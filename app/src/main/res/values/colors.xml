@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="material_blue_500">#5677fc</color>
+    <color name="material_blue_700">#455ede</color>
+    <color name="material_green_A200">#5af158</color>
+    <color name="form_background">#fff</color>
+
+</resources>
