@@ -1,8 +1,10 @@
 package org.itishka.pointim;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,7 +78,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public PostAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.adapter_post, viewGroup, false);
-        return new ViewHolder(v);
+        final ViewHolder holder = new ViewHolder(v);
+        holder.webLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri)view.getTag());
+                getContext().startActivity(browserIntent);
+            }
+        });
+        return holder;
     }
 
     private Context getContext() {
