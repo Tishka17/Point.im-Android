@@ -10,10 +10,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
+
+import org.itishka.pointim.api.ConnectionManager;
 
 
 public class MainActivity extends ActionBarActivity {

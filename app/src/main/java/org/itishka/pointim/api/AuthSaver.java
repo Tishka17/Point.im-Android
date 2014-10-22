@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.api;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.api;
 
 import org.itishka.pointim.api.data.LoginResult;
 
