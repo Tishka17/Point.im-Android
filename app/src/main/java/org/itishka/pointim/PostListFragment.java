@@ -42,7 +42,7 @@ public abstract class PostListFragment extends Fragment {
             public void onRefresh() {
                 ConnectionManager manager = ConnectionManager.getInstance();
                 if (manager.isAuthorized()) {
-                    update();
+                    update(getCallback());
                 }
             }
         });
@@ -54,7 +54,7 @@ public abstract class PostListFragment extends Fragment {
         ConnectionManager manager = ConnectionManager.getInstance();
         if (manager.isAuthorized()) {
             mSwipeRefresh.setRefreshing(true);
-            update();
+            update(getCallback());
         }
 
         return rootView;
@@ -83,5 +83,5 @@ public abstract class PostListFragment extends Fragment {
         return mCallback;
     }
 
-    protected abstract void update();
+    protected abstract void update(Callback<PostList> callback);
 }
