@@ -139,9 +139,8 @@
         </LinearLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ccc"
-            android:layerType="software" />
+            android:layout_height="wrap_content"
+            android:background="?android:attr/dividerVertical" />
 
         <LinearLayout
             android:layout_marginTop="4dp"
