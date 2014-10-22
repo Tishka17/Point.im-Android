@@ -86,7 +86,7 @@ public class MainActivity extends ActionBarActivity {
         private static final String[] titles = new String[]{
                 "Recent",
                 "Commented",
-                "Self"
+                "Blog"
         };
 
         @Override
