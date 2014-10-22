@@ -123,13 +123,13 @@
                 <org.itishka.pointim.widgets.FlowLayout
                     android:id="@+id/tags"
                     android:layout_marginTop="4dp"
-                    android:layout_marginLeft="@dimen/text_margin"
+                    android:layout_marginLeft="@dimen/text_quote_margin"
                     android:layout_marginRight="@dimen/text_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <org.itishka.pointim.widgets.MyTextView
-                    android:layout_marginLeft="@dimen/text_margin"
+                    android:layout_marginLeft="@dimen/text_quote_margin"
                     android:layout_marginRight="@dimen/text_margin"
                     android:id="@+id/text"
                     android:layout_width="wrap_content"

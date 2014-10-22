@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">4dp</dimen>
     <dimen name="activity_vertical_margin">4dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="text_avatar_margin">12dp</dimen>
-    <dimen name="text_quote_margin">12dp</dimen>
+    <dimen name="text_avatar_margin">8dp</dimen>
+    <dimen name="text_quote_margin">14dp</dimen>
     <dimen name="avatar_size">40dp</dimen>
 </resources>
