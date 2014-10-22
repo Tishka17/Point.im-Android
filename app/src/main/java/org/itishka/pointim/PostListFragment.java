@@ -42,7 +42,6 @@ public abstract class PostListFragment extends Fragment {
             public void onRefresh() {
                 ConnectionManager manager = ConnectionManager.getInstance();
                 if (manager.isAuthorized()) {
-                    mSwipeRefresh.setRefreshing(true);
                     update();
                 }
             }
@@ -64,19 +63,19 @@ public abstract class PostListFragment extends Fragment {
     private Callback<PostList> mCallback = new Callback<PostList>() {
         @Override
         public void success(PostList postList, Response response) {
+            mSwipeRefresh.setRefreshing(false);
             if (postList.isSuccess()) {
                 mAdapter.setData(postList);
                 mRecyclerView.setAdapter(mAdapter);
             } else {
-                mSwipeRefresh.setRefreshing(false);
                 Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void failure(RetrofitError error) {
-            Toast.makeText(getActivity(), error.getBody().toString(), Toast.LENGTH_SHORT).show();
             mSwipeRefresh.setRefreshing(false);
+            Toast.makeText(getActivity(), error.getBody().toString(), Toast.LENGTH_SHORT).show();
         }
     };
 

@@ -3,7 +3,6 @@ package org.itishka.pointim;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -107,7 +106,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.date.setText(Utils.formatDate(post.post.created));
 
         if (post.rec != null) {
-            holder.mainConent.setBackgroundColor(Color.argb(64, 200, 200, 255));
+            holder.mainConent.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_700_alpha));
             holder.recommend_info.setVisibility(View.VISIBLE);
             if (post.rec.text != null) {
                 holder.recommend_text.setVisibility(View.VISIBLE);
