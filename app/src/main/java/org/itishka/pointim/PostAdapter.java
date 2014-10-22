@@ -106,7 +106,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.date.setText(Utils.formatDate(post.post.created));
 
         if (post.rec != null) {
-            holder.mainConent.setBackgroundColor(getContext().getResources().getColor(R.color.material_blue_700_alpha));
+            holder.mainConent.setBackgroundColor(getContext().getResources().getColor(R.color.quote_background));
             holder.recommend_info.setVisibility(View.VISIBLE);
             if (post.rec.text != null) {
                 holder.recommend_text.setVisibility(View.VISIBLE);
@@ -124,7 +124,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.mainConent.setBackgroundColor(Color.TRANSPARENT);
             holder.recommend_info.setVisibility(View.GONE);
             holder.recommend_text.setVisibility(View.GONE);
-            holder.quote_mark.setVisibility(View.GONE);
+            holder.quote_mark.setVisibility(View.INVISIBLE);
             holder.quote_mark_top.setVisibility(View.GONE);
         }
 
