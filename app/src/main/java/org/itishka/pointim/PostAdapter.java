@@ -24,6 +24,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private PostList mPostList;
     private final WeakReference<Context> mContext;
 
+    public Post getItem(int pos) {
+        return mPostList.posts.get(pos);
+    }
+
     protected class ViewHolder extends RecyclerView.ViewHolder {
         TextView text;
         ViewGroup tags;

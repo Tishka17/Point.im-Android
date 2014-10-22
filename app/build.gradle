@@ -18,6 +18,9 @@ android {
         }
     }
 }
+repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -30,5 +33,8 @@ dependencies {
     compile "com.wefika:flowlayout:0.3.0"
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.makeramen:roundedimageview:1.3.0'
+
+    compile 'org.lucasr.twowayview:core:1.0.0-SNAPSHOT@aar'
+    compile 'org.lucasr.twowayview:layouts:1.0.0-SNAPSHOT@aar'
 
 }

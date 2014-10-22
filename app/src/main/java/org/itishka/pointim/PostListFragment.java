@@ -1,6 +1,7 @@
 package org.itishka.pointim;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.PostList;
+import org.lucasr.twowayview.ItemClickSupport;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -56,7 +58,16 @@ public abstract class PostListFragment extends Fragment {
             mSwipeRefresh.setRefreshing(true);
             update(getCallback());
         }
+        ItemClickSupport itemClick = ItemClickSupport.addTo(mRecyclerView);
 
+        itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView p, View c, int pos, long id) {
+                Intent browserIntent = new Intent(getActivity(), SinglePostActivity.class);
+                browserIntent.putExtra("post", mAdapter.getItem(pos).post.id);
+                getActivity().startActivity(browserIntent);
+            }
+        });
         return rootView;
     }
 
