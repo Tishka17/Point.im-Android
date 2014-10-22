@@ -85,6 +85,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 getContext().startActivity(browserIntent);
             }
         });
+        holder.post_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(getContext(), SinglePostActivity.class);
+                browserIntent.putExtra("post", view.getTag().toString());
+                getContext().startActivity(browserIntent);
+            }
+        });
         return holder;
     }
 
@@ -129,6 +137,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
 
         holder.post_id.setText("#" + post.post.id);
+        holder.post_id.setTag(post.post.id);
         holder.webLink.setTag(Utils.getnerateSiteUri(post.post.id));
         holder.favourite.setChecked(post.bookmarked);
         holder.favourite.setTag(post.post.id);
