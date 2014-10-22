@@ -28,6 +28,7 @@ public class SinglePostActivity extends ActionBarActivity {
             setSupportActionBar(toolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("#"+getIntent().getStringExtra("post"));
     }
 
 

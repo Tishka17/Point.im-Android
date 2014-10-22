@@ -20,7 +20,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by Татьяна on 20.10.2014.
  */
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHolder> {
     private PostList mPostList;
     private final WeakReference<Context> mContext;
 
@@ -72,13 +72,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         mPostList = postList;
         notifyDataSetChanged();
     }
-    public PostAdapter(Context context, PostList postList){
+    public PostListAdapter(Context context, PostList postList){
         super();
         mPostList = postList;
         mContext = new WeakReference<Context>(context);
     }
     @Override
-    public PostAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public PostListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.adapter_post, viewGroup, false);
         final ViewHolder holder = new ViewHolder(v);
@@ -105,7 +105,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(PostAdapter.ViewHolder holder, int i) {
+    public void onBindViewHolder(PostListAdapter.ViewHolder holder, int i) {
         Post post = mPostList.posts.get(i);
         holder.author.setText("@" + post.post.author.login);
         if (post.post.parsedText!=null)

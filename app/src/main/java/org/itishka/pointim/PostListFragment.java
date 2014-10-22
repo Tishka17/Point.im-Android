@@ -27,7 +27,7 @@ import retrofit.client.Response;
 public abstract class PostListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private PostAdapter mAdapter;
+    private PostListAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
 
     public PostListFragment() {
@@ -51,7 +51,7 @@ public abstract class PostListFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new PostAdapter(getActivity(), null);
+        mAdapter = new PostListAdapter(getActivity(), null);
         mRecyclerView.setAdapter(mAdapter);
         ConnectionManager manager = ConnectionManager.getInstance();
         if (manager.isAuthorized()) {
