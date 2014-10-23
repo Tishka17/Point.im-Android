@@ -28,8 +28,8 @@ public class FixedRecyclerView extends RecyclerView {
         if (direction < 1) {
             boolean original = super.canScrollVertically(direction);
             View child = getChildAt(0);
-            if (original || child==null)
-                return false;
+            if (child==null)
+                return original;
             ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) child.getLayoutParams();
             return child.getTop() < lp.topMargin || original;
         }
