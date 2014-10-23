@@ -13,6 +13,8 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -123,5 +125,11 @@ public class Utils {
     public static void addLinks(TextView view) {
         android.text.util.Linkify.addLinks(view, android.text.util.Linkify.ALL);
         view.setMovementMethod(null);
+    }
+
+    public static Spannable addLinks(String text) {
+        Spannable spannable = new SpannableString(text);
+        android.text.util.Linkify.addLinks(spannable, android.text.util.Linkify.ALL);
+        return spannable;
     }
 }

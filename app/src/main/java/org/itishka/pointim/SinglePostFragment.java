@@ -93,6 +93,13 @@ public class SinglePostFragment extends Fragment {
 
         mBottomBar = rootView.findViewById(R.id.bottom_bar);
         mCommentId = (TextView)rootView.findViewById(R.id.comment_id);
+        mCommentId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCommentId.setText("");
+                mCommentId.setVisibility(View.GONE);
+            }
+        });
         mText = (EditText)rootView.findViewById(R.id.text);
         mSendButton = (ImageButton)rootView.findViewById(R.id.send);
         mSendButton.setOnClickListener(new View.OnClickListener() {

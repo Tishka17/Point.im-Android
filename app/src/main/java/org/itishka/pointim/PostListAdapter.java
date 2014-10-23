@@ -108,12 +108,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     public void onBindViewHolder(PostListAdapter.ViewHolder holder, int i) {
         Post post = mPostList.posts.get(i);
         holder.author.setText("@" + post.post.author.login);
-        if (post.post.parsedText!=null)
-            holder.text.setText(post.post.parsedText);
-        else {
-            holder.text.setText(post.post.text);
-            Utils.addLinks(holder.text);
+
+        if (post.post.parsedText==null) {
+            post.post.parsedText = Utils.addLinks(post.post.text);
         }
+        holder.text.setText(post.post.parsedText);
         Utils.showAvatar(getContext(), post.post.author.avatar, holder.avatar);
         holder.date.setText(Utils.formatDate(post.post.created));
 

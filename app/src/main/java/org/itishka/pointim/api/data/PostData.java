@@ -2,6 +2,7 @@ package org.itishka.pointim.api.data;
 
 import java.util.Date;
 
+import android.text.Spannable;
 import android.text.SpannableString;
 
 import com.google.gson.annotations.SerializedName;
@@ -15,7 +16,7 @@ public class PostData {
 	public int comments_count;
 	public AuthorData author;
 	public String text;
-	public SpannableString parsedText;
+	public Spannable parsedText;
 	public Date created;
 	public Type type;
 	public String id;
