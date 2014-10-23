@@ -1,10 +1,13 @@
 package org.itishka.pointim;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.ExtendedPost;
 import org.itishka.pointim.api.data.PostList;
 import org.lucasr.twowayview.ItemClickSupport;
+import org.lucasr.twowayview.widget.DividerItemDecoration;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -76,6 +80,7 @@ public class SinglePostFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new SinglePostAdapter(getActivity(), null);
         mRecyclerView.setAdapter(mAdapter);
+
         ConnectionManager manager = ConnectionManager.getInstance();
         if (manager.isAuthorized()) {
             mSwipeRefresh.setRefreshing(true);

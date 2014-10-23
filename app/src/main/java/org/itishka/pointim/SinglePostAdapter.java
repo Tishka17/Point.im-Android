@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,12 +69,16 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ImageView avatar;
         TextView author;
         TextView date;
+        View divider;
+        TextView comment_id;
         public CommentViewHolder(View itemView) {
             super(itemView);
             text = (TextView) itemView.findViewById(R.id.text);
             avatar = (ImageView) itemView.findViewById(R.id.avatar);
             author = (TextView) itemView.findViewById(R.id.author);
             date = (TextView) itemView.findViewById(R.id.date);
+            divider = itemView.findViewById(R.id.divider);
+            comment_id = (TextView)itemView.findViewById(R.id.comment_id);
         }
     }
 
@@ -164,9 +169,18 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Comment comment = mPost.comments[i-1];
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
             Utils.showAvatar(getContext(), comment.author.avatar, commentHolder.avatar);
+            if (i==1) {
+                commentHolder.divider.setVisibility(View.INVISIBLE);
+            } else {
+                commentHolder.divider.setVisibility(View.VISIBLE);
+            }
             commentHolder.date.setText(Utils.formatDate(comment.created));
             commentHolder.text.setText(comment.text);
-
+            commentHolder.author.setText(comment.author.login);
+            if (TextUtils.isEmpty(comment.to_comment_id))
+                commentHolder.comment_id.setText("/"+comment.id);
+            else
+                commentHolder.comment_id.setText("/"+comment.id+" → "+"/"+comment.to_comment_id);
         }
     }
 

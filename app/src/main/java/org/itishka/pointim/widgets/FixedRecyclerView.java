@@ -3,6 +3,8 @@ package org.itishka.pointim.widgets;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by Татьяна on 21.10.2014.
@@ -25,7 +27,11 @@ public class FixedRecyclerView extends RecyclerView {
         // check if scrolling up
         if (direction < 1) {
             boolean original = super.canScrollVertically(direction);
-            return !original && getChildAt(0) != null && getChildAt(0).getTop() < 0 || original;
+            View child = getChildAt(0);
+            if (original || child==null)
+                return false;
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) child.getLayoutParams();
+            return child.getTop() < lp.topMargin || original;
         }
         return super.canScrollVertically(direction);
 
