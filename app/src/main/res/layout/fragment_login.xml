@@ -33,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_launcher"
                 android:id="@+id/imageView" />
+
             <EditText
                 android:id="@+id/login"
                 android:layout_width="match_parent"

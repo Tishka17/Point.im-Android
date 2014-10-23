@@ -55,4 +55,12 @@ public interface PointService {
 
     @DELETE("/api/post/{id}/b")
     void deleteBookmark(@Path("id") String id, Callback<PointResult> callback);
+
+    @FormUrlEncoded
+    @POST("/api/post/{id}")
+    void addComment(@Path("id") String id, @Field("text") String text, Callback<PointResult> callback);
+
+    @FormUrlEncoded
+    @POST("/api/post/{id}")
+    void addComment(@Path("id") String id, @Field("text") String text, @Field("comment_id") String commentId, Callback<PointResult> callback);
 }

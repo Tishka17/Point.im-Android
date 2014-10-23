@@ -6,15 +6,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;
+import org.itishka.pointim.api.data.PointResult;
 import org.itishka.pointim.api.data.PostList;
 import org.lucasr.twowayview.ItemClickSupport;
 import org.lucasr.twowayview.widget.DividerItemDecoration;
@@ -31,6 +37,10 @@ public class SinglePostFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefresh;
     private LinearLayoutManager mLayoutManager;
     private SinglePostAdapter mAdapter;
+    private TextView mCommentId;
+    private EditText mText;
+    private ImageButton mSendButton;
+    private View mBottomBar;
 
 
     /**
@@ -81,6 +91,28 @@ public class SinglePostFragment extends Fragment {
         mAdapter = new SinglePostAdapter(getActivity(), null);
         mRecyclerView.setAdapter(mAdapter);
 
+        mBottomBar = rootView.findViewById(R.id.bottom_bar);
+        mCommentId = (TextView)rootView.findViewById(R.id.comment_id);
+        mText = (EditText)rootView.findViewById(R.id.text);
+        mSendButton = (ImageButton)rootView.findViewById(R.id.send);
+        mSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String text = mText.getText().toString();
+                if (TextUtils.isEmpty(text)) {
+                    Toast.makeText(getActivity(), "Empty comment", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String comment = mCommentId.getText().toString();
+                mBottomBar.setEnabled(false);
+                if (TextUtils.isEmpty(comment)) {
+                    ConnectionManager.getInstance().pointService.addComment(mPost, text, mCommentCallback);
+                } else {
+                    ConnectionManager.getInstance().pointService.addComment(mPost, text, comment, mCommentCallback);
+                }
+            }
+        });
+
         ConnectionManager manager = ConnectionManager.getInstance();
         if (manager.isAuthorized()) {
             mSwipeRefresh.setRefreshing(true);
@@ -91,12 +123,40 @@ public class SinglePostFragment extends Fragment {
         itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView recyclerView, View view, int i, long l) {
-
+                Object item = mAdapter.getItem(i);
+                if (item instanceof Comment) {
+                    mCommentId.setText(((Comment) item).id);
+                    mCommentId.setVisibility(View.VISIBLE);
+                } else {
+                    mCommentId.setVisibility(View.GONE);
+                    mCommentId.setText("");
+                }
             }
         });
         return rootView;
     }
 
+    private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
+        @Override
+        public void success(PointResult post, Response response) {
+            mBottomBar.setEnabled(true);
+            if (post.isSuccess()) {
+                mCommentId.setVisibility(View.GONE);
+                mCommentId.setText("");
+                mText.setText("");
+                update(getCallback());
+                Toast.makeText(getActivity(), "Comment added!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            mBottomBar.setEnabled(true);
+            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
     private Callback<ExtendedPost> mCallback = new Callback<ExtendedPost>() {
         @Override
         public void success(ExtendedPost post, Response response) {
@@ -112,7 +172,7 @@ public class SinglePostFragment extends Fragment {
         @Override
         public void failure(RetrofitError error) {
             mSwipeRefresh.setRefreshing(false);
-            Toast.makeText(getActivity(), error.getBody().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
 

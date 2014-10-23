@@ -1,12 +1,65 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swiperefresh"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <org.itishka.pointim.widgets.FixedRecyclerView
-        android:id="@+id/post"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:layout_weight="1"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
-</android.support.v4.widget.SwipeRefreshLayout>
+        <org.itishka.pointim.widgets.FixedRecyclerView
+            android:id="@+id/post"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="-4dp"
+        android:layout_marginRight="-4dp"
+        android:layout_marginBottom="-4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingBottom="4dp"
+        card_view:cardCornerRadius="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/comment_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tag"
+                android:layout_marginLeft="@dimen/text_margin"
+                android:visibility="gone" />
+
+            <EditText
+                android:layout_marginLeft="@dimen/text_avatar_margin"
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/send"
+                android:layout_width="@dimen/touch_size"
+                android:layout_height="@dimen/touch_size"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_send" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
