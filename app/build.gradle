@@ -20,6 +20,9 @@ android {
 }
 repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    flatDir{
+        dirs 'libs'
+    }
 }
 
 dependencies {
@@ -35,5 +38,4 @@ dependencies {
 
     compile 'org.lucasr.twowayview:core:1.0.0-SNAPSHOT@aar'
     compile 'org.lucasr.twowayview:layouts:1.0.0-SNAPSHOT@aar'
-
 }

@@ -63,4 +63,12 @@ public interface PointService {
     @FormUrlEncoded
     @POST("/api/post/{id}")
     void addComment(@Path("id") String id, @Field("text") String text, @Field("comment_id") String commentId, Callback<PointResult> callback);
+
+    @POST("/api/post/{id}/r")
+    void recommend(@Path("id") String id, Callback<PointResult> callback);
+
+    @FormUrlEncoded
+    @POST("/api/post/{id}/r")
+    void recommend(@Path("id") String id, @Field("text") String text, Callback<PointResult> callback);
+
 }

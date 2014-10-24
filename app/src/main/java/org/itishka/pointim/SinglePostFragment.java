@@ -1,15 +1,17 @@
 package org.itishka.pointim;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -21,9 +23,7 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;
 import org.itishka.pointim.api.data.PointResult;
-import org.itishka.pointim.api.data.PostList;
 import org.lucasr.twowayview.ItemClickSupport;
-import org.lucasr.twowayview.widget.DividerItemDecoration;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -68,6 +68,7 @@ public class SinglePostFragment extends Fragment {
         if (getArguments() != null) {
             mPost = getArguments().getString(ARG_POST);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -190,4 +191,60 @@ public class SinglePostFragment extends Fragment {
     protected void update(Callback<ExtendedPost> callback) {
         ConnectionManager.getInstance().pointService.getPost(mPost, getCallback());
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_single_post, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        } else if (id == R.id.action_recomend) {
+            View v = getLayoutInflater(new Bundle()).inflate(R.layout.input_dialog, null);
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Really recommend #" + mPost + "?")
+                    .setView(v)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String text = ((EditText) ((AlertDialog) dialog).findViewById(R.id.recommend_text)).getText().toString();
+                            if (TextUtils.isEmpty(text)) {
+                                ConnectionManager.getInstance().pointService.recommend(mPost, mRecommendCallback);
+                            } else {
+                                ConnectionManager.getInstance().pointService.recommend(mPost, text, mRecommendCallback);
+                            }
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Do nothing.
+                }
+            }).show();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private Callback<PointResult> mRecommendCallback = new Callback<PointResult>() {
+        @Override
+        public void success(PointResult post, Response response) {
+            if (post.isSuccess()) {
+                Toast.makeText(getActivity(), "Reommended!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
 }

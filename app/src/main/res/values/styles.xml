@@ -8,7 +8,7 @@
 
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="android:dialogTheme">@style/MyDialog</item>
+        <!-- <item name="android:dialogTheme">@style/MyDialog</item> -->
         <item name="windowActionModeOverlay">true</item>
     </style>
 
