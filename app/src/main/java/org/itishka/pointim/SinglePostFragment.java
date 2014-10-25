@@ -171,7 +171,6 @@ public class SinglePostFragment extends Fragment {
             mSwipeRefresh.setRefreshing(false);
             if (post.isSuccess()) {
                 mAdapter.setData(post);
-                mRecyclerView.setAdapter(mAdapter);
             } else {
                 Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
             }

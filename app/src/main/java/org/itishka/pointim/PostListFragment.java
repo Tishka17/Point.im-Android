@@ -77,7 +77,6 @@ public abstract class PostListFragment extends Fragment {
             mSwipeRefresh.setRefreshing(false);
             if (postList.isSuccess()) {
                 mAdapter.setData(postList);
-                mRecyclerView.setAdapter(mAdapter);
             } else {
                 Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
             }

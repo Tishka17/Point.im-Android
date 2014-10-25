@@ -149,14 +149,14 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             holder.comments.setText("");
             // holder.comments.setVisibility(View.GONE);
         }
+        LayoutInflater li;
+        li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         holder.tags.removeAllViews();
         if (post.post.tags.length == 0) {
             holder.tags.setVisibility(View.GONE);
         } else {
             holder.tags.setVisibility(View.VISIBLE);
             for (String tag : post.post.tags) {
-                LayoutInflater li;
-                li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 final TextView v = (TextView) li.inflate(R.layout.tag, null);
                 v.setText(tag);
