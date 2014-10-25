@@ -109,10 +109,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         Post post = mPostList.posts.get(i);
         holder.author.setText("@" + post.post.author.login);
 
-        if (post.post.parsedText==null) {
-            post.post.parsedText = Utils.addLinks(post.post.text);
-        }
-        holder.text.setText(post.post.parsedText);
+        holder.text.setText(post.post.text);
         Utils.showAvatar(getContext(), post.post.author.avatar, holder.avatar);
         holder.date.setText(Utils.formatDate(post.post.created));
 

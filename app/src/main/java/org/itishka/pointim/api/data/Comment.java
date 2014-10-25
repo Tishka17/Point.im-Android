@@ -6,11 +6,10 @@ import java.util.Date;
 
 public class Comment {
 	public AuthorData author;
-	public String text;
+	public Spannable text;
 	public Date created;
 	public String id;
 	public String post_id;
 	public String to_comment_id;
 	public boolean is_rec;
-    public Spannable parsedText;
 }

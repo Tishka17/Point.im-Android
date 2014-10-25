@@ -15,8 +15,7 @@ public class PostData {
 	public String []tags;
 	public int comments_count;
 	public AuthorData author;
-	public String text;
-	public Spannable parsedText;
+	public Spannable text;
 	public Date created;
 	public Type type;
 	public String id;

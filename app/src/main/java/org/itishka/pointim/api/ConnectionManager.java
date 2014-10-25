@@ -1,6 +1,7 @@
 package org.itishka.pointim.api;
 
 import android.content.Context;
+import android.text.Spannable;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -42,9 +43,10 @@ public class ConnectionManager {
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String ENDPOINT = "https://point.im";
     public PointService pointService = null;
-    private Gson mGson = new GsonBuilder()
+    private final Gson mGson = new GsonBuilder()
             .setDateFormat(DATE_FORMAT)
             .registerTypeAdapter(Date.class, new DateDeserializer())
+            .registerTypeAdapter(Spannable.class, new TextParser())
             .create();
     public PointAuthService pointAuthService = null;
     public LoginResult loginResult = null;
