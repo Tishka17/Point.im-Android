@@ -1,7 +1,5 @@
 package org.itishka.pointim;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,6 +21,7 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;
 import org.itishka.pointim.api.data.PointResult;
+import org.itishka.pointim.dialogs.CustomDialog;
 import org.lucasr.twowayview.ItemClickSupport;
 
 import retrofit.Callback;
@@ -208,24 +207,30 @@ public class SinglePostFragment extends Fragment {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_recomend) {
-            View v = getLayoutInflater(new Bundle()).inflate(R.layout.input_dialog, null);
-            new AlertDialog.Builder(getActivity())
-                    .setTitle("Really recommend #" + mPost + "?")
-                    .setView(v)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            String text = ((EditText) ((AlertDialog) dialog).findViewById(R.id.recommend_text)).getText().toString();
-                            if (TextUtils.isEmpty(text)) {
-                                ConnectionManager.getInstance().pointService.recommend(mPost, mRecommendCallback);
-                            } else {
-                                ConnectionManager.getInstance().pointService.recommend(mPost, text, mRecommendCallback);
-                            }
-                        }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // Do nothing.
+            final View v = getLayoutInflater(new Bundle()).inflate(R.layout.input_dialog, null);
+            final CustomDialog dialog = new CustomDialog.Builder(getActivity(), "Really recommend #" + mPost + "?", "Ok")
+                    .positiveColor(getActivity().getResources().getColor(R.color.material_blue_700))
+                    .negativeText("Cancel")
+                    .build();
+
+            dialog.setClickListener(new CustomDialog.ClickListener() {
+                @Override
+                public void onConfirmClick() {
+                    String text = ((EditText) (v.findViewById(R.id.recommend_text))).getText().toString();
+                    if (TextUtils.isEmpty(text)) {
+                        ConnectionManager.getInstance().pointService.recommend(mPost, mRecommendCallback);
+                    } else {
+                        ConnectionManager.getInstance().pointService.recommend(mPost, text, mRecommendCallback);
+                    }
                 }
-            }).show();
+
+                @Override
+                public void onCancelClick() {
+
+                }
+            });
+            dialog.setCustomView(v);
+            dialog.show();
         }
 
         return super.onOptionsItemSelected(item);
