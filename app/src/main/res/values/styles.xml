@@ -4,7 +4,7 @@
         <!-- customize the color palette -->
         <item name="colorPrimary">@color/material_blue_500</item>
         <item name="colorPrimaryDark">@color/material_blue_700</item>
-        <item name="colorAccent">@color/white</item>
+        <item name="colorAccent">@color/accent_material_light</item>
 
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -13,6 +13,11 @@
     </style>
 
     <style name="MyDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">?attr/colorPrimary</item>
+        <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
+        <item name="colorAccent">?attr/colorAccent</item>
+    </style>
+    <style name="MyEditText" parent="Widget.AppCompat.EditText">
         <item name="colorPrimary">?attr/colorPrimary</item>
         <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
         <item name="colorAccent">?attr/colorAccent</item>

@@ -17,11 +17,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;
 import org.itishka.pointim.api.data.PointResult;
-import org.itishka.pointim.dialogs.CustomDialog;
 import org.lucasr.twowayview.ItemClickSupport;
 
 import retrofit.Callback;
@@ -207,29 +208,26 @@ public class SinglePostFragment extends Fragment {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_recomend) {
-            final View v = getLayoutInflater(new Bundle()).inflate(R.layout.input_dialog, null);
-            final CustomDialog dialog = new CustomDialog.Builder(getActivity(), "Really recommend #" + mPost + "?", "Ok")
-                    .positiveColor(getActivity().getResources().getColor(R.color.material_blue_700))
+            //final View v = getLayoutInflater(new Bundle()).inflate(R.layout.input_dialog, null);
+            final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                    .title("Really recommend #" + mPost + "?")
+                    .positiveText(android.R.string.ok)
                     .negativeText("Cancel")
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
+                            if (TextUtils.isEmpty(text)) {
+                                ConnectionManager.getInstance().pointService.recommend(mPost, mRecommendCallback);
+                            } else {
+                                ConnectionManager.getInstance().pointService.recommend(mPost, text, mRecommendCallback);
+                            }
+                        }
+                    })
+                    .customView(R.layout.input_dialog)
                     .build();
-
-            dialog.setClickListener(new CustomDialog.ClickListener() {
-                @Override
-                public void onConfirmClick() {
-                    String text = ((EditText) (v.findViewById(R.id.recommend_text))).getText().toString();
-                    if (TextUtils.isEmpty(text)) {
-                        ConnectionManager.getInstance().pointService.recommend(mPost, mRecommendCallback);
-                    } else {
-                        ConnectionManager.getInstance().pointService.recommend(mPost, text, mRecommendCallback);
-                    }
-                }
-
-                @Override
-                public void onCancelClick() {
-
-                }
-            });
-            dialog.setCustomView(v);
+            //dialog.setCustomView(v);
             dialog.show();
         }
 

@@ -84,6 +84,7 @@
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="picasso-2.4.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="material-dialogs-0.4.7" level="project" />
     <orderEntry type="library" exported="" name="core-1.0.0-SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="layouts-1.0.0-SNAPSHOT" level="project" />
@@ -95,7 +96,6 @@
     <orderEntry type="library" exported="" name="cardview-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3" level="project" />
-    <orderEntry type="library" exported="" name="ldialogs-" level="project" />
   </component>
 </module>
 
