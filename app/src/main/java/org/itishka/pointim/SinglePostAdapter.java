@@ -151,13 +151,14 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 postHolder.tags.setVisibility(View.GONE);
             } else {
                 postHolder.tags.setVisibility(View.VISIBLE);
+                int n=0;
                 for (String tag : mPost.post.tags) {
                     LayoutInflater li;
                     li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                     final TextView v = (TextView) li.inflate(R.layout.tag, null);
                     v.setText(tag);
-                    postHolder.tags.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    postHolder.tags.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 }
             }
         } else {
