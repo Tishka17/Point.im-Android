@@ -3,6 +3,7 @@ package org.itishka.pointim;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,11 +54,6 @@ public abstract class PostListFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new PostListAdapter(getActivity(), null);
         mRecyclerView.setAdapter(mAdapter);
-        ConnectionManager manager = ConnectionManager.getInstance();
-        if (manager.isAuthorized()) {
-            mSwipeRefresh.setRefreshing(true);
-            update(getCallback());
-        }
         ItemClickSupport itemClick = ItemClickSupport.addTo(mRecyclerView);
 
         itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
@@ -69,6 +65,21 @@ public abstract class PostListFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ConnectionManager manager = ConnectionManager.getInstance();
+        if (manager.isAuthorized()) {
+            mSwipeRefresh.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefresh.setRefreshing(true);
+                    update(getCallback());
+                }
+            });
+        }
     }
 
     private Callback<PostList> mCallback = new Callback<PostList>() {
