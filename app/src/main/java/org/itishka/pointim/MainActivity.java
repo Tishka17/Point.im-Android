@@ -10,8 +10,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.melnykov.fab.FloatingActionButton;
 
 import org.itishka.pointim.api.ConnectionManager;
 
@@ -19,6 +21,7 @@ import org.itishka.pointim.api.ConnectionManager;
 public class MainActivity extends ActionBarActivity {
 
     private static final int REQUEST_LOGIN = 0;
+    FloatingActionButton mNewPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,13 @@ public class MainActivity extends ActionBarActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
+        mNewPost = (FloatingActionButton) findViewById(R.id.new_post);
+        mNewPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, NewPostActivity.class));
+            }
+        });
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setOffscreenPageLimit(3);
@@ -72,9 +82,6 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        } else if (id==R.id.new_post) {
-            startActivity(new Intent(this, NewPostActivity.class));
             return true;
         }
 
