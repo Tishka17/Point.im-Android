@@ -84,4 +84,7 @@ public interface PointService {
     @DELETE("/api/post/{id}/{cid}/r")
     void unRecommendComment(@Path("id") String id, @Path("cid") String cid, Callback<PointResult> callback);
 
+    @FormUrlEncoded
+    @POST("/api/post/")
+    void createPost(@Field("text") String text, @Field("tag") String []tags, Callback<PointResult> callback);
 }

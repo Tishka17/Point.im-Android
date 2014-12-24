@@ -10,22 +10,32 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:launchMode="singleTask"
-            android:name="org.itishka.pointim.MainActivity"
-            android:label="@string/app_name" >
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="org.itishka.pointim.LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
         <activity
-            android:parentActivityName="org.itishka.pointim.MainActivity"
-            android:name="org.itishka.pointim.SinglePostActivity"
-            android:label="@string/title_activity_single_post" >
+            android:name=".SinglePostActivity"
+            android:label="@string/title_activity_single_post"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.itishka.pointim.MainActivity" />
+        </activity>
+        <activity
+            android:windowSoftInputMode="adjustResize"
+            android:name=".NewPostActivity"
+            android:label="@string/title_activity_new_post"
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.itishka.pointim.MainActivity" />
