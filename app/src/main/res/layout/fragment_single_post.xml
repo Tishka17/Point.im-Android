@@ -28,12 +28,10 @@
         android:layout_marginLeft="-4dp"
         android:layout_marginRight="-4dp"
         android:layout_marginBottom="-4dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingBottom="4dp"
         card_view:cardCornerRadius="0dp">
 
         <LinearLayout
+            android:layout_margin="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"

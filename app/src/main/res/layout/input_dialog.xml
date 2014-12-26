@@ -5,12 +5,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:inputType="text"
-        android:editable="true"
         android:hint="Type text here"
-        style="@style/MyEditText"
         android:id="@+id/recommend_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >

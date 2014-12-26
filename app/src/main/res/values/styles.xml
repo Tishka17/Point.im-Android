@@ -8,18 +8,6 @@
 
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <!-- <item name="android:dialogTheme">@style/MyDialog</item> -->
         <item name="windowActionModeOverlay">true</item>
-    </style>
-
-    <style name="MyDialog" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">?attr/colorPrimary</item>
-        <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
-        <item name="colorAccent">?attr/colorAccent</item>
-    </style>
-    <style name="MyEditText" parent="Widget.AppCompat.EditText">
-        <item name="colorPrimary">?attr/colorPrimary</item>
-        <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
-        <item name="colorAccent">?attr/colorAccent</item>
     </style>
 </resources>
