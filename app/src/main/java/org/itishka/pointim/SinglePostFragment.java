@@ -1,6 +1,7 @@
 package org.itishka.pointim;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -72,6 +73,21 @@ public class SinglePostFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ConnectionManager manager = ConnectionManager.getInstance();
+        if (manager.isAuthorized()) {
+            mSwipeRefresh.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefresh.setRefreshing(true);
+                    update(getCallback());
+                }
+            });
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_single_post, container, false);
@@ -121,11 +137,6 @@ public class SinglePostFragment extends Fragment {
             }
         });
 
-        ConnectionManager manager = ConnectionManager.getInstance();
-        if (manager.isAuthorized()) {
-            mSwipeRefresh.setRefreshing(true);
-            update(getCallback());
-        }
         ItemClickSupport itemClick = ItemClickSupport.addTo(mRecyclerView);
 
         itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
@@ -239,6 +250,7 @@ public class SinglePostFragment extends Fragment {
         public void success(PointResult post, Response response) {
             if (post.isSuccess()) {
                 Toast.makeText(getActivity(), "Reommended!", Toast.LENGTH_SHORT).show();
+                update(mCallback);
             } else {
                 Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
             }
