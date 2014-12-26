@@ -37,6 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/ic_pencil_white_24dp" />
     </FrameLayout>
 </LinearLayout>

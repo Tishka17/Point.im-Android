@@ -4,14 +4,14 @@
     tools:context="org.itishka.pointim.SinglePostActivity">
     <item
         android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_refresh"
+        android:icon="@drawable/ic_refresh_white_24dp"
         android:orderInCategory="100"
         android:title="@string/action_refresh"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_recomend"
-        android:icon="@drawable/ic_share"
+        android:icon="@drawable/ic_share_white_24dp"
         android:orderInCategory="100"
         android:title="@string/action_recommend"
         app:showAsAction="ifRoom" />
