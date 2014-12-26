@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Comment;
@@ -216,7 +217,9 @@ public class SinglePostFragment extends Fragment {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
+            mSwipeRefresh.setRefreshing(true);
+            update(mCallback);
             return true;
         } else if (id == R.id.action_recomend) {
             //final View v = getLayoutInflater(new Bundle()).inflate(R.layout.input_dialog, null);
@@ -240,6 +243,7 @@ public class SinglePostFragment extends Fragment {
                     .build();
             //dialog.setCustomView(v);
             dialog.show();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

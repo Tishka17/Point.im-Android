@@ -11,5 +11,6 @@
     <string name="title_activity_single_post">SinglePostActivity</string>
     <string name="action_recommend">Recommend</string>
     <string name="title_activity_new_post">New Post</string>
+    <string name="action_refresh">Refresh</string>
 
 </resources>
