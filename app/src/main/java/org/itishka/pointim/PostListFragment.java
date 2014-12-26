@@ -96,7 +96,7 @@ public abstract class PostListFragment extends Fragment {
         @Override
         public void failure(RetrofitError error) {
             mSwipeRefresh.setRefreshing(false);
-            Toast.makeText(getActivity(), error.getBody().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
 
