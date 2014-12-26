@@ -39,6 +39,15 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return mPost.comments[pos-1];
     }
 
+    View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getContext(), TagViewActivity.class);
+            intent.putExtra("tag", ((TextView)view).getText());
+            getContext().startActivity(intent);
+        }
+    };
+
     protected class PostViewHolder extends RecyclerView.ViewHolder {
         TextView text;
         ViewGroup tags;
@@ -159,6 +168,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     final TextView v = (TextView) li.inflate(R.layout.tag, null);
                     v.setText(tag);
                     postHolder.tags.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    v.setOnClickListener(mOnTagClickListener);
                 }
             }
         } else {

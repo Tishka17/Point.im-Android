@@ -32,9 +32,17 @@
                 android:value="org.itishka.pointim.MainActivity" />
         </activity>
         <activity
-            android:windowSoftInputMode="adjustResize"
             android:name=".NewPostActivity"
             android:label="@string/title_activity_new_post"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.itishka.pointim.MainActivity" />
+        </activity>
+        <activity
+            android:name=".TagViewActivity"
+            android:label="@string/title_activity_tag_view"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

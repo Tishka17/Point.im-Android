@@ -41,10 +41,10 @@ public interface PointService {
     List<Tag> getTags(@Path("login") String login);
 
     @GET("/api/tags")
-    PostList getPostsByTag(@Query("tag") String tag);
+    void getPostsByTag(@Query("tag") String tag, Callback<PostList> callback);
 
     @GET("/api/tags/{login}")
-    PostList getPostsByUserTag(@Path("login") String login, @Query("tag") String tag);
+    void getPostsByUserTag(@Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);
 
     @GET("/api/post/{id}")
     void getPost(@Path("id") String id, Callback<ExtendedPost> callback);

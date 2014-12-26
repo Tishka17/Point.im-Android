@@ -89,11 +89,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
                 getContext().startActivity(browserIntent);
             }
         });
-        holder.post_id.setOnClickListener(new View.OnClickListener() {
+        v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent browserIntent = new Intent(getContext(), SinglePostActivity.class);
-                browserIntent.putExtra("post", view.getTag().toString());
+                browserIntent.putExtra("post", view.getTag(R.id.post_id).toString());
                 getContext().startActivity(browserIntent);
             }
         });
@@ -108,6 +108,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     public void onBindViewHolder(PostListAdapter.ViewHolder holder, int i) {
         Post post = mPostList.posts.get(i);
         holder.author.setText("@" + post.post.author.login);
+        holder.itemView.setTag(R.id.post_id, post.post.id);
 
         holder.text.setText(post.post.text);
         Utils.showAvatar(getContext(), post.post.author.avatar, holder.avatar);
@@ -162,6 +163,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
                 final TextView v = (TextView) li.inflate(R.layout.tag, null);
                 v.setText(tag);
                 holder.tags.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                v.setOnClickListener(mOnTagClickListener);
             }
         }
     }
@@ -171,4 +173,13 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         if (mPostList==null) return 0;
         else return mPostList.posts.size();
     }
+
+    View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getContext(), TagViewActivity.class);
+            intent.putExtra("tag", ((TextView)view).getText());
+            getContext().startActivity(intent);
+        }
+    };
 }

@@ -12,5 +12,6 @@
     <string name="action_recommend">Recommend</string>
     <string name="title_activity_new_post">New Post</string>
     <string name="action_refresh">Refresh</string>
+    <string name="title_activity_tag_view">Tag</string>
 
 </resources>
