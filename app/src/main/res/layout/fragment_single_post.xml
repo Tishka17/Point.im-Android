@@ -57,7 +57,7 @@
                 android:layout_width="@dimen/touch_size"
                 android:layout_height="@dimen/touch_size"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_send" />
+                android:src="@drawable/ic_send_grey600_24dp" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

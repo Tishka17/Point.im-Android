@@ -4,7 +4,7 @@
     tools:context="org.itishka.pointim.NewPostActivity">
     <item
         android:id="@+id/send"
-        android:icon="@drawable/ic_send"
+        android:icon="@drawable/ic_send_white_24dp"
         android:title="Send"
         app:showAsAction="always|withText" />
 </menu>
