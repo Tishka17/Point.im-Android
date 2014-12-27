@@ -5,6 +5,7 @@ import org.itishka.pointim.api.data.PointResult;
 import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
 import org.itishka.pointim.api.data.Tag;
+import org.itishka.pointim.api.data.User;
 
 import java.util.List;
 
@@ -36,6 +37,9 @@ public interface PointService {
 
     @GET("/api/blog/{login}")
     void getBlog(@Path("login") String login, Callback<PostList> callback);
+
+    @GET("/api/user/{login}")
+    void getUserInfo(@Path("login") String login, Callback<User> callback);
 
     @GET("/api/tags/{login}")
     List<Tag> getTags(@Path("login") String login);

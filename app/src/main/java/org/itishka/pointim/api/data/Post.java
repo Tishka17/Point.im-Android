@@ -1,6 +1,6 @@
 package org.itishka.pointim.api.data;
 
-public class Post {
+public class Post extends PointResult {
 	public long uid;
 	public RecommendData rec;
 	public PostData post;
