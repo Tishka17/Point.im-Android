@@ -27,7 +27,5 @@
     <org.itishka.pointim.widgets.ImageUploadingPanel
         android:id="@+id/imagesPanel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        </org.itishka.pointim.widgets.ImageUploadingPanel>
+        android:layout_height="wrap_content" />
 </LinearLayout>

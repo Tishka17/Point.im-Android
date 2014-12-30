@@ -1,7 +1,10 @@
 package org.itishka.pointim;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,6 +29,7 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;
 import org.itishka.pointim.api.data.PointResult;
+import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.lucasr.twowayview.ItemClickSupport;
 
 import retrofit.Callback;
@@ -34,6 +38,7 @@ import retrofit.client.Response;
 
 public class SinglePostFragment extends Fragment {
     private static final String ARG_POST = "post";
+    private static final int RESULT_LOAD_IMAGE = 17;
 
     private String mPost;
     private RecyclerView mRecyclerView;
@@ -46,6 +51,8 @@ public class SinglePostFragment extends Fragment {
     private View mBottomBar;
     private ExtendedPost mPointPost;
     private Dialog mProgressDialog;
+    private ImageUploadingPanel mImagesPanel;
+    private ImageButton mAttachButton;
 
 
     /**
@@ -133,10 +140,21 @@ public class SinglePostFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String text = mText.getText().toString();
+                if (!mImagesPanel.isUploadFinished()) {
+                    Toast.makeText(getActivity(), "Wait or check for errors!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                StringBuffer sb = new StringBuffer(text);
+                for (String l : mImagesPanel.getLinks()) {
+                    sb.append("\n").append(l);
+                }
+                text = sb.toString().trim();
+
                 if (TextUtils.isEmpty(text)) {
                     Toast.makeText(getActivity(), "Empty comment", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 String comment = mCommentId.getText().toString();
                 mBottomBar.setEnabled(false);
                 mProgressDialog.show();
@@ -163,6 +181,15 @@ public class SinglePostFragment extends Fragment {
                 }
             }
         });
+        mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
+        mAttachButton = (ImageButton) rootView.findViewById(R.id.attach);
+        mAttachButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        });
         return rootView;
     }
 
@@ -175,6 +202,7 @@ public class SinglePostFragment extends Fragment {
                 mCommentId.setVisibility(View.GONE);
                 mCommentId.setText("");
                 mText.setText("");
+                mImagesPanel.reset();
                 update(getCallback());
                 Toast.makeText(getActivity(), "Comment added!", Toast.LENGTH_SHORT).show();
             } else {
@@ -328,4 +356,13 @@ public class SinglePostFragment extends Fragment {
             Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
+            mImagesPanel.addImage(data.getData());
+        }
+    }
 }
