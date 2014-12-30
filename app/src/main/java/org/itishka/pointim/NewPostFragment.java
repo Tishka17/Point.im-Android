@@ -43,15 +43,13 @@ public class NewPostFragment extends Fragment {
 
     private static final int RESULT_LOAD_IMAGE = 17;
     private AlertDialog mProgressDialog;
-    private Uri mImageUri = null;
-    private ImageUploadingPanel mImagesPanel;
 
     public NewPostFragment() {
     }
 
     EditText mPostText;
     EditText mPostTags;
-    ImageView mImageView;
+    private ImageUploadingPanel mImagesPanel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,14 +58,6 @@ public class NewPostFragment extends Fragment {
         mPostText = (EditText) rootView.findViewById(R.id.postText);
         mPostTags = (EditText) rootView.findViewById(R.id.postTags);
         mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
-        mImageView = (ImageView) rootView.findViewById(R.id.imageView);
-        mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mImageView.setVisibility(View.GONE);
-                mImageUri = null;
-            }
-        });
         setHasOptionsMenu(true);
 
         mProgressDialog = new MaterialDialog.Builder(getActivity())
@@ -87,10 +77,7 @@ public class NewPostFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
-            mImageUri =  data.getData();
-            mImageView.setImageURI(mImageUri);
-            mImageView.setVisibility(View.VISIBLE);
-            mImagesPanel.addImage(mImageUri);
+            mImagesPanel.addImage(data.getData());
         }
     }
 
@@ -100,8 +87,8 @@ public class NewPostFragment extends Fragment {
         if (id == R.id.send) {
             final String text = mPostText.getText().toString();
             final String[] tags = mPostTags.getText().toString().split("\\s*,\\s*");
-            if (mImageUri != null) {
-
+            if (!mImagesPanel.getLinks().isEmpty()) {
+/*
                 final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .cancelable(false)
                         .customView(R.layout.dialog_progress, false)
@@ -129,6 +116,7 @@ public class NewPostFragment extends Fragment {
                         }
                     }
                 }.execute();
+                */
             } else {
                 mProgressDialog.show();
                 ConnectionManager.getInstance().pointService.createPost(text, tags, mNewPostCallback);

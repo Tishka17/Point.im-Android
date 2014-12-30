@@ -47,6 +47,7 @@ public class ImageUploadingPanel extends FrameLayout {
         super(context);
         init();
     }
+
     public ImageUploadingPanel(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
@@ -60,6 +61,7 @@ public class ImageUploadingPanel extends FrameLayout {
         Picasso.with(getContext())
                 .load(uri)
                 .transform(new CropSquareTransformation())
+                .fit()
                 .into(img.imageView);
         mLayout.addView(view);
         img.originalPath = uri;
@@ -82,13 +84,20 @@ public class ImageUploadingPanel extends FrameLayout {
         }
     }
 
+    public boolean isUploadFinished() {
+        for (Image i: mImages) {
+            if (!i.uploaded) return false;
+        }
+        return true;
+    }
+
     public void reset() {
         cancel();
         mImages.clear();
         mLayout.removeAllViews();
     }
 
-    public class CropSquareTransformation implements Transformation {
+    private class CropSquareTransformation implements Transformation {
         @Override public Bitmap transform(Bitmap source) {
             int size = Math.min(source.getWidth(), source.getHeight());
             int x = (source.getWidth() - size) / 2;

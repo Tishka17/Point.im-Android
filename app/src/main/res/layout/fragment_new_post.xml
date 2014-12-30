@@ -24,13 +24,6 @@
         android:scrollHorizontally="false" >
         <requestFocus />
     </EditText>
-        <ImageView
-            android:scaleType="fitStart"
-            android:visibility="gone"
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="96dp" />
-
     <org.itishka.pointim.widgets.ImageUploadingPanel
         android:id="@+id/imagesPanel"
         android:layout_width="match_parent"
