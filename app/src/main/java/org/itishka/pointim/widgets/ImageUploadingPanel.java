@@ -7,14 +7,17 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import org.itishka.pointim.ImgurUploadTask;
 import org.itishka.pointim.R;
+import org.itishka.pointim.api.data.ImgurUploadResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,10 @@ public class ImageUploadingPanel extends FrameLayout {
         Uri originalPath;
         String link;
         ImageView imageView;
+        ImageButton cancel;
+        ImageView viewFinished;
+        TextView progress;
+
         boolean uploaded = false;
         ImgurUploadTask task = null;
     }
@@ -53,10 +60,30 @@ public class ImageUploadingPanel extends FrameLayout {
         init();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        cancel();
+    }
+
     public void addImage(Uri uri) {
-        Image img = new Image();
-        View view = inflate(getContext(), R.layout.image_uploading_panel_item, null);
+        final Image img = new Image();
+        final View view = inflate(getContext(), R.layout.image_uploading_panel_item, null);
         img.imageView = (ImageView) view.findViewById(R.id.imageView);
+        img.viewFinished = (ImageView) view.findViewById(R.id.viewFinished);
+        img.viewFinished.setVisibility(GONE);
+        img.progress = (TextView) view.findViewById(R.id.imageProgress);
+        img.cancel = (ImageButton) view.findViewById(R.id.action_cancel);
+        img.cancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (img.task!=null && !img.task.isCancelled()) {
+                    img.task.cancel(true);
+                }
+                ImageUploadingPanel.this.mLayout.removeView(view);
+                mImages.remove(img);
+            }
+        });
         img.imageView.setImageURI(uri);
         Picasso.with(getContext())
                 .load(uri)
@@ -66,6 +93,26 @@ public class ImageUploadingPanel extends FrameLayout {
         mLayout.addView(view);
         img.originalPath = uri;
         mImages.add(img);
+
+        img.task = new ImgurUploadTask(getContext(), uri) {
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+                img.progress.setText(values[0]+"%");
+            }
+
+            @Override
+            protected void onPostExecute(ImgurUploadResult result) {
+                super.onPostExecute(result);
+                if (result!=null && result.success) {
+                    img.viewFinished.setVisibility(VISIBLE);
+                    img.progress.setVisibility(GONE);
+                } else {
+                    //Toast.makeText(getActivity(), "Error uploading photo", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        img.task.execute();
     }
 
     public List<String> getLinks() {

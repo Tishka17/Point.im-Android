@@ -26,13 +26,18 @@ import retrofit.RetrofitError;
 public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUploadResult> {
     private CountingTypedFile.ProgressListener listener;
     private final Uri mUri;
-    private final File mFile;
+    private File mFile;
     private Context mContext;
 
 
-    public ImgurUploadTask(Context context, Uri uri, File file) {
+    public ImgurUploadTask(Context context, Uri uri) {
         mUri = uri;
-        mFile = file;
+        try {
+            mFile = File.createTempFile("upload_","", context.getCacheDir());
+        } catch (IOException e) {
+            mFile = null;
+            e.printStackTrace();
+        }
         mContext = context;
     }
 

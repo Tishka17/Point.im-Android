@@ -96,26 +96,9 @@ public class NewPostFragment extends Fragment {
                 dialog.show();
                 final ProgressBar progressBar = (ProgressBar) dialog.findViewById(R.id.google_progress);
 
-                new ImgurUploadTask(getActivity(), mImageUri, new File(getActivity().getCacheDir(), "UPLOADING.jpg")) {
-                    @Override
-                    protected void onProgressUpdate(Integer... values) {
-                        super.onProgressUpdate(values);
-                        progressBar.setProgress(values[0]);
-                    }
-
-                    @Override
-                    protected void onPostExecute(ImgurUploadResult result) {
-                        super.onPostExecute(result);
-                        dialog.hide();
-                        if (result!=null && result.success) {
-                            mProgressDialog.show();
-                            String newText = String.format("%s\n%s", text, result.data.link);
-                            ConnectionManager.getInstance().pointService.createPost(newText, tags, mNewPostCallback);
-                        } else {
-                            Toast.makeText(getActivity(), "Error uploading photo", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }.execute();
+                    mProgressDialog.show();
+                    String newText = String.format("%s\n%s", text, result.data.link);
+                    ConnectionManager.getInstance().pointService.createPost(newText, tags, mNewPostCallback);
                 */
             } else {
                 mProgressDialog.show();
