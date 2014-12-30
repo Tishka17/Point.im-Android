@@ -6,14 +6,17 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.okhttp.OkHttpClient;
 
 import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.api.data.LoginResult;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -21,12 +24,17 @@ import retrofit.converter.GsonConverter;
  */
 public class ConnectionManager {
     private static final ConnectionManager instance = new ConnectionManager();
+    private OkClient okClient;
 
     public static ConnectionManager getInstance() {
         return instance;
     }
 
     private ConnectionManager() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setReadTimeout(120, TimeUnit.SECONDS);
+        okClient = new OkClient(okHttpClient);
+
         RestAdapter authRestAdapter = new RestAdapter.Builder()
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
@@ -34,11 +42,11 @@ public class ConnectionManager {
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
+                .setClient(okClient)
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
                 .build();
         pointAuthService = authRestAdapter.create(PointAuthService.class);
-
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setRequestInterceptor(new RequestInterceptor() {
@@ -48,6 +56,7 @@ public class ConnectionManager {
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
+                .setClient(okClient)
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(IMGUR_ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
@@ -92,6 +101,7 @@ public class ConnectionManager {
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
+                .setClient(okClient)
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
                 .build();
