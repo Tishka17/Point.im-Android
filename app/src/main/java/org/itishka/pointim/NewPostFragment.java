@@ -23,12 +23,10 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.data.ImgurBaseResponse;
 import org.itishka.pointim.api.data.ImgurImage;
+import org.itishka.pointim.api.data.ImgurUploadResult;
 import org.itishka.pointim.api.data.PointResult;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -140,12 +138,16 @@ public class NewPostFragment extends Fragment {
                     }
 
                     @Override
-                    protected void onPostExecute(ImgurImage imgurImage) {
-                        super.onPostExecute(imgurImage);
+                    protected void onPostExecute(ImgurUploadResult result) {
+                        super.onPostExecute(result);
                         dialog.hide();
-                        mProgressDialog.show();
-                        String newText = String.format("%s\n%s", text, imgurImage.link);
-                        ConnectionManager.getInstance().pointService.createPost(newText, tags, mNewPostCallback);
+                        if (result!=null && result.success) {
+                            mProgressDialog.show();
+                            String newText = String.format("%s\n%s", text, result.data.link);
+                            ConnectionManager.getInstance().pointService.createPost(newText, tags, mNewPostCallback);
+                        } else {
+                            Toast.makeText(getActivity(), "Error uploading photo", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }.execute();
             } else {

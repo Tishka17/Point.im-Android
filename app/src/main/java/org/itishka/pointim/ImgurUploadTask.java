@@ -1,23 +1,21 @@
 package org.itishka.pointim;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.ProgressBar;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.CountingTypedFile;
-import org.itishka.pointim.api.data.ImgurBaseResponse;
+import org.itishka.pointim.api.data.ImgurUploadResult;
 import org.itishka.pointim.api.data.ImgurImage;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
+import java.net.SocketTimeoutException;
+
+import retrofit.RetrofitError;
 
 /**
  * Created by Tishka17 on 30.12.2014.
  */
-public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurImage> {
+public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUploadResult> {
     private CountingTypedFile.ProgressListener listener;
     private String filePath;
     private final String fileType;
@@ -30,7 +28,7 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurIm
 
 
     @Override
-    protected ImgurImage doInBackground(String... params) {
+    protected ImgurUploadResult doInBackground(String... params) {
         File file = new File(filePath);
         final long totalSize = file.length();
         listener = new CountingTypedFile.ProgressListener() {
@@ -39,7 +37,11 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurIm
                 publishProgress((int) ((num / (float) totalSize) * 100));
             }
         };
-        ImgurBaseResponse response = ConnectionManager.getInstance().imgurService.uploadFile(new CountingTypedFile(fileType, file, listener));
-        return ConnectionManager.getInstance().imgurService.getImageInfo(response.data);
+        try {
+            return ConnectionManager.getInstance().imgurService.uploadFile(new CountingTypedFile(fileType, file, listener));
+        } catch (RetrofitError e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

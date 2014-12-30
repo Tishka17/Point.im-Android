@@ -48,6 +48,7 @@ public class ConnectionManager {
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(IMGUR_ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
                 .build();

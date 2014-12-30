@@ -1,6 +1,6 @@
 package org.itishka.pointim.api;
 
-import org.itishka.pointim.api.data.ImgurBaseResponse;
+import org.itishka.pointim.api.data.ImgurUploadResult;
 import org.itishka.pointim.api.data.ImgurImage;
 
 import retrofit.http.GET;
@@ -8,7 +8,6 @@ import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
 import retrofit.http.Path;
-import retrofit.http.Query;
 import retrofit.mime.TypedFile;
 
 /**
@@ -17,7 +16,7 @@ import retrofit.mime.TypedFile;
 public interface ImgurService {
     @Multipart
     @POST("/upload")
-    ImgurBaseResponse uploadFile(@Part("image") TypedFile resource);
+    ImgurUploadResult uploadFile(@Part("image") TypedFile resource);
 
 
     @GET("/image/{id}")
