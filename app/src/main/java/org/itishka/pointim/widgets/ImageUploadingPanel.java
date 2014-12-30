@@ -41,6 +41,7 @@ public class ImageUploadingPanel extends FrameLayout {
         ImageView imageView;
         ImageButton cancel;
         ImageView viewFinished;
+        ImageView viewError;
         ProgressWheel progress;
 
         boolean uploaded = false;
@@ -82,6 +83,8 @@ public class ImageUploadingPanel extends FrameLayout {
         img.imageView = (ImageView) newView.findViewById(R.id.imageView);
         img.viewFinished = (ImageView) newView.findViewById(R.id.viewFinished);
         img.viewFinished.setVisibility(GONE);
+        img.viewError = (ImageView) newView.findViewById(R.id.viewError);
+        img.viewError.setVisibility(GONE);
         img.progress = (ProgressWheel) newView.findViewById(R.id.progress_wheel);
         img.cancel = (ImageButton) newView.findViewById(R.id.action_cancel);
         img.cancel.setOnClickListener(new OnClickListener() {
@@ -180,6 +183,7 @@ public class ImageUploadingPanel extends FrameLayout {
             super.onPreExecute();
             img.get().progress.setProgress(0);
             img.get().progress.setVisibility(VISIBLE);
+            img.get().viewError.setVisibility(GONE);
         }
 
         @Override
@@ -200,8 +204,9 @@ public class ImageUploadingPanel extends FrameLayout {
                 img.get().imageView.setColorFilter(null);
                 img.get().link = result.data.link;
             } else {
+                img.get().viewError.setVisibility(VISIBLE);
                 img.get().progress.setVisibility(GONE);
-                img.get().imageView.setColorFilter(Color.argb(220, 255, 255, 255), PorterDuff.Mode.LIGHTEN);
+                img.get().imageView.setColorFilter(Color.argb(220, 200, 100, 100), PorterDuff.Mode.LIGHTEN);
                 //Toast.makeText(getActivity(), "Error uploading photo", Toast.LENGTH_SHORT).show();
             }
         }
