@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.api.data.LoginResult;
 
 import java.util.Date;
@@ -37,6 +38,20 @@ public class ConnectionManager {
                 .setConverter(new GsonConverter(mGson))
                 .build();
         pointAuthService = authRestAdapter.create(PointAuthService.class);
+
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setRequestInterceptor(new RequestInterceptor() {
+                    @Override
+                    public void intercept(RequestFacade requestFacade) {
+                        requestFacade.addHeader("Authorization", "Client-ID "+ BuildConfig.IMGUR_ID);
+                        requestFacade.addHeader("User-Agent", USER_AGENT);
+                    }
+                })
+                .setEndpoint(IMGUR_ENDPOINT)
+                .setConverter(new GsonConverter(mGson))
+                .build();
+        imgurService = restAdapter.create(ImgurService.class);
     }
 
     public static final String USER_AGENT = "Tishka17 Point.im Client";
@@ -91,4 +106,9 @@ public class ConnectionManager {
             AuthSaver.saveLoginResult(context, loginResult);
         }
     }
+
+    //----- IMGUR ---
+
+    public ImgurService imgurService = null;
+    public static final String IMGUR_ENDPOINT = "https://api.imgur.com/3/";
 }

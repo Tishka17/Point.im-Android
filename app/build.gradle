@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
@@ -15,6 +18,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId')
+            buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret')
+        }
+        debug {
+            buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId')
+            buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret')
         }
     }
 }
