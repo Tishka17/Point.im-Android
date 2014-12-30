@@ -49,6 +49,7 @@ dependencies {
     compile 'com.afollestad:material-dialogs:0.5.1'
     compile 'com.melnykov:floatingactionbutton:1.1.0'
     compile 'com.jpardogo.googleprogressbar:library:1.1.0'
+    compile 'com.pnikosis:materialish-progress:1.2'
 
     compile 'org.lucasr.twowayview:core:1.0.0-SNAPSHOT@aar'
     compile 'org.lucasr.twowayview:layouts:1.0.0-SNAPSHOT@aar'
