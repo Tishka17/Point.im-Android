@@ -85,25 +85,18 @@ public class NewPostFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.send) {
+            if (!mImagesPanel.isUploadFinished()) {
+                Toast.makeText(getActivity(), "Wait or check for errors!", Toast.LENGTH_SHORT).show();
+                return true;
+            }
             final String text = mPostText.getText().toString();
             final String[] tags = mPostTags.getText().toString().split("\\s*,\\s*");
-            if (!mImagesPanel.getLinks().isEmpty()) {
-/*
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .cancelable(false)
-                        .customView(R.layout.dialog_progress, false)
-                        .build();
-                dialog.show();
-                final ProgressBar progressBar = (ProgressBar) dialog.findViewById(R.id.google_progress);
-
-                    mProgressDialog.show();
-                    String newText = String.format("%s\n%s", text, result.data.link);
-                    ConnectionManager.getInstance().pointService.createPost(newText, tags, mNewPostCallback);
-                */
-            } else {
-                mProgressDialog.show();
-                ConnectionManager.getInstance().pointService.createPost(text, tags, mNewPostCallback);
+            StringBuffer sb = new StringBuffer(text);
+            for (String l : mImagesPanel.getLinks()) {
+                sb.append("\n").append(l);
             }
+            mProgressDialog.show();
+            ConnectionManager.getInstance().pointService.createPost(sb.toString(), tags, mNewPostCallback);
             return true;
         } else if (id == R.id.attach) {
             Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
