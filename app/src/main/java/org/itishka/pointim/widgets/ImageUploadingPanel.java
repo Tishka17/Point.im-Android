@@ -178,6 +178,7 @@ public class ImageUploadingPanel extends FrameLayout {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            img.get().progress.setProgress(0);
             img.get().progress.setVisibility(VISIBLE);
         }
 
@@ -197,6 +198,7 @@ public class ImageUploadingPanel extends FrameLayout {
                 img.get().progress.setVisibility(GONE);
                 img.get().uploaded = true;
                 img.get().imageView.setColorFilter(null);
+                img.get().link = result.data.link;
             } else {
                 img.get().progress.setVisibility(GONE);
                 img.get().imageView.setColorFilter(Color.argb(220, 255, 255, 255), PorterDuff.Mode.LIGHTEN);

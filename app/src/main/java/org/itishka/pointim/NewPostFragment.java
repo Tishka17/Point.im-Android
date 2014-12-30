@@ -96,7 +96,7 @@ public class NewPostFragment extends Fragment {
                 sb.append("\n").append(l);
             }
             mProgressDialog.show();
-            ConnectionManager.getInstance().pointService.createPost(sb.toString(), tags, mNewPostCallback);
+            ConnectionManager.getInstance().pointService.createPost(sb.toString().trim(), tags, mNewPostCallback);
             return true;
         } else if (id == R.id.attach) {
             Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
