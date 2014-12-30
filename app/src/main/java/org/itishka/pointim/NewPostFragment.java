@@ -26,6 +26,7 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.ImgurImage;
 import org.itishka.pointim.api.data.ImgurUploadResult;
 import org.itishka.pointim.api.data.PointResult;
+import org.itishka.pointim.widgets.ImageUploadingPanel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,8 +43,8 @@ public class NewPostFragment extends Fragment {
 
     private static final int RESULT_LOAD_IMAGE = 17;
     private AlertDialog mProgressDialog;
-    private String mImagePath = null;
-    private String mImageMime;
+    private Uri mImageUri = null;
+    private ImageUploadingPanel mImagesPanel;
 
     public NewPostFragment() {
     }
@@ -58,12 +59,13 @@ public class NewPostFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_new_post, container, false);
         mPostText = (EditText) rootView.findViewById(R.id.postText);
         mPostTags = (EditText) rootView.findViewById(R.id.postTags);
+        mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
         mImageView = (ImageView) rootView.findViewById(R.id.imageView);
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mImageView.setVisibility(View.GONE);
-                mImagePath = null;
+                mImageUri = null;
             }
         });
         setHasOptionsMenu(true);
@@ -85,34 +87,10 @@ public class NewPostFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
-
-
-            Bitmap bitmap = null;
-            Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            mImagePath = null;
-            mImageMime = cursor.getString(cursor.getColumnIndex(filePathColumn[1]));
-            cursor.close();
-
-            File outputDir = getActivity().getCacheDir(); // context being the Activity pointer
-            File outputFile = new File(outputDir, "UPLOADING.jpg");
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                outputFile.createNewFile();
-                FileOutputStream fos = new FileOutputStream(outputFile);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
-                fos.close();
-                mImagePath = outputFile.getAbsolutePath();
-                mImageView.setImageURI(selectedImage);
-                mImageView.setVisibility(View.VISIBLE);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-
+            mImageUri =  data.getData();
+            mImageView.setImageURI(mImageUri);
+            mImageView.setVisibility(View.VISIBLE);
+            mImagesPanel.addImage(mImageUri);
         }
     }
 
@@ -122,7 +100,7 @@ public class NewPostFragment extends Fragment {
         if (id == R.id.send) {
             final String text = mPostText.getText().toString();
             final String[] tags = mPostTags.getText().toString().split("\\s*,\\s*");
-            if (mImagePath != null) {
+            if (mImageUri != null) {
 
                 final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                         .cancelable(false)
@@ -130,7 +108,8 @@ public class NewPostFragment extends Fragment {
                         .build();
                 dialog.show();
                 final ProgressBar progressBar = (ProgressBar) dialog.findViewById(R.id.google_progress);
-                new ImgurUploadTask(mImagePath, mImageMime) {
+
+                new ImgurUploadTask(getActivity(), mImageUri, new File(getActivity().getCacheDir(), "UPLOADING.jpg")) {
                     @Override
                     protected void onProgressUpdate(Integer... values) {
                         super.onProgressUpdate(values);
@@ -156,7 +135,7 @@ public class NewPostFragment extends Fragment {
             }
             return true;
         } else if (id == R.id.attach) {
-            Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(i, RESULT_LOAD_IMAGE);
         }
         return super.onOptionsItemSelected(item);
