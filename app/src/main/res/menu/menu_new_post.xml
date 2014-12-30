@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.itishka.pointim.NewPostActivity">
     <item
+        android:id="@+id/attach"
+        android:icon="@drawable/ic_attach_file_white_24dp"
+        android:title="Attach"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/send"
         android:icon="@drawable/ic_send_white_24dp"
         android:title="Send"
