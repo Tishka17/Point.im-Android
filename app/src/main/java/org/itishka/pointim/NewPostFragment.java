@@ -1,5 +1,6 @@
 package org.itishka.pointim;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.PointResult;
@@ -25,6 +28,8 @@ import retrofit.client.Response;
  */
 public class NewPostFragment extends Fragment {
 
+    private AlertDialog mProgressDialog;
+
     public NewPostFragment() {
     }
 
@@ -38,6 +43,11 @@ public class NewPostFragment extends Fragment {
         mPostText = (EditText) rootView.findViewById(R.id.postText);
         mPostTags = (EditText) rootView.findViewById(R.id.postTags);
         setHasOptionsMenu(true);
+
+        mProgressDialog = new MaterialDialog.Builder(getActivity())
+                .cancelable(false)
+                .customView(R.layout.dialog_progress, false)
+                .build();
         return rootView;
     }
 
@@ -53,6 +63,7 @@ public class NewPostFragment extends Fragment {
         if (id == R.id.send) {
             String text = mPostText.getText().toString();
             String[] tags = mPostTags.getText().toString().split("\\s*,\\s*");
+            mProgressDialog.show();
             ConnectionManager.getInstance().pointService.createPost(text, tags, mNewPostCallback);
             return true;
         }
@@ -62,6 +73,7 @@ public class NewPostFragment extends Fragment {
     private Callback<PointResult> mNewPostCallback = new Callback<PointResult>() {
         @Override
         public void success(PointResult post, Response response) {
+            mProgressDialog.hide();
             if (post.isSuccess()) {
                 Toast.makeText(getActivity(), "Post sent!", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
@@ -72,6 +84,7 @@ public class NewPostFragment extends Fragment {
 
         @Override
         public void failure(RetrofitError error) {
+            mProgressDialog.hide();
             Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };

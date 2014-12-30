@@ -22,4 +22,5 @@ public class PostData {
 	
 	@SerializedName("private")
 	public boolean isPrivate;
+    public boolean recommended; //is comming from server?
 }

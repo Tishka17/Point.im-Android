@@ -1,5 +1,6 @@
 package org.itishka.pointim;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,11 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Comment;
@@ -43,6 +44,8 @@ public class SinglePostFragment extends Fragment {
     private EditText mText;
     private ImageButton mSendButton;
     private View mBottomBar;
+    private ExtendedPost mPointPost;
+    private Dialog mProgressDialog;
 
 
     /**
@@ -71,6 +74,7 @@ public class SinglePostFragment extends Fragment {
             mPost = getArguments().getString(ARG_POST);
         }
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -86,6 +90,11 @@ public class SinglePostFragment extends Fragment {
                 }
             });
         }
+
+        mProgressDialog = new MaterialDialog.Builder(getActivity())
+                .cancelable(false)
+                .customView(R.layout.dialog_progress, false)
+                .build();
     }
 
     @Override
@@ -110,7 +119,7 @@ public class SinglePostFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
         mBottomBar = rootView.findViewById(R.id.bottom_bar);
-        mCommentId = (TextView)rootView.findViewById(R.id.comment_id);
+        mCommentId = (TextView) rootView.findViewById(R.id.comment_id);
         mCommentId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,8 +127,8 @@ public class SinglePostFragment extends Fragment {
                 mCommentId.setVisibility(View.GONE);
             }
         });
-        mText = (EditText)rootView.findViewById(R.id.text);
-        mSendButton = (ImageButton)rootView.findViewById(R.id.send);
+        mText = (EditText) rootView.findViewById(R.id.text);
+        mSendButton = (ImageButton) rootView.findViewById(R.id.send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,6 +139,7 @@ public class SinglePostFragment extends Fragment {
                 }
                 String comment = mCommentId.getText().toString();
                 mBottomBar.setEnabled(false);
+                mProgressDialog.show();
                 if (TextUtils.isEmpty(comment)) {
                     ConnectionManager.getInstance().pointService.addComment(mPost, text, mCommentCallback);
                 } else {
@@ -160,6 +170,7 @@ public class SinglePostFragment extends Fragment {
         @Override
         public void success(PointResult post, Response response) {
             mBottomBar.setEnabled(true);
+            mProgressDialog.hide();
             if (post.isSuccess()) {
                 mCommentId.setVisibility(View.GONE);
                 mCommentId.setText("");
@@ -174,6 +185,7 @@ public class SinglePostFragment extends Fragment {
         @Override
         public void failure(RetrofitError error) {
             mBottomBar.setEnabled(true);
+            mProgressDialog.hide();
             Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
@@ -183,6 +195,8 @@ public class SinglePostFragment extends Fragment {
             mSwipeRefresh.setRefreshing(false);
             if (post.isSuccess()) {
                 mAdapter.setData(post);
+                mPointPost = post;
+                getActivity().supportInvalidateOptionsMenu();
             } else {
                 Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
             }
@@ -204,6 +218,24 @@ public class SinglePostFragment extends Fragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.setGroupVisible(R.id.group_my,
+                mPointPost != null &&
+                        mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login)
+        );
+        menu.setGroupVisible(R.id.group_not_recommended,
+                mPointPost != null &&
+                        !mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login) &&
+                        !mPointPost.post.recommended
+        );
+
+
+
+
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_single_post, menu);
@@ -211,18 +243,12 @@ public class SinglePostFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
             mSwipeRefresh.setRefreshing(true);
             update(mCallback);
             return true;
-        } else if (id == R.id.action_recomend) {
-            //final View v = getLayoutInflater(new Bundle()).inflate(R.layout.input_dialog, null);
+        } else if (id == R.id.action_recommend) {
             final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                     .title("Really recommend #" + mPost + "?")
                     .positiveText(android.R.string.ok)
@@ -232,6 +258,7 @@ public class SinglePostFragment extends Fragment {
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
                             String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
+                            mProgressDialog.show();
                             if (TextUtils.isEmpty(text)) {
                                 ConnectionManager.getInstance().pointService.recommend(mPost, mRecommendCallback);
                             } else {
@@ -239,9 +266,24 @@ public class SinglePostFragment extends Fragment {
                             }
                         }
                     })
-                    .customView(R.layout.input_dialog)
+                    .customView(R.layout.dialog_input, true)
                     .build();
-            //dialog.setCustomView(v);
+            dialog.show();
+            return true;
+        } else if (id == R.id.action_delete) {
+            final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                    .title("Really delete #" + mPost + "?")
+                    .positiveText(android.R.string.ok)
+                    .negativeText("Cancel")
+                    .callback(new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            mProgressDialog.show();
+                            ConnectionManager.getInstance().pointService.deletePost(mPost, mDeleteCallback);
+                        }
+                    })
+                    .build();
             dialog.show();
             return true;
         }
@@ -249,9 +291,29 @@ public class SinglePostFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private Callback<PointResult> mDeleteCallback = new Callback<PointResult>() {
+        @Override
+        public void success(PointResult pointResult, Response response) {
+            mProgressDialog.hide();
+            if (pointResult.isSuccess()) {
+                Toast.makeText(getActivity(), "Deleted!", Toast.LENGTH_SHORT).show();
+                getActivity().finish();
+            } else {
+                Toast.makeText(getActivity(), pointResult.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            mProgressDialog.hide();
+            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
+
     private Callback<PointResult> mRecommendCallback = new Callback<PointResult>() {
         @Override
         public void success(PointResult post, Response response) {
+            mProgressDialog.hide();
             if (post.isSuccess()) {
                 Toast.makeText(getActivity(), "Reommended!", Toast.LENGTH_SHORT).show();
                 update(mCallback);
@@ -262,6 +324,7 @@ public class SinglePostFragment extends Fragment {
 
         @Override
         public void failure(RetrofitError error) {
+            mProgressDialog.hide();
             Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };

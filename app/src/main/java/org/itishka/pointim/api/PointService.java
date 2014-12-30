@@ -91,4 +91,7 @@ public interface PointService {
     @FormUrlEncoded
     @POST("/api/post/")
     void createPost(@Field("text") String text, @Field("tag") String []tags, Callback<PointResult> callback);
+
+    @DELETE("/api/post/{id}")
+    void deletePost(@Path("id") String id, Callback<PointResult> callback);
 }
