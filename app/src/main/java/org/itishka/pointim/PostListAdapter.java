@@ -129,7 +129,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             Picasso.with(getContext())
                     .load(post.post.text.images.get(0))
                     .fit()
-                    .centerCrop()
+                    .centerInside()
                     .into(holder.image);
         }
         holder.text.setText(post.post.text.text);
