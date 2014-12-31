@@ -32,10 +32,15 @@ public class ImageSearchHelper {
     public static List<String> checkImageLinks(List<String> links) {
         List<String> images = new ArrayList<>();
         for (String link: links) {
-            if (sLinksChecked.get(link) == null) {
+            Boolean stored = sLinksChecked.get(link);
+            if (stored == null) {
                 boolean res = checkImageLink(link);
-                if (res) images.add(link);
+                if (res) {
+                    images.add(link);
+                }
                 sLinksChecked.put(link, res);
+            } else if (stored) {
+                images.add(link);
             }
         }
         return images;

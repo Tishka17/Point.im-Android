@@ -141,6 +141,11 @@
             </LinearLayout>
         </LinearLayout>
 
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="192dp" />
         <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -191,7 +196,6 @@
                 android:paddingRight="10dp"
                 android:text="111"
                 android:textColor="@android:color/secondary_text_dark" />
-
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
