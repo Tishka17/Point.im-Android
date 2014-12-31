@@ -54,17 +54,6 @@ public abstract class PostListFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new PostListAdapter(getActivity(), null);
         mRecyclerView.setAdapter(mAdapter);
-        ItemClickSupport itemClick = ItemClickSupport.addTo(mRecyclerView);
-/*
-        itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-            @Override
-            public void onItemClick(RecyclerView p, View c, int pos, long id) {
-                Intent browserIntent = new Intent(getActivity(), SinglePostActivity.class);
-                browserIntent.putExtra("post", mAdapter.getItem(pos).post.id);
-                getActivity().startActivity(browserIntent);
-            }
-        });
-        */
         return rootView;
     }
 

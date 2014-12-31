@@ -110,7 +110,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.author.setText("@" + post.post.author.login);
         holder.itemView.setTag(R.id.post_id, post.post.id);
 
-        holder.text.setText(post.post.text);
+        holder.text.setText(post.post.text.text);
         Utils.showAvatar(getContext(), post.post.author.avatar, holder.avatar);
         holder.date.setText(Utils.formatDate(post.post.created));
 
@@ -119,8 +119,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             holder.recommend_info.setVisibility(View.VISIBLE);
             if (post.rec.text != null) {
                 holder.recommend_text.setVisibility(View.VISIBLE);
-                holder.recommend_text.setText(post.rec.text);
-                Utils.addLinks(holder.recommend_text);
+                holder.recommend_text.setText(post.rec.text.text);
             } else {
                 holder.recommend_text.setVisibility(View.GONE);
             }

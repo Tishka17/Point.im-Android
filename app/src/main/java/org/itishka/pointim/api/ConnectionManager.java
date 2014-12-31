@@ -10,6 +10,7 @@ import com.squareup.okhttp.OkHttpClient;
 
 import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.api.data.LoginResult;
+import org.itishka.pointim.api.data.TextWithImages;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -70,7 +71,7 @@ public class ConnectionManager {
     private final Gson mGson = new GsonBuilder()
             .setDateFormat(DATE_FORMAT)
             .registerTypeAdapter(Date.class, new DateDeserializer())
-            .registerTypeAdapter(Spannable.class, new TextParser())
+            .registerTypeAdapter(TextWithImages.class, new TextParser())
             .create();
     public PointAuthService pointAuthService = null;
     public LoginResult loginResult = null;

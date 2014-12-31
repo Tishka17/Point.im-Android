@@ -1,6 +1,7 @@
 package org.itishka.pointim.api.data;
 
 import java.util.Date;
+import java.util.List;
 
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -15,7 +16,7 @@ public class PostData {
 	public String []tags;
 	public int comments_count;
 	public AuthorData author;
-	public Spannable text;
+	public TextWithImages text;
 	public Date created;
 	public Type type;
 	public String id;

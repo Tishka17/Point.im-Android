@@ -140,7 +140,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (i==0) {
             PostViewHolder postHolder = (PostViewHolder) holder;
             postHolder.author.setText("@" + mPost.post.author.login);
-            postHolder.text.setText(mPost.post.text);
+            postHolder.text.setText(mPost.post.text.text);
             Utils.showAvatar(getContext(), mPost.post.author.avatar, postHolder.avatar);
             postHolder.date.setText(Utils.formatDate(mPost.post.created));
 
@@ -181,7 +181,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 commentHolder.divider.setVisibility(View.VISIBLE);
             }
             commentHolder.date.setText(Utils.formatDate(comment.created));
-            commentHolder.text.setText(comment.text);
+            commentHolder.text.setText(comment.text.text);
             commentHolder.author.setText(comment.author.login);
             if (TextUtils.isEmpty(comment.to_comment_id))
                 commentHolder.comment_id.setText("/"+comment.id);

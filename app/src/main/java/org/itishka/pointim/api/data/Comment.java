@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Comment {
 	public AuthorData author;
-	public Spannable text;
+	public TextWithImages text;
 	public Date created;
 	public String id;
 	public String post_id;
