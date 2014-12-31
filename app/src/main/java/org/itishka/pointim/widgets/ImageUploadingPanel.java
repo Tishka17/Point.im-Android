@@ -3,9 +3,6 @@ package org.itishka.pointim.widgets;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.squareup.picasso.Picasso;
@@ -103,6 +98,7 @@ public class ImageUploadingPanel extends FrameLayout {
                 .load(uri)
                 .transform(new CropSquareTransformation())
                 .fit()
+                .centerCrop()
                 .into(img.imageView);
         mLayout.addView(newView);
         img.originalPath = uri;
@@ -189,9 +185,9 @@ public class ImageUploadingPanel extends FrameLayout {
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            img.get().progress.setProgress(values[0]*0.9f);
+            img.get().progress.setProgress(values[0] * 0.9f);
             //progress 0..100 -> fkmaf 255..55
-            img.get().imageView.setColorFilter(Color.argb(220-values[0]*2, 255, 255, 255), PorterDuff.Mode.LIGHTEN);
+            img.get().imageView.setColorFilter(Color.argb(220 - values[0] * 2, 255, 255, 255), PorterDuff.Mode.LIGHTEN);
         }
 
         @Override
@@ -211,6 +207,4 @@ public class ImageUploadingPanel extends FrameLayout {
             }
         }
     }
-
-    ;
 }
