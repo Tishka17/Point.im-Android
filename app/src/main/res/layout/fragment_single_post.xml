@@ -57,7 +57,7 @@
                     android:src="@drawable/ic_attach_file_grey600_24dp" />
 
                 <EditText
-                    android:inputType="textCapSentences"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:id="@+id/text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
