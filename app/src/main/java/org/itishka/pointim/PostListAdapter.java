@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
+import org.itishka.pointim.widgets.ImageList;
 
 import java.lang.ref.WeakReference;
 
@@ -47,7 +48,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         TextView date;
         ImageView webLink;
         CheckBox favourite;
-        ImageView image;
+        ImageList imageList;
         View mainConent;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -68,7 +69,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             webLink = (ImageView) itemView.findViewById(R.id.weblink);
             favourite = (CheckBox) itemView.findViewById(R.id.favourite);
             mainConent = itemView.findViewById(R.id.main_content);
-            image = (ImageView) itemView.findViewById(R.id.imageView);
+            imageList = (ImageList) itemView.findViewById(R.id.imageList);
         }
     }
 
@@ -93,13 +94,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
                 getContext().startActivity(browserIntent);
             }
         });
-        holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String)view.getTag()));
-                getContext().startActivity(browserIntent);
-            }
-        });
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,17 +115,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         holder.author.setText("@" + post.post.author.login);
         holder.itemView.setTag(R.id.post_id, post.post.id);
 
-        if (post.post.text.images.isEmpty()) {
-            holder.image.setVisibility(View.GONE);
-        } else {
-            holder.image.setVisibility(View.VISIBLE);
-            holder.image.setTag(post.post.text.images.get(0));
-            Picasso.with(getContext())
-                    .load(post.post.text.images.get(0))
-                    .fit()
-                    .centerInside()
-                    .into(holder.image);
-        }
+        holder.imageList.setImageUrls(post.post.text.images);
         holder.text.setText(post.post.text.text);
         Utils.showAvatar(getContext(), post.post.author.avatar, holder.avatar);
         holder.date.setText(Utils.formatDate(post.post.created));

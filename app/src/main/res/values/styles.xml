@@ -10,4 +10,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
     </style>
+
+    <style name="AppTheme.ImageListItem">
+        <item name="android:maxWidth">384dp</item>
+        <item name="android:layout_height">192dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
 </resources>
