@@ -50,10 +50,10 @@
                     android:visibility="gone" />
 
                 <ImageButton
+                    style="@style/Widget.AppCompat.ActionButton"
                     android:id="@+id/attach"
                     android:layout_width="@dimen/touch_size"
                     android:layout_height="@dimen/touch_size"
-                    android:background="@android:color/transparent"
                     android:src="@drawable/ic_attach_file_grey600_24dp" />
 
                 <EditText
@@ -65,10 +65,10 @@
                     android:layout_weight="1" />
 
                 <ImageButton
+                    style="@style/Widget.AppCompat.ActionButton"
                     android:id="@+id/send"
                     android:layout_width="@dimen/touch_size"
                     android:layout_height="@dimen/touch_size"
-                    android:background="@android:color/transparent"
                     android:src="@drawable/ic_send_grey600_24dp" />
             </LinearLayout>
 
