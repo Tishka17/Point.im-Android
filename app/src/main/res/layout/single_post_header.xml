@@ -71,6 +71,10 @@
             android:text="test with some many letttttttttters and so on as it can be" />
 
 
+        <org.itishka.pointim.widgets.ImageList
+            android:id="@+id/imageList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
         <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

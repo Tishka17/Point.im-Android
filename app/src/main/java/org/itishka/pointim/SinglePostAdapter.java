@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;
+import org.itishka.pointim.widgets.ImageList;
 
 import java.lang.ref.WeakReference;
 
@@ -59,6 +60,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ImageView webLink;
         CheckBox favourite;
         View mainConent;
+        ImageList imageList;
         public PostViewHolder(View itemView) {
             super(itemView);
             text = (TextView) itemView.findViewById(R.id.text);
@@ -71,6 +73,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             webLink = (ImageView) itemView.findViewById(R.id.weblink);
             favourite = (CheckBox) itemView.findViewById(R.id.favourite);
             mainConent = itemView.findViewById(R.id.main_content);
+            imageList = (ImageList) itemView.findViewById(R.id.imageList);
         }
     }
     protected class CommentViewHolder extends RecyclerView.ViewHolder {
@@ -80,6 +83,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView date;
         View divider;
         TextView comment_id;
+        ImageList imageList;
         public CommentViewHolder(View itemView) {
             super(itemView);
             text = (TextView) itemView.findViewById(R.id.text);
@@ -88,6 +92,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             date = (TextView) itemView.findViewById(R.id.date);
             divider = itemView.findViewById(R.id.divider);
             comment_id = (TextView)itemView.findViewById(R.id.comment_id);
+            imageList = (ImageList) itemView.findViewById(R.id.imageList);
         }
     }
 
@@ -141,6 +146,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             PostViewHolder postHolder = (PostViewHolder) holder;
             postHolder.author.setText("@" + mPost.post.author.login);
             postHolder.text.setText(mPost.post.text.text);
+            postHolder.imageList.setImageUrls(mPost.post.text.images);
             Utils.showAvatar(getContext(), mPost.post.author.avatar, postHolder.avatar);
             postHolder.date.setText(Utils.formatDate(mPost.post.created));
 
@@ -182,6 +188,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
             commentHolder.date.setText(Utils.formatDate(comment.created));
             commentHolder.text.setText(comment.text.text);
+            commentHolder.imageList.setImageUrls(comment.text.images);
             commentHolder.author.setText(comment.author.login);
             if (TextUtils.isEmpty(comment.to_comment_id))
                 commentHolder.comment_id.setText("/"+comment.id);

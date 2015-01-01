@@ -58,6 +58,11 @@
         android:layout_marginRight="@dimen/text_margin"
         android:text="test with some many letttttttttters and so on as it can be" />
 
+    <org.itishka.pointim.widgets.ImageList
+        android:id="@+id/imageList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
