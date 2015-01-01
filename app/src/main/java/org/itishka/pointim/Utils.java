@@ -138,10 +138,21 @@ public class Utils {
     }
 
 
-    static final Pattern nickPattern = Pattern.compile("(^|\\s)@[\\w-]+");
+    static final Pattern nickPattern = Pattern.compile("(^|[>\\s])@[\\w-]+");
 
-    public static Spannable boldNicks(Spannable text) {
+    public static Spannable markNicks(Spannable text) {
         Matcher m = nickPattern.matcher(text);
+        while (m.find()) {
+            StyleSpan b = new StyleSpan(android.graphics.Typeface.BOLD);
+            text.setSpan(b, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        }
+        return text;
+    }
+
+    static final Pattern postNumberPattern = Pattern.compile("(^|[>\\s])#\\w+(/\\d+)?");
+
+    public static Spannable markPostNumbers(Spannable text) {
+        Matcher m = postNumberPattern.matcher(text);
         while (m.find()) {
             StyleSpan b = new StyleSpan(android.graphics.Typeface.BOLD);
             text.setSpan(b, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
