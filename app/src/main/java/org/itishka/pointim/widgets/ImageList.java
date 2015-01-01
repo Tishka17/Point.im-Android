@@ -93,6 +93,8 @@ public class ImageList extends FrameLayout {
 
             double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
             int targetWidth = (int) (targetHeight * aspectRatio);
+            if (targetWidth==0 || targetHeight==0)
+                return source;
             Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
             if (result != source) {
                 // Same bitmap is returned if sizes are the same

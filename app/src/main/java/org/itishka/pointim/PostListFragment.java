@@ -4,6 +4,7 @@ package org.itishka.pointim;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +16,6 @@ import android.widget.Toast;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.PostList;
-import org.lucasr.twowayview.ItemClickSupport;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -33,6 +33,23 @@ public abstract class PostListFragment extends Fragment {
 
     public PostListFragment() {
     }
+
+    PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
+
+        @Override
+        public void onPostClicked(View view, String post) {
+            Intent intent = new Intent(getActivity(), SinglePostActivity.class);
+            intent.putExtra("post", post);
+            ActivityCompat.startActivity(getActivity(), intent, null);
+        }
+
+        @Override
+        public void onTagClicked(View view, String tag) {
+            Intent intent = new Intent(getActivity(), TagViewActivity.class);
+            intent.putExtra("tag", tag);
+            ActivityCompat.startActivity(getActivity(), intent, null);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +70,7 @@ public abstract class PostListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new PostListAdapter(getActivity(), null);
+        mAdapter.setOnPostClickListener(mOnPostClickListener);
         mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }

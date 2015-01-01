@@ -12,8 +12,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
 import org.itishka.pointim.widgets.ImageList;
@@ -84,7 +82,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     }
     @Override
     public PostListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext())
+        final View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.adapter_post, viewGroup, false);
         final ViewHolder holder = new ViewHolder(v);
         holder.webLink.setOnClickListener(new View.OnClickListener() {
@@ -97,9 +95,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(getContext(), SinglePostActivity.class);
-                browserIntent.putExtra("post", view.getTag(R.id.post_id).toString());
-                getContext().startActivity(browserIntent);
+                if (mOnPostClickListener!=null) {
+                    mOnPostClickListener.onPostClicked(v, view.getTag(R.id.post_id).toString());
+                }
             }
         });
         return holder;
@@ -182,9 +180,18 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(getContext(), TagViewActivity.class);
-            intent.putExtra("tag", ((TextView)view).getText());
-            getContext().startActivity(intent);
+            if (mOnPostClickListener!=null)
+                mOnPostClickListener.onTagClicked(view, ((TextView)view).getText().toString());
         }
     };
+
+    public interface OnPostClickListener {
+        public void onPostClicked(View view, String post);
+        public void onTagClicked(View view, String tag);
+    }
+    private OnPostClickListener mOnPostClickListener = null;
+
+    public void setOnPostClickListener(OnPostClickListener onPostClickListener) {
+        mOnPostClickListener = onPostClickListener;
+    }
 }
