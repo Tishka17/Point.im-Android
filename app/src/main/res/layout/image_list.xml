@@ -9,6 +9,7 @@
         android:fillViewport="true">
 
         <LinearLayout
+            android:gravity="center"
             android:id="@+id/contentView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
