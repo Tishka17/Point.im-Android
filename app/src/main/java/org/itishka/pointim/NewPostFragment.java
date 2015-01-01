@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import org.itishka.pointim.widgets.ImageUploadingPanel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -42,9 +44,37 @@ import retrofit.client.Response;
 public class NewPostFragment extends Fragment {
 
     private static final int RESULT_LOAD_IMAGE = 17;
+    private static final String ARG_TEXT = "text";
+    private static final String ARG_IMAGES = "images";
     private AlertDialog mProgressDialog;
 
     public NewPostFragment() {
+    }
+
+    public static NewPostFragment newInstance(String text) {
+        NewPostFragment fragment = new NewPostFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_TEXT, text);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static NewPostFragment newInstance(ArrayList<Parcelable> images) {
+        NewPostFragment fragment = new NewPostFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(ARG_IMAGES, images);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static NewPostFragment newInstance(Uri image) {
+        ArrayList<Parcelable> images = new ArrayList<>(1);
+        images.add(image);
+        return newInstance(images);
+    }
+
+    public static NewPostFragment newInstance() {
+        return new NewPostFragment();
     }
 
     EditText mPostText;
@@ -59,6 +89,16 @@ public class NewPostFragment extends Fragment {
         mPostTags = (EditText) rootView.findViewById(R.id.postTags);
         mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
         setHasOptionsMenu(true);
+        if (savedInstanceState==null) {
+            Bundle args = getArguments();
+            if (args!=null) {
+                mPostText.setText(args.getString(ARG_TEXT, ""));
+                ArrayList<Uri> images = args.getParcelableArrayList(ARG_IMAGES);
+                if (images != null) for (Uri image : images) {
+                    mImagesPanel.addImage(image);
+                }
+            }
+        }
 
         mProgressDialog = new MaterialDialog.Builder(getActivity())
                 .cancelable(false)
