@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,17 @@ import com.squareup.picasso.Transformation;
 
 import org.itishka.pointim.ImgurUploadTask;
 import org.itishka.pointim.R;
+import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.api.data.ImgurImage;
 import org.itishka.pointim.api.data.ImgurUploadResult;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by Tishka17 on 31.12.2014.
@@ -32,7 +39,6 @@ public class ImageUploadingPanel extends FrameLayout {
 
     private class Image {
         Uri originalPath;
-        String link;
         ImageView imageView;
         ImageButton cancel;
         ImageView viewFinished;
@@ -41,6 +47,7 @@ public class ImageUploadingPanel extends FrameLayout {
 
         boolean uploaded = false;
         ImgurUploadTask task = null;
+        ImgurImage uploadInfo;
     }
 
     private ViewGroup mLayout;
@@ -112,6 +119,8 @@ public class ImageUploadingPanel extends FrameLayout {
                 if (!img.uploaded && img.task != null && img.task.getStatus() == AsyncTask.Status.FINISHED) {
                     img.task = new ImgUploadTask(img, getContext());
                     img.task.execute();
+                } else if (img.uploaded && !TextUtils.isEmpty(img.uploadInfo.deletehash)) {
+                    ConnectionManager.getInstance().imgurService.deleteImage(img.uploadInfo.deletehash, deleteCallback);
                 }
             }
         });
@@ -120,7 +129,7 @@ public class ImageUploadingPanel extends FrameLayout {
     public List<String> getLinks() {
         List<String> links = new ArrayList<>(mImages.size());
         for (Image i : mImages) {
-            links.add(i.link);
+            links.add(i.uploadInfo.link);
         }
         return links;
     }
@@ -129,6 +138,9 @@ public class ImageUploadingPanel extends FrameLayout {
         for (Image i : mImages) {
             if (i.task != null && !i.task.isCancelled()) {
                 i.task.cancel(true);
+            } else if (i.uploaded && !TextUtils.isEmpty(i.uploadInfo.deletehash)) {
+                //FIXME delete uploaded images on view cancel
+                //ConnectionManager.getInstance().imgurService.deleteImage(i.uploadInfo.deletehash, deleteCallback);
             }
         }
     }
@@ -198,7 +210,7 @@ public class ImageUploadingPanel extends FrameLayout {
                 img.get().progress.setVisibility(GONE);
                 img.get().uploaded = true;
                 img.get().imageView.setColorFilter(null);
-                img.get().link = result.data.link;
+                img.get().uploadInfo = result.data;
             } else {
                 img.get().viewError.setVisibility(VISIBLE);
                 img.get().progress.setVisibility(GONE);
@@ -207,4 +219,16 @@ public class ImageUploadingPanel extends FrameLayout {
             }
         }
     }
+
+    private Callback<Void> deleteCallback = new Callback<Void>() {
+        @Override
+        public void success(Void aVoid, Response response) {
+            //do nothng
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            //do nothng
+        }
+    };
 }

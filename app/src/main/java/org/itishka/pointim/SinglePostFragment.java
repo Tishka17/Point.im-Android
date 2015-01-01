@@ -224,16 +224,19 @@ public class SinglePostFragment extends Fragment {
             if (post.isSuccess()) {
                 mAdapter.setData(post);
                 mPointPost = post;
-                getActivity().supportInvalidateOptionsMenu();
+                if (!isDetached())
+                    getActivity().supportInvalidateOptionsMenu();
             } else {
-                Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+                if (!isDetached())
+                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void failure(RetrofitError error) {
             mSwipeRefresh.setRefreshing(false);
-            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
 

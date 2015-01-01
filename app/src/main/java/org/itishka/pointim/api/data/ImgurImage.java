@@ -7,4 +7,5 @@ public class ImgurImage {
     public String id;
     public String link;
     public String type;
+    public String deletehash;
 }

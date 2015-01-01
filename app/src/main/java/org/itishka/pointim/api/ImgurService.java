@@ -3,6 +3,8 @@ package org.itishka.pointim.api;
 import org.itishka.pointim.api.data.ImgurUploadResult;
 import org.itishka.pointim.api.data.ImgurImage;
 
+import retrofit.Callback;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
@@ -20,5 +22,8 @@ public interface ImgurService {
 
 
     @GET("/image/{id}")
-    ImgurImage getImageInfo(@Path("login") String id);
+    ImgurImage getImageInfo(@Path("id") String id);
+
+    @DELETE("/image/{id}")
+    void deleteImage(@Path("id") String id, Callback<Void> callback);
 }
