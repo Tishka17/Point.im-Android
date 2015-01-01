@@ -108,9 +108,10 @@ public class ConnectionManager {
         pointService = restAdapter.create(PointService.class);
     }
 
-    public boolean isAuthorized() {
-        return !TextUtils.isEmpty(loginResult.csrf_token);
+    synchronized public boolean isAuthorized() {
+        return loginResult!=null && !TextUtils.isEmpty(loginResult.csrf_token);
     }
+
     public void resetAuthorization(Context context) {
         synchronized (this) {
             loginResult.csrf_token = "";
