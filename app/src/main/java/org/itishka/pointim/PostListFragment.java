@@ -85,7 +85,7 @@ public abstract class PostListFragment extends Fragment {
                         mAdapter.getPostList().has_next = false;
                         return false;
                     } else {
-                        loadMore(posts.get(posts.size() - 1).post.id, getLoadMoreCallback());
+                        loadMore(posts.get(posts.size() - 1).uid, getLoadMoreCallback());
                     }
                 }
                 return true;
@@ -157,5 +157,5 @@ public abstract class PostListFragment extends Fragment {
     }
 
     protected abstract void update(Callback<PostList> callback);
-    protected abstract void loadMore(String before, Callback<PostList> callback);
+    protected abstract void loadMore(long before, Callback<PostList> callback);
 }

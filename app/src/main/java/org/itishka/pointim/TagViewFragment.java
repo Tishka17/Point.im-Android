@@ -1,10 +1,6 @@
 package org.itishka.pointim;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.PostList;
@@ -38,7 +34,7 @@ public class TagViewFragment extends PostListFragment {
     }
 
     @Override
-    protected void loadMore(String before, Callback<PostList> callback) {
+    protected void loadMore(long before, Callback<PostList> callback) {
         ConnectionManager.getInstance().pointService.getPostsByTag(before, mTag, callback);
     }
 }

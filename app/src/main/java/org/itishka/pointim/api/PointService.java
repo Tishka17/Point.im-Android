@@ -27,13 +27,13 @@ public interface PointService {
     void getRecent(Callback<PostList> callback);
 
     @GET("/api/recent")
-    void getRecent(@Query("before") String before, Callback<PostList> callback);
+    void getRecent(@Query("before") long before, Callback<PostList> callback);
 
     @GET("/api/comments")
     void getCommented(Callback<PostList> callback);
 
     @GET("/api/comments")
-    void getCommented(@Query("before") String before, Callback<PostList> callback);
+    void getCommented(@Query("before") long before, Callback<PostList> callback);
 
     @GET("/api/messages/incoming")
     void getIncoming(Callback<PostList> callback);
@@ -45,7 +45,7 @@ public interface PointService {
     void getBlog(@Path("login") String login, Callback<PostList> callback);
     @GET("/api/blog/{login}")
 
-    void getBlog(@Query("before") String before, @Path("login") String login, Callback<PostList> callback);
+    void getBlog(@Query("before") long before, @Path("login") String login, Callback<PostList> callback);
 
     @GET("/api/user/{login}")
     void getUserInfo(@Path("login") String login, Callback<User> callback);
@@ -57,7 +57,7 @@ public interface PointService {
     void getPostsByTag(@Query("tag") String tag, Callback<PostList> callback);
 
     @GET("/api/tags")
-    void getPostsByTag(@Query("before") String before, @Query("tag") String tag, Callback<PostList> callback);
+    void getPostsByTag(@Query("before") long before, @Query("tag") String tag, Callback<PostList> callback);
 
     @GET("/api/tags/{login}")
     void getPostsByUserTag(@Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);
