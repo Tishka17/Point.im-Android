@@ -10,12 +10,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.itishka.pointim.api.ConnectionManager;
+
 
 public class NewPostActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ConnectionManager.getInstance().updateAuthorization(this);  //we need this in every activity that can be launched from itself
         setContentView(R.layout.activity_new_post);
         if (savedInstanceState == null) {
             Fragment fragment = null;
