@@ -50,6 +50,7 @@
                     android:visibility="gone" />
 
                 <ImageButton
+                    android:layout_gravity="bottom"
                     style="@style/Widget.AppCompat.ActionButton"
                     android:id="@+id/attach"
                     android:layout_width="@dimen/touch_size"
