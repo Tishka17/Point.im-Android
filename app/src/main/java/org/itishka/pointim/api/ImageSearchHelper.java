@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.api;
 
 import android.os.AsyncTask;
 import android.text.Spannable;
@@ -65,14 +65,6 @@ public class ImageSearchHelper {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
-        }
-    }
-
-    public static final class CheckImagesTask extends AsyncTask<Spannable, Void, List<String>> {
-        @Override
-        protected List<String> doInBackground(Spannable... spannables) {
-            List<String> links = getAllLinks(spannables[0]);
-            return checkImageLinks(links);
         }
     }
 }
