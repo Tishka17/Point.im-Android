@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import retrofit.RetrofitError;
+
 /**
  * Created by Tishka17 on 31.12.2014.
  */
@@ -64,6 +66,8 @@ public class ImageSearchHelper {
             return contentType.startsWith("image/");
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
+        } catch (RuntimeException e) {
             return false;
         }
     }
