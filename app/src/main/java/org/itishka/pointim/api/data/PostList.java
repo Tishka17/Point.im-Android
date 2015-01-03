@@ -8,4 +8,9 @@ import java.util.List;
 public class PostList extends PointResult {
     public boolean has_next;
     public List<Post> posts;
+
+    public void append(PostList newPosts) {
+        has_next = newPosts.has_next;
+        posts.addAll(newPosts.posts);
+    }
 }

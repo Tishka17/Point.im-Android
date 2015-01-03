@@ -12,6 +12,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pnikosis.materialishprogress.ProgressWheel;
+
 import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
 import org.itishka.pointim.widgets.ImageList;
@@ -19,14 +21,28 @@ import org.itishka.pointim.widgets.ImageList;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by Татьяна on 20.10.2014.
+ * Created by Tishka17 on 20.10.2014.
  */
-public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHolder> {
+public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final int TYPE_FOOTER = 1;
+    public static final int TYPE_ITEM = 0;
     private PostList mPostList;
     private final WeakReference<Context> mContext;
 
     public Post getItem(int pos) {
+        if (pos == mPostList.posts.size())
+            return null;
         return mPostList.posts.get(pos);
+    }
+
+
+    protected class FooterHolder extends RecyclerView.ViewHolder {
+        ProgressWheel progressWheel;
+
+        public FooterHolder(View itemView) {
+            super(itemView);
+            progressWheel = (ProgressWheel) itemView.findViewById(R.id.progress_wheel);
+        }
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
@@ -48,6 +64,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         CheckBox favourite;
         ImageList imageList;
         View mainConent;
+
         public ViewHolder(View itemView) {
             super(itemView);
             text = (TextView) itemView.findViewById(R.id.text);
@@ -61,7 +78,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             author = (TextView) itemView.findViewById(R.id.author);
             post_id = (TextView) itemView.findViewById(R.id.post_id);
             recommend_info = itemView.findViewById(R.id.recommend_info);
-            recommend_id = (TextView)itemView.findViewById(R.id.recommend_id);
+            recommend_id = (TextView) itemView.findViewById(R.id.recommend_id);
             comments = (TextView) itemView.findViewById(R.id.comments);
             date = (TextView) itemView.findViewById(R.id.date);
             webLink = (ImageView) itemView.findViewById(R.id.weblink);
@@ -75,32 +92,52 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         mPostList = postList;
         notifyDataSetChanged();
     }
-    public PostListAdapter(Context context, PostList postList){
+
+    public void appendData(PostList postList) {
+        mPostList.append(postList);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == mPostList.posts.size())
+            return TYPE_FOOTER;
+        return TYPE_ITEM;
+    }
+
+    public PostListAdapter(Context context, PostList postList) {
         super();
         mPostList = postList;
         mContext = new WeakReference<Context>(context);
     }
+
     @Override
-    public PostListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        final View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.adapter_post, viewGroup, false);
-        final ViewHolder holder = new ViewHolder(v);
-        holder.webLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri)view.getTag());
-                getContext().startActivity(browserIntent);
-            }
-        });
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mOnPostClickListener!=null) {
-                    mOnPostClickListener.onPostClicked(v, view.getTag(R.id.post_id).toString());
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewTYpe) {
+        if (viewTYpe == TYPE_FOOTER) {
+            final View v = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.adapter_footer, viewGroup, false);
+            return new FooterHolder(v);
+        } else {
+            final View v = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.adapter_post, viewGroup, false);
+            final ViewHolder holder = new ViewHolder(v);
+            holder.webLink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri) view.getTag());
+                    getContext().startActivity(browserIntent);
                 }
-            }
-        });
-        return holder;
+            });
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mOnPostClickListener != null) {
+                        mOnPostClickListener.onPostClicked(v, view.getTag(R.id.post_id).toString());
+                    }
+                }
+            });
+            return holder;
+        }
     }
 
     private Context getContext() {
@@ -108,7 +145,23 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(PostListAdapter.ViewHolder holder, int i) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
+        if (i == mPostList.posts.size()) {
+            FooterHolder footerHolder = (FooterHolder) holder;
+            if (mPostList.has_next) {
+                footerHolder.progressWheel.setVisibility(View.VISIBLE);
+                if (mOnLoadMoreRequestListener != null) {
+                    mOnLoadMoreRequestListener.onLoadMoreRequested();
+                }
+            } else {
+                footerHolder.progressWheel.setVisibility(View.GONE);
+            }
+        } else {
+            onBindItemViewHolder((ViewHolder) holder, i);
+        }
+    }
+
+    public void onBindItemViewHolder(PostListAdapter.ViewHolder holder, int i) {
         Post post = mPostList.posts.get(i);
         holder.author.setText("@" + post.post.author.login);
         holder.itemView.setTag(R.id.post_id, post.post.id);
@@ -161,7 +214,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         } else {
             holder.tags.setVisibility(View.VISIBLE);
 
-            int n=0;
+            int n = 0;
             for (String tag : post.post.tags) {
                 final TextView v = (TextView) li.inflate(R.layout.tag, null);
                 v.setText(tag);
@@ -173,22 +226,34 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        if (mPostList==null) return 0;
-        else return mPostList.posts.size();
+        if (mPostList == null) return 0;
+        else return mPostList.posts.size() + 1;
     }
 
     View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (mOnPostClickListener!=null)
-                mOnPostClickListener.onTagClicked(view, ((TextView)view).getText().toString());
+            if (mOnPostClickListener != null)
+                mOnPostClickListener.onTagClicked(view, ((TextView) view).getText().toString());
         }
     };
 
+    public interface OnLoadMoreRequestListener {
+        public boolean onLoadMoreRequested();
+    }
+
+    private OnLoadMoreRequestListener mOnLoadMoreRequestListener = null;
+
+    public void setOnLoadMoreRequestListener(OnLoadMoreRequestListener onLoadMoreRequestListener) {
+        mOnLoadMoreRequestListener = onLoadMoreRequestListener;
+    }
+
     public interface OnPostClickListener {
         public void onPostClicked(View view, String post);
+
         public void onTagClicked(View view, String tag);
     }
+
     private OnPostClickListener mOnPostClickListener = null;
 
     public void setOnPostClickListener(OnPostClickListener onPostClickListener) {
