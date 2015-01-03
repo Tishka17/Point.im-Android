@@ -13,4 +13,9 @@ public class CommentedFragment extends PostListFragment {
     protected void update(Callback<PostList> callback) {
         ConnectionManager.getInstance().pointService.getCommented(callback);
     }
+
+    @Override
+    protected void loadMore(String before, Callback<PostList> callback) {
+        ConnectionManager.getInstance().pointService.getCommented(before, callback);
+    }
 }

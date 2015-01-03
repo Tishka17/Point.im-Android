@@ -13,4 +13,9 @@ public class SelfFragment extends PostListFragment {
     protected void update(Callback<PostList> callback) {
         ConnectionManager.getInstance().pointService.getBlog(ConnectionManager.getInstance().loginResult.login, callback);
     }
+
+    @Override
+    protected void loadMore(String before, Callback<PostList> callback) {
+        ConnectionManager.getInstance().pointService.getBlog(before, ConnectionManager.getInstance().loginResult.login, callback);
+    }
 }

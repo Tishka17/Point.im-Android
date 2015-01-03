@@ -36,4 +36,9 @@ public class TagViewFragment extends PostListFragment {
     protected void update(Callback<PostList> callback) {
         ConnectionManager.getInstance().pointService.getPostsByTag(mTag, callback);
     }
+
+    @Override
+    protected void loadMore(String before, Callback<PostList> callback) {
+        ConnectionManager.getInstance().pointService.getPostsByTag(before, mTag, callback);
+    }
 }

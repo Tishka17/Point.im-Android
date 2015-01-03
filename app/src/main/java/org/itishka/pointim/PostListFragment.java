@@ -15,7 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
+
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -71,6 +74,23 @@ public abstract class PostListFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new PostListAdapter(getActivity(), null);
         mAdapter.setOnPostClickListener(mOnPostClickListener);
+        mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
+            @Override
+            public boolean onLoadMoreRequested() {
+                if (mIsLoadingMore){
+                    //do nothing
+                } else {
+                    List<Post> posts = mAdapter.getPostList().posts;
+                    if (posts.size()<1) {
+                        mAdapter.getPostList().has_next = false;
+                        return false;
+                    } else {
+                        loadMore(posts.get(posts.size() - 1).post.id, getLoadMoreCallback());
+                    }
+                }
+                return true;
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }
@@ -110,9 +130,32 @@ public abstract class PostListFragment extends Fragment {
         }
     };
 
+    private boolean mIsLoadingMore = false;
+    private Callback<PostList> mLoadMoreCallback = new Callback<PostList>() {
+        @Override
+        public void success(PostList postList, Response response) {
+            if (postList.isSuccess()) {
+                mAdapter.appendData(postList);
+            } else {
+                if (!isDetached())
+                    Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
+
     protected Callback<PostList> getCallback() {
         return mCallback;
     }
+    protected Callback<PostList> getLoadMoreCallback() {
+        return mLoadMoreCallback;
+    }
 
     protected abstract void update(Callback<PostList> callback);
+    protected abstract void loadMore(String before, Callback<PostList> callback);
 }

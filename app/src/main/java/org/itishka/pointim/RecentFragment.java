@@ -13,4 +13,9 @@ public class RecentFragment extends PostListFragment {
     protected void update(Callback<PostList> callback) {
         ConnectionManager.getInstance().pointService.getRecent(callback);
     }
+
+    @Override
+    protected void loadMore(String before, Callback<PostList> callback) {
+        ConnectionManager.getInstance().pointService.getRecent(before, callback);
+    }
 }

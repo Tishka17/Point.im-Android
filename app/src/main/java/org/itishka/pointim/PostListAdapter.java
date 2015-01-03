@@ -35,6 +35,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mPostList.posts.get(pos);
     }
 
+    protected PostList getPostList() {
+        return mPostList;
+    }
 
     protected class FooterHolder extends RecyclerView.ViewHolder {
         ProgressWheel progressWheel;
@@ -151,7 +154,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (mPostList.has_next) {
                 footerHolder.progressWheel.setVisibility(View.VISIBLE);
                 if (mOnLoadMoreRequestListener != null) {
-                    mOnLoadMoreRequestListener.onLoadMoreRequested();
+                    if (!mOnLoadMoreRequestListener.onLoadMoreRequested()) {
+                        footerHolder.progressWheel.setVisibility(View.GONE);
+                    }
                 }
             } else {
                 footerHolder.progressWheel.setVisibility(View.GONE);
@@ -239,7 +244,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     };
 
     public interface OnLoadMoreRequestListener {
-        public boolean onLoadMoreRequested();
+        public boolean onLoadMoreRequested();//return false if cannot load more
     }
 
     private OnLoadMoreRequestListener mOnLoadMoreRequestListener = null;
