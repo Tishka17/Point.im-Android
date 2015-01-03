@@ -97,14 +97,16 @@ public abstract class PostListFragment extends Fragment {
             if (postList.isSuccess()) {
                 mAdapter.setData(postList);
             } else {
-                Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
+                if (!isDetached())
+                    Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void failure(RetrofitError error) {
             mSwipeRefresh.setRefreshing(false);
-            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
 

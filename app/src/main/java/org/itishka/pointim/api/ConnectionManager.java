@@ -25,14 +25,15 @@ import retrofit.converter.GsonConverter;
  */
 public class ConnectionManager {
     private static final ConnectionManager instance = new ConnectionManager();
-    private OkClient okClient;
+    public final OkHttpClient okHttpClient;
+    public final OkClient okClient;
 
     public static ConnectionManager getInstance() {
         return instance;
     }
 
     private ConnectionManager() {
-        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient = new OkHttpClient();
         okHttpClient.setReadTimeout(120, TimeUnit.SECONDS);
         okClient = new OkClient(okHttpClient);
 
