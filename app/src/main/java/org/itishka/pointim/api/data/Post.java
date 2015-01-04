@@ -8,4 +8,5 @@ public class Post extends PointResult {
 	public boolean editable;
 	public boolean subscribed;
 	public boolean bookmarked;
+    public String comment_id;
 }

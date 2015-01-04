@@ -258,7 +258,7 @@ public class SinglePostFragment extends Fragment {
         menu.setGroupVisible(R.id.group_not_recommended,
                 mPointPost != null &&
                         !mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login) &&
-                        !mPointPost.post.recommended
+                        !mPointPost.recommended
         );
 
 
