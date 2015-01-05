@@ -14,5 +14,6 @@
     <string name="action_refresh">Refresh</string>
     <string name="title_activity_tag_view">Tag</string>
     <string name="action_delete">Delete</string>
+    <string name="action_copy_link">Copy link</string>
 
 </resources>

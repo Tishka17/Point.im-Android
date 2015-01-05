@@ -2,7 +2,11 @@ package org.itishka.pointim;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -262,8 +266,6 @@ public class SinglePostFragment extends Fragment {
         );
 
 
-
-
     }
 
     @Override
@@ -317,6 +319,12 @@ public class SinglePostFragment extends Fragment {
                     .build();
             dialog.show();
             return true;
+        } else if (id == R.id.action_copy_link) {
+            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+            Uri uri = Utils.getnerateSiteUri(mPost);
+            ClipData clip = ClipData.newRawUri(uri.toString(), uri);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(getActivity(), "Link copied: "+uri.toString(), Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);
