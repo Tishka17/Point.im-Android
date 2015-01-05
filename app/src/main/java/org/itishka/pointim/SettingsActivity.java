@@ -90,7 +90,7 @@ public class SettingsActivity extends ActionBarActivity {
             avatarTishka17.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://tishka17.point.im/blog"));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Utils.getnerateBlogUri("Tishka17"));
                     getActivity().startActivity(browserIntent);
                 }
             });
@@ -100,7 +100,7 @@ public class SettingsActivity extends ActionBarActivity {
             avatarArts.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://arts.point.im/blog"));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Utils.getnerateBlogUri("arts"));
                     getActivity().startActivity(browserIntent);
                 }
             });
