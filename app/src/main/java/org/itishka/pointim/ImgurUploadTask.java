@@ -6,17 +6,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.view.View;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.CountingTypedFile;
 import org.itishka.pointim.api.data.ImgurUploadResult;
-import org.itishka.pointim.api.data.ImgurImage;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 
 import retrofit.RetrofitError;
 

@@ -1,7 +1,6 @@
 package org.itishka.pointim.api;
 
 import android.content.Context;
-import android.text.Spannable;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;

@@ -1,12 +1,8 @@
 package org.itishka.pointim.api.data;
 
-import java.util.Date;
-import java.util.List;
-
-import android.text.Spannable;
-import android.text.SpannableString;
-
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
 
 public class PostData {
 	enum Type {

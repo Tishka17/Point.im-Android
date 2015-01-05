@@ -3,8 +3,6 @@ package org.itishka.pointim;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -17,21 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.data.ImgurImage;
-import org.itishka.pointim.api.data.ImgurUploadResult;
 import org.itishka.pointim.api.data.PointResult;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import retrofit.Callback;

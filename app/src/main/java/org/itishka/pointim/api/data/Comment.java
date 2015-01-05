@@ -1,7 +1,5 @@
 package org.itishka.pointim.api.data;
 
-import android.text.Spannable;
-
 import java.util.Date;
 
 public class Comment {

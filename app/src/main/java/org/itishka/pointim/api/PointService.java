@@ -2,7 +2,6 @@ package org.itishka.pointim.api;
 
 import org.itishka.pointim.api.data.ExtendedPost;
 import org.itishka.pointim.api.data.PointResult;
-import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
 import org.itishka.pointim.api.data.Tag;
 import org.itishka.pointim.api.data.User;
@@ -14,7 +13,6 @@ import retrofit.http.DELETE;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
-import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
