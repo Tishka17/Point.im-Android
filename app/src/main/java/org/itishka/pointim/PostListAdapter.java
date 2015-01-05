@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +15,13 @@ import android.widget.TextView;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
 
+import org.itishka.pointim.api.ImageSearchHelper;
 import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
 import org.itishka.pointim.widgets.ImageList;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * Created by Tishka17 on 20.10.2014.
@@ -28,6 +31,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static final int TYPE_ITEM = 0;
     private PostList mPostList;
     private final WeakReference<Context> mContext;
+    private ImageSearchTask mTask;
 
     public Post getItem(int pos) {
         if (pos == mPostList.posts.size())
@@ -94,11 +98,21 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void setData(PostList postList) {
         mPostList = postList;
         notifyDataSetChanged();
+        if (mTask != null && mTask.getStatus()!= AsyncTask.Status.FINISHED) {
+            mTask.cancel(true);
+        }
+        mTask = new ImageSearchTask();
+        mTask.execute(mPostList);
     }
 
     public void appendData(PostList postList) {
+        int oldLength = mPostList.posts.size();
         mPostList.append(postList);
-        notifyDataSetChanged();
+        notifyItemRangeInserted(oldLength, postList.posts.size());
+        if (mTask == null || mTask.getStatus()== AsyncTask.Status.FINISHED) {
+            mTask = new ImageSearchTask();
+            mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mPostList);
+        }
     }
 
     @Override
@@ -263,5 +277,27 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setOnPostClickListener(OnPostClickListener onPostClickListener) {
         mOnPostClickListener = onPostClickListener;
+    }
+
+    private class ImageSearchTask extends AsyncTask<PostList, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(PostList... postLists) {
+            List<Post> posts = postLists[0].posts;
+            for (int i=0; i<posts.size(); i++) {
+                Post post = posts.get(i);
+                if (post.post.text.images==null) {
+                    post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
+                    publishProgress(i);
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            notifyItemChanged(values[0]);
+            super.onProgressUpdate(values);
+        }
     }
 }

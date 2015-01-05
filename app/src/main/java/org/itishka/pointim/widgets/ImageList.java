@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -72,7 +71,7 @@ public class ImageList extends FrameLayout {
     public void setImageUrls(List<String> urls) {
         mImageUrls = urls;
         for (int i=0; i< sImageIds.length; i++) {
-            if (i<urls.size()) {
+            if (urls!=null && i<urls.size()) {
                 mImageViews[i].setVisibility(VISIBLE);
                 mImageViews[i].setTag(urls.get(i));
                 Picasso.with(getContext())
