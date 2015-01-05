@@ -207,10 +207,13 @@ public class SinglePostFragment extends Fragment {
                 mCommentId.setText("");
                 mText.setText("");
                 mImagesPanel.reset();
-                update(getCallback());
-                Toast.makeText(getActivity(), "Comment added!", Toast.LENGTH_SHORT).show();
+                if (!isDetached()) {
+                    update(getCallback());
+                    Toast.makeText(getActivity(), "Comment added!", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+                if (!isDetached())
+                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -324,7 +327,7 @@ public class SinglePostFragment extends Fragment {
             Uri uri = Utils.getnerateSiteUri(mPost);
             ClipData clip = ClipData.newRawUri(uri.toString(), uri);
             clipboard.setPrimaryClip(clip);
-            Toast.makeText(getActivity(), "Link copied: "+uri.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Link copied: " + uri.toString(), Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -354,17 +357,21 @@ public class SinglePostFragment extends Fragment {
         public void success(PointResult post, Response response) {
             mProgressDialog.hide();
             if (post.isSuccess()) {
-                Toast.makeText(getActivity(), "Reommended!", Toast.LENGTH_SHORT).show();
-                update(mCallback);
+                if (!isDetached()) {
+                    Toast.makeText(getActivity(), "Reommended!", Toast.LENGTH_SHORT).show();
+                    update(mCallback);
+                }
             } else {
-                Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+                if (!isDetached())
+                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void failure(RetrofitError error) {
             mProgressDialog.hide();
-            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
 
