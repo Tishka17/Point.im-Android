@@ -2,6 +2,7 @@ package org.itishka.pointim;
 
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +32,28 @@ import retrofit.client.Response;
  */
 public abstract class PostListFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
+    private StaggeredGridLayoutManager mLayoutManager;
     private PostListAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
 
     public PostListFragment() {
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mLayoutManager.setSpanCount(getSpanCount(newConfig));
+    }
+
+    private int getSpanCount(Configuration config) {
+        if ((config.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
+            return config.orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3;
+        } else if ((config.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            return config.orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3;
+        } else if ((config.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            return config.orientation == Configuration.ORIENTATION_PORTRAIT ? 1 : 2;
+        }
+        return 1;
     }
 
     PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
@@ -70,18 +89,21 @@ public abstract class PostListFragment extends Fragment {
             }
         });
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager = new StaggeredGridLayoutManager(
+                getSpanCount(getActivity().getResources().getConfiguration()),
+                StaggeredGridLayoutManager.VERTICAL
+        );
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new PostListAdapter(getActivity(), null);
         mAdapter.setOnPostClickListener(mOnPostClickListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
             @Override
             public boolean onLoadMoreRequested() {
-                if (mIsLoadingMore){
+                if (mIsLoadingMore) {
                     //do nothing
                 } else {
                     List<Post> posts = mAdapter.getPostList().posts;
-                    if (posts.size()<1) {
+                    if (posts.size() < 1) {
                         mAdapter.getPostList().has_next = false;
                         return false;
                     } else {
@@ -152,10 +174,12 @@ public abstract class PostListFragment extends Fragment {
     protected Callback<PostList> getCallback() {
         return mCallback;
     }
+
     protected Callback<PostList> getLoadMoreCallback() {
         return mLoadMoreCallback;
     }
 
     protected abstract void update(Callback<PostList> callback);
+
     protected abstract void loadMore(long before, Callback<PostList> callback);
 }
