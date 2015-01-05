@@ -105,7 +105,6 @@ public class ConnectionManager {
                 .setClient(okClient)
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
-                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
         pointService = restAdapter.create(PointService.class);
     }
