@@ -25,7 +25,8 @@ public class CountingTypedFile extends TypedFile {
         this.listener = listener;
     }
 
-    @Override public void writeTo(OutputStream out) throws IOException {
+    @Override
+    public void writeTo(OutputStream out) throws IOException {
         byte[] buffer = new byte[BUFFER_SIZE];
         FileInputStream in = new FileInputStream(super.file());
         long total = 0;

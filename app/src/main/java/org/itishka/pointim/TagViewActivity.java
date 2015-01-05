@@ -24,7 +24,7 @@ public class TagViewActivity extends ActionBarActivity {
             setSupportActionBar(toolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("*"+getIntent().getStringExtra("tag"));
+        getSupportActionBar().setTitle("*" + getIntent().getStringExtra("tag"));
     }
 
 

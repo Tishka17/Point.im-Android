@@ -80,9 +80,9 @@ public class NewPostFragment extends Fragment {
         mPostTags = (EditText) rootView.findViewById(R.id.postTags);
         mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
         setHasOptionsMenu(true);
-        if (savedInstanceState==null) {
+        if (savedInstanceState == null) {
             Bundle args = getArguments();
-            if (args!=null) {
+            if (args != null) {
                 mPostText.setText(args.getString(ARG_TEXT, ""));
                 ArrayList<Uri> images = args.getParcelableArrayList(ARG_IMAGES);
                 if (images != null) for (Uri image : images) {

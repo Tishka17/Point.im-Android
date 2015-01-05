@@ -10,6 +10,7 @@ import org.itishka.pointim.api.data.LoginResult;
  */
 public class AuthSaver {
     private static final String PREFS_NAME = "AUTH_DATA";
+
     public static void saveLoginResult(Context context, LoginResult result) {
         SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, 0).edit();
         editor.putString("token", result.token);

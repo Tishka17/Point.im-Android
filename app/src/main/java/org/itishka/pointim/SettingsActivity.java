@@ -68,7 +68,7 @@ public class SettingsActivity extends ActionBarActivity {
 
 
             TextView version = (TextView) rootView.findViewById(R.id.version);
-            version.setText("Version: "+BuildConfig.VERSION_NAME);
+            version.setText("Version: " + BuildConfig.VERSION_NAME);
 
             rootView.findViewById(R.id.google_play).setOnClickListener(new View.OnClickListener() {
                 @Override

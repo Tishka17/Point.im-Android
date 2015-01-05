@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class ImageList extends FrameLayout {
 
-    private static final int[] sImageIds = new int[] {
+    private static final int[] sImageIds = new int[]{
             R.id.imageView0,
             R.id.imageView1,
             R.id.imageView2,
@@ -53,7 +53,7 @@ public class ImageList extends FrameLayout {
 
     private void init() {
         inflate(getContext(), R.layout.image_list, this);
-        for (int i=0; i< sImageIds.length; i++) {
+        for (int i = 0; i < sImageIds.length; i++) {
             mImageViews[i] = (ImageView) findViewById(sImageIds[i]);
             mImageViews[i].setVisibility(GONE);
             mImageViews[i].setOnClickListener(imageClickListener);
@@ -70,8 +70,8 @@ public class ImageList extends FrameLayout {
 
     public void setImageUrls(List<String> urls) {
         mImageUrls = urls;
-        for (int i=0; i< sImageIds.length; i++) {
-            if (urls!=null && i<urls.size()) {
+        for (int i = 0; i < sImageIds.length; i++) {
+            if (urls != null && i < urls.size()) {
                 mImageViews[i].setVisibility(VISIBLE);
                 mImageViews[i].setTag(urls.get(i));
                 Picasso.with(getContext())
@@ -86,13 +86,14 @@ public class ImageList extends FrameLayout {
 
     Transformation transformation = new Transformation() {
 
-        @Override public Bitmap transform(Bitmap source) {
+        @Override
+        public Bitmap transform(Bitmap source) {
 
             int targetHeight = mImageViews[0].getHeight();
 
             double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
             int targetWidth = (int) (targetHeight * aspectRatio);
-            if (targetWidth==0 || targetHeight==0)
+            if (targetWidth == 0 || targetHeight == 0)
                 return source;
             Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
             if (result != source) {
@@ -102,7 +103,8 @@ public class ImageList extends FrameLayout {
             return result;
         }
 
-        @Override public String key() {
+        @Override
+        public String key() {
             return "transformation" + " desiredWidth";
         }
     };

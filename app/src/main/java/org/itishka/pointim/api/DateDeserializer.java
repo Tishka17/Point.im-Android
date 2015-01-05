@@ -17,10 +17,11 @@ import java.util.Locale;
  */
 class DateDeserializer implements JsonDeserializer<Date> {
 
-    private static final String[] DATE_FORMATS = new String[] {
-        "yyyy-MM-dd'T'HH:mm:ss",
-        "yyyy-MM-dd"
+    private static final String[] DATE_FORMATS = new String[]{
+            "yyyy-MM-dd'T'HH:mm:ss",
+            "yyyy-MM-dd"
     };
+
     @Override
     public Date deserialize(JsonElement jsonElement, Type typeOF,
                             JsonDeserializationContext context) throws JsonParseException {

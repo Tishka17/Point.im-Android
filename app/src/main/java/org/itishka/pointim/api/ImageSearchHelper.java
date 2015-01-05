@@ -19,7 +19,7 @@ public class ImageSearchHelper {
     public static List<String> getAllLinks(Spannable text) {
         URLSpan[] links = text.getSpans(0, text.length(), URLSpan.class);
         List<String> result = new ArrayList<>();
-        for (URLSpan u: links) {
+        for (URLSpan u : links) {
             result.add(u.getURL());
         }
         return result;
@@ -29,7 +29,7 @@ public class ImageSearchHelper {
 
     public static List<String> checkImageLinks(List<String> links) {
         List<String> images = new ArrayList<>();
-        for (String link: links) {
+        for (String link : links) {
             Boolean stored = sLinksChecked.get(link);
             if (stored == null) {
                 boolean res = checkImageLink(link);
@@ -46,7 +46,7 @@ public class ImageSearchHelper {
 
     public static boolean checkImageLink(String link) {
         try {
-            Log.d("ImageSearchHelper", "Checking: "+link);
+            Log.d("ImageSearchHelper", "Checking: " + link);
             URLConnection connection = new URL(link).openConnection();
             connection.setDoInput(false);
             connection.setDoInput(false);

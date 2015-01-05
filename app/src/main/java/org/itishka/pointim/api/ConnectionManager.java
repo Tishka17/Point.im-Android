@@ -53,7 +53,7 @@ public class ConnectionManager {
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
                     public void intercept(RequestFacade requestFacade) {
-                        requestFacade.addHeader("Authorization", "Client-ID "+ BuildConfig.IMGUR_ID);
+                        requestFacade.addHeader("Authorization", "Client-ID " + BuildConfig.IMGUR_ID);
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
@@ -109,7 +109,7 @@ public class ConnectionManager {
     }
 
     synchronized public boolean isAuthorized() {
-        return loginResult!=null && !TextUtils.isEmpty(loginResult.csrf_token);
+        return loginResult != null && !TextUtils.isEmpty(loginResult.csrf_token);
     }
 
     public void resetAuthorization(Context context) {

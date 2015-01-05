@@ -23,7 +23,7 @@ public class NewPostActivity extends ActionBarActivity {
             Intent intent = getIntent();
             String action = intent.getAction();
             String type = intent.getType();
-            Log.d("NPA", "type: "+type);
+            Log.d("NPA", "type: " + type);
             if (Intent.ACTION_SEND.equals(action) && type != null) {
                 if ("text/plain".equals(type)) {
                     fragment = NewPostFragment.newInstance(intent.getStringExtra(Intent.EXTRA_TEXT));
@@ -35,7 +35,7 @@ public class NewPostActivity extends ActionBarActivity {
                     fragment = NewPostFragment.newInstance(intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM));
                 }
             }
-            if (fragment==null) {
+            if (fragment == null) {
                 fragment = NewPostFragment.newInstance();
             }
 

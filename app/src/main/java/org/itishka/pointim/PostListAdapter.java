@@ -98,7 +98,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void setData(PostList postList) {
         mPostList = postList;
         notifyDataSetChanged();
-        if (mTask != null && mTask.getStatus()!= AsyncTask.Status.FINISHED) {
+        if (mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED) {
             mTask.cancel(true);
         }
         mTask = new ImageSearchTask();
@@ -109,7 +109,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         int oldLength = mPostList.posts.size();
         mPostList.append(postList);
         notifyItemRangeInserted(oldLength, postList.posts.size());
-        if (mTask == null || mTask.getStatus()== AsyncTask.Status.FINISHED) {
+        if (mTask == null || mTask.getStatus() == AsyncTask.Status.FINISHED) {
             mTask = new ImageSearchTask();
             mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mPostList);
         }
@@ -284,9 +284,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @Override
         protected Void doInBackground(PostList... postLists) {
             List<Post> posts = postLists[0].posts;
-            for (int i=0; i<posts.size(); i++) {
+            for (int i = 0; i < posts.size(); i++) {
                 Post post = posts.get(i);
-                if (post.post.text.images==null) {
+                if (post.post.text.images == null) {
                     post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
                     publishProgress(i);
                 }

@@ -161,7 +161,7 @@ public class Utils {
             StyleSpan b = new StyleSpan(android.graphics.Typeface.BOLD);
             text.setSpan(b, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             String comment = m.group(2);
-            URLSpan urlSpan = new URLSpan(SITE_URL_STRING + m.group(1) + "#" + (comment==null?"":comment));
+            URLSpan urlSpan = new URLSpan(SITE_URL_STRING + m.group(1) + "#" + (comment == null ? "" : comment));
             text.setSpan(urlSpan, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         }
         return text;

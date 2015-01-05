@@ -30,7 +30,7 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUp
     public ImgurUploadTask(Context context, Uri uri) {
         mUri = uri;
         try {
-            mFile = File.createTempFile("upload_","", context.getCacheDir());
+            mFile = File.createTempFile("upload_", "", context.getCacheDir());
         } catch (IOException e) {
             mFile = null;
             e.printStackTrace();
