@@ -4,15 +4,15 @@
     android:layout_height="match_parent">
 
     <HorizontalScrollView
-        android:layout_width="match_parent"
+        android:fillViewport="true"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_width="match_parent">
 
         <LinearLayout
             android:gravity="center"
             android:id="@+id/contentView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <ImageView

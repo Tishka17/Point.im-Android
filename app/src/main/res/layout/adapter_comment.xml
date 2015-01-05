@@ -60,7 +60,7 @@
 
     <org.itishka.pointim.widgets.ImageList
         android:id="@+id/imageList"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
