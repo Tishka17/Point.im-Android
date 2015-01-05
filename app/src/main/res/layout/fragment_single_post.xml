@@ -30,9 +30,9 @@
         card_view:cardCornerRadius="0dp">
 
         <LinearLayout
-            android:layout_margin="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -41,34 +41,44 @@
                 android:gravity="bottom"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_gravity="bottom"
-                    android:id="@+id/comment_id"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/text_margin"
-                    android:background="@drawable/tag"
-                    android:visibility="gone" />
+                    android:layout_height="@dimen/touch_size"
+                    android:gravity="center">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/comment_id"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_margin"
+                            android:background="@drawable/tag"
+                            android:gravity="bottom"
+                            android:visibility="gone" />
+                    </FrameLayout>
+                </LinearLayout>
 
                 <ImageButton
-                    android:layout_gravity="bottom"
-                    style="@style/Widget.AppCompat.ActionButton"
                     android:id="@+id/attach"
+                    style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="@dimen/touch_size"
                     android:layout_height="@dimen/touch_size"
                     android:src="@drawable/ic_attach_file_grey600_24dp" />
 
                 <EditText
-                    android:inputType="textCapSentences|textMultiLine"
                     android:id="@+id/text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/text_avatar_margin"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:inputType="textCapSentences|textMultiLine" />
 
                 <ImageButton
-                    style="@style/Widget.AppCompat.ActionButton"
                     android:id="@+id/send"
+                    style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="@dimen/touch_size"
                     android:layout_height="@dimen/touch_size"
                     android:src="@drawable/ic_send_grey600_24dp" />
