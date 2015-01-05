@@ -47,6 +47,10 @@ public class SettingsActivity extends ActionBarActivity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        private ImageView avatar;
+        private ImageButton logout;
+        private TextView name;
+
         public PlaceholderFragment() {
         }
 
@@ -54,13 +58,13 @@ public class SettingsActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
-            TextView name = (TextView) rootView.findViewById(R.id.login);
+            name = (TextView) rootView.findViewById(R.id.login);
             name.setText(ConnectionManager.getInstance().loginResult.login);
 
-            ImageView avatar = (ImageView) rootView.findViewById(R.id.avatar);
+            avatar = (ImageView) rootView.findViewById(R.id.avatar);
             Utils.showAvatarByLogin(getActivity(), ConnectionManager.getInstance().loginResult.login, avatar);
 
-            ImageButton logout = (ImageButton) rootView.findViewById(R.id.action_logout);
+            logout = (ImageButton) rootView.findViewById(R.id.action_logout);
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -119,6 +123,9 @@ public class SettingsActivity extends ActionBarActivity {
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
                             ConnectionManager.getInstance().resetAuthorization(getActivity());
+                            avatar.setVisibility(View.GONE);
+                            logout.setVisibility(View.GONE);
+                            name.setText("<logged out>");
                         }
                     })
                     .build();

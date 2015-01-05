@@ -117,6 +117,7 @@ public class ConnectionManager {
         synchronized (this) {
             loginResult.csrf_token = "";
             AuthSaver.saveLoginResult(context, loginResult);
+            updateAuthorization(context);
         }
     }
 

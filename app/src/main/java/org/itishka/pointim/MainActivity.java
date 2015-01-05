@@ -47,15 +47,15 @@ public class MainActivity extends ActionBarActivity {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
-        ConnectionManager.getInstance().updateAuthorization(this);
-        if (!ConnectionManager.getInstance().isAuthorized())
-            startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        ConnectionManager.getInstance().updateAuthorization(this);
+        if (!ConnectionManager.getInstance().isAuthorized())
+            startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
     }
 
     @Override
