@@ -100,7 +100,6 @@ public class ImageUploadingPanel extends FrameLayout {
             }
         });
         img.imageView.setColorFilter(Color.argb(220, 255, 255, 255), PorterDuff.Mode.LIGHTEN);
-        img.imageView.setImageURI(uri);
         Picasso.with(getContext())
                 .load(uri)
                 .transform(new CropSquareTransformation())
