@@ -220,7 +220,8 @@ public class SinglePostFragment extends Fragment {
         public void failure(RetrofitError error) {
             mBottomBar.setEnabled(true);
             mProgressDialog.hide();
-            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
     private Callback<ExtendedPost> mCallback = new Callback<ExtendedPost>() {
@@ -336,7 +337,10 @@ public class SinglePostFragment extends Fragment {
         @Override
         public void success(PointResult pointResult, Response response) {
             mProgressDialog.hide();
+            if (isDetached())
+                return;
             if (pointResult.isSuccess()) {
+
                 Toast.makeText(getActivity(), "Deleted!", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             } else {
@@ -347,7 +351,8 @@ public class SinglePostFragment extends Fragment {
         @Override
         public void failure(RetrofitError error) {
             mProgressDialog.hide();
-            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
 
