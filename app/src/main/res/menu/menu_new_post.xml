@@ -6,10 +6,10 @@
         android:id="@+id/attach"
         android:icon="@drawable/ic_attach_file_white_24dp"
         android:title="Attach"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/send"
         android:icon="@drawable/ic_send_white_24dp"
         android:title="Send"
-        app:showAsAction="always|withText" />
+        app:showAsAction="ifRoom|withText" />
 </menu>

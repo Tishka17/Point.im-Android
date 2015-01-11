@@ -16,7 +16,7 @@
         android:inputType="textCapSentences|textMultiLine"
         android:id="@+id/postText"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="top|left"
         android:hint="Enter your text here"
