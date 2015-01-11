@@ -21,7 +21,6 @@ import retrofit.RetrofitError;
  * Created by Tishka17 on 30.12.2014.
  */
 public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUploadResult> {
-    private CountingTypedFile.ProgressListener listener;
     private final Uri mUri;
     private File mFile;
     private Context mContext;
@@ -63,14 +62,13 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUp
         }
         mContext = null;
         final long totalSize = mFile.length();
-        listener = new CountingTypedFile.ProgressListener() {
-            @Override
-            public void transferred(long num) {
-                publishProgress((int) ((num / (float) totalSize) * 100));
-            }
-        };
         try {
-            return ConnectionManager.getInstance().imgurService.uploadFile(new CountingTypedFile(imageMime, mFile, listener));
+            return ConnectionManager.getInstance().imgurService.uploadFile(new CountingTypedFile(imageMime, mFile, new CountingTypedFile.ProgressListener() {
+                @Override
+                public void transferred(long num) {
+                    publishProgress((int) ((num / (float) totalSize) * 100));
+                }
+            }));
         } catch (RetrofitError e) {
             e.printStackTrace();
             return null;

@@ -125,7 +125,7 @@ public class SinglePostFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new SinglePostAdapter(getActivity(), null);
+        mAdapter = new SinglePostAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
         mBottomBar = rootView.findViewById(R.id.bottom_bar);
@@ -147,7 +147,7 @@ public class SinglePostFragment extends Fragment {
                     Toast.makeText(getActivity(), "Wait or check for errors!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                StringBuffer sb = new StringBuffer(text);
+                StringBuilder sb = new StringBuilder(text);
                 for (String l : mImagesPanel.getLinks()) {
                     sb.append("\n").append(l);
                 }

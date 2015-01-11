@@ -93,7 +93,7 @@ public abstract class PostListFragment extends Fragment {
                 StaggeredGridLayoutManager.VERTICAL
         );
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new PostListAdapter(getActivity(), null);
+        mAdapter = new PostListAdapter(getActivity());
         mAdapter.setOnPostClickListener(mOnPostClickListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
             @Override

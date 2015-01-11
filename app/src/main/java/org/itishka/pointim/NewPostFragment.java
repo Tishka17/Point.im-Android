@@ -122,7 +122,7 @@ public class NewPostFragment extends Fragment {
             }
             final String text = mPostText.getText().toString();
             final String[] tags = mPostTags.getText().toString().split("\\s*,\\s*");
-            StringBuffer sb = new StringBuffer(text);
+            StringBuilder sb = new StringBuilder(text);
             for (String l : mImagesPanel.getLinks()) {
                 sb.append("\n").append(l);
             }

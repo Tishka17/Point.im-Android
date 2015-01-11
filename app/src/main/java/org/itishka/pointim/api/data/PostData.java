@@ -8,7 +8,7 @@ import java.util.List;
 public class PostData {
     enum Type {
         post,
-        comment;
+        comment
     }
 
     public List<String> tags;

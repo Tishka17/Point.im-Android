@@ -24,7 +24,7 @@ import java.lang.ref.WeakReference;
  * Created by Татьяна on 20.10.2014.
  */
 public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ExtendedPost mPost;
+    private ExtendedPost mPost = null;
     private final WeakReference<Context> mContext;
     private ImageSearchTask mTask;
 
@@ -112,9 +112,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mTask.execute(post);
     }
 
-    public SinglePostAdapter(Context context, ExtendedPost post) {
+    public SinglePostAdapter(Context context) {
         super();
-        mPost = post;
         mContext = new WeakReference<>(context);
     }
 
@@ -141,10 +140,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             });
             return holder;
         } else {
-            View v = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.adapter_comment, viewGroup, false);
-            final CommentViewHolder holder = new CommentViewHolder(v);
-            return holder;
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_comment, viewGroup, false);
+            return new CommentViewHolder(v);
         }
 
     }
@@ -244,7 +241,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            notifyItemChanged(values[0]+1);
+            notifyItemChanged(values[0] + 1);
             super.onProgressUpdate(values);
         }
     }

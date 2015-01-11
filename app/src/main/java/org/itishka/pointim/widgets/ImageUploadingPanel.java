@@ -182,7 +182,7 @@ public class ImageUploadingPanel extends FrameLayout {
 
         ImgUploadTask(Image img, Context context) {
             super(context, img.originalPath);
-            this.img = new WeakReference<Image>(img);
+            this.img = new WeakReference<>(img);
 
         }
 

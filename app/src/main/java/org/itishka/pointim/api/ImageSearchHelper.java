@@ -51,9 +51,7 @@ public class ImageSearchHelper {
             connection.setDoInput(false);
             connection.setDoInput(false);
             String contentType = connection.getHeaderField("Content-Type");
-            if (TextUtils.isEmpty(contentType))
-                return false;
-            return contentType.startsWith("image/");
+            return !TextUtils.isEmpty(contentType) && contentType.startsWith("image/");
         } catch (IOException e) {
             e.printStackTrace();
             return false;

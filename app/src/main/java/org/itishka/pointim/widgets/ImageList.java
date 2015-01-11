@@ -34,7 +34,6 @@ public class ImageList extends FrameLayout {
             R.id.imageView9
     };
     private ImageView[] mImageViews = new ImageView[sImageIds.length];
-    private List<String> mImageUrls = null;
 
     public ImageList(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -69,7 +68,6 @@ public class ImageList extends FrameLayout {
     };
 
     public void setImageUrls(List<String> urls) {
-        mImageUrls = urls;
         for (int i = 0; i < sImageIds.length; i++) {
             if (urls != null && i < urls.size()) {
                 mImageViews[i].setVisibility(VISIBLE);

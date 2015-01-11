@@ -27,7 +27,7 @@ public class MyTextView extends TextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        TextView widget = (TextView) this;
+        TextView widget = this;
         Object text = widget.getText();
         if (text instanceof Spanned) {
             Spannable buffer = new SpannableString((CharSequence) text);

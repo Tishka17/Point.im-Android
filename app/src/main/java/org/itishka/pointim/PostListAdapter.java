@@ -21,7 +21,6 @@ import org.itishka.pointim.api.data.PostList;
 import org.itishka.pointim.widgets.ImageList;
 
 import java.lang.ref.WeakReference;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ import java.util.List;
 public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_FOOTER = 1;
     public static final int TYPE_ITEM = 0;
-    private PostList mPostList;
+    private PostList mPostList = null;
     private final WeakReference<Context> mContext;
     private ImageSearchTask mTask;
 
@@ -123,10 +122,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return TYPE_ITEM;
     }
 
-    public PostListAdapter(Context context, PostList postList) {
+    public PostListAdapter(Context context) {
         super();
-        mPostList = postList;
-        mContext = new WeakReference<Context>(context);
+        mContext = new WeakReference<>(context);
     }
 
     @Override
