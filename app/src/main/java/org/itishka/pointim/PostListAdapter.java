@@ -21,6 +21,7 @@ import org.itishka.pointim.api.data.PostList;
 import org.itishka.pointim.widgets.ImageList;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -228,7 +229,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         LayoutInflater li;
         li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         holder.tags.removeAllViews();
-        if (post.post.tags.length == 0) {
+        if (post.post.tags==null || post.post.tags.size() == 0) {
             holder.tags.setVisibility(View.GONE);
         } else {
             holder.tags.setVisibility(View.VISIBLE);

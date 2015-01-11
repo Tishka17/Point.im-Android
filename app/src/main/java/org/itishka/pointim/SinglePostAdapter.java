@@ -40,7 +40,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (pos == 0)
             return mPost;
         else
-            return mPost.comments[pos - 1];
+            return mPost.comments.get(pos - 1);
     }
 
     View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
@@ -175,7 +175,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 postHolder.comments.setText("");
             }
             postHolder.tags.removeAllViews();
-            if (mPost.post.tags.length == 0) {
+            if (mPost.post.tags == null || mPost.post.tags.size() == 0) {
                 postHolder.tags.setVisibility(View.GONE);
             } else {
                 postHolder.tags.setVisibility(View.VISIBLE);
@@ -191,7 +191,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             }
         } else {
-            Comment comment = mPost.comments[i - 1];
+            Comment comment = mPost.comments.get(i - 1);
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
             Utils.showAvatar(getContext(), comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
@@ -214,7 +214,10 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public int getItemCount() {
         if (mPost == null)
             return 0;
-        else return mPost.comments.length + 1;
+        else if (mPost.comments == null)
+            return 1;
+        else
+            return mPost.comments.size() + 1;
     }
 
 
@@ -227,11 +230,13 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
                 publishProgress(0);
             }
-            for (int i = 0; i < post.comments.length; i++) {
-                Comment comment = post.comments[i];
-                if (comment.text.images == null) {
-                    comment.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(comment.text.text));
-                    publishProgress(i + 1);
+            if (post.comments != null) {
+                for (int i = 0; i < post.comments.size(); i++) {
+                    Comment comment = post.comments.get(i);
+                    if (comment.text.images == null) {
+                        comment.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(comment.text.text));
+                        publishProgress(i);
+                    }
                 }
             }
             return null;
@@ -239,7 +244,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            notifyItemChanged(values[0]);
+            notifyItemChanged(values[0]+1);
             super.onProgressUpdate(values);
         }
     }

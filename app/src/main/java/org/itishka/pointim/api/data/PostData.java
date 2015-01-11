@@ -3,6 +3,7 @@ package org.itishka.pointim.api.data;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.List;
 
 public class PostData {
     enum Type {
@@ -10,7 +11,7 @@ public class PostData {
         comment;
     }
 
-    public String[] tags;
+    public List<String> tags;
     public int comments_count;
     public AuthorData author;
     public TextWithImages text;
