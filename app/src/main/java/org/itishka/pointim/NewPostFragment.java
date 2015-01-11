@@ -2,28 +2,39 @@ package org.itishka.pointim;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.api.ContentStorageHelper;
 import org.itishka.pointim.api.data.PointResult;
+import org.itishka.pointim.api.data.Tag;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -38,6 +49,8 @@ public class NewPostFragment extends Fragment {
     private static final String ARG_TEXT = "text";
     private static final String ARG_IMAGES = "images";
     private AlertDialog mProgressDialog;
+    private ArrayAdapter<Tag> mTagsListAdapter;
+    private List<Tag> mTags = null;
 
     public NewPostFragment() {
     }
@@ -69,7 +82,7 @@ public class NewPostFragment extends Fragment {
     }
 
     EditText mPostText;
-    EditText mPostTags;
+    MultiAutoCompleteTextView mPostTags;
     private ImageUploadingPanel mImagesPanel;
 
     @Override
@@ -77,7 +90,10 @@ public class NewPostFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_post, container, false);
         mPostText = (EditText) rootView.findViewById(R.id.postText);
-        mPostTags = (EditText) rootView.findViewById(R.id.postTags);
+        mTagsListAdapter = new ArrayAdapter<Tag>(getActivity(), android.R.layout.simple_dropdown_item_1line);
+        mPostTags = (MultiAutoCompleteTextView) rootView.findViewById(R.id.postTags);
+        mPostTags.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        mPostTags.setAdapter(mTagsListAdapter);
         mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
         setHasOptionsMenu(true);
         if (savedInstanceState == null) {
@@ -95,8 +111,55 @@ public class NewPostFragment extends Fragment {
                 .cancelable(false)
                 .customView(R.layout.dialog_progress, false)
                 .build();
+
+        new LoadTagsAsyncTask().execute();
         return rootView;
     }
+
+    private void applyTags(List<Tag> tags) {
+        if (isDetached() || tags == null)
+            return;
+        ContentStorageHelper.saveTags(getActivity(), tags);
+        mTags = tags;
+        mTagsListAdapter.clear();
+        mTagsListAdapter.addAll(mTags);
+        mTagsListAdapter.notifyDataSetChanged();
+    }
+
+    private class LoadTagsAsyncTask extends AsyncTask<Void, Void, Void> {
+        ContentStorageHelper.TagList tagList;
+        @Override
+        protected Void doInBackground(Void... voids) {
+            tagList = ContentStorageHelper.loadTags(getActivity());
+            mTags = tagList.tags;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (mTags != null) {
+                mTagsListAdapter.clear();
+                mTagsListAdapter.addAll(mTags);
+                mTagsListAdapter.notifyDataSetChanged();
+            }
+            if (mTags == null || System.currentTimeMillis() - tagList.updated > 24 * 60 * 60 * 1000) {
+                ConnectionManager.getInstance().pointService.getTags(ConnectionManager.getInstance().loginResult.login, new Callback<List<Tag>>() {
+                    @Override
+                    public void success(List<Tag> tags, Response response) {
+                        if (tags != null)
+                            applyTags(tags);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        //nothing
+                    }
+                });
+            }
+            Toast.makeText(getActivity(), "tags!!! " + mTags.size(), Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

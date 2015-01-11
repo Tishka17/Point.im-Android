@@ -5,5 +5,6 @@ package org.itishka.pointim.api.data;
  */
 public class Tag {
     public int count;
-    String tag;
+    public String tag;
+    public String toString() {return tag;}
 }

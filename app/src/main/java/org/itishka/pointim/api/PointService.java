@@ -49,7 +49,7 @@ public interface PointService {
     void getUserInfo(@Path("login") String login, Callback<User> callback);
 
     @GET("/api/tags/{login}")
-    List<Tag> getTags(@Path("login") String login);
+    void getTags(@Path("login") String login, Callback<List<Tag>> callback);
 
     @GET("/api/tags")
     void getPostsByTag(@Query("tag") String tag, Callback<PostList> callback);
