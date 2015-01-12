@@ -83,7 +83,7 @@ public class MainActivity extends ActionBarActivity {
             RecentFragment.class,
             CommentedFragment.class,
             SelfFragment.class,
-            SelfFragment.class
+            AllFragment.class
     };
 
     @Override
