@@ -5,15 +5,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.itishka.pointim.api.ConnectionManager;
@@ -27,7 +30,9 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
         }
@@ -42,50 +47,15 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(new Intent(MainActivity.this, NewPostActivity.class));
             }
         });
-        /*
+
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        pager.setOffscreenPageLimit(3);
+        pager.setOffscreenPageLimit(4);
         pager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
-        */
-        final Spinner spinner = (Spinner) findViewById(R.id.spinner_nav);
-        mSpinnerAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.toolbar_main_spinner, android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerAdapter.setDropDownViewResource(R.layout.spinner_toolbar);
-        spinner.setAdapter(mSpinnerAdapter);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                CharSequence item = mSpinnerAdapter.getItem(position);
-                Fragment f = getSupportFragmentManager().findFragmentByTag(item.toString());
-
-                if (f == null)
-                    f = Fragment.instantiate(MainActivity.this, fragmentClass[position].getName());
-                else if (f.isAdded())
-                    return;
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content, f, item.toString())
-                        .commit();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                //ignore
-            }
-        });
-
     }
-
-    Class[] fragmentClass = new Class[]{
-            RecentFragment.class,
-            CommentedFragment.class,
-            SelfFragment.class,
-            AllFragment.class
-    };
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -133,7 +103,8 @@ public class MainActivity extends ActionBarActivity {
         private static final String[] titles = new String[]{
                 "Recent",
                 "Commented",
-                "Blog"
+                "Blog",
+                "All"
         };
 
         @Override
@@ -145,7 +116,8 @@ public class MainActivity extends ActionBarActivity {
         public Fragment getItem(int position) {
             if (position == 0) return new RecentFragment();
             if (position == 1) return new CommentedFragment();
-            else return new SelfFragment();
+            if (position == 2) return new SelfFragment();
+            else return new AllFragment();
         }
 
         @Override
