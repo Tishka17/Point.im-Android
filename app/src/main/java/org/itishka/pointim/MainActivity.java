@@ -104,7 +104,8 @@ public class MainActivity extends ActionBarActivity {
                 "Recent",
                 "Commented",
                 "Blog",
-                "All"
+                "All",
+                "Bookmarks"
         };
 
         @Override
@@ -117,7 +118,8 @@ public class MainActivity extends ActionBarActivity {
             if (position == 0) return new RecentFragment();
             if (position == 1) return new CommentedFragment();
             if (position == 2) return new SelfFragment();
-            else return new AllFragment();
+            if (position == 3) return new AllFragment();
+            else return new BookmarksFragment();
         }
 
         @Override

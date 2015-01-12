@@ -27,6 +27,11 @@ public interface PointService {
     @GET("/api/all")
     void getAll(@Query("before") long before, Callback<PostList> callback);
 
+    @GET("/api/bookmarks")
+    void getBookmarks(Callback<PostList> callback);
+    @GET("/api/bookmarks")
+    void getBookmarks(@Query("before") long before, Callback<PostList> callback);
+
     @GET("/api/recent")
     void getRecent(Callback<PostList> callback);
 
