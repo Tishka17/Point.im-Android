@@ -157,7 +157,6 @@ public class NewPostFragment extends Fragment {
                     }
                 });
             }
-            Toast.makeText(getActivity(), "tags!!! " + mTags.size(), Toast.LENGTH_SHORT).show();
         }
     };
 
