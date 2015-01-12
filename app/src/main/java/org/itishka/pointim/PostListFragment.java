@@ -11,6 +11,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -31,11 +34,35 @@ import retrofit.client.Response;
  */
 public abstract class PostListFragment extends Fragment {
     private RecyclerView mRecyclerView;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     private StaggeredGridLayoutManager mLayoutManager;
     private PostListAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
 
     public PostListFragment() {
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_posts_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_refresh) {
+            mSwipeRefresh.setRefreshing(true);
+            update(mCallback);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
