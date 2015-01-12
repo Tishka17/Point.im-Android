@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -210,8 +211,11 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.quote_mark.setVisibility(View.INVISIBLE);
             holder.quote_mark_top.setVisibility(View.GONE);
         }
-
-        holder.post_id.setText("#" + post.post.id);
+        if (TextUtils.isEmpty(post.comment_id)) {
+            holder.post_id.setText("#" + post.post.id);
+        } else {
+            holder.post_id.setText("#" + post.post.id + "/" + post.comment_id);
+        }
         holder.post_id.setTag(post.post.id);
         holder.webLink.setTag(Utils.getnerateSiteUri(post.post.id));
         holder.favourite.setChecked(post.bookmarked);
