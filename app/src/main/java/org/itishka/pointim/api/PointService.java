@@ -21,6 +21,12 @@ import retrofit.http.Query;
  * Created by atikhonov on 28.04.2014.
  */
 public interface PointService {
+    @GET("/api/all")
+    void getAll(Callback<PostList> callback);
+
+    @GET("/api/all")
+    void getAll(@Query("before") long before, Callback<PostList> callback);
+
     @GET("/api/recent")
     void getRecent(Callback<PostList> callback);
 
