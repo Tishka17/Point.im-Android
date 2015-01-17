@@ -19,6 +19,8 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
+import org.itishka.pointim.widgets.span.PostClickableSpan;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -171,8 +173,9 @@ public class Utils {
         while (m.find()) {
             StyleSpan b = new StyleSpan(android.graphics.Typeface.BOLD);
             text.setSpan(b, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            URLSpan urlSpan = new URLSpan(getnerateSiteUri(m.group(1), m.group(2)).toString());
-            text.setSpan(urlSpan, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            PostClickableSpan span = new PostClickableSpan(m.group(1), m.group(2));
+            //URLSpan urlSpan = new URLSpan(getnerateSiteUri(m.group(1), m.group(2)).toString());
+            text.setSpan(span, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         }
         return text;
     }
