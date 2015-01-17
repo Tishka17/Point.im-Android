@@ -76,6 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <View
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:attr/dividerVertical" />
@@ -111,13 +112,13 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:src="@drawable/ic_action_internet" />
+                android:src="@drawable/ic_earth_grey600_24dp" />
 
             <TextView
                 android:id="@+id/comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_action_comment"
+                android:drawableLeft="@drawable/ic_message_reply_grey600_24dp"
                 android:gravity="center"
                 android:minWidth="65dp"
                 android:paddingLeft="10dp"

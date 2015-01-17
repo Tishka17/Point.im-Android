@@ -40,6 +40,7 @@
                     android:layout_height="wrap_content"
                     android:text="Name"
                     android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/primary_text_default_material_light"
                     android:textStyle="bold" />
 
                 <TextView
@@ -47,7 +48,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Small Text"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/secondary_text_default_material_light" />
             </LinearLayout>
         </LinearLayout>
 
@@ -57,7 +59,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/text_margin"
             android:layout_marginRight="@dimen/text_margin"
-            android:text="recommend test with some many letttttttttters and so on as it can be" />
+            android:text="recommend test with some many letttttttttters and so on as it can be"
+            android:textColor="@color/primary_text_default_material_light" />
 
         <View
             android:id="@+id/quote_mark_top"
@@ -70,6 +73,7 @@
             android:id="@+id/main_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/quote_background"
             android:orientation="horizontal">
 
             <View
@@ -89,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/text_quote_margin"
-                    android:layout_marginRight="@dimen/text_margin"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -101,7 +105,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/text_avatar_margin"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
@@ -110,6 +116,7 @@
                             android:layout_height="wrap_content"
                             android:text="Name"
                             android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@color/primary_text_default_material_light"
                             android:textStyle="bold" />
 
                         <TextView
@@ -119,6 +126,19 @@
                             android:text="Small Text"
                             android:textAppearance="?android:attr/textAppearanceSmall" />
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/post_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/post_id"
+                        android:drawableLeft="@drawable/postidleft"
+                        android:drawablePadding="4dp"
+                        android:gravity="center_vertical"
+                        android:paddingRight="4dp"
+                        android:text="#xxx"
+                        android:textColor="@android:color/secondary_text_light"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <org.itishka.pointim.widgets.FlowLayout
@@ -135,7 +155,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/text_quote_margin"
                     android:layout_marginRight="@dimen/text_margin"
-                    android:text="test with some many letttttttttters and so on as it can be" />
+                    android:text="test with some many letttttttttters and so on as it can be"
+                    android:textColor="@color/primary_text_default_material_light" />
 
                 <org.itishka.pointim.widgets.ImageList
                     android:id="@+id/imageList"
@@ -148,53 +169,53 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="?android:attr/dividerVertical" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginLeft="@dimen/text_margin"
             android:layout_marginRight="@dimen/text_margin"
-            android:layout_marginTop="4dp">
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/post_id"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="#xxx"
-                android:textColor="@android:color/secondary_text_dark"
-                android:textStyle="bold" />
+            <ImageButton
+                android:id="@+id/action_recommend"
+                style="@style/Widget.AppCompat.Light.ActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_share_grey600_24dp" />
 
             <CheckBox
                 android:id="@+id/favourite"
+                style="@style/Widget.AppCompat.Light.ActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@null"
-                android:drawableLeft="@drawable/ic_bookmark"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
+                android:drawableLeft="@drawable/ic_star_outline_grey600_24dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/weblink"
+                style="@style/Widget.AppCompat.Light.ActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:src="@drawable/ic_action_internet" />
+                android:src="@drawable/ic_earth_grey600_18dp" />
 
             <TextView
                 android:id="@+id/comments"
+                style="@style/Widget.AppCompat.Light.ActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_action_comment"
+                android:drawableLeft="@drawable/ic_message_reply_grey600_18dp"
                 android:gravity="center"
                 android:minWidth="65dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:text="111"
-                android:textColor="@android:color/secondary_text_dark" />
+                android:textColor="@color/secondary_text_default_material_light" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
