@@ -20,6 +20,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.api.ImageSearchHelper;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -77,6 +78,12 @@ public class MainActivity extends ActionBarActivity {
         if (!ConnectionManager.getInstance().isAuthorized()) {
             finish();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ImageSearchHelper.saveCache(this);
     }
 
     @Override

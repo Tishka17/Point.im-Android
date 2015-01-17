@@ -290,7 +290,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             for (int i = 0; i < posts.size(); i++) {
                 Post post = posts.get(i);
                 if (post.post.text.images == null) {
-                    post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
+                    post.post.text.images = ImageSearchHelper.checkImageLinks(getContext(), ImageSearchHelper.getAllLinks(post.post.text.text));
                     publishProgress(i);
                 }
             }

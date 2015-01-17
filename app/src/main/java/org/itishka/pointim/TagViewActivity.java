@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.itishka.pointim.api.ImageSearchHelper;
+
 
 public class TagViewActivity extends ActionBarActivity {
 
@@ -32,6 +34,12 @@ public class TagViewActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_tag_view, menu);
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ImageSearchHelper.saveCache(this);
     }
 
     @Override
