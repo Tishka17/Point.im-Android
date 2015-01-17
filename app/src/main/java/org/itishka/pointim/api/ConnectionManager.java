@@ -10,6 +10,9 @@ import com.squareup.okhttp.OkHttpClient;
 import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.api.data.LoginResult;
 import org.itishka.pointim.api.data.TextWithImages;
+import org.itishka.pointim.utils.AuthSaver;
+import org.itishka.pointim.utils.DateDeserializer;
+import org.itishka.pointim.utils.TextParser;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;

@@ -19,7 +19,7 @@ import com.melnykov.fab.FloatingActionButton;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.ImageSearchHelper;
+import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.fragments.AllFragment;
 import org.itishka.pointim.fragments.BookmarksFragment;
 import org.itishka.pointim.fragments.CommentedFragment;

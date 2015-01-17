@@ -1,4 +1,4 @@
-package org.itishka.pointim.api;
+package org.itishka.pointim.utils;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -15,7 +15,7 @@ import java.util.Locale;
 /**
  * Created by atikhonov on 28.04.2014.
  */
-class DateDeserializer implements JsonDeserializer<Date> {
+public class DateDeserializer implements JsonDeserializer<Date> {
 
     private static final String[] DATE_FORMATS = new String[]{
             "yyyy-MM-dd'T'HH:mm:ss",

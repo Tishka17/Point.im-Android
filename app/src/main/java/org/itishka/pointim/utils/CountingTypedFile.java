@@ -1,4 +1,4 @@
-package org.itishka.pointim.api;
+package org.itishka.pointim.utils;
 
 import java.io.File;
 import java.io.FileInputStream;

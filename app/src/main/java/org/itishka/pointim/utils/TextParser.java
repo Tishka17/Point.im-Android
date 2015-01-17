@@ -1,4 +1,4 @@
-package org.itishka.pointim.api;
+package org.itishka.pointim.utils;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

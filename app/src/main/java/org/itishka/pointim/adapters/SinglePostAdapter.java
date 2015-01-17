@@ -20,7 +20,7 @@ import org.itishka.pointim.activities.UserViewActivity;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
-import org.itishka.pointim.api.ImageSearchHelper;
+import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;
 import org.itishka.pointim.widgets.ImageList;

@@ -1,9 +1,8 @@
-package org.itishka.pointim.api;
+package org.itishka.pointim.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.Spannable;
-import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.util.Log;
 import android.util.LruCache;
