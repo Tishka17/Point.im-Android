@@ -1,10 +1,12 @@
 package org.itishka.pointim.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.UserViewActivity;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.api.ImageSearchHelper;
 import org.itishka.pointim.api.data.Post;
@@ -147,6 +150,17 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     getContext().startActivity(browserIntent);
                 }
             });
+            holder.avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String user = (String) view.getTag();
+                    if (!TextUtils.isEmpty(user)) {
+                        Intent intent = new Intent(view.getContext(), UserViewActivity.class);
+                        intent.putExtra("user", user);
+                        ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                    }
+                }
+            });
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -189,7 +203,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         holder.imageList.setImageUrls(post.post.text.images);
         holder.text.setText(post.post.text.text);
-        Utils.showAvatar(getContext(), post.post.author.avatar, holder.avatar);
+        Utils.showAvatar(getContext(), post.post.author.login, post.post.author.avatar, holder.avatar);
         holder.date.setText(Utils.formatDate(post.post.created));
 
         if (post.rec != null) {
@@ -205,7 +219,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.quote_mark_top.setVisibility(View.VISIBLE);
             holder.recommend_author.setText("@" + post.rec.author.login);
             holder.recommend_id.setText("");
-            Utils.showAvatar(getContext(), post.rec.author.avatar, holder.recommender_avatar);
+            Utils.showAvatar(getContext(), post.post.author.login, post.rec.author.avatar, holder.recommender_avatar);
         } else {
             holder.mainConent.setBackgroundColor(Color.TRANSPARENT);
             holder.recommend_info.setVisibility(View.GONE);

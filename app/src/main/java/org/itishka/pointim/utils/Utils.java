@@ -55,10 +55,11 @@ public class Utils {
     }
 
     public static void showAvatarByLogin(Context context, String login, ImageView imageView) {
-        showAvatar(context, "http://point.im/avatar/" + login + "/80", imageView);
+        showAvatar(context, login, "http://point.im/avatar/" + login + "/80", imageView);
     }
 
-    public static void showAvatar(Context context, String avatar, ImageView imageView) {
+    public static void showAvatar(Context context, String login, String avatar, ImageView imageView) {
+        imageView.setTag(login);
         if (avatar == null) {
             imageView.setImageResource(R.drawable.ic_launcher);
             return;

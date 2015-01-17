@@ -1,9 +1,11 @@
 package org.itishka.pointim.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.UserViewActivity;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
@@ -134,6 +137,17 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     getContext().startActivity(browserIntent);
                 }
             });
+            holder.avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String user = (String) view.getTag();
+                    if (!TextUtils.isEmpty(user)) {
+                        Intent intent = new Intent(view.getContext(), UserViewActivity.class);
+                        intent.putExtra("user", user);
+                        ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                    }
+                }
+            });
             holder.post_id.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -145,7 +159,19 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return holder;
         } else {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_comment, viewGroup, false);
-            return new CommentViewHolder(v);
+            CommentViewHolder holder = new CommentViewHolder(v);
+            holder.avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String user = (String) view.getTag();
+                    if (!TextUtils.isEmpty(user)) {
+                        Intent intent = new Intent(view.getContext(), UserViewActivity.class);
+                        intent.putExtra("user", user);
+                        ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                    }
+                }
+            });
+            return holder;
         }
 
     }
@@ -161,7 +187,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             postHolder.author.setText("@" + mPost.post.author.login);
             postHolder.text.setText(mPost.post.text.text);
             postHolder.imageList.setImageUrls(mPost.post.text.images);
-            Utils.showAvatar(getContext(), mPost.post.author.avatar, postHolder.avatar);
+            Utils.showAvatar(getContext(), mPost.post.author.login, mPost.post.author.avatar, postHolder.avatar);
             postHolder.date.setText(Utils.formatDate(mPost.post.created));
 
             postHolder.post_id.setText("#" + mPost.post.id);
@@ -194,7 +220,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else {
             Comment comment = mPost.comments.get(i - 1);
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
-            Utils.showAvatar(getContext(), comment.author.avatar, commentHolder.avatar);
+            Utils.showAvatar(getContext(), comment.author.login, comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
                 commentHolder.divider.setVisibility(View.INVISIBLE);
             } else {
