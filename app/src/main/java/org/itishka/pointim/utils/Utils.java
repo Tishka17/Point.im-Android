@@ -141,43 +141,4 @@ public class Utils {
             mActionBar.setLogo(placeHolderDrawable);
         }
     }
-
-    public static void addLinks(TextView view) {
-        android.text.util.Linkify.addLinks(view, android.text.util.Linkify.ALL);
-        view.setMovementMethod(null);
-    }
-
-    public static Spannable addLinks(String text) {
-        Spannable spannable = new SpannableString(text);
-        android.text.util.Linkify.addLinks(spannable, android.text.util.Linkify.ALL);
-        return spannable;
-    }
-
-
-    static final Pattern nickPattern = Pattern.compile("(?<=^|[:(>\\s])@([\\w-]+)");
-
-    public static Spannable markNicks(Spannable text) {
-        Matcher m = nickPattern.matcher(text);
-        while (m.find()) {
-            StyleSpan b = new StyleSpan(android.graphics.Typeface.BOLD);
-            text.setSpan(b, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            URLSpan urlSpan = new URLSpan(getnerateBlogUri(m.group(1)).toString());
-            text.setSpan(urlSpan, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        }
-        return text;
-    }
-
-    static final Pattern postNumberPattern = Pattern.compile("(?<=^|[:(>\\s])#(\\w+)(?>/(\\d+))?");
-
-    public static Spannable markPostNumbers(Spannable text) {
-        Matcher m = postNumberPattern.matcher(text);
-        while (m.find()) {
-            StyleSpan b = new StyleSpan(android.graphics.Typeface.BOLD);
-            text.setSpan(b, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            PostClickableSpan span = new PostClickableSpan(m.group(1), m.group(2));
-            //URLSpan urlSpan = new URLSpan(getnerateSiteUri(m.group(1), m.group(2)).toString());
-            text.setSpan(span, m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        }
-        return text;
-    }
 }

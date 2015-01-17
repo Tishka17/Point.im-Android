@@ -82,6 +82,15 @@
                 android:value=".activities.MainActivity" />
         </activity>
         <activity
+            android:name=".activities.UserViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_tag_view"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".activities.MainActivity" >
