@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.utils;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -19,7 +19,8 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
-import org.itishka.pointim.widgets.span.PostClickableSpan;
+import org.itishka.pointim.R;
+import org.itishka.pointim.widgets.spans.PostClickableSpan;
 
 import java.net.MalformedURLException;
 import java.net.URL;

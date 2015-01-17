@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.fragments;
 
 
 import android.content.Intent;
@@ -18,6 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.itishka.pointim.adapters.PostListAdapter;
+import org.itishka.pointim.R;
+import org.itishka.pointim.activities.SinglePostActivity;
+import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;

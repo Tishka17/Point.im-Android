@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,10 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.itishka.pointim.R;
+import org.itishka.pointim.utils.Utils;
+import org.itishka.pointim.activities.SinglePostActivity;
+import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.api.ImageSearchHelper;
 import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;

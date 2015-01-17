@@ -18,7 +18,7 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
-import org.itishka.pointim.ImgurUploadTask;
+import org.itishka.pointim.utils.ImgurUploadTask;
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.ImgurImage;

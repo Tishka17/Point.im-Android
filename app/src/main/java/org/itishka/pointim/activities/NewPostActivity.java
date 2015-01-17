@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,7 +8,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.fragments.NewPostFragment;
 
 
 public class NewPostActivity extends ActionBarActivity {

@@ -1,17 +1,14 @@
-package org.itishka.pointim;
+package org.itishka.pointim.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,11 +21,10 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
+import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.ContentStorageHelper;
+import org.itishka.pointim.utils.ContentStorageHelper;
 import org.itishka.pointim.api.data.PointResult;
 import org.itishka.pointim.api.data.Tag;
 import org.itishka.pointim.widgets.ImageUploadingPanel;

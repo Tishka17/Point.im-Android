@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.fragments;
 
 import android.os.Bundle;
 

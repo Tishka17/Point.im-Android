@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,15 +12,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.melnykov.fab.FloatingActionButton;
 
+import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.ImageSearchHelper;
+import org.itishka.pointim.fragments.AllFragment;
+import org.itishka.pointim.fragments.BookmarksFragment;
+import org.itishka.pointim.fragments.CommentedFragment;
+import org.itishka.pointim.fragments.RecentFragment;
+import org.itishka.pointim.fragments.SelfFragment;
 
 
 public class MainActivity extends ActionBarActivity {

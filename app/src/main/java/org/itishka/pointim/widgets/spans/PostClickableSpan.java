@@ -1,14 +1,12 @@
-package org.itishka.pointim.widgets.span;
+package org.itishka.pointim.widgets.spans;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
-import android.text.TextPaint;
-import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-import org.itishka.pointim.SinglePostActivity;
+import org.itishka.pointim.activities.SinglePostActivity;
 
 /**
  * Created by Tishka17 on 17.01.2015.

@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import org.itishka.pointim.BuildConfig;
+import org.itishka.pointim.R;
+import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.api.ConnectionManager;
 
 

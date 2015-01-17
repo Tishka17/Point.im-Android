@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.utils;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
 
+import org.itishka.pointim.R;
+import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.api.ImageSearchHelper;
 import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
@@ -40,7 +42,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mPostList.posts.get(pos);
     }
 
-    protected PostList getPostList() {
+    public PostList getPostList() {
         return mPostList;
     }
 

@@ -18,6 +18,6 @@ android:orientation="vertical">
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.itishka.pointim.NewPostActivity"
+    tools:context="org.itishka.pointim.activities.NewPostActivity"
     tools:ignore="MergeRootFrame" />
 </LinearLayout>

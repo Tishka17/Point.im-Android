@@ -1,4 +1,4 @@
-package org.itishka.pointim;
+package org.itishka.pointim.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -28,6 +28,9 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import org.itishka.pointim.R;
+import org.itishka.pointim.adapters.SinglePostAdapter;
+import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;

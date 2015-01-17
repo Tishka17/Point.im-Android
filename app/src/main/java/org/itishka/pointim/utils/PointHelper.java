@@ -1,4 +1,4 @@
-package org.itishka.pointim.api;
+package org.itishka.pointim.utils;
 
 import org.itishka.pointim.api.data.Tag;
 
