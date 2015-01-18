@@ -18,11 +18,11 @@ public class TagViewActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_view);
         if (savedInstanceState == null) {
+            //TODO user!!!
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, TagViewFragment.newInstance(getIntent().getStringExtra("tag")))
                     .commit();
         }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);

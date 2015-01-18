@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
-
+        //TODO switch tabs
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
         }

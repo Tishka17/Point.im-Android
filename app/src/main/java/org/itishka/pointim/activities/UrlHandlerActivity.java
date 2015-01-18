@@ -35,13 +35,16 @@ public class UrlHandlerActivity extends ActionBarActivity {
                 intent.putExtra("tag", tag);
                 intent.putExtra("user", user);
             }
-        } else if ("recent".equals(post)) {
+        } else if ("recent".equals(post)
+                || "bookmarks".equals(post)
+                || "all".equals(post)
+                || "comments".equals(post)) {
             intent = new Intent(this, MainActivity.class);
-            intent.putExtra("target", "recent");
+            intent.putExtra("target", post);
         } else { //post
-                intent = new Intent(this, SinglePostActivity.class);
-                intent.putExtra("post", post);
-                intent.putExtra("comment", comment);
+            intent = new Intent(this, SinglePostActivity.class);
+            intent.putExtra("post", post);
+            intent.putExtra("comment", comment);
         }
         startActivity(intent);
         finish();
