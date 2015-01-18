@@ -3,6 +3,7 @@ package org.itishka.pointim.activities;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,10 +18,12 @@ public class TagViewActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_view);
+        String user = getIntent().getStringExtra("user");
+        String tag = getIntent().getStringExtra("tag");
         if (savedInstanceState == null) {
             //TODO user!!!
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, TagViewFragment.newInstance(getIntent().getStringExtra("tag")))
+                    .add(R.id.container, TagViewFragment.newInstance(user, tag))
                     .commit();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -28,7 +31,10 @@ public class TagViewActivity extends ActionBarActivity {
             setSupportActionBar(toolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("*" + getIntent().getStringExtra("tag"));
+        if (TextUtils.isEmpty(user))
+            getSupportActionBar().setTitle("*" + tag);
+        else
+            getSupportActionBar().setTitle("@" + user + ": *" + tag);
     }
 
 

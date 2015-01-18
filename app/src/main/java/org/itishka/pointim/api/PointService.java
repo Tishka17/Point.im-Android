@@ -70,6 +70,8 @@ public interface PointService {
 
     @GET("/api/tags/{login}")
     void getPostsByUserTag(@Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);
+    @GET("/api/tags/{login}")
+    void getPostsByUserTag(@Query("before") long before, @Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);
 
     @GET("/api/post/{id}")
     void getPost(@Path("id") String id, Callback<ExtendedPost> callback);
