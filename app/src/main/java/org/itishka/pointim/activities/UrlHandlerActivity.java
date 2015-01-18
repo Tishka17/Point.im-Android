@@ -36,10 +36,12 @@ public class UrlHandlerActivity extends ActionBarActivity {
                 intent.putExtra("user", user);
             }
         } else if ("recent".equals(post)
-                || "bookmarks".equals(post)
                 || "all".equals(post)
                 || "comments".equals(post)) {
             intent = new Intent(this, MainActivity.class);
+            intent.putExtra("target", post);
+        } else if ("bookmarks".equals(post)) {
+            intent = new Intent(this, BookmarksActivity.class);
             intent.putExtra("target", post);
         } else { //post
             intent = new Intent(this, SinglePostActivity.class);

@@ -83,7 +83,16 @@
         <activity
             android:name=".activities.UserViewActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_tag_view"
+            android:label="@string/title_activity_user_view"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.BookmarksActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_bookmarks"
             android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -12,26 +12,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.fragments.AllFragment;
-import org.itishka.pointim.fragments.BookmarksFragment;
 import org.itishka.pointim.fragments.CommentedFragment;
 import org.itishka.pointim.fragments.RecentFragment;
 import org.itishka.pointim.fragments.SelfFragment;
+import org.itishka.pointim.utils.ImageSearchHelper;
 
 
 public class MainActivity extends ActionBarActivity {
 
     private static final int REQUEST_LOGIN = 0;
     FloatingActionButton mNewPost;
-    private ArrayAdapter<CharSequence> mSpinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +58,7 @@ public class MainActivity extends ActionBarActivity {
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(pager);
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -101,6 +99,9 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
+        } else if (id == R.id.action_bookmarks) {
+            startActivity(new Intent(this, BookmarksActivity.class));
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -116,7 +117,6 @@ public class MainActivity extends ActionBarActivity {
                 "Commented",
                 "Blog",
                 "All",
-                "Bookmarks"
         };
 
         @Override
@@ -130,7 +130,7 @@ public class MainActivity extends ActionBarActivity {
             if (position == 1) return new CommentedFragment();
             if (position == 2) return new SelfFragment();
             if (position == 3) return new AllFragment();
-            else return new BookmarksFragment();
+            return null;
         }
 
         @Override
