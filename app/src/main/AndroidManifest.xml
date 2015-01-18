@@ -23,8 +23,7 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".activities.SinglePostActivity"
             android:configChanges="orientation|screenSize"
@@ -97,6 +96,29 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".activities.UrlHandlerActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="point.im"
+                    android:scheme="http" />
+                <data
+                    android:host="*.point.im"
+                    android:scheme="http" />
+                <data
+                    android:host="point.im"
+                    android:scheme="http" />
+                <data
+                    android:host="*.point.im"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
     </application>
 
