@@ -20,10 +20,10 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.utils.Utils;
-import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
+import org.itishka.pointim.utils.ImageSearchHelper;
+import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
 
 import java.lang.ref.WeakReference;
@@ -35,9 +35,23 @@ import java.util.List;
 public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_FOOTER = 1;
     public static final int TYPE_ITEM = 0;
-    private PostList mPostList = null;
     private final WeakReference<Context> mContext;
+    private PostList mPostList = null;
     private ImageSearchTask mTask;
+    private OnLoadMoreRequestListener mOnLoadMoreRequestListener = null;
+    private OnPostClickListener mOnPostClickListener = null;
+    View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (mOnPostClickListener != null)
+                mOnPostClickListener.onTagClicked(view, ((TextView) view).getText().toString());
+        }
+    };
+
+    public PostListAdapter(Context context) {
+        super();
+        mContext = new WeakReference<>(context);
+    }
 
     public Post getItem(int pos) {
         if (pos == mPostList.posts.size())
@@ -47,58 +61,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public PostList getPostList() {
         return mPostList;
-    }
-
-    protected class FooterHolder extends RecyclerView.ViewHolder {
-        ProgressWheel progressWheel;
-
-        public FooterHolder(View itemView) {
-            super(itemView);
-            progressWheel = (ProgressWheel) itemView.findViewById(R.id.progress_wheel);
-        }
-    }
-
-    protected class ViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        ViewGroup tags;
-        ImageView avatar;
-        ImageView recommender_avatar;
-        TextView recommend_text;
-        View quote_mark;
-        View quote_mark_top;
-        TextView recommend_author;
-        TextView author;
-        TextView post_id;
-        View recommend_info;
-        TextView recommend_id;
-        TextView comments;
-        TextView date;
-        ImageView webLink;
-        CheckBox favourite;
-        ImageList imageList;
-        View mainConent;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            text = (TextView) itemView.findViewById(R.id.text);
-            tags = (ViewGroup) itemView.findViewById(R.id.tags);
-            avatar = (ImageView) itemView.findViewById(R.id.avatar);
-            recommender_avatar = (ImageView) itemView.findViewById(R.id.recommend_avatar);
-            recommend_text = (TextView) itemView.findViewById(R.id.recommend_text);
-            quote_mark = itemView.findViewById(R.id.quote_mark);
-            quote_mark_top = itemView.findViewById(R.id.quote_mark_top);
-            recommend_author = (TextView) itemView.findViewById(R.id.recommend_author);
-            author = (TextView) itemView.findViewById(R.id.author);
-            post_id = (TextView) itemView.findViewById(R.id.post_id);
-            recommend_info = itemView.findViewById(R.id.recommend_info);
-            recommend_id = (TextView) itemView.findViewById(R.id.recommend_id);
-            comments = (TextView) itemView.findViewById(R.id.comments);
-            date = (TextView) itemView.findViewById(R.id.date);
-            webLink = (ImageView) itemView.findViewById(R.id.weblink);
-            favourite = (CheckBox) itemView.findViewById(R.id.favourite);
-            mainConent = itemView.findViewById(R.id.main_content);
-            imageList = (ImageList) itemView.findViewById(R.id.imageList);
-        }
     }
 
     public void setData(PostList postList) {
@@ -126,11 +88,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (position == mPostList.posts.size())
             return TYPE_FOOTER;
         return TYPE_ITEM;
-    }
-
-    public PostListAdapter(Context context) {
-        super();
-        mContext = new WeakReference<>(context);
     }
 
     @Override
@@ -247,7 +204,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         LayoutInflater li;
         li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         holder.tags.removeAllViews();
-        if (post.post.tags==null || post.post.tags.size() == 0) {
+        if (post.post.tags == null || post.post.tags.size() == 0) {
             holder.tags.setVisibility(View.GONE);
         } else {
             holder.tags.setVisibility(View.VISIBLE);
@@ -268,22 +225,16 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         else return mPostList.posts.size() + 1;
     }
 
-    View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (mOnPostClickListener != null)
-                mOnPostClickListener.onTagClicked(view, ((TextView) view).getText().toString());
-        }
-    };
+    public void setOnLoadMoreRequestListener(OnLoadMoreRequestListener onLoadMoreRequestListener) {
+        mOnLoadMoreRequestListener = onLoadMoreRequestListener;
+    }
+
+    public void setOnPostClickListener(OnPostClickListener onPostClickListener) {
+        mOnPostClickListener = onPostClickListener;
+    }
 
     public interface OnLoadMoreRequestListener {
         public boolean onLoadMoreRequested();//return false if cannot load more
-    }
-
-    private OnLoadMoreRequestListener mOnLoadMoreRequestListener = null;
-
-    public void setOnLoadMoreRequestListener(OnLoadMoreRequestListener onLoadMoreRequestListener) {
-        mOnLoadMoreRequestListener = onLoadMoreRequestListener;
     }
 
     public interface OnPostClickListener {
@@ -292,10 +243,56 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void onTagClicked(View view, String tag);
     }
 
-    private OnPostClickListener mOnPostClickListener = null;
+    protected class FooterHolder extends RecyclerView.ViewHolder {
+        ProgressWheel progressWheel;
 
-    public void setOnPostClickListener(OnPostClickListener onPostClickListener) {
-        mOnPostClickListener = onPostClickListener;
+        public FooterHolder(View itemView) {
+            super(itemView);
+            progressWheel = (ProgressWheel) itemView.findViewById(R.id.progress_wheel);
+        }
+    }
+
+    protected class ViewHolder extends RecyclerView.ViewHolder {
+        TextView text;
+        ViewGroup tags;
+        ImageView avatar;
+        ImageView recommender_avatar;
+        TextView recommend_text;
+        View quote_mark;
+        View quote_mark_top;
+        TextView recommend_author;
+        TextView author;
+        TextView post_id;
+        View recommend_info;
+        TextView recommend_id;
+        TextView comments;
+        TextView date;
+        ImageView webLink;
+        CheckBox favourite;
+        ImageList imageList;
+        View mainConent;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            text = (TextView) itemView.findViewById(R.id.text);
+            tags = (ViewGroup) itemView.findViewById(R.id.tags);
+            avatar = (ImageView) itemView.findViewById(R.id.avatar);
+            recommender_avatar = (ImageView) itemView.findViewById(R.id.recommend_avatar);
+            recommend_text = (TextView) itemView.findViewById(R.id.recommend_text);
+            quote_mark = itemView.findViewById(R.id.quote_mark);
+            quote_mark_top = itemView.findViewById(R.id.quote_mark_top);
+            recommend_author = (TextView) itemView.findViewById(R.id.recommend_author);
+            author = (TextView) itemView.findViewById(R.id.author);
+            post_id = (TextView) itemView.findViewById(R.id.post_id);
+            recommend_info = itemView.findViewById(R.id.recommend_info);
+            recommend_id = (TextView) itemView.findViewById(R.id.recommend_id);
+            comments = (TextView) itemView.findViewById(R.id.comments);
+            date = (TextView) itemView.findViewById(R.id.date);
+            webLink = (ImageView) itemView.findViewById(R.id.weblink);
+            favourite = (CheckBox) itemView.findViewById(R.id.favourite);
+            mainConent = itemView.findViewById(R.id.main_content);
+            imageList = (ImageList) itemView.findViewById(R.id.imageList);
+        }
     }
 
     private class ImageSearchTask extends AsyncTask<PostList, Integer, Void> {
