@@ -42,6 +42,9 @@ public class TagViewFragment extends PostListFragment {
 
     @Override
     protected void loadMore(long before, Callback<PostList> callback) {
+        if (TextUtils.isEmpty(mUser))
+            ConnectionManager.getInstance().pointService.getPostsByTag(before, mTag, callback);
+        else
         ConnectionManager.getInstance().pointService.getPostsByUserTag(before, mUser, mTag, callback);
     }
 }
