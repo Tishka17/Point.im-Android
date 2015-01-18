@@ -33,7 +33,38 @@ public class ImageList extends FrameLayout {
             R.id.imageView8,
             R.id.imageView9
     };
+    Transformation transformation = new Transformation() {
+
+        @Override
+        public Bitmap transform(Bitmap source) {
+
+            int targetHeight = mImageViews[0].getHeight();
+
+            double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
+            int targetWidth = (int) (targetHeight * aspectRatio);
+            if (targetWidth == 0 || targetHeight == 0)
+                return source;
+            Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+            if (result != source) {
+                // Same bitmap is returned if sizes are the same
+                source.recycle();
+            }
+            return result;
+        }
+
+        @Override
+        public String key() {
+            return "transformation" + " desiredWidth";
+        }
+    };
     private ImageView[] mImageViews = new ImageView[sImageIds.length];
+    private OnClickListener imageClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) view.getTag()));
+            getContext().startActivity(browserIntent);
+        }
+    };
 
     public ImageList(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -59,14 +90,6 @@ public class ImageList extends FrameLayout {
         }
     }
 
-    private OnClickListener imageClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) view.getTag()));
-            getContext().startActivity(browserIntent);
-        }
-    };
-
     public void setImageUrls(List<String> urls) {
         for (int i = 0; i < sImageIds.length; i++) {
             if (urls != null && i < urls.size()) {
@@ -81,29 +104,4 @@ public class ImageList extends FrameLayout {
             }
         }
     }
-
-    Transformation transformation = new Transformation() {
-
-        @Override
-        public Bitmap transform(Bitmap source) {
-
-            int targetHeight = mImageViews[0].getHeight();
-
-            double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
-            int targetWidth = (int) (targetHeight * aspectRatio);
-            if (targetWidth == 0 || targetHeight == 0)
-                return source;
-            Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
-            if (result != source) {
-                // Same bitmap is returned if sizes are the same
-                source.recycle();
-            }
-            return result;
-        }
-
-        @Override
-        public String key() {
-            return "transformation" + " desiredWidth";
-        }
-    };
 }

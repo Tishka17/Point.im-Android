@@ -6,11 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 public class PostData {
-    enum Type {
-        post,
-        comment
-    }
-
     public List<String> tags;
     public int comments_count;
     public AuthorData author;
@@ -18,7 +13,11 @@ public class PostData {
     public Date created;
     public Type type;
     public String id;
-
     @SerializedName("private")
     public boolean isPrivate;
+
+    enum Type {
+        post,
+        comment
+    }
 }

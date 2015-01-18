@@ -12,12 +12,7 @@ import retrofit.mime.TypedFile;
  */
 public class CountingTypedFile extends TypedFile {
 
-    public interface ProgressListener {
-        void transferred(long num);
-    }
-
     private static final int BUFFER_SIZE = 4096;
-
     private final ProgressListener listener;
 
     public CountingTypedFile(String mimeType, File file, ProgressListener listener) {
@@ -40,5 +35,9 @@ public class CountingTypedFile extends TypedFile {
         } finally {
             in.close();
         }
+    }
+
+    public interface ProgressListener {
+        void transferred(long num);
     }
 }

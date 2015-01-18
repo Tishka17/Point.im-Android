@@ -18,11 +18,11 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
-import org.itishka.pointim.utils.ImgurUploadTask;
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.ImgurImage;
 import org.itishka.pointim.api.data.ImgurUploadResult;
+import org.itishka.pointim.utils.ImgurUploadTask;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -37,30 +37,23 @@ import retrofit.client.Response;
  */
 public class ImageUploadingPanel extends FrameLayout {
 
-    private class Image {
-        Uri originalPath;
-        ImageView imageView;
-        ImageButton cancel;
-        ImageView viewFinished;
-        ImageView viewError;
-        ProgressWheel progress;
-
-        boolean uploaded = false;
-        ImgurUploadTask task = null;
-        ImgurImage uploadInfo;
-    }
-
     private ViewGroup mLayout;
     private ArrayList<Image> mImages = new ArrayList<>(1);
+    private Callback<Void> deleteCallback = new Callback<Void>() {
+        @Override
+        public void success(Void aVoid, Response response) {
+            //do nothng
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            //do nothng
+        }
+    };
 
     public ImageUploadingPanel(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
-    }
-
-    private void init() {
-        inflate(getContext(), R.layout.image_uploading_panel, this);
-        mLayout = (ViewGroup) findViewById(R.id.contentView);
     }
 
     public ImageUploadingPanel(Context context) {
@@ -71,6 +64,11 @@ public class ImageUploadingPanel extends FrameLayout {
     public ImageUploadingPanel(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
+    }
+
+    private void init() {
+        inflate(getContext(), R.layout.image_uploading_panel, this);
+        mLayout = (ViewGroup) findViewById(R.id.contentView);
     }
 
     @Override
@@ -157,25 +155,6 @@ public class ImageUploadingPanel extends FrameLayout {
         mLayout.removeAllViews();
     }
 
-    private class CropSquareTransformation implements Transformation {
-        @Override
-        public Bitmap transform(Bitmap source) {
-            int size = Math.min(source.getWidth(), source.getHeight());
-            int x = (source.getWidth() - size) / 2;
-            int y = (source.getHeight() - size) / 2;
-            Bitmap result = Bitmap.createBitmap(source, x, y, size, size);
-            if (result != source) {
-                source.recycle();
-            }
-            return result;
-        }
-
-        @Override
-        public String key() {
-            return "square()";
-        }
-    }
-
     private static final class ImgUploadTask extends ImgurUploadTask {
         WeakReference<Image> img;
 
@@ -219,15 +198,35 @@ public class ImageUploadingPanel extends FrameLayout {
         }
     }
 
-    private Callback<Void> deleteCallback = new Callback<Void>() {
+    private class Image {
+        Uri originalPath;
+        ImageView imageView;
+        ImageButton cancel;
+        ImageView viewFinished;
+        ImageView viewError;
+        ProgressWheel progress;
+
+        boolean uploaded = false;
+        ImgurUploadTask task = null;
+        ImgurImage uploadInfo;
+    }
+
+    private class CropSquareTransformation implements Transformation {
         @Override
-        public void success(Void aVoid, Response response) {
-            //do nothng
+        public Bitmap transform(Bitmap source) {
+            int size = Math.min(source.getWidth(), source.getHeight());
+            int x = (source.getWidth() - size) / 2;
+            int y = (source.getHeight() - size) / 2;
+            Bitmap result = Bitmap.createBitmap(source, x, y, size, size);
+            if (result != source) {
+                source.recycle();
+            }
+            return result;
         }
 
         @Override
-        public void failure(RetrofitError error) {
-            //do nothng
+        public String key() {
+            return "square()";
         }
-    };
+    }
 }

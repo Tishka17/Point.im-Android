@@ -8,8 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.fragments.TagViewFragment;
+import org.itishka.pointim.utils.ImageSearchHelper;
 
 
 public class TagViewActivity extends ActionBarActivity {

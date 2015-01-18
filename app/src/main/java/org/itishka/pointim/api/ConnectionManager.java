@@ -26,13 +26,22 @@ import retrofit.converter.GsonConverter;
  * Created by Татьяна on 21.10.2014.
  */
 public class ConnectionManager {
+    public static final String USER_AGENT = "Tishka17 Point.im Client";
+    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String ENDPOINT = "https://point.im";
+    public static final String IMGUR_ENDPOINT = "https://api.imgur.com/3/";
     private static final ConnectionManager instance = new ConnectionManager();
     public final OkHttpClient okHttpClient;
     public final OkClient okClient;
-
-    public static ConnectionManager getInstance() {
-        return instance;
-    }
+    private final Gson mGson = new GsonBuilder()
+            .setDateFormat(DATE_FORMAT)
+            .registerTypeAdapter(Date.class, new DateDeserializer())
+            .registerTypeAdapter(TextWithImages.class, new TextParser())
+            .create();
+    public PointService pointService = null;
+    public PointAuthService pointAuthService = null;
+    public LoginResult loginResult = null;
+    public ImgurService imgurService = null;
 
     private ConnectionManager() {
         okHttpClient = new OkHttpClient();
@@ -67,17 +76,9 @@ public class ConnectionManager {
         imgurService = restAdapter.create(ImgurService.class);
     }
 
-    public static final String USER_AGENT = "Tishka17 Point.im Client";
-    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
-    public static final String ENDPOINT = "https://point.im";
-    public PointService pointService = null;
-    private final Gson mGson = new GsonBuilder()
-            .setDateFormat(DATE_FORMAT)
-            .registerTypeAdapter(Date.class, new DateDeserializer())
-            .registerTypeAdapter(TextWithImages.class, new TextParser())
-            .create();
-    public PointAuthService pointAuthService = null;
-    public LoginResult loginResult = null;
+    public static ConnectionManager getInstance() {
+        return instance;
+    }
 
     public void updateAuthorization(Context context, LoginResult loginResult) {
         synchronized (this) {
@@ -111,6 +112,8 @@ public class ConnectionManager {
         pointService = restAdapter.create(PointService.class);
     }
 
+    //----- IMGUR ---
+
     synchronized public boolean isAuthorized() {
         return loginResult != null && !TextUtils.isEmpty(loginResult.csrf_token);
     }
@@ -122,9 +125,4 @@ public class ConnectionManager {
             updateAuthorization(context);
         }
     }
-
-    //----- IMGUR ---
-
-    public ImgurService imgurService = null;
-    public static final String IMGUR_ENDPOINT = "https://api.imgur.com/3/";
 }

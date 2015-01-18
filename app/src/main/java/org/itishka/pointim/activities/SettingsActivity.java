@@ -17,8 +17,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.R;
-import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.utils.Utils;
 
 
 public class SettingsActivity extends ActionBarActivity {

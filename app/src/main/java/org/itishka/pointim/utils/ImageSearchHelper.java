@@ -19,8 +19,9 @@ import java.util.Map;
  */
 public class ImageSearchHelper {
     private static final String MIME_ERROR = "^";
-    private static boolean isLoaded = false;
     private static final LruCache<String, String> sLinksChecked = new LruCache<>(512);
+    private static final String PREFERENCE = "linkTypes";
+    private static boolean isLoaded = false;
 
     public static List<String> getAllLinks(Spannable text) {
         URLSpan[] links = text.getSpans(0, text.length(), URLSpan.class);
@@ -31,17 +32,17 @@ public class ImageSearchHelper {
         return result;
     }
 
-    private static final String PREFERENCE = "linkTypes";
     public static final void loadCache(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
-        for (Map.Entry<String, ?> s: pref.getAll().entrySet()) {
+        for (Map.Entry<String, ?> s : pref.getAll().entrySet()) {
             sLinksChecked.put(s.getKey(), (String) s.getValue());
         }
     }
+
     public static final void saveCache(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        for (Map.Entry<String, ?> s: sLinksChecked.snapshot().entrySet()) {
+        for (Map.Entry<String, ?> s : sLinksChecked.snapshot().entrySet()) {
             if (!MIME_ERROR.equals(s.getValue()))
                 editor.putString(s.getKey(), (String) s.getValue());
         }
@@ -59,7 +60,7 @@ public class ImageSearchHelper {
             String mime = sLinksChecked.get(link);
             if (mime == null) {
                 mime = checkImageLink(link);
-                if (mime==null) mime = MIME_ERROR;
+                if (mime == null) mime = MIME_ERROR;
                 sLinksChecked.put(link, mime);
             }
             if (isImage(mime)) {
@@ -70,8 +71,9 @@ public class ImageSearchHelper {
     }
 
     private static boolean isImage(String mime) {
-        return mime!=null && mime.startsWith("image/");
+        return mime != null && mime.startsWith("image/");
     }
+
     public static String checkImageLink(String link) {
         try {
             Log.d("ImageSearchHelper", "Checking: " + link);

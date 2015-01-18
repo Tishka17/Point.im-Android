@@ -32,10 +32,6 @@ public class ContentStorageHelper {
                 .commit();
     }
 
-    public static class TagList {
-        public List<Tag> tags = null;
-        public long updated = 0;
-    }
     public static TagList loadTags(Context context) {
         TagList tagList = new TagList();
         SharedPreferences pref = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
@@ -43,9 +39,15 @@ public class ContentStorageHelper {
         if (TextUtils.isEmpty(t))
             return null;
         Gson gson = new Gson();
-        tagList.tags = gson.fromJson(t, new TypeToken<ArrayList<Tag>>() {}.getType());
+        tagList.tags = gson.fromJson(t, new TypeToken<ArrayList<Tag>>() {
+        }.getType());
         tagList.tags = PointHelper.removeDublicates(tagList.tags);
         tagList.updated = pref.getLong(PREF_UPDATED, 0);
         return tagList;
+    }
+
+    public static class TagList {
+        public List<Tag> tags = null;
+        public long updated = 0;
     }
 }

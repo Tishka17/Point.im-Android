@@ -18,10 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
+import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
@@ -37,19 +37,71 @@ import retrofit.client.Response;
  * A simple {@link Fragment} subclass.
  */
 public abstract class PostListFragment extends Fragment {
+    PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
+
+        @Override
+        public void onPostClicked(View view, String post) {
+            Intent intent = new Intent(getActivity(), SinglePostActivity.class);
+            intent.putExtra("post", post);
+            ActivityCompat.startActivity(getActivity(), intent, null);
+        }
+
+        @Override
+        public void onTagClicked(View view, String tag) {
+            Intent intent = new Intent(getActivity(), TagViewActivity.class);
+            intent.putExtra("tag", tag);
+            ActivityCompat.startActivity(getActivity(), intent, null);
+        }
+    };
     private RecyclerView mRecyclerView;
+    private StaggeredGridLayoutManager mLayoutManager;
+    private PostListAdapter mAdapter;
+    private SwipeRefreshLayout mSwipeRefresh;
+    private Callback<PostList> mCallback = new Callback<PostList>() {
+        @Override
+        public void success(PostList postList, Response response) {
+            mSwipeRefresh.setRefreshing(false);
+            if (postList.isSuccess()) {
+                mAdapter.setData(postList);
+            } else {
+                if (!isDetached())
+                    Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            mSwipeRefresh.setRefreshing(false);
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
+    private boolean mIsLoadingMore = false;
+    private Callback<PostList> mLoadMoreCallback = new Callback<PostList>() {
+        @Override
+        public void success(PostList postList, Response response) {
+            if (postList.isSuccess()) {
+                mAdapter.appendData(postList);
+            } else {
+                if (!isDetached())
+                    Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    public PostListFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
-
-    private StaggeredGridLayoutManager mLayoutManager;
-    private PostListAdapter mAdapter;
-    private SwipeRefreshLayout mSwipeRefresh;
-
-    public PostListFragment() {
     }
 
     @Override
@@ -85,23 +137,6 @@ public abstract class PostListFragment extends Fragment {
         }
         return 1;
     }
-
-    PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
-
-        @Override
-        public void onPostClicked(View view, String post) {
-            Intent intent = new Intent(getActivity(), SinglePostActivity.class);
-            intent.putExtra("post", post);
-            ActivityCompat.startActivity(getActivity(), intent, null);
-        }
-
-        @Override
-        public void onTagClicked(View view, String tag) {
-            Intent intent = new Intent(getActivity(), TagViewActivity.class);
-            intent.putExtra("tag", tag);
-            ActivityCompat.startActivity(getActivity(), intent, null);
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -161,45 +196,6 @@ public abstract class PostListFragment extends Fragment {
             });
         }
     }
-
-    private Callback<PostList> mCallback = new Callback<PostList>() {
-        @Override
-        public void success(PostList postList, Response response) {
-            mSwipeRefresh.setRefreshing(false);
-            if (postList.isSuccess()) {
-                mAdapter.setData(postList);
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            mSwipeRefresh.setRefreshing(false);
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    private boolean mIsLoadingMore = false;
-    private Callback<PostList> mLoadMoreCallback = new Callback<PostList>() {
-        @Override
-        public void success(PostList postList, Response response) {
-            if (postList.isSuccess()) {
-                mAdapter.appendData(postList);
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
-        }
-    };
 
     protected Callback<PostList> getCallback() {
         return mCallback;

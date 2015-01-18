@@ -29,6 +29,7 @@ public interface PointService {
 
     @GET("/api/bookmarks")
     void getBookmarks(Callback<PostList> callback);
+
     @GET("/api/bookmarks")
     void getBookmarks(@Query("before") long before, Callback<PostList> callback);
 
@@ -70,6 +71,7 @@ public interface PointService {
 
     @GET("/api/tags/{login}")
     void getPostsByUserTag(@Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);
+
     @GET("/api/tags/{login}")
     void getPostsByUserTag(@Query("before") long before, @Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);
 

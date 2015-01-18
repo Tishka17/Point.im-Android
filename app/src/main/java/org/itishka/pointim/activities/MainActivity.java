@@ -108,16 +108,16 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private static class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
         private static final String[] titles = new String[]{
                 "Recent",
                 "Commented",
                 "Blog",
                 "All",
         };
+
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
         @Override
         public CharSequence getPageTitle(int position) {

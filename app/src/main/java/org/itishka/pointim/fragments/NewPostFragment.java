@@ -24,9 +24,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.utils.ContentStorageHelper;
 import org.itishka.pointim.api.data.PointResult;
 import org.itishka.pointim.api.data.Tag;
+import org.itishka.pointim.utils.ContentStorageHelper;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 
 import java.util.ArrayList;
@@ -44,9 +44,30 @@ public class NewPostFragment extends Fragment {
     private static final int RESULT_LOAD_IMAGE = 17;
     private static final String ARG_TEXT = "text";
     private static final String ARG_IMAGES = "images";
+    EditText mPostText;
+    MultiAutoCompleteTextView mPostTags;
     private AlertDialog mProgressDialog;
     private ArrayAdapter<Tag> mTagsListAdapter;
     private List<Tag> mTags = null;
+    private ImageUploadingPanel mImagesPanel;
+    private Callback<PointResult> mNewPostCallback = new Callback<PointResult>() {
+        @Override
+        public void success(PointResult post, Response response) {
+            mProgressDialog.hide();
+            if (post.isSuccess()) {
+                Toast.makeText(getActivity(), "Post sent!", Toast.LENGTH_SHORT).show();
+                getActivity().finish();
+            } else {
+                Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            mProgressDialog.hide();
+            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
 
     public NewPostFragment() {
     }
@@ -76,10 +97,6 @@ public class NewPostFragment extends Fragment {
     public static NewPostFragment newInstance() {
         return new NewPostFragment();
     }
-
-    EditText mPostText;
-    MultiAutoCompleteTextView mPostTags;
-    private ImageUploadingPanel mImagesPanel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,39 +139,7 @@ public class NewPostFragment extends Fragment {
         mTagsListAdapter.notifyDataSetChanged();
     }
 
-    private class LoadTagsAsyncTask extends AsyncTask<Void, Void, Void> {
-        ContentStorageHelper.TagList tagList;
-        @Override
-        protected Void doInBackground(Void... voids) {
-            tagList = ContentStorageHelper.loadTags(getActivity());
-            mTags = tagList.tags;
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (mTags != null) {
-                mTagsListAdapter.clear();
-                mTagsListAdapter.addAll(mTags);
-                mTagsListAdapter.notifyDataSetChanged();
-            }
-            if (mTags == null || System.currentTimeMillis() - tagList.updated > 24 * 60 * 60 * 1000) {
-                ConnectionManager.getInstance().pointService.getTags(ConnectionManager.getInstance().loginResult.login, new Callback<List<Tag>>() {
-                    @Override
-                    public void success(List<Tag> tags, Response response) {
-                        if (tags != null)
-                            applyTags(tags);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-                        //nothing
-                    }
-                });
-            }
-        }
-    };
+    ;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -194,22 +179,38 @@ public class NewPostFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private Callback<PointResult> mNewPostCallback = new Callback<PointResult>() {
+    private class LoadTagsAsyncTask extends AsyncTask<Void, Void, Void> {
+        ContentStorageHelper.TagList tagList;
+
         @Override
-        public void success(PointResult post, Response response) {
-            mProgressDialog.hide();
-            if (post.isSuccess()) {
-                Toast.makeText(getActivity(), "Post sent!", Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-            } else {
-                Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
-            }
+        protected Void doInBackground(Void... voids) {
+            tagList = ContentStorageHelper.loadTags(getActivity());
+            mTags = tagList.tags;
+            return null;
         }
 
         @Override
-        public void failure(RetrofitError error) {
-            mProgressDialog.hide();
-            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (mTags != null) {
+                mTagsListAdapter.clear();
+                mTagsListAdapter.addAll(mTags);
+                mTagsListAdapter.notifyDataSetChanged();
+            }
+            if (mTags == null || System.currentTimeMillis() - tagList.updated > 24 * 60 * 60 * 1000) {
+                ConnectionManager.getInstance().pointService.getTags(ConnectionManager.getInstance().loginResult.login, new Callback<List<Tag>>() {
+                    @Override
+                    public void success(List<Tag> tags, Response response) {
+                        if (tags != null)
+                            applyTags(tags);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        //nothing
+                    }
+                });
+            }
         }
-    };
+    }
 }

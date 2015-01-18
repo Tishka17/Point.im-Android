@@ -2,13 +2,9 @@ package org.itishka.pointim.activities;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import org.itishka.pointim.R;
 
 public class UrlHandlerActivity extends ActionBarActivity {
 

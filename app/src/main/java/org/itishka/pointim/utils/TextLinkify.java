@@ -4,7 +4,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
-import android.widget.TextView;
 
 import org.itishka.pointim.widgets.spans.PostClickableSpan;
 import org.itishka.pointim.widgets.spans.UserClickableSpan;

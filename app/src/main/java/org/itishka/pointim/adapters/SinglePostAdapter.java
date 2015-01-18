@@ -16,13 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
-import org.itishka.pointim.utils.ImageSearchHelper;
+import org.itishka.pointim.activities.UserViewActivity;
 import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;
+import org.itishka.pointim.utils.ImageSearchHelper;
+import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
 
 import java.lang.ref.WeakReference;
@@ -31,9 +31,22 @@ import java.lang.ref.WeakReference;
  * Created by Татьяна on 20.10.2014.
  */
 public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ExtendedPost mPost = null;
     private final WeakReference<Context> mContext;
+    View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getContext(), TagViewActivity.class);
+            intent.putExtra("tag", ((TextView) view).getText());
+            getContext().startActivity(intent);
+        }
+    };
+    private ExtendedPost mPost = null;
     private ImageSearchTask mTask;
+
+    public SinglePostAdapter(Context context) {
+        super();
+        mContext = new WeakReference<>(context);
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -50,65 +63,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return mPost.comments.get(pos - 1);
     }
 
-    View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(getContext(), TagViewActivity.class);
-            intent.putExtra("tag", ((TextView) view).getText());
-            getContext().startActivity(intent);
-        }
-    };
-
-    protected class PostViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        ViewGroup tags;
-        ImageView avatar;
-        TextView author;
-        TextView post_id;
-        TextView comments;
-        TextView date;
-        ImageView webLink;
-        CheckBox favourite;
-        View mainConent;
-        ImageList imageList;
-
-        public PostViewHolder(View itemView) {
-            super(itemView);
-            text = (TextView) itemView.findViewById(R.id.text);
-            tags = (ViewGroup) itemView.findViewById(R.id.tags);
-            avatar = (ImageView) itemView.findViewById(R.id.avatar);
-            author = (TextView) itemView.findViewById(R.id.author);
-            post_id = (TextView) itemView.findViewById(R.id.post_id);
-            comments = (TextView) itemView.findViewById(R.id.comments);
-            date = (TextView) itemView.findViewById(R.id.date);
-            webLink = (ImageView) itemView.findViewById(R.id.weblink);
-            favourite = (CheckBox) itemView.findViewById(R.id.favourite);
-            mainConent = itemView.findViewById(R.id.main_content);
-            imageList = (ImageList) itemView.findViewById(R.id.imageList);
-        }
-    }
-
-    protected class CommentViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        ImageView avatar;
-        TextView author;
-        TextView date;
-        View divider;
-        TextView comment_id;
-        ImageList imageList;
-
-        public CommentViewHolder(View itemView) {
-            super(itemView);
-            text = (TextView) itemView.findViewById(R.id.text);
-            avatar = (ImageView) itemView.findViewById(R.id.avatar);
-            author = (TextView) itemView.findViewById(R.id.author);
-            date = (TextView) itemView.findViewById(R.id.date);
-            divider = itemView.findViewById(R.id.divider);
-            comment_id = (TextView) itemView.findViewById(R.id.comment_id);
-            imageList = (ImageList) itemView.findViewById(R.id.imageList);
-        }
-    }
-
     public void setData(ExtendedPost post) {
         mPost = post;
         notifyDataSetChanged();
@@ -117,11 +71,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
         mTask = new ImageSearchTask();
         mTask.execute(post);
-    }
-
-    public SinglePostAdapter(Context context) {
-        super();
-        mContext = new WeakReference<>(context);
     }
 
     @Override
@@ -247,6 +196,55 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return mPost.comments.size() + 1;
     }
 
+    protected class PostViewHolder extends RecyclerView.ViewHolder {
+        TextView text;
+        ViewGroup tags;
+        ImageView avatar;
+        TextView author;
+        TextView post_id;
+        TextView comments;
+        TextView date;
+        ImageView webLink;
+        CheckBox favourite;
+        View mainConent;
+        ImageList imageList;
+
+        public PostViewHolder(View itemView) {
+            super(itemView);
+            text = (TextView) itemView.findViewById(R.id.text);
+            tags = (ViewGroup) itemView.findViewById(R.id.tags);
+            avatar = (ImageView) itemView.findViewById(R.id.avatar);
+            author = (TextView) itemView.findViewById(R.id.author);
+            post_id = (TextView) itemView.findViewById(R.id.post_id);
+            comments = (TextView) itemView.findViewById(R.id.comments);
+            date = (TextView) itemView.findViewById(R.id.date);
+            webLink = (ImageView) itemView.findViewById(R.id.weblink);
+            favourite = (CheckBox) itemView.findViewById(R.id.favourite);
+            mainConent = itemView.findViewById(R.id.main_content);
+            imageList = (ImageList) itemView.findViewById(R.id.imageList);
+        }
+    }
+
+    protected class CommentViewHolder extends RecyclerView.ViewHolder {
+        TextView text;
+        ImageView avatar;
+        TextView author;
+        TextView date;
+        View divider;
+        TextView comment_id;
+        ImageList imageList;
+
+        public CommentViewHolder(View itemView) {
+            super(itemView);
+            text = (TextView) itemView.findViewById(R.id.text);
+            avatar = (ImageView) itemView.findViewById(R.id.avatar);
+            author = (TextView) itemView.findViewById(R.id.author);
+            date = (TextView) itemView.findViewById(R.id.date);
+            divider = itemView.findViewById(R.id.divider);
+            comment_id = (TextView) itemView.findViewById(R.id.comment_id);
+            imageList = (ImageList) itemView.findViewById(R.id.imageList);
+        }
+    }
 
     private class ImageSearchTask extends AsyncTask<ExtendedPost, Integer, Void> {
 

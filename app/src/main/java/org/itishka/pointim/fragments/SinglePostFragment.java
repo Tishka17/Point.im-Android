@@ -30,11 +30,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.SinglePostAdapter;
-import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Comment;
 import org.itishka.pointim.api.data.ExtendedPost;
 import org.itishka.pointim.api.data.PointResult;
+import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.lucasr.twowayview.ItemClickSupport;
 
@@ -56,10 +56,107 @@ public class SinglePostFragment extends Fragment {
     private ImageButton mSendButton;
     private View mBottomBar;
     private ExtendedPost mPointPost;
+    private Callback<ExtendedPost> mCallback = new Callback<ExtendedPost>() {
+        @Override
+        public void success(ExtendedPost post, Response response) {
+            mSwipeRefresh.setRefreshing(false);
+            if (post.isSuccess()) {
+                mAdapter.setData(post);
+                mPointPost = post;
+                if (!isDetached())
+                    getActivity().supportInvalidateOptionsMenu();
+            } else {
+                if (!isDetached())
+                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            mSwipeRefresh.setRefreshing(false);
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
+    private Callback<PointResult> mRecommendCallback = new Callback<PointResult>() {
+        @Override
+        public void success(PointResult post, Response response) {
+            mProgressDialog.hide();
+            if (post.isSuccess()) {
+                if (!isDetached()) {
+                    Toast.makeText(getActivity(), "Reommended!", Toast.LENGTH_SHORT).show();
+                    update(mCallback);
+                }
+            } else {
+                if (!isDetached())
+                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            mProgressDialog.hide();
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
     private Dialog mProgressDialog;
     private ImageUploadingPanel mImagesPanel;
     private ImageButton mAttachButton;
+    private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
+        @Override
+        public void success(PointResult post, Response response) {
+            mBottomBar.setEnabled(true);
+            mProgressDialog.hide();
+            if (post.isSuccess()) {
+                mCommentId.setVisibility(View.GONE);
+                mCommentId.setText("");
+                mText.setText("");
+                mImagesPanel.reset();
+                if (!isDetached()) {
+                    update(getCallback());
+                    Toast.makeText(getActivity(), "Comment added!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                if (!isDetached())
+                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+            }
+        }
 
+        @Override
+        public void failure(RetrofitError error) {
+            mBottomBar.setEnabled(true);
+            mProgressDialog.hide();
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
+    private Callback<PointResult> mDeleteCallback = new Callback<PointResult>() {
+        @Override
+        public void success(PointResult pointResult, Response response) {
+            mProgressDialog.hide();
+            if (isDetached())
+                return;
+            if (pointResult.isSuccess()) {
+
+                Toast.makeText(getActivity(), "Deleted!", Toast.LENGTH_SHORT).show();
+                getActivity().finish();
+            } else {
+                Toast.makeText(getActivity(), pointResult.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            mProgressDialog.hide();
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    public SinglePostFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -74,10 +171,6 @@ public class SinglePostFragment extends Fragment {
         args.putString(ARG_POST, post);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public SinglePostFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -199,57 +292,6 @@ public class SinglePostFragment extends Fragment {
         return rootView;
     }
 
-    private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
-        @Override
-        public void success(PointResult post, Response response) {
-            mBottomBar.setEnabled(true);
-            mProgressDialog.hide();
-            if (post.isSuccess()) {
-                mCommentId.setVisibility(View.GONE);
-                mCommentId.setText("");
-                mText.setText("");
-                mImagesPanel.reset();
-                if (!isDetached()) {
-                    update(getCallback());
-                    Toast.makeText(getActivity(), "Comment added!", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            mBottomBar.setEnabled(true);
-            mProgressDialog.hide();
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
-        }
-    };
-    private Callback<ExtendedPost> mCallback = new Callback<ExtendedPost>() {
-        @Override
-        public void success(ExtendedPost post, Response response) {
-            mSwipeRefresh.setRefreshing(false);
-            if (post.isSuccess()) {
-                mAdapter.setData(post);
-                mPointPost = post;
-                if (!isDetached())
-                    getActivity().supportInvalidateOptionsMenu();
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            mSwipeRefresh.setRefreshing(false);
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
-        }
-    };
-
     protected Callback<ExtendedPost> getCallback() {
         return mCallback;
     }
@@ -335,53 +377,6 @@ public class SinglePostFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
-
-    private Callback<PointResult> mDeleteCallback = new Callback<PointResult>() {
-        @Override
-        public void success(PointResult pointResult, Response response) {
-            mProgressDialog.hide();
-            if (isDetached())
-                return;
-            if (pointResult.isSuccess()) {
-
-                Toast.makeText(getActivity(), "Deleted!", Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-            } else {
-                Toast.makeText(getActivity(), pointResult.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            mProgressDialog.hide();
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    private Callback<PointResult> mRecommendCallback = new Callback<PointResult>() {
-        @Override
-        public void success(PointResult post, Response response) {
-            mProgressDialog.hide();
-            if (post.isSuccess()) {
-                if (!isDetached()) {
-                    Toast.makeText(getActivity(), "Reommended!", Toast.LENGTH_SHORT).show();
-                    update(mCallback);
-                }
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            mProgressDialog.hide();
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
-        }
-    };
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
