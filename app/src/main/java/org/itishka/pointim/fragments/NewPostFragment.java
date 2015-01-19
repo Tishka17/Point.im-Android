@@ -2,6 +2,7 @@ package org.itishka.pointim.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -180,24 +181,28 @@ public class NewPostFragment extends Fragment {
     }
 
     private class LoadTagsAsyncTask extends AsyncTask<Void, Void, Void> {
-        ContentStorageHelper.TagList tagList;
+        ContentStorageHelper.TagList tagList = null;
 
         @Override
         protected Void doInBackground(Void... voids) {
-            tagList = ContentStorageHelper.loadTags(getActivity());
-            mTags = tagList.tags;
+            Context context = getActivity();
+            if (context!=null) {
+                tagList = ContentStorageHelper.loadTags(context);
+                if (tagList!=null)
+                    mTags = tagList.tags;
+            }
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(Void b) {
+            super.onPostExecute(b);
             if (mTags != null) {
                 mTagsListAdapter.clear();
                 mTagsListAdapter.addAll(mTags);
                 mTagsListAdapter.notifyDataSetChanged();
             }
-            if (mTags == null || System.currentTimeMillis() - tagList.updated > 24 * 60 * 60 * 1000) {
+            if (mTags == null || tagList==null || System.currentTimeMillis() - tagList.updated > 24 * 60 * 60 * 1000) {
                 ConnectionManager.getInstance().pointService.getTags(ConnectionManager.getInstance().loginResult.login, new Callback<List<Tag>>() {
                     @Override
                     public void success(List<Tag> tags, Response response) {
