@@ -7,6 +7,7 @@ import android.text.TextUtils;
  */
 public class PointResult {
     public String error;
+
     public boolean isSuccess() {
         return TextUtils.isEmpty(error);
     }

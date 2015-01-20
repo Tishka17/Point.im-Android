@@ -6,7 +6,6 @@ import retrofit.Callback;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.POST;
-import retrofit.http.Query;
 
 /**
  * Created by atikhonov on 28.04.2014.

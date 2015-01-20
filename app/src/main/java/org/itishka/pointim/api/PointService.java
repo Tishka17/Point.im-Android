@@ -2,9 +2,9 @@ package org.itishka.pointim.api;
 
 import org.itishka.pointim.api.data.ExtendedPost;
 import org.itishka.pointim.api.data.PointResult;
-import org.itishka.pointim.api.data.Post;
 import org.itishka.pointim.api.data.PostList;
 import org.itishka.pointim.api.data.Tag;
+import org.itishka.pointim.api.data.User;
 
 import java.util.List;
 
@@ -13,7 +13,6 @@ import retrofit.http.DELETE;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
-import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
@@ -22,11 +21,29 @@ import retrofit.http.Query;
  * Created by atikhonov on 28.04.2014.
  */
 public interface PointService {
+    @GET("/api/all")
+    void getAll(Callback<PostList> callback);
+
+    @GET("/api/all")
+    void getAll(@Query("before") long before, Callback<PostList> callback);
+
+    @GET("/api/bookmarks")
+    void getBookmarks(Callback<PostList> callback);
+
+    @GET("/api/bookmarks")
+    void getBookmarks(@Query("before") long before, Callback<PostList> callback);
+
     @GET("/api/recent")
     void getRecent(Callback<PostList> callback);
 
+    @GET("/api/recent")
+    void getRecent(@Query("before") long before, Callback<PostList> callback);
+
     @GET("/api/comments")
     void getCommented(Callback<PostList> callback);
+
+    @GET("/api/comments")
+    void getCommented(@Query("before") long before, Callback<PostList> callback);
 
     @GET("/api/messages/incoming")
     void getIncoming(Callback<PostList> callback);
@@ -37,14 +54,32 @@ public interface PointService {
     @GET("/api/blog/{login}")
     void getBlog(@Path("login") String login, Callback<PostList> callback);
 
+    @GET("/api/blog/{login}")
+    void getBlog(@Query("before") long before, @Path("login") String login, Callback<PostList> callback);
+
+    @GET("/api/user/{login}")
+    void getUserInfo(@Path("login") String login, Callback<User> callback);
+
+    @POST("/api/user/{login}/s")
+    void subscribeUser(@Path("login") String login, Callback<PointResult> callback);
+
+    @DELETE("/api/user/{login}/s")
+    void unsubscribeUser(@Path("login") String login, Callback<PointResult> callback);
+
     @GET("/api/tags/{login}")
-    List<Tag> getTags(@Path("login") String login);
+    void getTags(@Path("login") String login, Callback<List<Tag>> callback);
 
     @GET("/api/tags")
-    PostList getPostsByTag(@Query("tag") String tag);
+    void getPostsByTag(@Query("tag") String tag, Callback<PostList> callback);
+
+    @GET("/api/tags")
+    void getPostsByTag(@Query("before") long before, @Query("tag") String tag, Callback<PostList> callback);
 
     @GET("/api/tags/{login}")
-    PostList getPostsByUserTag(@Path("login") String login, @Query("tag") String tag);
+    void getPostsByUserTag(@Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);
+
+    @GET("/api/tags/{login}")
+    void getPostsByUserTag(@Query("before") long before, @Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);
 
     @GET("/api/post/{id}")
     void getPost(@Path("id") String id, Callback<ExtendedPost> callback);
@@ -84,4 +119,10 @@ public interface PointService {
     @DELETE("/api/post/{id}/{cid}/r")
     void unRecommendComment(@Path("id") String id, @Path("cid") String cid, Callback<PointResult> callback);
 
+    @FormUrlEncoded
+    @POST("/api/post/")
+    void createPost(@Field("text") String text, @Field("tag") String[] tags, Callback<PointResult> callback);
+
+    @DELETE("/api/post/{id}")
+    void deletePost(@Path("id") String id, Callback<PointResult> callback);
 }

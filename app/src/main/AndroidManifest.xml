@@ -3,6 +3,7 @@
     package="org.itishka.pointim" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -10,25 +11,123 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:launchMode="singleTask"
-            android:name="org.itishka.pointim.MainActivity"
-            android:label="@string/app_name" >
+            android:name=".activities.MainActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="org.itishka.pointim.LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
+            android:name=".activities.LoginActivity"
+            android:label="@string/title_activity_login" />
         <activity
-            android:parentActivityName="org.itishka.pointim.MainActivity"
-            android:name="org.itishka.pointim.SinglePostActivity"
-            android:label="@string/title_activity_single_post" >
+            android:name=".activities.SinglePostActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_single_post"
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.itishka.pointim.MainActivity" />
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.NewPostActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_new_post"
+            android:parentActivityName=".activities.MainActivity"
+            android:windowSoftInputMode="adjustResize" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+
+        <activity-alias
+            android:name=".ShareWithActivity"
+            android:label="@string/app_name"
+            android:targetActivity=".activities.NewPostActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="image/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name=".activities.TagViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_tag_view"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.UserViewActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_user_view"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.BookmarksActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_bookmarks"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".activities.UrlHandlerActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="point.im"
+                    android:scheme="http" />
+                <data
+                    android:host="*.point.im"
+                    android:scheme="http" />
+                <data
+                    android:host="point.im"
+                    android:scheme="http" />
+                <data
+                    android:host="*.point.im"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
     </application>
 

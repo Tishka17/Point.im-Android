@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="toolbar_main_spinner">
+        <item>Recent</item>
+        <item>Commented</item>
+        <item>Blog</item>
+        <item>All posts</item>
+    </string-array>
+</resources>

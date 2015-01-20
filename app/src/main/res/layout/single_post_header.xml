@@ -58,6 +58,7 @@
             android:id="@+id/tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:layout_marginLeft="@dimen/text_margin"
             android:layout_marginRight="@dimen/text_margin" />
 
@@ -70,6 +71,10 @@
             android:text="test with some many letttttttttters and so on as it can be" />
 
 
+        <org.itishka.pointim.widgets.ImageList
+            android:id="@+id/imageList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,7 +88,7 @@
 
             <TextView
                 android:id="@+id/post_id"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"

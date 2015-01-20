@@ -6,7 +6,7 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:focusable="true"
         android:focusableInTouchMode="true">
@@ -19,47 +19,74 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="-4dp"
         android:layout_marginLeft="-4dp"
         android:layout_marginRight="-4dp"
-        android:layout_marginBottom="-4dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingBottom="4dp"
         card_view:cardCornerRadius="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:orientation="horizontal">
+            android:layout_margin="4dp"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/comment_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tag"
-                android:layout_marginLeft="@dimen/text_margin"
-                android:visibility="gone" />
-
-            <EditText
-                android:layout_marginLeft="@dimen/text_avatar_margin"
-                android:id="@+id/text"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:gravity="bottom"
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/send"
-                android:layout_width="@dimen/touch_size"
-                android:layout_height="@dimen/touch_size"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_send" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/touch_size"
+                    android:gravity="center">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/comment_id"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/text_margin"
+                            android:background="@drawable/tag"
+                            android:gravity="bottom"
+                            android:visibility="gone" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/attach"
+                    style="@style/Widget.AppCompat.ActionButton"
+                    android:layout_width="@dimen/touch_size"
+                    android:layout_height="@dimen/touch_size"
+                    android:src="@drawable/ic_attach_file_grey600_24dp" />
+
+                <EditText
+                    android:id="@+id/text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="textCapSentences|textMultiLine" />
+
+                <ImageButton
+                    android:id="@+id/send"
+                    style="@style/Widget.AppCompat.ActionButton"
+                    android:layout_width="@dimen/touch_size"
+                    android:layout_height="@dimen/touch_size"
+                    android:src="@drawable/ic_send_grey600_24dp" />
+            </LinearLayout>
+
+            <org.itishka.pointim.widgets.ImageUploadingPanel
+                android:id="@+id/imagesPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
