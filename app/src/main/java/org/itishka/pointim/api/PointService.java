@@ -60,6 +60,12 @@ public interface PointService {
     @GET("/api/user/{login}")
     void getUserInfo(@Path("login") String login, Callback<User> callback);
 
+    @POST("/api/user/{login}/s")
+    void subscribeUser(@Path("login") String login, Callback<PointResult> callback);
+
+    @DELETE("/api/user/{login}/s")
+    void unsubscribeUser(@Path("login") String login, Callback<PointResult> callback);
+
     @GET("/api/tags/{login}")
     void getTags(@Path("login") String login, Callback<List<Tag>> callback);
 

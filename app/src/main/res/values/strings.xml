@@ -20,4 +20,6 @@
     <string name="title_activity_user_view">User</string>
     <string name="title_activity_bookmarks">Bookmarks</string>
     <string name="action_bookmarks">Bookmarks</string>
+    <string name="action_subscribe">Subscribe</string>
+    <string name="action_unsubscribe">Unsubscribe</string>
 </resources>
