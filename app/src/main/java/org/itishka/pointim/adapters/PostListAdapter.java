@@ -87,8 +87,8 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if (position == mPostList.posts.size()+1)
-            return TYPE_FOOTER;
+        if (position == mPostList.posts.size() + (mHasHeader ? 1 : 0))
+        return TYPE_FOOTER;
         if (position == 0 && mHasHeader)
             return TYPE_HEADER;
         return TYPE_ITEM;
@@ -101,7 +101,8 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup viewGroup) {
-        return new RecyclerView.ViewHolder(viewGroup) {};
+        return new RecyclerView.ViewHolder(viewGroup) {
+        };
     }
 
     public RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup viewGroup) {
@@ -185,12 +186,12 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
         int type = getItemViewType(i);
-        if (type==TYPE_FOOTER) {
+        if (type == TYPE_FOOTER) {
             onBindFooterViewHolder(holder);
-        } else if (type==TYPE_HEADER) {
+        } else if (type == TYPE_HEADER) {
             onBindHeaderViewHolder(holder);
         } else {
-            onBindItemViewHolder((ViewHolder) holder, mHasHeader?(i- 1):i);
+            onBindItemViewHolder((ViewHolder) holder, mHasHeader ? (i - 1) : i);
         }
     }
 
