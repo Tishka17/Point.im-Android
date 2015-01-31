@@ -45,17 +45,22 @@ public class UserInfoPostListAdapter extends PostListAdapter {
             headerHolder.about.setVisibility(View.VISIBLE);
             headerHolder.about.setText(mUser.about.text);
         }
-        if (TextUtils.isEmpty(mUser.name)) {
-            headerHolder.name.setVisibility(View.GONE);
-        } else {
-            headerHolder.name.setVisibility(View.VISIBLE);
-            headerHolder.name.setText(mUser.name);
-        }
+        setText(mUser.name, headerHolder.name, headerHolder.name);
+        setText(mUser.xmpp, headerHolder.xmpp_group, headerHolder.xmpp);
+        setText(mUser.icq, headerHolder.icq_group, headerHolder.icq);
+        setText(mUser.skye, headerHolder.skype_group, headerHolder.skype);
+
         if (mUser.created==null) {
             headerHolder.registered_group.setVisibility(View.GONE);
         } else {
             headerHolder.registered_group.setVisibility(View.VISIBLE);
             headerHolder.registered.setText(Utils.formatDate(mUser.created));
+        }
+        if (mUser.birthdate==null) {
+            headerHolder.birthday_group.setVisibility(View.GONE);
+        } else {
+            headerHolder.birthday_group.setVisibility(View.VISIBLE);
+            headerHolder.birthday.setText(Utils.formatDate(mUser.birthdate));
         }
         headerHolder.login.setText(mUser.login);
     }
@@ -67,12 +72,29 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         notifyItemChanged(0);
     }
 
+    private void setText(CharSequence text, View group, TextView field) {
+        if (TextUtils.isEmpty(text)) {
+            group.setVisibility(View.GONE);
+        } else {
+            group.setVisibility(View.VISIBLE);
+            field.setText(text);
+        }
+    }
+
     private class HeaderHolder extends RecyclerView.ViewHolder {
         final TextView login;
         final TextView name;
         final TextView about;
         final TextView registered;
         final View registered_group;
+        final View birthday_group;
+        final TextView birthday;
+        final View xmpp_group;
+        final TextView xmpp;
+        final View icq_group;
+        final TextView icq;
+        final View skype_group;
+        final TextView skype;
         final ImageView avatar;
         public HeaderHolder(View v) {
             super(v);
@@ -81,6 +103,14 @@ public class UserInfoPostListAdapter extends PostListAdapter {
             about = (TextView) v.findViewById(R.id.about);
             registered = (TextView) v.findViewById(R.id.registered);
             registered_group =  v.findViewById(R.id.registered_group);
+            birthday = (TextView) v.findViewById(R.id.birthday);
+            birthday_group =  v.findViewById(R.id.birthday_group);
+            xmpp = (TextView) v.findViewById(R.id.xmpp);
+            xmpp_group =  v.findViewById(R.id.xmpp_group);
+            icq = (TextView) v.findViewById(R.id.icq);
+            icq_group =  v.findViewById(R.id.icq_group);
+            skype = (TextView) v.findViewById(R.id.skype);
+            skype_group =  v.findViewById(R.id.skype_group);
             avatar = (ImageView) v.findViewById(R.id.avatar);
         }
     }

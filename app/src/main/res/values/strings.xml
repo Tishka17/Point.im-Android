@@ -22,5 +22,9 @@
     <string name="action_bookmarks">Bookmarks</string>
     <string name="action_subscribe">Subscribe</string>
     <string name="action_unsubscribe">Unsubscribe</string>
-    <string name="about_registered_title">Registered: </string>
+    <string name="about_registered_title">Registered:</string>
+    <string name="about_birthday_title">Birthday:</string>
+    <string name="about_skype_title">Skype:</string>
+    <string name="about_icq_title">ICQ:</string>
+    <string name="about_xmpp_title">XMPP:</string>
 </resources>
