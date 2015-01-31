@@ -29,4 +29,5 @@
     <string name="about_xmpp_title">XMPP:</string>
     <string name="about_web_title">Homepage:</string>
     <string name="about_email_title">Email:</string>
+    <string name="about_location_title">Location:</string>
 </resources>

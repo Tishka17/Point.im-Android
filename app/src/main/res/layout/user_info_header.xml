@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginBottom="4dp"
     android:layout_marginLeft="-4dp"
     android:layout_marginRight="-4dp"
     android:layout_marginTop="-4dp"
@@ -61,9 +62,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:paddingRight="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="4dp"
                 android:text="@string/about_registered_title"
                 android:textStyle="bold" />
 
@@ -81,9 +82,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:paddingRight="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="4dp"
                 android:text="@string/about_birthday_title"
                 android:textStyle="bold" />
 
@@ -94,9 +95,10 @@
         </LinearLayout>
 
         <View
-            android:layout_marginTop="4dp"
+            android:id="@+id/contacts_splitter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:background="?android:attr/dividerVertical" />
 
         <LinearLayout
@@ -107,9 +109,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:paddingRight="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="4dp"
                 android:text="@string/about_xmpp_title"
                 android:textStyle="bold" />
 
@@ -127,9 +129,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:paddingRight="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="4dp"
                 android:text="@string/about_icq_title"
                 android:textStyle="bold" />
 
@@ -147,9 +149,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:paddingRight="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="4dp"
                 android:text="@string/about_skype_title"
                 android:textStyle="bold" />
 
@@ -158,6 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/email_group"
             android:layout_width="match_parent"
@@ -166,18 +169,40 @@
             android:orientation="horizontal">
 
             <TextView
-                android:paddingRight="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="4dp"
                 android:text="@string/about_email_title"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/email"
-                android:autoLink="all"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:autoLink="all" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/location_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="4dp"
+                android:text="@string/about_location_title"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="all" />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/web_group"
             android:layout_width="match_parent"
@@ -186,29 +211,37 @@
             android:orientation="horizontal">
 
             <TextView
-                android:paddingRight="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="4dp"
                 android:text="@string/about_web_title"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/web"
-                android:autoLink="all"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:autoLink="all" />
         </LinearLayout>
 
-        <View
-            android:layout_marginTop="4dp"
+        <LinearLayout
+            android:id="@+id/about_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?android:attr/dividerVertical" />
-        <org.itishka.pointim.widgets.MyTextView
-            android:id="@+id/about"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="test with some many letttttttttters and so on as it can be" />
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="?android:attr/dividerVertical" />
+
+            <org.itishka.pointim.widgets.MyTextView
+                android:id="@+id/about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="test with some many letttttttttters and so on as it can be" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

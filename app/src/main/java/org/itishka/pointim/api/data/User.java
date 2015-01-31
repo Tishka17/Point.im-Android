@@ -18,7 +18,7 @@ public class User extends PointResult {
     public int id;
     public boolean rec_sub;
     public String avatar;
-    public String skye;
+    public String skype;
     public String login;
     public String icq;
     public String homepage;

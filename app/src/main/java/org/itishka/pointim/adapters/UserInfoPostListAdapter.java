@@ -37,20 +37,26 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         HeaderHolder headerHolder = (HeaderHolder) holder;
         if (mUser==null)
             return;
-
-        Utils.showAvatar(getContext(), mUser.login, mUser.avatar, headerHolder.avatar);
-        if (TextUtils.isEmpty(mUser.about.text)) {
-            headerHolder.about.setVisibility(View.GONE);
-        } else {
-            headerHolder.about.setVisibility(View.VISIBLE);
-            headerHolder.about.setText(mUser.about.text);
-        }
+        setText(mUser.about.text, headerHolder.about_group, headerHolder.about);
         setText(mUser.name, headerHolder.name, headerHolder.name);
+        Utils.showAvatar(getContext(), mUser.login, mUser.avatar, headerHolder.avatar);
+        if (TextUtils.isEmpty(mUser.xmpp) &&
+                TextUtils.isEmpty(mUser.icq) &&
+                TextUtils.isEmpty(mUser.skype) &&
+                TextUtils.isEmpty(mUser.homepage) &&
+                TextUtils.isEmpty(mUser.email) &&
+                TextUtils.isEmpty(mUser.location)
+                ) {
+            headerHolder.contacts_splitter.setVisibility(View.GONE);
+        } else {
+            headerHolder.contacts_splitter.setVisibility(View.VISIBLE);
+        }
         setText(mUser.xmpp, headerHolder.xmpp_group, headerHolder.xmpp);
         setText(mUser.icq, headerHolder.icq_group, headerHolder.icq);
-        setText(mUser.skye, headerHolder.skype_group, headerHolder.skype);
+        setText(mUser.skype, headerHolder.skype_group, headerHolder.skype);
         setText(mUser.homepage, headerHolder.web_group, headerHolder.web);
         setText(mUser.email, headerHolder.email_group, headerHolder.email);
+        setText(mUser.location, headerHolder.location_group, headerHolder.location);
 
         if (mUser.created==null) {
             headerHolder.registered_group.setVisibility(View.GONE);
@@ -86,7 +92,9 @@ public class UserInfoPostListAdapter extends PostListAdapter {
     private class HeaderHolder extends RecyclerView.ViewHolder {
         final TextView login;
         final TextView name;
+        final View contacts_splitter;
         final TextView about;
+        final View about_group;
         final TextView registered;
         final View registered_group;
         final View birthday_group;
@@ -101,12 +109,16 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         final TextView web;
         final View email_group;
         final TextView email;
+        final View location_group;
+        final TextView location;
         final ImageView avatar;
         public HeaderHolder(View v) {
             super(v);
             login = (TextView) v.findViewById(R.id.login);
             name = (TextView) v.findViewById(R.id.name);
+            contacts_splitter = v.findViewById(R.id.contacts_splitter);
             about = (TextView) v.findViewById(R.id.about);
+            about_group =  v.findViewById(R.id.about_group);
             registered = (TextView) v.findViewById(R.id.registered);
             registered_group =  v.findViewById(R.id.registered_group);
             birthday = (TextView) v.findViewById(R.id.birthday);
@@ -121,6 +133,8 @@ public class UserInfoPostListAdapter extends PostListAdapter {
             web_group =  v.findViewById(R.id.web_group);
             email = (TextView) v.findViewById(R.id.email);
             email_group =  v.findViewById(R.id.email_group);
+            location = (TextView) v.findViewById(R.id.location);
+            location_group =  v.findViewById(R.id.location_group);
             avatar = (ImageView) v.findViewById(R.id.avatar);
         }
     }
