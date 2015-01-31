@@ -1,9 +1,11 @@
 package org.itishka.pointim.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -99,8 +101,9 @@ public class SettingsActivity extends ActionBarActivity {
             avatarTishka17.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Utils.getnerateBlogUri("Tishka17"));
-                    getActivity().startActivity(browserIntent);
+                    Intent intent = new Intent(view.getContext(), UserViewActivity.class);
+                    intent.putExtra("user", "Tishka17");
+                    ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
                 }
             });
 
@@ -109,8 +112,9 @@ public class SettingsActivity extends ActionBarActivity {
             avatarArts.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Utils.getnerateBlogUri("arts"));
-                    getActivity().startActivity(browserIntent);
+                    Intent intent = new Intent(view.getContext(), UserViewActivity.class);
+                    intent.putExtra("user", "arts");
+                    ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
                 }
             });
 
