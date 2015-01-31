@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by tishka17 on 27.12.2014.
  */
 public class User extends PointResult {
-    public String about;
+    public TextWithImages about;
     public String xmpp;
     public String name;
     public boolean subscribed;

@@ -30,12 +30,16 @@ public class UserViewFragment extends PostListFragment {
         public void success(User user, Response response) {
             if (user.isSuccess()) {
                 ((UserInfoPostListAdapter)getAdapter()).setUserInfo(user);
+            } else if (!isDetached()) {
+                Toast.makeText(getActivity(), "Error: "+user.error, Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void failure(RetrofitError retrofitError) {
-
+            if (!isDetached()) {
+                Toast.makeText(getActivity(), retrofitError.toString(), Toast.LENGTH_SHORT).show();
+            }
         }
     };
 

@@ -149,7 +149,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private Context getContext() {
+    protected Context getContext() {
         return mContext.get();
     }
 
