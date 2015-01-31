@@ -51,6 +51,7 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         } else {
             headerHolder.contacts_splitter.setVisibility(View.VISIBLE);
         }
+        headerHolder.gender.setText(mUser.gender?getContext().getString(R.string.male):getContext().getString(R.string.female));
         setText(mUser.xmpp, headerHolder.xmpp_group, headerHolder.xmpp);
         setText(mUser.icq, headerHolder.icq_group, headerHolder.icq);
         setText(mUser.skype, headerHolder.skype_group, headerHolder.skype);
@@ -95,6 +96,8 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         final View contacts_splitter;
         final TextView about;
         final View about_group;
+        final TextView gender;
+        final View gender_group;
         final TextView registered;
         final View registered_group;
         final View birthday_group;
@@ -119,6 +122,8 @@ public class UserInfoPostListAdapter extends PostListAdapter {
             contacts_splitter = v.findViewById(R.id.contacts_splitter);
             about = (TextView) v.findViewById(R.id.about);
             about_group =  v.findViewById(R.id.about_group);
+            gender = (TextView) v.findViewById(R.id.gender);
+            gender_group =  v.findViewById(R.id.gender_group);
             registered = (TextView) v.findViewById(R.id.registered);
             registered_group =  v.findViewById(R.id.registered_group);
             birthday = (TextView) v.findViewById(R.id.birthday);

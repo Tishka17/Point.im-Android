@@ -30,4 +30,7 @@
     <string name="about_web_title">Homepage:</string>
     <string name="about_email_title">Email:</string>
     <string name="about_location_title">Location:</string>
+    <string name="about_gender_title">Gender:</string>
+    <string name="female">female</string>
+    <string name="male">male</string>
 </resources>
