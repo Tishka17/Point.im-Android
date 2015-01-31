@@ -35,6 +35,8 @@ import java.util.List;
 public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_FOOTER = 1;
     public static final int TYPE_ITEM = 0;
+    public static final int TYPE_HEADER = -1;
+
     private final WeakReference<Context> mContext;
     private PostList mPostList = null;
     private ImageSearchTask mTask;
@@ -48,15 +50,15 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     };
 
+    boolean mHasHeader = false;
+
     public PostListAdapter(Context context) {
         super();
         mContext = new WeakReference<>(context);
     }
 
-    public Post getItem(int pos) {
-        if (pos == mPostList.posts.size())
-            return null;
-        return mPostList.posts.get(pos);
+    protected void setHasHeader(boolean hasHeader) {
+        mHasHeader = hasHeader;
     }
 
     public PostList getPostList() {
@@ -85,48 +87,65 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if (position == mPostList.posts.size())
+        if (position == mPostList.posts.size()+1)
             return TYPE_FOOTER;
+        if (position == 0 && mHasHeader)
+            return TYPE_HEADER;
         return TYPE_ITEM;
+    }
+
+    public RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup viewGroup) {
+        final View v = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.adapter_footer, viewGroup, false);
+        return new FooterHolder(v);
+    }
+
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup viewGroup) {
+        return new RecyclerView.ViewHolder(viewGroup) {};
+    }
+
+    public RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup viewGroup) {
+
+        final View v = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.adapter_post, viewGroup, false);
+        final ViewHolder holder = new ViewHolder(v);
+        holder.webLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri) view.getTag());
+                getContext().startActivity(browserIntent);
+            }
+        });
+        holder.avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String user = (String) view.getTag();
+                if (!TextUtils.isEmpty(user)) {
+                    Intent intent = new Intent(view.getContext(), UserViewActivity.class);
+                    intent.putExtra("user", user);
+                    ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                }
+            }
+        });
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnPostClickListener != null) {
+                    mOnPostClickListener.onPostClicked(v, view.getTag(R.id.post_id).toString());
+                }
+            }
+        });
+        return holder;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewTYpe) {
         if (viewTYpe == TYPE_FOOTER) {
-            final View v = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.adapter_footer, viewGroup, false);
-            return new FooterHolder(v);
+            return onCreateFooterViewHolder(viewGroup);
+        } else if (viewTYpe == TYPE_HEADER) {
+            return onCreateHeaderViewHolder(viewGroup);
         } else {
-            final View v = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.adapter_post, viewGroup, false);
-            final ViewHolder holder = new ViewHolder(v);
-            holder.webLink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri) view.getTag());
-                    getContext().startActivity(browserIntent);
-                }
-            });
-            holder.avatar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String user = (String) view.getTag();
-                    if (!TextUtils.isEmpty(user)) {
-                        Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                        intent.putExtra("user", user);
-                        ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
-                    }
-                }
-            });
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mOnPostClickListener != null) {
-                        mOnPostClickListener.onPostClicked(v, view.getTag(R.id.post_id).toString());
-                    }
-                }
-            });
-            return holder;
+            return onCreateItemViewHolder(viewGroup);
         }
     }
 
@@ -134,22 +153,33 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mContext.get();
     }
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
-        if (i == mPostList.posts.size()) {
-            FooterHolder footerHolder = (FooterHolder) holder;
-            if (mPostList.has_next) {
-                footerHolder.progressWheel.setVisibility(View.VISIBLE);
-                if (mOnLoadMoreRequestListener != null) {
-                    if (!mOnLoadMoreRequestListener.onLoadMoreRequested()) {
-                        footerHolder.progressWheel.setVisibility(View.GONE);
-                    }
+    public void onBindFooterViewHolder(RecyclerView.ViewHolder holder) {
+        FooterHolder footerHolder = (FooterHolder) holder;
+        if (mPostList.has_next) {
+            footerHolder.progressWheel.setVisibility(View.VISIBLE);
+            if (mOnLoadMoreRequestListener != null) {
+                if (!mOnLoadMoreRequestListener.onLoadMoreRequested()) {
+                    footerHolder.progressWheel.setVisibility(View.GONE);
                 }
-            } else {
-                footerHolder.progressWheel.setVisibility(View.GONE);
             }
         } else {
-            onBindItemViewHolder((ViewHolder) holder, i);
+            footerHolder.progressWheel.setVisibility(View.GONE);
+        }
+    }
+
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder) {
+        //do nothin
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
+        int type = getItemViewType(i);
+        if (type==TYPE_FOOTER) {
+            onBindFooterViewHolder(holder);
+        } else if (type==TYPE_HEADER) {
+            onBindHeaderViewHolder(holder);
+        } else {
+            onBindItemViewHolder((ViewHolder) holder, mHasHeader?(i- 1):i);
         }
     }
 

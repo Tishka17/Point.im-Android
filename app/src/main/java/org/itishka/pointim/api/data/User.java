@@ -3,7 +3,7 @@ package org.itishka.pointim.api.data;
 import java.util.Date;
 
 /**
- * Created by Татьяна on 27.12.2014.
+ * Created by tishka17 on 27.12.2014.
  */
 public class User extends PointResult {
     public String about;

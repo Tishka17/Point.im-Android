@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.adapters.PostListAdapter;
+import org.itishka.pointim.adapters.UserInfoPostListAdapter;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.PointResult;
 import org.itishka.pointim.api.data.PostList;
@@ -23,6 +25,19 @@ import retrofit.client.Response;
 public class UserViewFragment extends PostListFragment {
 
     private String mUser;
+    private Callback<User> mUserInfoCallback =new Callback<User>() {
+        @Override
+        public void success(User user, Response response) {
+            if (user.isSuccess()) {
+                ((UserInfoPostListAdapter)getAdapter()).setUserInfo(user);
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError retrofitError) {
+
+        }
+    };
 
     public static UserViewFragment newInstance(String tag) {
         UserViewFragment fragment = new UserViewFragment();
@@ -30,6 +45,11 @@ public class UserViewFragment extends PostListFragment {
         args.putString("user", tag);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected PostListAdapter createAdapter() {
+        return new UserInfoPostListAdapter(getActivity());
     }
 
     @Override
@@ -41,6 +61,7 @@ public class UserViewFragment extends PostListFragment {
     @Override
     protected void update(Callback<PostList> callback) {
         ConnectionManager.getInstance().pointService.getBlog(mUser, callback);
+        ConnectionManager.getInstance().pointService.getUserInfo(mUser, mUserInfoCallback);
     }
 
     @Override
