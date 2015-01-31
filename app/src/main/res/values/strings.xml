@@ -27,4 +27,6 @@
     <string name="about_skype_title">Skype:</string>
     <string name="about_icq_title">ICQ:</string>
     <string name="about_xmpp_title">XMPP:</string>
+    <string name="about_web_title">Homepage:</string>
+    <string name="about_email_title">Email:</string>
 </resources>

@@ -44,6 +44,10 @@ public class Utils {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd MMM yyyy", Locale.getDefault());
         return sdf.format(date);
     }
+    public static String formatDateOnly(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        return sdf.format(date);
+    }
 
     public static void showAvatarByLogin(Context context, String login, ImageView imageView) {
         showAvatar(context, login, "http://point.im/avatar/" + login + "/80", imageView);

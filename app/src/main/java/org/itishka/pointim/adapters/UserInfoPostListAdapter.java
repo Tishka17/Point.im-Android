@@ -49,18 +49,20 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         setText(mUser.xmpp, headerHolder.xmpp_group, headerHolder.xmpp);
         setText(mUser.icq, headerHolder.icq_group, headerHolder.icq);
         setText(mUser.skye, headerHolder.skype_group, headerHolder.skype);
+        setText(mUser.homepage, headerHolder.web_group, headerHolder.web);
+        setText(mUser.email, headerHolder.email_group, headerHolder.email);
 
         if (mUser.created==null) {
             headerHolder.registered_group.setVisibility(View.GONE);
         } else {
             headerHolder.registered_group.setVisibility(View.VISIBLE);
-            headerHolder.registered.setText(Utils.formatDate(mUser.created));
+            headerHolder.registered.setText(Utils.formatDateOnly(mUser.created));
         }
         if (mUser.birthdate==null) {
             headerHolder.birthday_group.setVisibility(View.GONE);
         } else {
             headerHolder.birthday_group.setVisibility(View.VISIBLE);
-            headerHolder.birthday.setText(Utils.formatDate(mUser.birthdate));
+            headerHolder.birthday.setText(Utils.formatDateOnly(mUser.birthdate));
         }
         headerHolder.login.setText(mUser.login);
     }
@@ -95,6 +97,10 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         final TextView icq;
         final View skype_group;
         final TextView skype;
+        final View web_group;
+        final TextView web;
+        final View email_group;
+        final TextView email;
         final ImageView avatar;
         public HeaderHolder(View v) {
             super(v);
@@ -111,6 +117,10 @@ public class UserInfoPostListAdapter extends PostListAdapter {
             icq_group =  v.findViewById(R.id.icq_group);
             skype = (TextView) v.findViewById(R.id.skype);
             skype_group =  v.findViewById(R.id.skype_group);
+            web = (TextView) v.findViewById(R.id.web);
+            web_group =  v.findViewById(R.id.web_group);
+            email = (TextView) v.findViewById(R.id.email);
+            email_group =  v.findViewById(R.id.email_group);
             avatar = (ImageView) v.findViewById(R.id.avatar);
         }
     }
