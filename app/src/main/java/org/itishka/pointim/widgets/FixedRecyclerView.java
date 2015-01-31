@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Created by Татьяна on 21.10.2014.
+ * Created by Tishka17 on 21.10.2014.
  */
 public class FixedRecyclerView extends RecyclerView {
     public FixedRecyclerView(Context context) {

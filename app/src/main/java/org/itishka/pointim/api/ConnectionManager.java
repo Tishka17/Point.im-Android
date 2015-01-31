@@ -23,7 +23,7 @@ import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
- * Created by Татьяна on 21.10.2014.
+ * Created by Tishka17 on 21.10.2014.
  */
 public class ConnectionManager {
     public static final String USER_AGENT = "Tishka17 Point.im Client";

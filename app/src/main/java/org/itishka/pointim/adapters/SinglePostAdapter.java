@@ -28,7 +28,7 @@ import org.itishka.pointim.widgets.ImageList;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by Татьяна on 20.10.2014.
+ * Created by Tishka17 on 20.10.2014.
  */
 public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final WeakReference<Context> mContext;

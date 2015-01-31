@@ -6,7 +6,7 @@ import org.itishka.pointim.api.data.PostList;
 import retrofit.Callback;
 
 /**
- * Created by Татьяна on 21.10.2014.
+ * Created by Tishka17 on 21.10.2014.
  */
 public class BookmarksFragment extends PostListFragment {
     @Override
