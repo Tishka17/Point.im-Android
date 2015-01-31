@@ -308,6 +308,11 @@ public class SinglePostFragment extends Fragment {
                 mPointPost != null &&
                         mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login)
         );
+        menu.setGroupVisible(R.id.group_my_editable,
+                mPointPost != null &&
+                        mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login)
+                        // mPointPost.editable //FIXME
+        );
         menu.setGroupVisible(R.id.group_not_recommended,
                 mPointPost != null &&
                         !mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login) &&

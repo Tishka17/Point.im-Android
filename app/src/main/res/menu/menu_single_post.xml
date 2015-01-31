@@ -21,6 +21,8 @@
             android:icon="@drawable/ic_delete_white_24dp"
             android:title="@string/action_delete"
             app:showAsAction="ifRoom" />
+    </group>
+    <group android:id="@+id/group_my_editable">
         <item
             android:id="@+id/action_edit"
             android:title="@string/action_edit"
