@@ -22,8 +22,8 @@
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            app:barColor="@color/primary"
-            app:progressIndeterminate="true" />
+            app:matProg_barColor="@color/primary"
+            app:matProg_progressIndeterminate="true" />
 
         <ImageView
             android:visibility="gone"

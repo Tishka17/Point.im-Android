@@ -11,8 +11,8 @@ android {
         applicationId "org.itishka.pointim"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 10
-        versionName "1.9"
+        versionCode 11
+        versionName "2.0"
     }
     buildTypes {
         release {
@@ -44,12 +44,12 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.1.0'
     compile "com.squareup.retrofit:retrofit:1.8.+"
     compile "com.squareup.picasso:picasso:2.4.+"
-    compile 'com.jpardogo.materialtabstrip:library:1.0.6'
+    compile 'com.jpardogo.materialtabstrip:library:1.0.8'
     compile 'com.makeramen:roundedimageview:1.5.0'
-    compile 'com.afollestad:material-dialogs:0.5.2'
+    compile 'com.afollestad:material-dialogs:0.6.2.1'
     compile 'com.melnykov:floatingactionbutton:1.1.0'
     compile 'com.jpardogo.googleprogressbar:library:1.1.0'
-    compile 'com.pnikosis:materialish-progress:1.2'
+    compile 'com.pnikosis:materialish-progress:1.4'
 
     compile 'org.lucasr.twowayview:core:1.0.0-SNAPSHOT@aar'
     compile 'org.lucasr.twowayview:layouts:1.0.0-SNAPSHOT@aar'
