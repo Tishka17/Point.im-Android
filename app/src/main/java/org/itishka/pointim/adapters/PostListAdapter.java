@@ -127,6 +127,17 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         });
+        holder.recommender_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String user = (String) view.getTag();
+                if (!TextUtils.isEmpty(user)) {
+                    Intent intent = new Intent(view.getContext(), UserViewActivity.class);
+                    intent.putExtra("user", user);
+                    ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                }
+            }
+        });
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,7 +217,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.quote_mark_top.setVisibility(View.VISIBLE);
             holder.recommend_author.setText("@" + post.rec.author.login);
             holder.recommend_id.setText("");
-            Utils.showAvatar(getContext(), post.post.author.login, post.rec.author.avatar, holder.recommender_avatar);
+            Utils.showAvatar(getContext(), post.rec.author.login, post.rec.author.avatar, holder.recommender_avatar);
         } else {
             holder.mainConent.setBackgroundColor(Color.TRANSPARENT);
             holder.recommend_info.setVisibility(View.GONE);
