@@ -1,6 +1,7 @@
 package org.itishka.pointim.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,8 +26,10 @@ import org.itishka.pointim.utils.Utils;
 
 public class SettingsActivity extends ActionBarActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         if (savedInstanceState == null) {
@@ -43,17 +48,18 @@ public class SettingsActivity extends ActionBarActivity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-
+        SharedPreferences prefs;
         private ImageView avatar;
         private ImageButton logout;
         private TextView name;
-
+        boolean loadPictures;
         public PlaceholderFragment() {
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            prefs = getActivity().getApplicationContext().getSharedPreferences("prefs", MODE_PRIVATE);
             View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
             name = (TextView) rootView.findViewById(R.id.login);
             name.setText(ConnectionManager.getInstance().loginResult.login);
@@ -105,6 +111,19 @@ public class SettingsActivity extends ActionBarActivity {
                 public void onClick(View view) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Utils.getnerateBlogUri("arts"));
                     getActivity().startActivity(browserIntent);
+                }
+            });
+
+            //LoadPictures switch
+            Switch swLoadPictures = (Switch) rootView.findViewById(R.id.swLoadPictures);
+            swLoadPictures.setChecked(prefs.getBoolean("loadImages", true));
+            swLoadPictures.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    loadPictures = isChecked;
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("loadImages", isChecked);
+                    editor.apply();
                 }
             });
             return rootView;

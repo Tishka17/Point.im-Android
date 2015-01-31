@@ -3,6 +3,7 @@ package org.itishka.pointim.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
@@ -247,7 +248,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     private class ImageSearchTask extends AsyncTask<ExtendedPost, Integer, Void> {
-
+        SharedPreferences prefs;
+        boolean loadImages;
         @Override
         protected Void doInBackground(ExtendedPost... posts) {
             ExtendedPost post = posts[0];
@@ -265,6 +267,14 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             }
             return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+            loadImages = prefs.getBoolean("loadImages", true);
+            if(!loadImages) cancel(true);
+            super.onPreExecute();
         }
 
         @Override

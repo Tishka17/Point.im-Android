@@ -3,6 +3,7 @@ package org.itishka.pointim.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -33,6 +34,7 @@ import java.util.List;
  * Created by Tishka17 on 20.10.2014.
  */
 public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     public static final int TYPE_FOOTER = 1;
     public static final int TYPE_ITEM = 0;
     public static final int TYPE_HEADER = -1;
@@ -338,6 +340,8 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private class ImageSearchTask extends AsyncTask<PostList, Integer, Void> {
+        SharedPreferences prefs;
+        boolean loadImages;
 
         @Override
         protected Void doInBackground(PostList... postLists) {
@@ -350,6 +354,15 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
             return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+            loadImages = prefs.getBoolean("loadImages", true);
+            if(!loadImages) cancel(true);
+            super.onPreExecute();
+
         }
 
         @Override
