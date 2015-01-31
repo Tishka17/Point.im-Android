@@ -22,6 +22,12 @@
             android:title="@string/action_delete"
             app:showAsAction="ifRoom" />
     </group>
+    <group android:id="@+id/group_my_editable">
+        <item
+            android:id="@+id/action_edit"
+            android:title="@string/action_edit"
+            app:showAsAction="never" />
+    </group>
     <item
         android:id="@+id/action_copy_link"
         android:title="@string/action_copy_link"

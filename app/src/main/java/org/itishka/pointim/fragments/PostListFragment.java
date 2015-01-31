@@ -138,6 +138,14 @@ public abstract class PostListFragment extends Fragment {
         return 1;
     }
 
+    public PostListAdapter getAdapter() {
+        return mAdapter;
+    }
+
+    protected PostListAdapter createAdapter() {
+        return new PostListAdapter(getActivity());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -159,7 +167,7 @@ public abstract class PostListFragment extends Fragment {
                 StaggeredGridLayoutManager.VERTICAL
         );
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new PostListAdapter(getActivity());
+        mAdapter = createAdapter();
         mAdapter.setOnPostClickListener(mOnPostClickListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
             @Override

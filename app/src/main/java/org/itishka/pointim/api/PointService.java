@@ -14,6 +14,7 @@ import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -122,6 +123,10 @@ public interface PointService {
     @FormUrlEncoded
     @POST("/api/post/")
     void createPost(@Field("text") String text, @Field("tag") String[] tags, Callback<PointResult> callback);
+
+    @FormUrlEncoded
+    @PUT("/api/post/{id}")
+    void editPost(@Path("id") String id, @Field("text") String text, @Field("tag") String[] tags, Callback<PointResult> callback);
 
     @DELETE("/api/post/{id}")
     void deletePost(@Path("id") String id, Callback<PointResult> callback);

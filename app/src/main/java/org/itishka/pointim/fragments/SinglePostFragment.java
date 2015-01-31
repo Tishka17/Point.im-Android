@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.api.data.Comment;
@@ -307,6 +308,11 @@ public class SinglePostFragment extends Fragment {
                 mPointPost != null &&
                         mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login)
         );
+        menu.setGroupVisible(R.id.group_my_editable,
+                mPointPost != null &&
+                        mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login)
+                        // mPointPost.editable //FIXME
+        );
         menu.setGroupVisible(R.id.group_not_recommended,
                 mPointPost != null &&
                         !mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login) &&
@@ -373,6 +379,14 @@ public class SinglePostFragment extends Fragment {
             ClipData clip = ClipData.newRawUri(uri.toString(), uri);
             clipboard.setPrimaryClip(clip);
             Toast.makeText(getActivity(), "Link copied: " + uri.toString(), Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.action_edit) {
+            Intent intent = new Intent(getActivity(), NewPostActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("id", mPost);
+            bundle.putString("text", mPointPost.post.text.text.toString());
+            bundle.putStringArray("tags", mPointPost.post.tags.toArray(new String[]{}));
+            intent.putExtras(bundle);
+            getActivity().startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

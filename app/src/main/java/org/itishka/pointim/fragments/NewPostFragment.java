@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,7 +46,10 @@ public class NewPostFragment extends Fragment {
     private static final int RESULT_LOAD_IMAGE = 17;
     private static final String ARG_TEXT = "text";
     private static final String ARG_IMAGES = "images";
+    private static final String ARG_ID = "id";
+    private static final String ARG_TAGS = "tags";
     EditText mPostText;
+    private String mPostId;
     MultiAutoCompleteTextView mPostTags;
     private AlertDialog mProgressDialog;
     private ArrayAdapter<Tag> mTagsListAdapter;
@@ -94,6 +98,15 @@ public class NewPostFragment extends Fragment {
         images.add(image);
         return newInstance(images);
     }
+    public static NewPostFragment newInstanceForEdit(String id, String text, String[] tags) {
+        NewPostFragment fragment = new NewPostFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_ID, id);
+        args.putString(ARG_TEXT, text);
+        args.putStringArray(ARG_TAGS, tags);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public static NewPostFragment newInstance() {
         return new NewPostFragment();
@@ -113,7 +126,12 @@ public class NewPostFragment extends Fragment {
         if (savedInstanceState == null) {
             Bundle args = getArguments();
             if (args != null) {
+                mPostId = args.getString(ARG_ID);
                 mPostText.setText(args.getString(ARG_TEXT, ""));
+                String [] tags = args.getStringArray(ARG_TAGS);
+                if (tags!=null) {
+                    mPostTags.setText(TextUtils.join(", ", tags));
+                }
                 ArrayList<Uri> images = args.getParcelableArrayList(ARG_IMAGES);
                 if (images != null) for (Uri image : images) {
                     mImagesPanel.addImage(image);
@@ -125,7 +143,6 @@ public class NewPostFragment extends Fragment {
                 .cancelable(false)
                 .customView(R.layout.dialog_progress, false)
                 .build();
-
         new LoadTagsAsyncTask().execute();
         return rootView;
     }
@@ -171,7 +188,11 @@ public class NewPostFragment extends Fragment {
                 sb.append("\n").append(l);
             }
             mProgressDialog.show();
-            ConnectionManager.getInstance().pointService.createPost(sb.toString().trim(), tags, mNewPostCallback);
+            if (TextUtils.isEmpty(mPostId)) {
+                ConnectionManager.getInstance().pointService.createPost(sb.toString().trim(), tags, mNewPostCallback);
+            } else {
+                ConnectionManager.getInstance().pointService.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
+            }
             return true;
         } else if (id == R.id.attach) {
             Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

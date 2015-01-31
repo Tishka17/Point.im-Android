@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.itishka.pointim.R;
@@ -20,6 +21,10 @@ public class NewPostActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         ConnectionManager.getInstance().updateAuthorization(this);  //we need this in every activity that can be launched from itself
         setContentView(R.layout.activity_new_post);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
         if (savedInstanceState == null) {
             Fragment fragment = null;
             Intent intent = getIntent();
@@ -36,6 +41,15 @@ public class NewPostActivity extends ActionBarActivity {
                 if (type.startsWith("image/")) {
                     fragment = NewPostFragment.newInstance(intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM));
                 }
+            } else {
+                String id = getIntent().getStringExtra("id");
+                String text = getIntent().getStringExtra("text");
+                String[] tags = getIntent().getStringArrayExtra("tags");
+                if (!TextUtils.isEmpty(id))
+                    fragment = NewPostFragment.newInstanceForEdit(id, text, tags);
+                if (!TextUtils.isEmpty(id)) {
+                    getSupportActionBar().setTitle("#"+id);
+                }
             }
             if (fragment == null) {
                 fragment = NewPostFragment.newInstance();
@@ -44,10 +58,6 @@ public class NewPostActivity extends ActionBarActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, fragment)
                     .commit();
-        }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
