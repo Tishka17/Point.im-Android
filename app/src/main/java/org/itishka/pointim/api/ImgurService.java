@@ -1,7 +1,7 @@
 package org.itishka.pointim.api;
 
-import org.itishka.pointim.api.data.ImgurImage;
-import org.itishka.pointim.api.data.ImgurUploadResult;
+import org.itishka.pointim.model.ImgurImage;
+import org.itishka.pointim.model.ImgurUploadResult;
 
 import retrofit.Callback;
 import retrofit.http.DELETE;

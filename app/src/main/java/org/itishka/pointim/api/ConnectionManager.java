@@ -8,8 +8,10 @@ import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
 import org.itishka.pointim.BuildConfig;
-import org.itishka.pointim.api.data.LoginResult;
-import org.itishka.pointim.api.data.TextWithImages;
+import org.itishka.pointim.model.LoginResult;
+import org.itishka.pointim.model.TextWithImages;
+import org.itishka.pointim.network.PointImAuth;
+import org.itishka.pointim.network.PointIm;
 import org.itishka.pointim.utils.AuthSaver;
 import org.itishka.pointim.utils.DateDeserializer;
 import org.itishka.pointim.utils.TextParser;
@@ -38,8 +40,8 @@ public class ConnectionManager {
             .registerTypeAdapter(Date.class, new DateDeserializer())
             .registerTypeAdapter(TextWithImages.class, new TextParser())
             .create();
-    public PointService pointService = null;
-    public PointAuthService pointAuthService = null;
+    public PointIm pointIm = null;
+    public PointImAuth pointAuthService = null;
     public LoginResult loginResult = null;
     public ImgurService imgurService = null;
 
@@ -59,7 +61,7 @@ public class ConnectionManager {
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
                 .build();
-        pointAuthService = authRestAdapter.create(PointAuthService.class);
+        pointAuthService = authRestAdapter.create(PointImAuth.class);
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setRequestInterceptor(new RequestInterceptor() {
@@ -109,7 +111,7 @@ public class ConnectionManager {
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
                 .build();
-        pointService = restAdapter.create(PointService.class);
+        pointIm = restAdapter.create(PointIm.class);
     }
 
     //----- IMGUR ---

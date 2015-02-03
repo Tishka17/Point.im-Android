@@ -1,6 +1,6 @@
-package org.itishka.pointim.api;
+package org.itishka.pointim.network;
 
-import org.itishka.pointim.api.data.LoginResult;
+import org.itishka.pointim.model.LoginResult;
 
 import retrofit.Callback;
 import retrofit.http.Field;
@@ -10,7 +10,7 @@ import retrofit.http.POST;
 /**
  * Created by atikhonov on 28.04.2014.
  */
-public interface PointAuthService {
+public interface PointImAuth {
     @FormUrlEncoded
     @POST("/api/login")
     void login(@Field("login") String login, @Field("password") String password, Callback<LoginResult> callback);

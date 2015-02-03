@@ -106,9 +106,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-
-        <activity
-            android:name=".activities.UrlHandlerActivity" >
+        <activity android:name=".activities.UrlHandlerActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -129,6 +127,12 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".network.PointService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

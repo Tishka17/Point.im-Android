@@ -1,10 +1,10 @@
-package org.itishka.pointim.api;
+package org.itishka.pointim.network;
 
-import org.itishka.pointim.api.data.ExtendedPost;
-import org.itishka.pointim.api.data.PointResult;
-import org.itishka.pointim.api.data.PostList;
-import org.itishka.pointim.api.data.Tag;
-import org.itishka.pointim.api.data.User;
+import org.itishka.pointim.model.ExtendedPost;
+import org.itishka.pointim.model.PointResult;
+import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.model.Tag;
+import org.itishka.pointim.model.User;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import retrofit.http.Query;
 /**
  * Created by atikhonov on 28.04.2014.
  */
-public interface PointService {
+public interface PointIm {
     @GET("/api/all")
     void getAll(Callback<PostList> callback);
 
@@ -36,6 +36,8 @@ public interface PointService {
 
     @GET("/api/recent")
     void getRecent(Callback<PostList> callback);
+    @GET("/api/recent")
+    PostList getRecent();
 
     @GET("/api/recent")
     void getRecent(@Query("before") long before, Callback<PostList> callback);

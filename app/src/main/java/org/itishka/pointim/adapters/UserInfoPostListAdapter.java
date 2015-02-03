@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.api.data.User;
+import org.itishka.pointim.model.User;
 import org.itishka.pointim.utils.Utils;
 
 /**

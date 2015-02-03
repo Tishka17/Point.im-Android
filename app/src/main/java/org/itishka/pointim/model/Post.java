@@ -1,4 +1,4 @@
-package org.itishka.pointim.api.data;
+package org.itishka.pointim.model;
 
 public class Post extends PointResult {
     public long uid;

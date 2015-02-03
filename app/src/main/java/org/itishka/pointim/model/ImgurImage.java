@@ -1,4 +1,4 @@
-package org.itishka.pointim.api.data;
+package org.itishka.pointim.model;
 
 /**
  * Created by Tishka17 on 30.12.2014.

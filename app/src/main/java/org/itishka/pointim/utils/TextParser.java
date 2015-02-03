@@ -5,7 +5,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-import org.itishka.pointim.api.data.TextWithImages;
+import org.itishka.pointim.model.TextWithImages;
 
 import java.lang.reflect.Type;
 

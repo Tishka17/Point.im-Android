@@ -1,7 +1,7 @@
 package org.itishka.pointim.fragments;
 
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.data.PostList;
+import org.itishka.pointim.model.PostList;
 
 import retrofit.Callback;
 
@@ -11,11 +11,11 @@ import retrofit.Callback;
 public class CommentedFragment extends PostListFragment {
     @Override
     protected void update(Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointService.getCommented(callback);
+        ConnectionManager.getInstance().pointIm.getCommented(callback);
     }
 
     @Override
     protected void loadMore(long before, Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointService.getCommented(before, callback);
+        ConnectionManager.getInstance().pointIm.getCommented(before, callback);
     }
 }

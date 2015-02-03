@@ -1,6 +1,5 @@
 package org.itishka.pointim.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,9 +10,9 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.adapters.UserInfoPostListAdapter;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.data.PointResult;
-import org.itishka.pointim.api.data.PostList;
-import org.itishka.pointim.api.data.User;
+import org.itishka.pointim.model.PointResult;
+import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.model.User;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -64,15 +63,15 @@ public class UserViewFragment extends PostListFragment {
 
     @Override
     protected void update(Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointService.getBlog(mUser, callback);
-        ConnectionManager.getInstance().pointService.getUserInfo(mUser, mUserInfoCallback);
+        ConnectionManager.getInstance().pointIm.getBlog(mUser, callback);
+        ConnectionManager.getInstance().pointIm.getUserInfo(mUser, mUserInfoCallback);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_subscribe) {
-            ConnectionManager.getInstance().pointService.subscribeUser(mUser, new Callback<PointResult>() {
+            ConnectionManager.getInstance().pointIm.subscribeUser(mUser, new Callback<PointResult>() {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {
@@ -91,7 +90,7 @@ public class UserViewFragment extends PostListFragment {
             });
             return true;
         } else if (id == R.id.action_unsubscribe) {
-            ConnectionManager.getInstance().pointService.unsubscribeUser(mUser, new Callback<PointResult>() {
+            ConnectionManager.getInstance().pointIm.unsubscribeUser(mUser, new Callback<PointResult>() {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {
@@ -122,6 +121,6 @@ public class UserViewFragment extends PostListFragment {
 
     @Override
     protected void loadMore(long before, Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointService.getBlog(before, mUser, callback);
+        ConnectionManager.getInstance().pointIm.getBlog(before, mUser, callback);
     }
 }

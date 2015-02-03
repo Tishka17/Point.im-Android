@@ -1,7 +1,7 @@
 package org.itishka.pointim.fragments;
 
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.data.PostList;
+import org.itishka.pointim.model.PostList;
 
 import retrofit.Callback;
 
@@ -11,11 +11,11 @@ import retrofit.Callback;
 public class SelfFragment extends PostListFragment {
     @Override
     protected void update(Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointService.getBlog(ConnectionManager.getInstance().loginResult.login, callback);
+        ConnectionManager.getInstance().pointIm.getBlog(ConnectionManager.getInstance().loginResult.login, callback);
     }
 
     @Override
     protected void loadMore(long before, Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointService.getBlog(before, ConnectionManager.getInstance().loginResult.login, callback);
+        ConnectionManager.getInstance().pointIm.getBlog(before, ConnectionManager.getInstance().loginResult.login, callback);
     }
 }

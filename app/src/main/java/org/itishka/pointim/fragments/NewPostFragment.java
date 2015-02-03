@@ -26,8 +26,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.data.PointResult;
-import org.itishka.pointim.api.data.Tag;
+import org.itishka.pointim.model.PointResult;
+import org.itishka.pointim.model.Tag;
 import org.itishka.pointim.utils.ContentStorageHelper;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 
@@ -189,9 +189,9 @@ public class NewPostFragment extends Fragment {
             }
             mProgressDialog.show();
             if (TextUtils.isEmpty(mPostId)) {
-                ConnectionManager.getInstance().pointService.createPost(sb.toString().trim(), tags, mNewPostCallback);
+                ConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mNewPostCallback);
             } else {
-                ConnectionManager.getInstance().pointService.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
+                ConnectionManager.getInstance().pointIm.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
             }
             return true;
         } else if (id == R.id.attach) {
@@ -224,7 +224,7 @@ public class NewPostFragment extends Fragment {
                 mTagsListAdapter.notifyDataSetChanged();
             }
             if (mTags == null || tagList==null || System.currentTimeMillis() - tagList.updated > 24 * 60 * 60 * 1000) {
-                ConnectionManager.getInstance().pointService.getTags(ConnectionManager.getInstance().loginResult.login, new Callback<List<Tag>>() {
+                ConnectionManager.getInstance().pointIm.getTags(ConnectionManager.getInstance().loginResult.login, new Callback<List<Tag>>() {
                     @Override
                     public void success(List<Tag> tags, Response response) {
                         if (tags != null)

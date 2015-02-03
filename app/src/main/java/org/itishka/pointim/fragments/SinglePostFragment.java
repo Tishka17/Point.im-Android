@@ -32,9 +32,9 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.data.Comment;
-import org.itishka.pointim.api.data.ExtendedPost;
-import org.itishka.pointim.api.data.PointResult;
+import org.itishka.pointim.model.Comment;
+import org.itishka.pointim.model.ExtendedPost;
+import org.itishka.pointim.model.PointResult;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.lucasr.twowayview.ItemClickSupport;
@@ -259,9 +259,9 @@ public class SinglePostFragment extends Fragment {
                 mBottomBar.setEnabled(false);
                 mProgressDialog.show();
                 if (TextUtils.isEmpty(comment)) {
-                    ConnectionManager.getInstance().pointService.addComment(mPost, text, mCommentCallback);
+                    ConnectionManager.getInstance().pointIm.addComment(mPost, text, mCommentCallback);
                 } else {
-                    ConnectionManager.getInstance().pointService.addComment(mPost, text, comment, mCommentCallback);
+                    ConnectionManager.getInstance().pointIm.addComment(mPost, text, comment, mCommentCallback);
                 }
             }
         });
@@ -298,7 +298,7 @@ public class SinglePostFragment extends Fragment {
     }
 
     protected void update(Callback<ExtendedPost> callback) {
-        ConnectionManager.getInstance().pointService.getPost(mPost, getCallback());
+        ConnectionManager.getInstance().pointIm.getPost(mPost, getCallback());
     }
 
     @Override
@@ -347,9 +347,9 @@ public class SinglePostFragment extends Fragment {
                             String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
                             mProgressDialog.show();
                             if (TextUtils.isEmpty(text)) {
-                                ConnectionManager.getInstance().pointService.recommend(mPost, mRecommendCallback);
+                                ConnectionManager.getInstance().pointIm.recommend(mPost, mRecommendCallback);
                             } else {
-                                ConnectionManager.getInstance().pointService.recommend(mPost, text, mRecommendCallback);
+                                ConnectionManager.getInstance().pointIm.recommend(mPost, text, mRecommendCallback);
                             }
                         }
                     })
@@ -367,7 +367,7 @@ public class SinglePostFragment extends Fragment {
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
                             mProgressDialog.show();
-                            ConnectionManager.getInstance().pointService.deletePost(mPost, mDeleteCallback);
+                            ConnectionManager.getInstance().pointIm.deletePost(mPost, mDeleteCallback);
                         }
                     })
                     .build();

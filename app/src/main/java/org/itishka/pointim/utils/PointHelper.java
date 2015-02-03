@@ -1,6 +1,6 @@
 package org.itishka.pointim.utils;
 
-import org.itishka.pointim.api.data.Tag;
+import org.itishka.pointim.model.Tag;
 
 import java.util.ArrayList;
 import java.util.Collection;

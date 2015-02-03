@@ -20,8 +20,8 @@ import com.squareup.picasso.Transformation;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.data.ImgurImage;
-import org.itishka.pointim.api.data.ImgurUploadResult;
+import org.itishka.pointim.model.ImgurImage;
+import org.itishka.pointim.model.ImgurUploadResult;
 import org.itishka.pointim.utils.ImgurUploadTask;
 
 import java.lang.ref.WeakReference;

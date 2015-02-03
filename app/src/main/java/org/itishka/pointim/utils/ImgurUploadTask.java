@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.data.ImgurUploadResult;
+import org.itishka.pointim.model.ImgurUploadResult;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.itishka.pointim.api.data.Tag;
+import org.itishka.pointim.model.Tag;
 
 import java.util.ArrayList;
 import java.util.List;

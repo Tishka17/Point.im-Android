@@ -23,8 +23,8 @@ import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.api.data.Post;
-import org.itishka.pointim.api.data.PostList;
+import org.itishka.pointim.model.Post;
+import org.itishka.pointim.model.PostList;
 
 import java.util.List;
 
