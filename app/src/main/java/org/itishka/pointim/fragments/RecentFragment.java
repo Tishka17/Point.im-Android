@@ -38,28 +38,30 @@ public class RecentFragment extends PostListFragment {
     protected void update(Callback<PostList> callback) {
         //ConnectionManager.getInstance().pointIm.getRecent(callback);
         RecentRequest request = new RecentRequest();
-
-        spiceManager.execute(request, "recents", DurationInMillis.ONE_MINUTE, new RequestListener<PostList>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), spiceException.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onRequestSuccess(PostList postList) {
-                if (postList.isSuccess()) {
-                    getAdapter().setData(postList);
-                } else {
-                    if (!isDetached())
-                        Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        spiceManager.getFromCache(PostList.class, "recents", DurationInMillis.ALWAYS_RETURNED, new PostListResultListener());
+        spiceManager.execute(request, "recents", DurationInMillis.ALWAYS_EXPIRED, new PostListResultListener());
     }
 
     @Override
     protected void loadMore(long before, Callback<PostList> callback) {
         ConnectionManager.getInstance().pointIm.getRecent(before, callback);
+    }
+
+    class PostListResultListener implements RequestListener<PostList> {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            if (!isDetached())
+                Toast.makeText(getActivity(), spiceException.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRequestSuccess(PostList postList) {
+            if (postList!=null && postList.isSuccess()) {
+                getAdapter().setData(postList);
+            } else {
+                if (!isDetached())
+                    Toast.makeText(getActivity(), postList==null?"null":postList.error, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
