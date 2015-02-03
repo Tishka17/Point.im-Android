@@ -1,11 +1,14 @@
 package org.itishka.pointim.network;
 
+import android.content.Intent;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.octo.android.robospice.retrofit.RetrofitGsonSpiceService;
 
 import org.itishka.pointim.model.LoginResult;
 import org.itishka.pointim.model.TextWithImages;
+import org.itishka.pointim.utils.AuthSaver;
 import org.itishka.pointim.utils.DateDeserializer;
 import org.itishka.pointim.utils.TextParser;
 
@@ -34,8 +37,10 @@ public class PointService extends RetrofitGsonSpiceService {
         return new GsonConverter(gson);
     }
 
-    public void updateAuthorization(LoginResult loginResult) {
-        mRequestInterceptor.setAuthorization(loginResult);
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        mRequestInterceptor.setAuthorization(AuthSaver.loadLoginResult(this));
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override

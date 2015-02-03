@@ -15,6 +15,7 @@ import android.view.Window;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.melnykov.fab.FloatingActionButton;
+import com.octo.android.robospice.SpiceManager;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
@@ -22,6 +23,7 @@ import org.itishka.pointim.fragments.AllFragment;
 import org.itishka.pointim.fragments.CommentedFragment;
 import org.itishka.pointim.fragments.RecentFragment;
 import org.itishka.pointim.fragments.SelfFragment;
+import org.itishka.pointim.network.PointService;
 import org.itishka.pointim.utils.ImageSearchHelper;
 
 
