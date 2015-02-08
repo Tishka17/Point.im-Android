@@ -10,7 +10,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.network.PointService;
-import org.itishka.pointim.network.RecentRequest;
+import org.itishka.pointim.network.requests.RecentRequest;
 
 import retrofit.Callback;
 

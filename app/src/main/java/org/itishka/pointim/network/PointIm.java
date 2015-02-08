@@ -35,12 +35,11 @@ public interface PointIm {
     void getBookmarks(@Query("before") long before, Callback<PostList> callback);
 
     @GET("/api/recent")
-    void getRecent(Callback<PostList> callback);
-    @GET("/api/recent")
     PostList getRecent();
 
     @GET("/api/recent")
-    void getRecent(@Query("before") long before, Callback<PostList> callback);
+    PostList getRecent(@Query("before") long before);
+
 
     @GET("/api/comments")
     void getCommented(Callback<PostList> callback);
