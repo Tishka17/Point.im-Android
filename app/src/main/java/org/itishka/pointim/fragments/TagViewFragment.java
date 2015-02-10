@@ -6,8 +6,6 @@ import android.text.TextUtils;
 import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.network.requests.PostListRequest;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * A placeholder fragment containing a simple view.
  */

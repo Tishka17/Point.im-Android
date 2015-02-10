@@ -74,11 +74,11 @@ public abstract class PostListFragment extends Fragment {
         @Override
         public void onRequestSuccess(PostList postList) {
             mSwipeRefresh.setRefreshing(false);
-            if (postList!=null && postList.isSuccess()) {
+            if (postList != null && postList.isSuccess()) {
                 mAdapter.setData(postList);
             } else {
                 if (!isDetached())
-                    Toast.makeText(getActivity(), (postList==null)?"null":postList.error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -89,7 +89,7 @@ public abstract class PostListFragment extends Fragment {
 
         @Override
         public void onRequestSuccess(PostList postList) {
-            if (postList!=null && postList.isSuccess()) {
+            if (postList != null && postList.isSuccess()) {
                 mAdapter.setData(postList);
             }
         }
@@ -105,11 +105,11 @@ public abstract class PostListFragment extends Fragment {
 
         @Override
         public void onRequestSuccess(PostList postList) {
-            if (postList!=null && postList.isSuccess()) {
+            if (postList != null && postList.isSuccess()) {
                 mAdapter.appendData(postList);
             } else {
                 if (!isDetached())
-                    Toast.makeText(getActivity(), (postList==null)?"null":postList.error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -250,5 +250,6 @@ public abstract class PostListFragment extends Fragment {
     }
 
     protected abstract PostListRequest createRequest();
+
     protected abstract PostListRequest createRequest(long before);
 }

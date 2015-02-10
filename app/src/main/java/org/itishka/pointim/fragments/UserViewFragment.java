@@ -25,13 +25,13 @@ import retrofit.client.Response;
 public class UserViewFragment extends PostListFragment {
 
     private String mUser;
-    private Callback<User> mUserInfoCallback =new Callback<User>() {
+    private Callback<User> mUserInfoCallback = new Callback<User>() {
         @Override
         public void success(User user, Response response) {
             if (user.isSuccess()) {
-                ((UserInfoPostListAdapter)getAdapter()).setUserInfo(user);
+                ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
             } else if (!isDetached()) {
-                Toast.makeText(getActivity(), "Error: "+user.error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error: " + user.error, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -132,6 +132,7 @@ public class UserViewFragment extends PostListFragment {
 
     public static class BlogRequest extends PostListRequest {
         private final String mUser;
+
         public BlogRequest(String user, long before) {
             super(before);
             mUser = user;
@@ -144,7 +145,7 @@ public class UserViewFragment extends PostListFragment {
 
         @Override
         public String getCacheName() {
-            return super.getCacheName()+"-"+mUser;
+            return super.getCacheName() + "-" + mUser;
         }
 
         @Override

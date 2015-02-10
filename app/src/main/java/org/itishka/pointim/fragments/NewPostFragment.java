@@ -98,6 +98,7 @@ public class NewPostFragment extends Fragment {
         images.add(image);
         return newInstance(images);
     }
+
     public static NewPostFragment newInstanceForEdit(String id, String text, String[] tags) {
         NewPostFragment fragment = new NewPostFragment();
         Bundle args = new Bundle();
@@ -128,8 +129,8 @@ public class NewPostFragment extends Fragment {
             if (args != null) {
                 mPostId = args.getString(ARG_ID);
                 mPostText.setText(args.getString(ARG_TEXT, ""));
-                String [] tags = args.getStringArray(ARG_TAGS);
-                if (tags!=null) {
+                String[] tags = args.getStringArray(ARG_TAGS);
+                if (tags != null) {
                     mPostTags.setText(TextUtils.join(", ", tags));
                 }
                 ArrayList<Uri> images = args.getParcelableArrayList(ARG_IMAGES);
@@ -207,9 +208,9 @@ public class NewPostFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... voids) {
             Context context = getActivity();
-            if (context!=null) {
+            if (context != null) {
                 tagList = ContentStorageHelper.loadTags(context);
-                if (tagList!=null)
+                if (tagList != null)
                     mTags = tagList.tags;
             }
             return null;
@@ -223,7 +224,7 @@ public class NewPostFragment extends Fragment {
                 mTagsListAdapter.addAll(mTags);
                 mTagsListAdapter.notifyDataSetChanged();
             }
-            if (mTags == null || tagList==null || System.currentTimeMillis() - tagList.updated > 24 * 60 * 60 * 1000) {
+            if (mTags == null || tagList == null || System.currentTimeMillis() - tagList.updated > 24 * 60 * 60 * 1000) {
                 ConnectionManager.getInstance().pointIm.getTags(ConnectionManager.getInstance().loginResult.login, new Callback<List<Tag>>() {
                     @Override
                     public void success(List<Tag> tags, Response response) {

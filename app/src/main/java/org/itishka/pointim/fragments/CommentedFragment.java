@@ -1,10 +1,7 @@
 package org.itishka.pointim.fragments;
 
-import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.network.requests.PostListRequest;
-
-import retrofit.Callback;
 
 /**
  * Created by Tishka17 on 21.10.2014.
