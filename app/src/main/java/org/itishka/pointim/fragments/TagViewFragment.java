@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.network.requests.PostListRequest;
 
 import retrofit.Callback;
 
@@ -33,18 +34,33 @@ public class TagViewFragment extends PostListFragment {
     }
 
     @Override
-    protected void update(Callback<PostList> callback) {
-        if (TextUtils.isEmpty(mUser))
-            ConnectionManager.getInstance().pointIm.getPostsByTag(mTag, callback);
-        else
-            ConnectionManager.getInstance().pointIm.getPostsByUserTag(mUser, mTag, callback);
+    protected PostListRequest createRequest() {
+        return new TagRequest();
     }
 
     @Override
-    protected void loadMore(long before, Callback<PostList> callback) {
-        if (TextUtils.isEmpty(mUser))
-            ConnectionManager.getInstance().pointIm.getPostsByTag(before, mTag, callback);
-        else
-            ConnectionManager.getInstance().pointIm.getPostsByUserTag(before, mUser, mTag, callback);
+    protected PostListRequest createRequest(long before) {
+        return new TagRequest(before);
+    }
+
+    public class TagRequest extends PostListRequest {
+        public TagRequest(long before) {
+            super(before);
+        }
+
+        public TagRequest() {
+            super();
+        }
+
+        @Override
+        public PostList load() throws Exception {
+            return getService().getPostsByTag(mTag);
+        }
+
+        @Override
+        public PostList loadBefore(long before) throws Exception {
+            return getService().getPostsByTag(before, mTag);
+        }
+
     }
 }

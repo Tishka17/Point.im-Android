@@ -13,6 +13,7 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.PointResult;
 import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.model.User;
+import org.itishka.pointim.network.requests.PostListRequest;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -56,14 +57,24 @@ public class UserViewFragment extends PostListFragment {
     }
 
     @Override
+    protected PostListRequest createRequest() {
+        return new BlogRequest();
+    }
+
+    @Override
+    protected PostListRequest createRequest(long before) {
+        return new BlogRequest(before);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUser = getArguments().getString("user");
     }
 
     @Override
-    protected void update(Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointIm.getBlog(mUser, callback);
+    protected void update() {
+        super.update();
         ConnectionManager.getInstance().pointIm.getUserInfo(mUser, mUserInfoCallback);
     }
 
@@ -119,8 +130,24 @@ public class UserViewFragment extends PostListFragment {
 
     }
 
-    @Override
-    protected void loadMore(long before, Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointIm.getBlog(before, mUser, callback);
+    public class BlogRequest extends PostListRequest {
+        public BlogRequest(long before) {
+            super(before);
+        }
+
+        public BlogRequest() {
+            super();
+        }
+
+        @Override
+        public PostList load() throws Exception {
+            return getService().getBlog(mUser);
+        }
+
+        @Override
+        public PostList loadBefore(long before) throws Exception {
+            return getService().getBlog(before, mUser);
+        }
+
     }
 }

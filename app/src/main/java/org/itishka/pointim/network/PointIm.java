@@ -54,10 +54,10 @@ public interface PointIm {
     void getOutgoing(Callback<PostList> callback);
 
     @GET("/api/blog/{login}")
-    void getBlog(@Path("login") String login, Callback<PostList> callback);
+    PostList getBlog(@Path("login") String login);
 
     @GET("/api/blog/{login}")
-    void getBlog(@Query("before") long before, @Path("login") String login, Callback<PostList> callback);
+    PostList getBlog(@Query("before") long before, @Path("login") String login);
 
     @GET("/api/user/{login}")
     void getUserInfo(@Path("login") String login, Callback<User> callback);
@@ -72,10 +72,10 @@ public interface PointIm {
     void getTags(@Path("login") String login, Callback<List<Tag>> callback);
 
     @GET("/api/tags")
-    void getPostsByTag(@Query("tag") String tag, Callback<PostList> callback);
+    PostList getPostsByTag(@Query("tag") String tag);
 
     @GET("/api/tags")
-    void getPostsByTag(@Query("before") long before, @Query("tag") String tag, Callback<PostList> callback);
+    PostList getPostsByTag(@Query("before") long before, @Query("tag") String tag);
 
     @GET("/api/tags/{login}")
     void getPostsByUserTag(@Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);

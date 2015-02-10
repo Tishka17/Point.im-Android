@@ -9,14 +9,14 @@ import org.itishka.pointim.network.PointIm;
  * Created by Tishka17 on 08.02.2015.
  */
 public abstract class PostListRequest extends RetrofitSpiceRequest<PostList, PointIm> {
-    private final int mBefore;
+    private final long mBefore;
 
     public PostListRequest() {
         super(PostList.class, PointIm.class);
         mBefore = 0;
     }
 
-    public PostListRequest(int before) {
+    public PostListRequest(long before) {
         super(PostList.class, PointIm.class);
         mBefore = before;
     }
@@ -31,7 +31,7 @@ public abstract class PostListRequest extends RetrofitSpiceRequest<PostList, Poi
 
     public abstract PostList load() throws Exception;
 
-    public abstract PostList loadBefore(int before) throws Exception;
+    public abstract PostList loadBefore(long before) throws Exception;
 
     public String getCacheName() {
         return getCacheName()+"."+mBefore;

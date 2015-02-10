@@ -18,6 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
@@ -25,20 +30,19 @@ import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.Post;
 import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.network.PointService;
+import org.itishka.pointim.network.requests.PostListRequest;
 
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public abstract class PostListFragment extends Fragment {
-    PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
+    protected SpiceManager spiceManager = new SpiceManager(PointService.class);
 
+    PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
         @Override
         public void onPostClicked(View view, String post) {
             Intent intent = new Intent(getActivity(), SinglePostActivity.class);
@@ -53,13 +57,22 @@ public abstract class PostListFragment extends Fragment {
             ActivityCompat.startActivity(getActivity(), intent, null);
         }
     };
+
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
     private PostListAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
-    private Callback<PostList> mCallback = new Callback<PostList>() {
+
+    private RequestListener<PostList> mUpdateRequestListener = new RequestListener<PostList>() {
         @Override
-        public void success(PostList postList, Response response) {
+        public void onRequestFailure(SpiceException spiceException) {
+            mSwipeRefresh.setRefreshing(false);
+            if (!isDetached())
+                Toast.makeText(getActivity(), spiceException.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRequestSuccess(PostList postList) {
             mSwipeRefresh.setRefreshing(false);
             if (postList.isSuccess()) {
                 mAdapter.setData(postList);
@@ -68,30 +81,36 @@ public abstract class PostListFragment extends Fragment {
                     Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
             }
         }
+    };
+    private RequestListener<PostList> mCacheRequestListener = new RequestListener<PostList>() {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+        }
 
         @Override
-        public void failure(RetrofitError error) {
-            mSwipeRefresh.setRefreshing(false);
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        public void onRequestSuccess(PostList postList) {
+            if (postList.isSuccess()) {
+                mAdapter.setData(postList);
+            }
         }
     };
     private boolean mIsLoadingMore = false;
-    private Callback<PostList> mLoadMoreCallback = new Callback<PostList>() {
+    private RequestListener<PostList> mLoadMoreRequestListener = new RequestListener<PostList>() {
+
         @Override
-        public void success(PostList postList, Response response) {
+        public void onRequestFailure(SpiceException spiceException) {
+            if (!isDetached())
+                Toast.makeText(getActivity(), spiceException.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRequestSuccess(PostList postList) {
             if (postList.isSuccess()) {
                 mAdapter.appendData(postList);
             } else {
                 if (!isDetached())
                     Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
             }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -105,6 +124,20 @@ public abstract class PostListFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        spiceManager.start(getActivity());
+    }
+
+    @Override
+    public void onStop() {
+        if (spiceManager.isStarted()) {
+            spiceManager.shouldStop();
+        }
+        super.onStop();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_posts_fragment, menu);
@@ -115,7 +148,7 @@ public abstract class PostListFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             mSwipeRefresh.setRefreshing(true);
-            update(mCallback);
+            update();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -157,7 +190,7 @@ public abstract class PostListFragment extends Fragment {
             public void onRefresh() {
                 ConnectionManager manager = ConnectionManager.getInstance();
                 if (manager.isAuthorized()) {
-                    update(getCallback());
+                    update();
                 }
             }
         });
@@ -180,7 +213,7 @@ public abstract class PostListFragment extends Fragment {
                         mAdapter.getPostList().has_next = false;
                         return false;
                     } else {
-                        loadMore(posts.get(posts.size() - 1).uid, getLoadMoreCallback());
+                        loadMore(posts.get(posts.size() - 1).uid);
                     }
                 }
                 return true;
@@ -199,21 +232,23 @@ public abstract class PostListFragment extends Fragment {
                 @Override
                 public void run() {
                     mSwipeRefresh.setRefreshing(true);
-                    update(getCallback());
+                    update();
                 }
             });
         }
     }
 
-    protected Callback<PostList> getCallback() {
-        return mCallback;
+    protected void update() {
+        PostListRequest request = createRequest();
+        spiceManager.getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mUpdateRequestListener);
+        spiceManager.execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
     }
 
-    protected Callback<PostList> getLoadMoreCallback() {
-        return mLoadMoreCallback;
+    protected void loadMore(long before) {
+        PostListRequest request = createRequest(before);
+        spiceManager.execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
     }
 
-    protected abstract void update(Callback<PostList> callback);
-
-    protected abstract void loadMore(long before, Callback<PostList> callback);
+    protected abstract PostListRequest createRequest();
+    protected abstract PostListRequest createRequest(long before);
 }
