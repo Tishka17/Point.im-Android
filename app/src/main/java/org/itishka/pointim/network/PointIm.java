@@ -23,16 +23,16 @@ import retrofit.http.Query;
  */
 public interface PointIm {
     @GET("/api/all")
-    void getAll(Callback<PostList> callback);
+    PostList getAll();
 
     @GET("/api/all")
-    void getAll(@Query("before") long before, Callback<PostList> callback);
+    PostList getAll(@Query("before") long before);
 
     @GET("/api/bookmarks")
-    void getBookmarks(Callback<PostList> callback);
+    PostList getBookmarks();
 
     @GET("/api/bookmarks")
-    void getBookmarks(@Query("before") long before, Callback<PostList> callback);
+    PostList getBookmarks(@Query("before") long before);
 
     @GET("/api/recent")
     PostList getRecent();
@@ -42,16 +42,16 @@ public interface PointIm {
 
 
     @GET("/api/comments")
-    void getCommented(Callback<PostList> callback);
+    PostList getCommented();
 
     @GET("/api/comments")
-    void getCommented(@Query("before") long before, Callback<PostList> callback);
+    PostList getCommented(@Query("before") long before);
 
     @GET("/api/messages/incoming")
-    void getIncoming(Callback<PostList> callback);
+    PostList getIncoming();
 
     @GET("/api/messages/outgoing")
-    void getOutgoing(Callback<PostList> callback);
+    PostList getOutgoing();
 
     @GET("/api/blog/{login}")
     PostList getBlog(@Path("login") String login);

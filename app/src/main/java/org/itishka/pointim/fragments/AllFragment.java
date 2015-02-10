@@ -2,6 +2,7 @@ package org.itishka.pointim.fragments;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.network.requests.PostListRequest;
 
 import retrofit.Callback;
 
@@ -10,12 +11,34 @@ import retrofit.Callback;
  */
 public class AllFragment extends PostListFragment {
     @Override
-    protected void update(Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointIm.getAll(callback);
+    protected PostListRequest createRequest() {
+        return new AllRequest();
     }
 
     @Override
-    protected void loadMore(long before, Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointIm.getAll(before, callback);
+    protected PostListRequest createRequest(long before) {
+        return new AllRequest(before);
+    }
+
+
+    public static class AllRequest extends PostListRequest {
+        public AllRequest(long before) {
+            super(before);
+        }
+
+        public AllRequest() {
+            super();
+        }
+
+        @Override
+        public PostList load() throws Exception {
+            return getService().getAll();
+        }
+
+        @Override
+        public PostList loadBefore(long before) throws Exception {
+            return getService().getAll(before);
+        }
+
     }
 }

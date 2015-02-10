@@ -2,6 +2,7 @@ package org.itishka.pointim.fragments;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.network.requests.PostListRequest;
 
 import retrofit.Callback;
 
@@ -9,13 +10,36 @@ import retrofit.Callback;
  * Created by Tishka17 on 21.10.2014.
  */
 public class BookmarksFragment extends PostListFragment {
+
     @Override
-    protected void update(Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointIm.getBookmarks(callback);
+    protected PostListRequest createRequest() {
+        return new BookmarksRequest();
     }
 
     @Override
-    protected void loadMore(long before, Callback<PostList> callback) {
-        ConnectionManager.getInstance().pointIm.getBookmarks(before, callback);
+    protected PostListRequest createRequest(long before) {
+        return new BookmarksRequest(before);
+    }
+
+
+    public static class BookmarksRequest extends PostListRequest {
+        public BookmarksRequest(long before) {
+            super(before);
+        }
+
+        public BookmarksRequest() {
+            super();
+        }
+
+        @Override
+        public PostList load() throws Exception {
+            return getService().getBookmarks();
+        }
+
+        @Override
+        public PostList loadBefore(long before) throws Exception {
+            return getService().getBookmarks(before);
+        }
+
     }
 }
