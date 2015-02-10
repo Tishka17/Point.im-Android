@@ -58,12 +58,12 @@ public class UserViewFragment extends PostListFragment {
 
     @Override
     protected PostListRequest createRequest() {
-        return new BlogRequest();
+        return new BlogRequest(mUser);
     }
 
     @Override
     protected PostListRequest createRequest(long before) {
-        return new BlogRequest(before);
+        return new BlogRequest(mUser, before);
     }
 
     @Override
@@ -130,13 +130,21 @@ public class UserViewFragment extends PostListFragment {
 
     }
 
-    public class BlogRequest extends PostListRequest {
-        public BlogRequest(long before) {
+    public static class BlogRequest extends PostListRequest {
+        private final String mUser;
+        public BlogRequest(String user, long before) {
             super(before);
+            mUser = user;
         }
 
-        public BlogRequest() {
+        public BlogRequest(String user) {
             super();
+            mUser = user;
+        }
+
+        @Override
+        public String getCacheName() {
+            return super.getCacheName()+"-"+mUser;
         }
 
         @Override

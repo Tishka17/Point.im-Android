@@ -10,6 +10,7 @@ import org.itishka.pointim.model.TextWithImages;
 import org.itishka.pointim.utils.AuthSaver;
 import org.itishka.pointim.utils.DateDeserializer;
 import org.itishka.pointim.utils.TextParser;
+import org.itishka.pointim.utils.TextSerializer;
 
 import java.io.File;
 import java.util.Date;
@@ -33,6 +34,7 @@ public class PointService extends RetrofitGsonSpiceService {
                 .setDateFormat(DATE_FORMAT)
                 .registerTypeAdapter(Date.class, new DateDeserializer())
                 .registerTypeAdapter(TextWithImages.class, new TextParser())
+                .registerTypeAdapter(TextWithImages.class, new TextSerializer())
                 .create();
         return new GsonConverter(gson);
     }

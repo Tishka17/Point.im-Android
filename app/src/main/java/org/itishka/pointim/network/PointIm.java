@@ -78,10 +78,10 @@ public interface PointIm {
     PostList getPostsByTag(@Query("before") long before, @Query("tag") String tag);
 
     @GET("/api/tags/{login}")
-    void getPostsByUserTag(@Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);
+    PostList getPostsByUserTag(@Path("login") String login, @Query("tag") String tag);
 
     @GET("/api/tags/{login}")
-    void getPostsByUserTag(@Query("before") long before, @Path("login") String login, @Query("tag") String tag, Callback<PostList> callback);
+    PostList getPostsByUserTag(@Query("before") long before, @Path("login") String login, @Query("tag") String tag);
 
     @GET("/api/post/{id}")
     void getPost(@Path("id") String id, Callback<ExtendedPost> callback);
