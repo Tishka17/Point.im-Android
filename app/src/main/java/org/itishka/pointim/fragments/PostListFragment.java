@@ -240,13 +240,13 @@ public abstract class PostListFragment extends Fragment {
 
     protected void update() {
         PostListRequest request = createRequest();
-        spiceManager.getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mUpdateRequestListener);
+        spiceManager.getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
         spiceManager.execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
     }
 
     protected void loadMore(long before) {
         PostListRequest request = createRequest(before);
-        spiceManager.execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
+        spiceManager.execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mLoadMoreRequestListener);
     }
 
     protected abstract PostListRequest createRequest();
