@@ -43,6 +43,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     };
     private ExtendedPost mPost = null;
     private ImageSearchTask mTask;
+    private OnCommentClickListener mOnCommentClickListener;
 
     public SinglePostAdapter(Context context) {
         super();
@@ -77,7 +78,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         if (i == 0) {
-            View v = LayoutInflater.from(viewGroup.getContext())
+            final View v = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.single_post_header, viewGroup, false);
             final PostViewHolder holder = new PostViewHolder(v);
             holder.webLink.setOnClickListener(new View.OnClickListener() {
@@ -106,9 +107,17 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     getContext().startActivity(browserIntent);
                 }
             });
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mOnCommentClickListener != null) {
+                        mOnCommentClickListener.onPostClicked(v);
+                    }
+                }
+            });
             return holder;
         } else {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_comment, viewGroup, false);
+            final View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_comment, viewGroup, false);
             CommentViewHolder holder = new CommentViewHolder(v);
             holder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -118,6 +127,14 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         Intent intent = new Intent(view.getContext(), UserViewActivity.class);
                         intent.putExtra("user", user);
                         ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                    }
+                }
+            });
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mOnCommentClickListener != null) {
+                        mOnCommentClickListener.onCommentClicked(v, view.getTag(R.id.comment_id).toString());
                     }
                 }
             });
@@ -170,6 +187,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else {
             Comment comment = mPost.comments.get(i - 1);
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
+            commentHolder.itemView.setTag(R.id.comment_id, comment.id);
             Utils.showAvatar(getContext(), comment.author.login, comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
                 commentHolder.divider.setVisibility(View.INVISIBLE);
@@ -282,5 +300,13 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             notifyItemChanged(values[0] + 1);
             super.onProgressUpdate(values);
         }
+    }
+
+    public static  interface OnCommentClickListener {
+        public void onCommentClicked(View view, String commentId);
+        public void onPostClicked(View view);
+    }
+    public void setOnCommentClickListener(OnCommentClickListener onCommentClickListener) {
+        mOnCommentClickListener = onCommentClickListener;
     }
 }

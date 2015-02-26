@@ -61,7 +61,4 @@ dependencies {
     compile 'com.jpardogo.googleprogressbar:library:1.1.0'
     compile 'com.pnikosis:materialish-progress:1.4'
 
-    compile 'org.lucasr.twowayview:core:1.0.0-SNAPSHOT@aar'
-    compile 'org.lucasr.twowayview:layouts:1.0.0-SNAPSHOT@aar'
-
 }

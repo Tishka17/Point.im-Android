@@ -37,7 +37,6 @@ import org.itishka.pointim.model.ExtendedPost;
 import org.itishka.pointim.model.PointResult;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
-import org.lucasr.twowayview.ItemClickSupport;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -266,21 +265,20 @@ public class SinglePostFragment extends Fragment {
             }
         });
 
-        ItemClickSupport itemClick = ItemClickSupport.addTo(mRecyclerView);
-
-        itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+        mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnCommentClickListener() {
             @Override
-            public void onItemClick(RecyclerView recyclerView, View view, int i, long l) {
-                Object item = mAdapter.getItem(i);
-                if (item instanceof Comment) {
-                    mCommentId.setText(((Comment) item).id);
-                    mCommentId.setVisibility(View.VISIBLE);
-                } else {
-                    mCommentId.setVisibility(View.GONE);
-                    mCommentId.setText("");
-                }
+            public void onCommentClicked(View view, String commentId) {
+                mCommentId.setText(commentId);
+                mCommentId.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPostClicked(View view) {
+                mCommentId.setVisibility(View.GONE);
+                mCommentId.setText("");
             }
         });
+
         mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
         mAttachButton = (ImageButton) rootView.findViewById(R.id.attach);
         mAttachButton.setOnClickListener(new View.OnClickListener() {

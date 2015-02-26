@@ -281,7 +281,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public boolean onLoadMoreRequested();//return false if cannot load more
     }
 
-    public interface OnPostClickListener {
+    public static interface OnPostClickListener {
         public void onPostClicked(View view, String post);
 
         public void onTagClicked(View view, String tag);
