@@ -121,6 +121,9 @@ public abstract class PostListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        PostListRequest request = createRequest();
+        spiceManager.getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
     }
 
     @Override
@@ -240,7 +243,6 @@ public abstract class PostListFragment extends Fragment {
 
     protected void update() {
         PostListRequest request = createRequest();
-        spiceManager.getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
         spiceManager.execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
     }
 
