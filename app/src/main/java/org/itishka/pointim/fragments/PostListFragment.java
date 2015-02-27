@@ -39,8 +39,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public abstract class PostListFragment extends Fragment {
-    protected SpiceManager spiceManager = new SpiceManager(PointService.class);
+public abstract class PostListFragment extends SpicedFragment {
 
     PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
         @Override
@@ -123,21 +122,7 @@ public abstract class PostListFragment extends Fragment {
         setHasOptionsMenu(true);
 
         PostListRequest request = createRequest();
-        spiceManager.getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        spiceManager.start(getActivity());
-    }
-
-    @Override
-    public void onStop() {
-        if (spiceManager.isStarted()) {
-            spiceManager.shouldStop();
-        }
-        super.onStop();
+        getSpiceManager().getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
     }
 
     @Override
@@ -243,12 +228,12 @@ public abstract class PostListFragment extends Fragment {
 
     protected void update() {
         PostListRequest request = createRequest();
-        spiceManager.execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
+        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
     }
 
     protected void loadMore(long before) {
         PostListRequest request = createRequest(before);
-        spiceManager.execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mLoadMoreRequestListener);
+        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mLoadMoreRequestListener);
     }
 
     protected abstract PostListRequest createRequest();
