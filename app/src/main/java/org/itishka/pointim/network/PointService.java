@@ -12,7 +12,6 @@ import org.itishka.pointim.utils.DateDeserializer;
 import org.itishka.pointim.utils.TextParser;
 import org.itishka.pointim.utils.TextSerializer;
 
-import java.io.File;
 import java.util.Date;
 
 import retrofit.RestAdapter;

@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -30,7 +29,6 @@ import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.Post;
 import org.itishka.pointim.model.PostList;
-import org.itishka.pointim.network.PointService;
 import org.itishka.pointim.network.requests.PostListRequest;
 
 import java.util.List;

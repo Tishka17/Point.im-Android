@@ -3,7 +3,6 @@ package org.itishka.pointim.network.requests;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
 import org.itishka.pointim.model.ExtendedPost;
-import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.network.PointIm;
 
 /**
