@@ -84,7 +84,7 @@ public interface PointIm {
     PostList getPostsByUserTag(@Query("before") long before, @Path("login") String login, @Query("tag") String tag);
 
     @GET("/api/post/{id}")
-    void getPost(@Path("id") String id, Callback<ExtendedPost> callback);
+    ExtendedPost getPost(@Path("id") String id);
 
     @FormUrlEncoded
     @POST("/api/post/{id}/b")

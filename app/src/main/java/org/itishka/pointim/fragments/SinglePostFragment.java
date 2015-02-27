@@ -27,6 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
@@ -35,6 +38,9 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.Comment;
 import org.itishka.pointim.model.ExtendedPost;
 import org.itishka.pointim.model.PointResult;
+import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.network.requests.PostListRequest;
+import org.itishka.pointim.network.requests.SinglePostRequest;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 
@@ -42,7 +48,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SinglePostFragment extends Fragment {
+public class SinglePostFragment extends SpicedFragment {
     private static final String ARG_POST = "post";
     private static final int RESULT_LOAD_IMAGE = 17;
 
@@ -56,28 +62,45 @@ public class SinglePostFragment extends Fragment {
     private ImageButton mSendButton;
     private View mBottomBar;
     private ExtendedPost mPointPost;
-    private Callback<ExtendedPost> mCallback = new Callback<ExtendedPost>() {
+
+    private RequestListener<ExtendedPost> mUpdateRequestListener = new RequestListener<ExtendedPost>() {
         @Override
-        public void success(ExtendedPost post, Response response) {
+        public void onRequestFailure(SpiceException spiceException) {
             mSwipeRefresh.setRefreshing(false);
-            if (post.isSuccess()) {
-                mAdapter.setData(post);
-                mPointPost = post;
+            if (!isDetached())
+                Toast.makeText(getActivity(), spiceException.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRequestSuccess(ExtendedPost extendedPost) {
+            mSwipeRefresh.setRefreshing(false);
+            if (extendedPost != null && extendedPost.isSuccess()) {
+                mAdapter.setData(extendedPost);
+                mPointPost = extendedPost;
                 if (!isDetached())
                     getActivity().supportInvalidateOptionsMenu();
             } else {
                 if (!isDetached())
-                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), (extendedPost == null) ? "null" : extendedPost.error, Toast.LENGTH_SHORT).show();
             }
+        }
+    };
+    private RequestListener<ExtendedPost> mCacheRequestListener = new RequestListener<ExtendedPost>() {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
         }
 
         @Override
-        public void failure(RetrofitError error) {
-            mSwipeRefresh.setRefreshing(false);
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+        public void onRequestSuccess(ExtendedPost extendedPost) {
+            if (extendedPost != null && extendedPost.isSuccess()) {
+                mAdapter.setData(extendedPost);
+                mPointPost = extendedPost;
+                if (!isDetached())
+                    getActivity().supportInvalidateOptionsMenu();
+            }
         }
     };
+
     private Callback<PointResult> mRecommendCallback = new Callback<PointResult>() {
         @Override
         public void success(PointResult post, Response response) {
@@ -85,7 +108,7 @@ public class SinglePostFragment extends Fragment {
             if (post.isSuccess()) {
                 if (!isDetached()) {
                     Toast.makeText(getActivity(), "Reommended!", Toast.LENGTH_SHORT).show();
-                    update(mCallback);
+                    update();
                 }
             } else {
                 if (!isDetached())
@@ -114,7 +137,7 @@ public class SinglePostFragment extends Fragment {
                 mText.setText("");
                 mImagesPanel.reset();
                 if (!isDetached()) {
-                    update(getCallback());
+                    update();
                     Toast.makeText(getActivity(), "Comment added!", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -181,6 +204,8 @@ public class SinglePostFragment extends Fragment {
         }
         setHasOptionsMenu(true);
 
+        SinglePostRequest request = createRequest();
+        getSpiceManager().getFromCache(ExtendedPost.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
     }
 
     @Override
@@ -192,7 +217,7 @@ public class SinglePostFragment extends Fragment {
                 @Override
                 public void run() {
                     mSwipeRefresh.setRefreshing(true);
-                    update(getCallback());
+                    update();
                 }
             });
         }
@@ -214,7 +239,7 @@ public class SinglePostFragment extends Fragment {
             public void onRefresh() {
                 ConnectionManager manager = ConnectionManager.getInstance();
                 if (manager.isAuthorized()) {
-                    update(getCallback());
+                    update();
                 }
             }
         });
@@ -291,12 +316,13 @@ public class SinglePostFragment extends Fragment {
         return rootView;
     }
 
-    protected Callback<ExtendedPost> getCallback() {
-        return mCallback;
+    protected SinglePostRequest createRequest() {
+        return new SinglePostRequest(mPost);
     }
 
-    protected void update(Callback<ExtendedPost> callback) {
-        ConnectionManager.getInstance().pointIm.getPost(mPost, getCallback());
+    protected void update() {
+        SinglePostRequest request = createRequest();
+        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
     }
 
     @Override
@@ -331,7 +357,7 @@ public class SinglePostFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             mSwipeRefresh.setRefreshing(true);
-            update(mCallback);
+            update();
             return true;
         } else if (id == R.id.action_recommend) {
             final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
