@@ -9,11 +9,11 @@
         app:showAsAction="ifRoom" />
 
     <group android:id="@+id/group_not_recommended">
-    <item
-        android:id="@+id/action_recommend"
-        android:icon="@drawable/ic_share_white_24dp"
-        android:title="@string/action_recommend"
-        app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_recommend"
+            android:icon="@drawable/ic_share_white_24dp"
+            android:title="@string/action_recommend"
+            app:showAsAction="ifRoom" />
     </group>
     <group android:id="@+id/group_my">
         <item

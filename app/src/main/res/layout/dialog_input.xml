@@ -8,7 +8,8 @@
         android:hint="Type text here"
         android:id="@+id/recommend_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
+
         <requestFocus />
     </EditText>
 </LinearLayout>
