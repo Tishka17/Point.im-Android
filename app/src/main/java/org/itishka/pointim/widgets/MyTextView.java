@@ -1,6 +1,7 @@
 package org.itishka.pointim.widgets;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
@@ -26,7 +27,7 @@ public class MyTextView extends TextView {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         TextView widget = this;
         Object text = widget.getText();
         if (text instanceof Spanned) {

@@ -33,7 +33,7 @@ public class ImageList extends FrameLayout {
             R.id.imageView8,
             R.id.imageView9
     };
-    Transformation transformation = new Transformation() {
+    private Transformation transformation = new Transformation() {
 
         @Override
         public Bitmap transform(Bitmap source) {

@@ -39,7 +39,7 @@ import java.util.List;
  */
 public abstract class PostListFragment extends SpicedFragment {
 
-    PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
+    private PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
         @Override
         public void onPostClicked(View view, String post) {
             Intent intent = new Intent(getActivity(), SinglePostActivity.class);

@@ -10,7 +10,7 @@ import org.itishka.pointim.network.PointService;
  * Created by Tishka17 on 27.02.2015.
  */
 public class SpicedFragment extends Fragment {
-    protected SpiceManager mSpiceManager = new SpiceManager(PointService.class);
+    private SpiceManager mSpiceManager = new SpiceManager(PointService.class);
 
     protected SpiceManager getSpiceManager() {
         return mSpiceManager;

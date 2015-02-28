@@ -35,16 +35,16 @@ import java.util.List;
  */
 public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final int TYPE_FOOTER = 1;
-    public static final int TYPE_ITEM = 0;
-    public static final int TYPE_HEADER = -1;
+    private static final int TYPE_FOOTER = 1;
+    private static final int TYPE_ITEM = 0;
+    private static final int TYPE_HEADER = -1;
 
     private final WeakReference<Context> mContext;
     private PostList mPostList = null;
     private ImageSearchTask mTask;
     private OnLoadMoreRequestListener mOnLoadMoreRequestListener = null;
     private OnPostClickListener mOnPostClickListener = null;
-    View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
+    private View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if (mOnPostClickListener != null)
@@ -52,7 +52,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     };
 
-    boolean mHasHeader = false;
+    private boolean mHasHeader = false;
 
     public PostListAdapter(Context context) {
         super();

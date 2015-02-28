@@ -38,7 +38,7 @@ public class UserViewFragment extends PostListFragment {
             if (user != null && user.isSuccess()) {
                 ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
             } else if (!isDetached()) {
-                Toast.makeText(getActivity(), "Error: " + user.error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error: " + ((user==null)?"null":user.error), Toast.LENGTH_SHORT).show();
             }
         }
 

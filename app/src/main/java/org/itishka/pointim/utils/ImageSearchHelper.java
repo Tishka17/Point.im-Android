@@ -32,14 +32,14 @@ public class ImageSearchHelper {
         return result;
     }
 
-    public static final void loadCache(Context context) {
+    public static void loadCache(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
         for (Map.Entry<String, ?> s : pref.getAll().entrySet()) {
             sLinksChecked.put(s.getKey(), (String) s.getValue());
         }
     }
 
-    public static final void saveCache(Context context) {
+    public static void saveCache(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         for (Map.Entry<String, ?> s : sLinksChecked.snapshot().entrySet()) {
@@ -80,8 +80,7 @@ public class ImageSearchHelper {
             URLConnection connection = new URL(link).openConnection();
             connection.setDoInput(false);
             connection.setDoInput(false);
-            String contentType = connection.getHeaderField("Content-Type");
-            return contentType;
+            return connection.getHeaderField("Content-Type");
         } catch (IOException e) {
             e.printStackTrace();
             return null;

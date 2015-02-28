@@ -48,9 +48,9 @@ public class NewPostFragment extends Fragment {
     private static final String ARG_IMAGES = "images";
     private static final String ARG_ID = "id";
     private static final String ARG_TAGS = "tags";
-    EditText mPostText;
+    private EditText mPostText;
     private String mPostId;
-    MultiAutoCompleteTextView mPostTags;
+    private MultiAutoCompleteTextView mPostTags;
     private AlertDialog mProgressDialog;
     private ArrayAdapter<Tag> mTagsListAdapter;
     private List<Tag> mTags = null;
@@ -118,7 +118,7 @@ public class NewPostFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_post, container, false);
         mPostText = (EditText) rootView.findViewById(R.id.postText);
-        mTagsListAdapter = new ArrayAdapter<Tag>(getActivity(), android.R.layout.simple_dropdown_item_1line);
+        mTagsListAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line);
         mPostTags = (MultiAutoCompleteTextView) rootView.findViewById(R.id.postTags);
         mPostTags.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         mPostTags.setAdapter(mTagsListAdapter);
@@ -157,8 +157,6 @@ public class NewPostFragment extends Fragment {
         mTagsListAdapter.addAll(mTags);
         mTagsListAdapter.notifyDataSetChanged();
     }
-
-    ;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

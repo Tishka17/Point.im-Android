@@ -403,7 +403,7 @@ public class SinglePostFragment extends SpicedFragment {
             Bundle bundle = new Bundle();
             bundle.putString("id", mPost);
             bundle.putString("text", mPointPost.post.text.text.toString());
-            bundle.putStringArray("tags", mPointPost.post.tags.toArray(new String[]{}));
+            bundle.putStringArray("tags", mPointPost.post.tags.toArray(new String[mPointPost.post.tags.size()]));
             intent.putExtras(bundle);
             getActivity().startActivity(intent);
         }

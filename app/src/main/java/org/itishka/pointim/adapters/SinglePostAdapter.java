@@ -33,7 +33,7 @@ import java.lang.ref.WeakReference;
  */
 public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final WeakReference<Context> mContext;
-    View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
+    private View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(getContext(), TagViewActivity.class);

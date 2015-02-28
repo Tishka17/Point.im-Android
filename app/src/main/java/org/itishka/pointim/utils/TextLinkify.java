@@ -15,8 +15,8 @@ import java.util.regex.Pattern;
  * Created by Tishka17 on 17.01.2015.
  */
 public class TextLinkify {
-    static final Pattern nickPattern = Pattern.compile("(?<=^|[:(>\\s])@([\\w-]+)");
-    static final Pattern postNumberPattern = Pattern.compile("(?<=^|[:(>\\s])#(\\w+)(?>/(\\d+))?");
+    private static final Pattern nickPattern = Pattern.compile("(?<=^|[:(>\\s])@([\\w-]+)");
+    private static final Pattern postNumberPattern = Pattern.compile("(?<=^|[:(>\\s])#(\\w+)(?>/(\\d+))?");
 
     public static Spannable addLinks(String text) {
         Spannable spannable = new SpannableString(text);

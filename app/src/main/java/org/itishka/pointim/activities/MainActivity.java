@@ -28,7 +28,7 @@ import org.itishka.pointim.utils.ImageSearchHelper;
 public class MainActivity extends ActionBarActivity {
 
     private static final int REQUEST_LOGIN = 0;
-    FloatingActionButton mNewPost;
+    private FloatingActionButton mNewPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
