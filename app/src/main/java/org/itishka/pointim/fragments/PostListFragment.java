@@ -118,9 +118,6 @@ public abstract class PostListFragment extends SpicedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        PostListRequest request = createRequest();
-        getSpiceManager().getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
     }
 
     @Override
@@ -214,6 +211,8 @@ public abstract class PostListFragment extends SpicedFragment {
         super.onViewCreated(view, savedInstanceState);
         ConnectionManager manager = ConnectionManager.getInstance();
         if (manager.isAuthorized()) {
+            PostListRequest request = createRequest();
+            getSpiceManager().getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
             mSwipeRefresh.post(new Runnable() {
                 @Override
                 public void run() {

@@ -199,9 +199,6 @@ public class SinglePostFragment extends SpicedFragment {
             mPost = getArguments().getString(ARG_POST);
         }
         setHasOptionsMenu(true);
-
-        SinglePostRequest request = createRequest();
-        getSpiceManager().getFromCache(ExtendedPost.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
     }
 
     @Override
@@ -209,6 +206,8 @@ public class SinglePostFragment extends SpicedFragment {
         super.onViewCreated(view, savedInstanceState);
         ConnectionManager manager = ConnectionManager.getInstance();
         if (manager.isAuthorized()) {
+            SinglePostRequest request = createRequest();
+            getSpiceManager().getFromCache(ExtendedPost.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
             mSwipeRefresh.post(new Runnable() {
                 @Override
                 public void run() {
