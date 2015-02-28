@@ -34,6 +34,6 @@ public abstract class PostListRequest extends RetrofitSpiceRequest<PostList, Poi
     public abstract PostList loadBefore(long before) throws Exception;
 
     public String getCacheName() {
-        return getClass().getCanonicalName()+"-"+mBefore;
+        return getClass().getCanonicalName() + "-" + mBefore;
     }
 }

@@ -90,7 +90,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemViewType(int position) {
         if (position == mPostList.posts.size() + (mHasHeader ? 1 : 0))
-        return TYPE_FOOTER;
+            return TYPE_FOOTER;
         if (position == 0 && mHasHeader)
             return TYPE_HEADER;
         return TYPE_ITEM;
@@ -360,7 +360,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         protected void onPreExecute() {
             prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
             loadImages = prefs.getBoolean("loadImages", true);
-            if(!loadImages) cancel(true);
+            if (!loadImages) cancel(true);
             super.onPreExecute();
 
         }

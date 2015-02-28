@@ -11,6 +11,7 @@ import org.itishka.pointim.network.PointService;
  */
 public class SpicedFragment extends Fragment {
     protected SpiceManager mSpiceManager = new SpiceManager(PointService.class);
+
     protected SpiceManager getSpiceManager() {
         return mSpiceManager;
     }

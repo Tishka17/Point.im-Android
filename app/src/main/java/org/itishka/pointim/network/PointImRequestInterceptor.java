@@ -11,7 +11,8 @@ public class PointImRequestInterceptor implements RequestInterceptor {
     public static final String USER_AGENT = "Tishka17 Point.im Client";
     private LoginResult mLoginResult;
 
-    PointImRequestInterceptor() {}
+    PointImRequestInterceptor() {
+    }
 
     public void setAuthorization(LoginResult loginResult) {
         mLoginResult = loginResult;

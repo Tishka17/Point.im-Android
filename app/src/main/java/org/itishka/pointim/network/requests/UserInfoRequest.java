@@ -2,7 +2,6 @@ package org.itishka.pointim.network.requests;
 
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
-import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.model.User;
 import org.itishka.pointim.network.PointIm;
 
@@ -23,6 +22,6 @@ public class UserInfoRequest extends RetrofitSpiceRequest<User, PointIm> {
     }
 
     public String getCacheName() {
-        return getClass().getCanonicalName()+"-"+mUserName;
+        return getClass().getCanonicalName() + "-" + mUserName;
     }
 }

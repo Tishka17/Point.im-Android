@@ -55,6 +55,7 @@ public class SettingsActivity extends ActionBarActivity {
         private ImageButton logout;
         private TextView name;
         boolean loadPictures;
+
         public PlaceholderFragment() {
         }
 

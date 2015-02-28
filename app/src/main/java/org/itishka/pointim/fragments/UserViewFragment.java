@@ -2,12 +2,10 @@ package org.itishka.pointim.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -37,7 +35,7 @@ public class UserViewFragment extends PostListFragment {
     private RequestListener<User> mUserInfoRequestListener = new RequestListener<User>() {
         @Override
         public void onRequestSuccess(User user) {
-            if (user!=null && user.isSuccess()) {
+            if (user != null && user.isSuccess()) {
                 ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
             } else if (!isDetached()) {
                 Toast.makeText(getActivity(), "Error: " + user.error, Toast.LENGTH_SHORT).show();

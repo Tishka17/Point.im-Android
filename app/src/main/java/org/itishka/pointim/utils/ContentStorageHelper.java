@@ -22,7 +22,7 @@ public class ContentStorageHelper {
     private static final String PREF_UPDATED = "updated";
 
     public static void saveTags(Context context, List<Tag> tags) {
-        if (context==null)
+        if (context == null)
             return;
         SharedPreferences pref = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
         Gson gson = new Gson();

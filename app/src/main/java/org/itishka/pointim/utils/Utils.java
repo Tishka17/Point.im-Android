@@ -44,6 +44,7 @@ public class Utils {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd MMM yyyy", Locale.getDefault());
         return sdf.format(date);
     }
+
     public static String formatDateOnly(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         return sdf.format(date);

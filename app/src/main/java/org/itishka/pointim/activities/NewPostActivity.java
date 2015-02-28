@@ -48,7 +48,7 @@ public class NewPostActivity extends ActionBarActivity {
                 if (!TextUtils.isEmpty(id))
                     fragment = NewPostFragment.newInstanceForEdit(id, text, tags);
                 if (!TextUtils.isEmpty(id)) {
-                    getSupportActionBar().setTitle("#"+id);
+                    getSupportActionBar().setTitle("#" + id);
                 }
             }
             if (fragment == null) {

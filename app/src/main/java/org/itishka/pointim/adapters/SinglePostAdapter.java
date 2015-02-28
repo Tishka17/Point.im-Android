@@ -268,6 +268,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private class ImageSearchTask extends AsyncTask<ExtendedPost, Integer, Void> {
         SharedPreferences prefs;
         boolean loadImages;
+
         @Override
         protected Void doInBackground(ExtendedPost... posts) {
             ExtendedPost post = posts[0];
@@ -291,7 +292,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         protected void onPreExecute() {
             prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
             loadImages = prefs.getBoolean("loadImages", true);
-            if(!loadImages) cancel(true);
+            if (!loadImages) cancel(true);
             super.onPreExecute();
         }
 
@@ -302,10 +303,12 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public static  interface OnCommentClickListener {
+    public static interface OnCommentClickListener {
         public void onCommentClicked(View view, String commentId);
+
         public void onPostClicked(View view);
     }
+
     public void setOnCommentClickListener(OnCommentClickListener onCommentClickListener) {
         mOnCommentClickListener = onCommentClickListener;
     }

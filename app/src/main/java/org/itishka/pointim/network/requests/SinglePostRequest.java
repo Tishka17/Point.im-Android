@@ -22,6 +22,6 @@ public class SinglePostRequest extends RetrofitSpiceRequest<ExtendedPost, PointI
     }
 
     public String getCacheName() {
-        return getClass().getCanonicalName()+"-"+mPostId;
+        return getClass().getCanonicalName() + "-" + mPostId;
     }
 }
