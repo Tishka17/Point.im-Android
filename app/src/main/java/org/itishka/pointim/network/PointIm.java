@@ -40,7 +40,6 @@ public interface PointIm {
     @GET("/api/recent")
     PostList getRecent(@Query("before") long before);
 
-
     @GET("/api/comments")
     PostList getCommented();
 
@@ -60,7 +59,7 @@ public interface PointIm {
     PostList getBlog(@Query("before") long before, @Path("login") String login);
 
     @GET("/api/user/{login}")
-    void getUserInfo(@Path("login") String login, Callback<User> callback);
+    User getUserInfo(@Path("login") String login);
 
     @POST("/api/user/{login}/s")
     void subscribeUser(@Path("login") String login, Callback<PointResult> callback);

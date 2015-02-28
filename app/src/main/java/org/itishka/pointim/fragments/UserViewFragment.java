@@ -1,10 +1,18 @@
 package org.itishka.pointim.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.PostListAdapter;
@@ -14,6 +22,7 @@ import org.itishka.pointim.model.PointResult;
 import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.model.User;
 import org.itishka.pointim.network.requests.PostListRequest;
+import org.itishka.pointim.network.requests.UserInfoRequest;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -25,10 +34,10 @@ import retrofit.client.Response;
 public class UserViewFragment extends PostListFragment {
 
     private String mUser;
-    private Callback<User> mUserInfoCallback = new Callback<User>() {
+    private RequestListener<User> mUserInfoRequestListener = new RequestListener<User>() {
         @Override
-        public void success(User user, Response response) {
-            if (user.isSuccess()) {
+        public void onRequestSuccess(User user) {
+            if (user!=null && user.isSuccess()) {
                 ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
             } else if (!isDetached()) {
                 Toast.makeText(getActivity(), "Error: " + user.error, Toast.LENGTH_SHORT).show();
@@ -36,10 +45,23 @@ public class UserViewFragment extends PostListFragment {
         }
 
         @Override
-        public void failure(RetrofitError retrofitError) {
+        public void onRequestFailure(SpiceException retrofitError) {
             if (!isDetached()) {
                 Toast.makeText(getActivity(), retrofitError.toString(), Toast.LENGTH_SHORT).show();
             }
+        }
+    };
+
+    private RequestListener<User> mUserInfoCacheListener = new RequestListener<User>() {
+        @Override
+        public void onRequestSuccess(User user) {
+            if (user != null && user.isSuccess()) {
+                ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
+            }
+        }
+
+        @Override
+        public void onRequestFailure(SpiceException retrofitError) {
         }
     };
 
@@ -66,6 +88,10 @@ public class UserViewFragment extends PostListFragment {
         return new BlogRequest(mUser, before);
     }
 
+    protected UserInfoRequest createUserInfoRequest() {
+        return new UserInfoRequest(mUser);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +99,17 @@ public class UserViewFragment extends PostListFragment {
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        UserInfoRequest request = createUserInfoRequest();
+        getSpiceManager().getFromCache(User.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mUserInfoCacheListener);
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     protected void update() {
         super.update();
-        ConnectionManager.getInstance().pointIm.getUserInfo(mUser, mUserInfoCallback);
+        UserInfoRequest request = createUserInfoRequest();
+        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUserInfoRequestListener);
     }
 
     @Override
