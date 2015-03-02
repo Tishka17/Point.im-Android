@@ -102,6 +102,8 @@ public class MainActivity extends ActionBarActivity {
         } else if (id == R.id.action_bookmarks) {
             startActivity(new Intent(this, BookmarksActivity.class));
 
+        } else if (id == R.id.action_mailbox) {
+            startActivity(new Intent(this, MailboxActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

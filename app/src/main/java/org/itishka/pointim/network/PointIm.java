@@ -49,8 +49,14 @@ public interface PointIm {
     @GET("/api/messages/incoming")
     PostList getIncoming();
 
+    @GET("/api/messages/incoming")
+    PostList getIncoming(@Query("before") long before);
+
     @GET("/api/messages/outgoing")
     PostList getOutgoing();
+
+    @GET("/api/messages/outgoing")
+    PostList getOutgoing(@Query("before") long before);
 
     @GET("/api/blog/{login}")
     PostList getBlog(@Path("login") String login);

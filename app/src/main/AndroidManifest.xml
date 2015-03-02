@@ -91,6 +91,15 @@
                 android:value=".activities.MainActivity" />
         </activity>
         <activity
+            android:name=".activities.MailboxActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_mailbox"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
             android:name=".activities.BookmarksActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_bookmarks"

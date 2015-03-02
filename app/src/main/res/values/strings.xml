@@ -34,4 +34,6 @@
     <string name="female">female</string>
     <string name="male">male</string>
     <string name="action_edit">Edit</string>
+    <string name="action_mailbox">Mailbox</string>
+    <string name="title_activity_mailbox">Mailbox</string>
 </resources>
