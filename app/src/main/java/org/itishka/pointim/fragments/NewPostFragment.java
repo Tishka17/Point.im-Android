@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -49,6 +50,7 @@ public class NewPostFragment extends Fragment {
     private static final String ARG_ID = "id";
     private static final String ARG_TAGS = "tags";
     private EditText mPostText;
+    private Switch mIsPrivate;
     private String mPostId;
     private MultiAutoCompleteTextView mPostTags;
     private AlertDialog mProgressDialog;
@@ -118,6 +120,7 @@ public class NewPostFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_post, container, false);
         mPostText = (EditText) rootView.findViewById(R.id.postText);
+        mIsPrivate = (Switch) rootView.findViewById(R.id.isPrivate);
         mTagsListAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line);
         mPostTags = (MultiAutoCompleteTextView) rootView.findViewById(R.id.postTags);
         mPostTags.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
@@ -139,7 +142,11 @@ public class NewPostFragment extends Fragment {
                 }
             }
         }
-
+        if (mPostId==null) {
+            mIsPrivate.setVisibility(View.VISIBLE);
+        } else {
+            mIsPrivate.setVisibility(View.GONE);
+        }
         mProgressDialog = new MaterialDialog.Builder(getActivity())
                 .cancelable(false)
                 .customView(R.layout.dialog_progress, false)
@@ -188,7 +195,7 @@ public class NewPostFragment extends Fragment {
             }
             mProgressDialog.show();
             if (TextUtils.isEmpty(mPostId)) {
-                ConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mNewPostCallback);
+                ConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mIsPrivate.isChecked(), mNewPostCallback);
             } else {
                 ConnectionManager.getInstance().pointIm.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
             }
