@@ -66,28 +66,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="4dp"
-        card_view:cardCornerRadius="3dp"
+        android:checked="true"
         android:gravity="center_vertical"
-        android:checked="true">
+        card_view:cardCornerRadius="3dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Switch
+            android:id="@+id/swLoadPictures"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <Switch
-                android:layout_width="fill_parent"
-                android:layout_height="36dp"
-                android:text="Load pictures"
-                android:id="@+id/swLoadPictures"
-                android:checked="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="10dp" />
-        </LinearLayout>
+            android:layout_margin="@dimen/text_margin"
+            android:checked="true"
+            android:text="@string/setting_load_images" />
     </android.support.v7.widget.CardView>
 
     <View

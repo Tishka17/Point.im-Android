@@ -36,4 +36,5 @@
     <string name="action_edit">Edit</string>
     <string name="action_mailbox">Mailbox</string>
     <string name="title_activity_mailbox">Mailbox</string>
+    <string name="setting_load_images">Load images</string>
 </resources>
