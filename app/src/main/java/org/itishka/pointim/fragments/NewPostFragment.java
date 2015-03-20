@@ -195,7 +195,10 @@ public class NewPostFragment extends Fragment {
             }
             mProgressDialog.show();
             if (TextUtils.isEmpty(mPostId)) {
-                ConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mIsPrivate.isChecked(), mNewPostCallback);
+                if (mIsPrivate.isChecked())
+                    ConnectionManager.getInstance().pointIm.createPrivatePost(sb.toString().trim(), tags, mIsPrivate.isChecked(), mNewPostCallback);
+                else
+                    ConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mNewPostCallback);
             } else {
                 ConnectionManager.getInstance().pointIm.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
             }

@@ -128,7 +128,11 @@ public interface PointIm {
 
     @FormUrlEncoded
     @POST("/api/post/")
-    void createPost(@Field("text") String text, @Field("tag") String[] tags, @Field("private") boolean isPrivate, Callback<PointResult> callback);
+    void createPost(@Field("text") String text, @Field("tag") String[] tags, Callback<PointResult> callback);
+
+    @FormUrlEncoded
+    @POST("/api/post/")
+    void createPrivatePost(@Field("text") String text, @Field("tag") String[] tags, @Field("private") boolean isPrivate, Callback<PointResult> callback);
 
     @FormUrlEncoded
     @PUT("/api/post/{id}")
