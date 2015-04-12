@@ -70,13 +70,27 @@
         android:gravity="center_vertical"
         card_view:cardCornerRadius="3dp">
 
-        <Switch
-            android:id="@+id/swLoadPictures"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:checked="true"
-            android:text="@string/setting_load_images" />
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/swLoadPictures"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:checked="true"
+                android:text="@string/setting_load_images" />
+
+            <Switch
+                android:id="@+id/swMultiColumn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:checked="true"
+                android:text="@string/setting_multi_column" />
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
     <View

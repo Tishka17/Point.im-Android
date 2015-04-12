@@ -1,7 +1,9 @@
 package org.itishka.pointim.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -144,6 +146,10 @@ public abstract class PostListFragment extends SpicedFragment {
     }
 
     private int getSpanCount(Configuration config) {
+        SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        if (!prefs.getBoolean("multiColumns", true))
+            return 1;
+
         if ((config.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
             return config.orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3;
         } else if ((config.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {

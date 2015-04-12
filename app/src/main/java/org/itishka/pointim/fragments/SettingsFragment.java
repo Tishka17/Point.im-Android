@@ -33,7 +33,6 @@ public class SettingsFragment extends Fragment {
     private ImageView avatar;
     private ImageButton logout;
     private TextView name;
-    boolean loadPictures;
 
     public SettingsFragment() {
     }
@@ -43,6 +42,7 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         prefs = getActivity().getApplicationContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+
         name = (TextView) rootView.findViewById(R.id.login);
         name.setText(ConnectionManager.getInstance().loginResult.login);
 
@@ -104,9 +104,19 @@ public class SettingsFragment extends Fragment {
         swLoadPictures.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                loadPictures = isChecked;
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean("loadImages", isChecked);
+                editor.apply();
+            }
+        });
+        //LoadPictures switch
+        Switch swMultiColumns = (Switch) rootView.findViewById(R.id.swMultiColumn);
+        swMultiColumns.setChecked(prefs.getBoolean("multiColumns", true));
+        swMultiColumns.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("multiColumns", isChecked);
                 editor.apply();
             }
         });
