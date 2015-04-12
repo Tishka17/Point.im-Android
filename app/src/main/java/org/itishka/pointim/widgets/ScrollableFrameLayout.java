@@ -47,7 +47,6 @@ public class ScrollableFrameLayout extends FrameLayout {
             y = motionEvent.getY();
             stopToolbarSlide();
             scrolledDistance = getToolbarOffset();
-            Log.d("SrollableFrame", "onDown dist=" + scrolledDistance);
             return true;
         }
 
@@ -67,7 +66,6 @@ public class ScrollableFrameLayout extends FrameLayout {
             boolean result = false;
             float dy = motionEvent2.getY() - y;
             y = motionEvent2.getY();
-            Log.d("SrollableFrame", "onScroll dist=" + scrolledDistance + ", dy=" + dy + ", ev2=" + motionEvent2);
             int top = getToolbarOffset();
             if ((top >= 0 && dy < 0)
                     || (top <= -mToolbar.getHeight() && dy > 0)

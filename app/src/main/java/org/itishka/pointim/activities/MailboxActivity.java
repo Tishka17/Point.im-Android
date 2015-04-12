@@ -18,6 +18,7 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.fragments.IncomingFragment;
 import org.itishka.pointim.fragments.OutgoingFragment;
 import org.itishka.pointim.utils.ImageSearchHelper;
+import org.itishka.pointim.widgets.ScrollableFrameLayout;
 
 
 public class MailboxActivity extends ActionBarActivity {
@@ -38,6 +39,9 @@ public class MailboxActivity extends ActionBarActivity {
             setSupportActionBar(toolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ScrollableFrameLayout scrollableFrameLayout = (ScrollableFrameLayout) findViewById(R.id.scrollableFrame);
+        scrollableFrameLayout.setToolbar(toolbar);
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
