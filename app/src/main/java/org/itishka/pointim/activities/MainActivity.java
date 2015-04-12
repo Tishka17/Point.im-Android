@@ -26,9 +26,10 @@ import org.itishka.pointim.fragments.CommentedFragment;
 import org.itishka.pointim.fragments.RecentFragment;
 import org.itishka.pointim.fragments.SelfFragment;
 import org.itishka.pointim.utils.ImageSearchHelper;
+import org.itishka.pointim.widgets.ScrollableFrameLayout;
 
 
-public class MainActivity extends ToolBarActivity {
+public class MainActivity extends ActionBarActivity {
 
     private static final int REQUEST_LOGIN = 0;
     private FloatingActionButton mNewPost;
@@ -45,6 +46,8 @@ public class MainActivity extends ToolBarActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
+        ScrollableFrameLayout scrollableFrameLayout = (ScrollableFrameLayout) findViewById(R.id.scrollableFrame);
+        scrollableFrameLayout.setToolbar(toolbar);
         mNewPost = (FloatingActionButton) findViewById(R.id.new_post);
         mNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
