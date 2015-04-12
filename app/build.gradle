@@ -11,8 +11,8 @@ android {
         applicationId "org.itishka.pointim"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 12
-        versionName "2.1"
+        versionCode 13
+        versionName "2.2"
     }
     buildTypes {
         release {
