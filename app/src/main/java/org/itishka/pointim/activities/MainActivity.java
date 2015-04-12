@@ -8,8 +8,11 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 
@@ -25,7 +28,7 @@ import org.itishka.pointim.fragments.SelfFragment;
 import org.itishka.pointim.utils.ImageSearchHelper;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ToolBarActivity {
 
     private static final int REQUEST_LOGIN = 0;
     private FloatingActionButton mNewPost;
@@ -52,6 +55,14 @@ public class MainActivity extends ActionBarActivity {
 
         // Initialize the ViewPager and set an adapter
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d("pager Touch", "onTouch "+motionEvent);
+                return false;
+            }
+        });
+
         pager.setOffscreenPageLimit(4);
         pager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
         // Bind the tabs to the ViewPager
