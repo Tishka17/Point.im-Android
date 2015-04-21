@@ -79,7 +79,7 @@ public class ImageSearchHelper {
             Log.d("ImageSearchHelper", "Checking: " + link);
             URLConnection connection = new URL(link).openConnection();
             connection.setDoInput(false);
-            connection.setDoInput(false);
+            connection.setDoOutput(false);
             return connection.getHeaderField("Content-Type");
         } catch (IOException e) {
             e.printStackTrace();
