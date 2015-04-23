@@ -415,7 +415,7 @@ public class SinglePostFragment extends SpicedFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
-            mImagesPanel.addImage(data.getData());
+            mImagesPanel.addImage(data.getData(), data.getType());
         }
     }
 }

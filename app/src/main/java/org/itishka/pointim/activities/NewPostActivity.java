@@ -35,11 +35,11 @@ public class NewPostActivity extends ActionBarActivity {
                 if ("text/plain".equals(type)) {
                     fragment = NewPostFragment.newInstance(intent.getStringExtra(Intent.EXTRA_TEXT));
                 } else if (type.startsWith("image/")) {
-                    fragment = NewPostFragment.newInstance((Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM));
+                    fragment = NewPostFragment.newInstance((Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM), type);
                 }
             } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
                 if (type.startsWith("image/")) {
-                    fragment = NewPostFragment.newInstance(intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM));
+                    fragment = NewPostFragment.newInstance(intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM), type);
                 }
             } else {
                 String id = getIntent().getStringExtra("id");

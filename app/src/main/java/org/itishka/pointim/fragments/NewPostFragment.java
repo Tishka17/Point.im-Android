@@ -49,9 +49,11 @@ public class NewPostFragment extends Fragment {
     private static final String ARG_IMAGES = "images";
     private static final String ARG_ID = "id";
     private static final String ARG_TAGS = "tags";
+    private static final String ARG_MIME = "mime";
     private EditText mPostText;
     private Switch mIsPrivate;
     private String mPostId;
+    private String mMime;
     private MultiAutoCompleteTextView mPostTags;
     private AlertDialog mProgressDialog;
     private ArrayAdapter<Tag> mTagsListAdapter;
@@ -87,18 +89,19 @@ public class NewPostFragment extends Fragment {
         return fragment;
     }
 
-    public static NewPostFragment newInstance(ArrayList<Parcelable> images) {
+    public static NewPostFragment newInstance(ArrayList<Parcelable> images, String mime) {
         NewPostFragment fragment = new NewPostFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_IMAGES, images);
+        args.putString(ARG_MIME, mime);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static NewPostFragment newInstance(Uri image) {
+    public static NewPostFragment newInstance(Uri image, String mime) {
         ArrayList<Parcelable> images = new ArrayList<>(1);
         images.add(image);
-        return newInstance(images);
+        return newInstance(images, mime);
     }
 
     public static NewPostFragment newInstanceForEdit(String id, String text, String[] tags) {
@@ -138,8 +141,9 @@ public class NewPostFragment extends Fragment {
                 }
                 ArrayList<Uri> images = args.getParcelableArrayList(ARG_IMAGES);
                 if (images != null) for (Uri image : images) {
-                    mImagesPanel.addImage(image);
+                    mImagesPanel.addImage(image, mMime);
                 }
+                mMime = args.getString(ARG_MIME);
             }
         }
         if (mPostId==null) {
@@ -175,7 +179,7 @@ public class NewPostFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
-            mImagesPanel.addImage(data.getData());
+            mImagesPanel.addImage(data.getData(), data.getType());
         }
     }
 

@@ -23,10 +23,12 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUp
     private final Uri mUri;
     private File mFile;
     private Context mContext;
+    private String mMime;
 
 
-    public ImgurUploadTask(Context context, Uri uri) {
+    public ImgurUploadTask(Context context, Uri uri, String mime) {
         mUri = uri;
+        mMime = mime;
         try {
             mFile = File.createTempFile("upload_", "", context.getCacheDir());
         } catch (IOException e) {
@@ -40,10 +42,17 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUp
     @Override
     protected ImgurUploadResult doInBackground(String... params) {
         String[] filePathColumn = {MediaStore.Images.Media.MIME_TYPE};
-        Cursor cursor = mContext.getContentResolver().query(mUri, filePathColumn, null, null, null);
-        cursor.moveToFirst();
-        String imageMime = cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
-        cursor.close();
+        String imageMime = mMime;
+        if (imageMime==null) {
+            Cursor cursor = mContext.getContentResolver().query(mUri, filePathColumn, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                imageMime = cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
+            }
+            if (cursor != null) cursor.close();
+        }
+        if (imageMime==null) {
+            imageMime = "image/other";
+        }
 
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), mUri);

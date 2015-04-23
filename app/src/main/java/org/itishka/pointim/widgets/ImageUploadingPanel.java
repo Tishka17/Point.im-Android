@@ -77,9 +77,10 @@ public class ImageUploadingPanel extends FrameLayout {
         cancel();
     }
 
-    public void addImage(Uri uri) {
+    public void addImage(Uri uri, String mime) {
         final Image img = new Image();
         final View newView = inflate(getContext(), R.layout.image_uploading_panel_item, null);
+        img.mime = mime;
         img.imageView = (ImageView) newView.findViewById(R.id.imageView);
         img.viewFinished = (ImageView) newView.findViewById(R.id.viewFinished);
         img.viewFinished.setVisibility(GONE);
@@ -159,7 +160,7 @@ public class ImageUploadingPanel extends FrameLayout {
         WeakReference<Image> img;
 
         ImgUploadTask(Image img, Context context) {
-            super(context, img.originalPath);
+            super(context, img.originalPath, img.mime);
             this.img = new WeakReference<>(img);
 
         }
@@ -199,6 +200,7 @@ public class ImageUploadingPanel extends FrameLayout {
     }
 
     private class Image {
+        String mime;
         Uri originalPath;
         ImageView imageView;
         ImageButton cancel;
