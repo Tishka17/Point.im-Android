@@ -216,17 +216,17 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     protected class PostViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        ViewGroup tags;
-        ImageView avatar;
-        TextView author;
-        TextView post_id;
-        TextView comments;
-        TextView date;
-        ImageView webLink;
-        CheckBox favourite;
-        View mainConent;
-        ImageList imageList;
+        final TextView text;
+        final ViewGroup tags;
+        final ImageView avatar;
+        final TextView author;
+        final TextView post_id;
+        final TextView comments;
+        final TextView date;
+        final ImageView webLink;
+        final CheckBox favourite;
+        final View mainConent;
+        final ImageList imageList;
 
         public PostViewHolder(View itemView) {
             super(itemView);
@@ -245,13 +245,13 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     protected class CommentViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        ImageView avatar;
-        TextView author;
-        TextView date;
-        View divider;
-        TextView comment_id;
-        ImageList imageList;
+        final TextView text;
+        final ImageView avatar;
+        final TextView author;
+        final TextView date;
+        final View divider;
+        final TextView comment_id;
+        final ImageList imageList;
 
         public CommentViewHolder(View itemView) {
             super(itemView);

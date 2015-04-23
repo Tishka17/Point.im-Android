@@ -297,24 +297,24 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        ViewGroup tags;
-        ImageView avatar;
-        ImageView recommender_avatar;
-        TextView recommend_text;
-        View quote_mark;
-        View quote_mark_top;
-        TextView recommend_author;
-        TextView author;
-        TextView post_id;
-        View recommend_info;
-        TextView recommend_id;
-        TextView comments;
-        TextView date;
-        ImageView webLink;
-        CheckBox favourite;
-        ImageList imageList;
-        View mainConent;
+        final TextView text;
+        final ViewGroup tags;
+        final ImageView avatar;
+        final ImageView recommender_avatar;
+        final TextView recommend_text;
+        final View quote_mark;
+        final View quote_mark_top;
+        final TextView recommend_author;
+        final TextView author;
+        final TextView post_id;
+        final View recommend_info;
+        final TextView recommend_id;
+        final TextView comments;
+        final TextView date;
+        final ImageView webLink;
+        final CheckBox favourite;
+        final ImageList imageList;
+        final View mainConent;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -57,7 +57,11 @@ public class Utils {
     public static void showAvatar(Context context, String login, String avatar, ImageView imageView) {
         imageView.setTag(login);
         if (avatar == null) {
-            imageView.setImageResource(R.drawable.ic_launcher);
+            Picasso.with(context)
+                    .load(R.drawable.ic_launcher)
+                    .placeholder(R.drawable.ic_launcher)
+                    .fit()
+                    .into(imageView);
             return;
         }
         try {
