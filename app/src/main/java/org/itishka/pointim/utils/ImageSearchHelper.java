@@ -22,6 +22,15 @@ public class ImageSearchHelper {
     private static final LruCache<String, String> sLinksChecked = new LruCache<>(512);
     private static final String PREFERENCE = "linkTypes";
     private static boolean isLoaded = false;
+    private static boolean isSaved = false;
+
+    public static void initCache(Context context) {
+        synchronized (ImageSearchHelper.class) {
+            if (!isLoaded) {
+                reloadCache(context);
+            }
+        }
+    }
 
     public static List<String> getAllLinks(Spannable text) {
         URLSpan[] links = text.getSpans(0, text.length(), URLSpan.class);
@@ -32,14 +41,17 @@ public class ImageSearchHelper {
         return result;
     }
 
-    public static void loadCache(Context context) {
+    public static void reloadCache(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
         for (Map.Entry<String, ?> s : pref.getAll().entrySet()) {
             sLinksChecked.put(s.getKey(), (String) s.getValue());
         }
+        isSaved = true;
     }
 
     public static void saveCache(Context context) {
+        if (isSaved)
+            return;
         SharedPreferences pref = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         for (Map.Entry<String, ?> s : sLinksChecked.snapshot().entrySet()) {
@@ -47,21 +59,24 @@ public class ImageSearchHelper {
                 editor.putString(s.getKey(), (String) s.getValue());
         }
         editor.commit();
+        isSaved = true;
     }
 
-    public static List<String> checkImageLinks(Context context, List<String> links) {
-        synchronized (ImageSearchHelper.class) {
-            if (!isLoaded) {
-                loadCache(context);
-            }
-        }
+    public static List<String> checkImageLinks(List<String> links) {
+        return checkImageLinks(links, false);
+    }
+
+    public static List<String> checkImageLinks(List<String> links, boolean offline) {
         List<String> images = new ArrayList<>();
         for (String link : links) {
             String mime = sLinksChecked.get(link);
             if (mime == null) {
+                if (offline)
+                    continue;
                 mime = checkImageLink(link);
                 if (mime == null) mime = MIME_ERROR;
                 sLinksChecked.put(link, mime);
+                isSaved = false;
             }
             if (isImage(mime)) {
                 images.add(link);

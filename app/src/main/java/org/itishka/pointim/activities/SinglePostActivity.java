@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.fragments.SinglePostFragment;
+import org.itishka.pointim.utils.ImageSearchHelper;
 
 
 public class SinglePostActivity extends ActionBarActivity {
