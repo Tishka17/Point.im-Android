@@ -130,7 +130,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         });
-        holder.recommender_avatar.setOnClickListener(new View.OnClickListener() {
+        holder.recomender_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String user = (String) view.getTag();
@@ -208,7 +208,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.date.setText(Utils.formatDate(post.post.created));
 
         if (post.rec != null) {
-            holder.mainConent.setBackgroundColor(getContext().getResources().getColor(R.color.quote_background));
+            holder.mainContent.setBackgroundColor(getContext().getResources().getColor(R.color.quote_background));
             holder.recommend_info.setVisibility(View.VISIBLE);
             if (post.rec.text != null) {
                 holder.recommend_text.setVisibility(View.VISIBLE);
@@ -220,9 +220,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.quote_mark_top.setVisibility(View.VISIBLE);
             holder.recommend_author.setText("@" + post.rec.author.login);
             holder.recommend_id.setText("");
-            Utils.showAvatar(getContext(), post.rec.author.login, post.rec.author.avatar, holder.recommender_avatar);
+            Utils.showAvatar(getContext(), post.rec.author.login, post.rec.author.avatar, holder.recomender_avatar);
         } else {
-            holder.mainConent.setBackgroundColor(Color.TRANSPARENT);
+            holder.mainContent.setBackgroundColor(Color.TRANSPARENT);
             holder.recommend_info.setVisibility(View.GONE);
             holder.recommend_text.setVisibility(View.GONE);
             holder.quote_mark.setVisibility(View.INVISIBLE);
@@ -300,7 +300,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final TextView text;
         final ViewGroup tags;
         final ImageView avatar;
-        final ImageView recommender_avatar;
+        final ImageView recomender_avatar;
         final TextView recommend_text;
         final View quote_mark;
         final View quote_mark_top;
@@ -314,14 +314,14 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final ImageView webLink;
         final CheckBox favourite;
         final ImageList imageList;
-        final View mainConent;
+        final View mainContent;
 
         public ViewHolder(View itemView) {
             super(itemView);
             text = (TextView) itemView.findViewById(R.id.text);
             tags = (ViewGroup) itemView.findViewById(R.id.tags);
             avatar = (ImageView) itemView.findViewById(R.id.avatar);
-            recommender_avatar = (ImageView) itemView.findViewById(R.id.recommend_avatar);
+            recomender_avatar = (ImageView) itemView.findViewById(R.id.recommend_avatar);
             recommend_text = (TextView) itemView.findViewById(R.id.recommend_text);
             quote_mark = itemView.findViewById(R.id.quote_mark);
             quote_mark_top = itemView.findViewById(R.id.quote_mark_top);
@@ -334,7 +334,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             date = (TextView) itemView.findViewById(R.id.date);
             webLink = (ImageView) itemView.findViewById(R.id.weblink);
             favourite = (CheckBox) itemView.findViewById(R.id.favourite);
-            mainConent = itemView.findViewById(R.id.main_content);
+            mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
         }
     }

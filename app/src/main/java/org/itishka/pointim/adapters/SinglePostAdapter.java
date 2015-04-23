@@ -225,7 +225,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         final TextView date;
         final ImageView webLink;
         final CheckBox favourite;
-        final View mainConent;
+        final View mainContent;
         final ImageList imageList;
 
         public PostViewHolder(View itemView) {
@@ -239,7 +239,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             date = (TextView) itemView.findViewById(R.id.date);
             webLink = (ImageView) itemView.findViewById(R.id.weblink);
             favourite = (CheckBox) itemView.findViewById(R.id.favourite);
-            mainConent = itemView.findViewById(R.id.main_content);
+            mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
         }
     }
