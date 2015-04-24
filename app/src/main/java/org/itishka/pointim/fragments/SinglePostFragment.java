@@ -60,6 +60,9 @@ public class SinglePostFragment extends SpicedFragment {
     private ImageButton mSendButton;
     private View mBottomBar;
     private ExtendedPost mPointPost;
+    private WeakReference<Dialog> mProgressDialog;
+    private ImageUploadingPanel mImagesPanel;
+    private ImageButton mAttachButton;
 
     private RequestListener<ExtendedPost> mUpdateRequestListener = new RequestListener<ExtendedPost>() {
         @Override
@@ -121,9 +124,7 @@ public class SinglePostFragment extends SpicedFragment {
                 Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
-    private WeakReference<Dialog> mProgressDialog;
-    private ImageUploadingPanel mImagesPanel;
-    private ImageButton mAttachButton;
+
     private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
         @Override
         public void success(PointResult post, Response response) {
@@ -364,8 +365,6 @@ public class SinglePostFragment extends SpicedFragment {
                         !mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login) &&
                         !mPointPost.recommended
         );
-
-
     }
 
     @Override
@@ -434,7 +433,6 @@ public class SinglePostFragment extends SpicedFragment {
             intent.putExtras(bundle);
             getActivity().startActivity(intent);
         }
-
         return super.onOptionsItemSelected(item);
     }
 

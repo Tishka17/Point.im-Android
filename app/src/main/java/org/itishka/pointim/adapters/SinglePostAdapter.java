@@ -16,6 +16,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
@@ -23,7 +25,6 @@ import org.itishka.pointim.activities.UserViewActivity;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.Comment;
 import org.itishka.pointim.model.ExtendedPost;
-import org.itishka.pointim.model.Post;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
