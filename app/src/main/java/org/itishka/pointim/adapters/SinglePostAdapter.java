@@ -130,6 +130,15 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 }
             });
+            holder.action_recommend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mOnCommentClickListener != null) {
+                        mOnCommentClickListener.onRecommendCommentClicked(v, view.getTag(R.id.comment_id).toString());
+                    }
+                }
+            });
+
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -188,6 +197,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Comment comment = mPost.comments.get(i - 1);
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
             commentHolder.itemView.setTag(R.id.comment_id, comment.id);
+            commentHolder.action_recommend.setTag(R.id.comment_id, comment.id);
             Utils.showAvatar(getContext(), comment.author.login, comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
                 commentHolder.divider.setVisibility(View.INVISIBLE);
@@ -252,6 +262,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         final View divider;
         final TextView comment_id;
         final ImageList imageList;
+        final View action_recommend;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
@@ -262,6 +273,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             divider = itemView.findViewById(R.id.divider);
             comment_id = (TextView) itemView.findViewById(R.id.comment_id);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
+            action_recommend = itemView.findViewById(R.id.action_recommend);
         }
     }
 
@@ -305,6 +317,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public static interface OnCommentClickListener {
         public void onCommentClicked(View view, String commentId);
+
+        public void onRecommendCommentClicked(View view, String commentId);
 
         public void onPostClicked(View view);
     }

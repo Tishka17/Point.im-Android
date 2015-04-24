@@ -103,7 +103,7 @@ public class SinglePostFragment extends SpicedFragment {
             mProgressDialog.hide();
             if (post.isSuccess()) {
                 if (!isDetached()) {
-                    Toast.makeText(getActivity(), "Reommended!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Recommended!", Toast.LENGTH_SHORT).show();
                     update();
                 }
             } else {
@@ -293,6 +293,31 @@ public class SinglePostFragment extends SpicedFragment {
             }
 
             @Override
+            public void onRecommendCommentClicked(View view, String commentId) {
+                final String cid = commentId;
+                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                        .title("Recommend #" + mPost + "/" + commentId + "?")
+                        .positiveText(android.R.string.ok)
+                        .negativeText("Cancel")
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                super.onPositive(dialog);
+                                String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
+                                mProgressDialog.show();
+                                if (TextUtils.isEmpty(text)) {
+                                    ConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, mRecommendCallback);
+                                } else {
+                                    ConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, text, mRecommendCallback);
+                                }
+                            }
+                        })
+                        .customView(R.layout.dialog_input, true)
+                        .build();
+                dialog.show();
+            }
+
+            @Override
             public void onPostClicked(View view) {
                 mCommentId.setVisibility(View.GONE);
                 mCommentId.setText("");
@@ -356,7 +381,7 @@ public class SinglePostFragment extends SpicedFragment {
             return true;
         } else if (id == R.id.action_recommend) {
             final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                    .title("Really recommend #" + mPost + "?")
+                    .title("Recommend #" + mPost + "?")
                     .positiveText(android.R.string.ok)
                     .negativeText("Cancel")
                     .callback(new MaterialDialog.ButtonCallback() {

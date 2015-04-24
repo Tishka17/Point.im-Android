@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="4dp"
-    android:paddingTop="4dp">
+    android:orientation="vertical">
 
     <View
         android:id="@+id/divider"
+        android:paddingTop="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/dividerVertical" />
 
     <LinearLayout
-        android:layout_marginTop="@dimen/text_margin"
+        android:clipToPadding="false"
+        android:clipChildren="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/text_margin"
-        android:layout_marginRight="@dimen/text_margin"
+        android:layout_marginTop="@dimen/text_margin"
         android:orientation="horizontal">
 
         <ImageView
+            android:layout_marginLeft="@dimen/text_margin"
+            android:background="?android:attr/selectableItemBackground"
             android:id="@+id/avatar"
             android:layout_width="@dimen/avatar_size"
             android:layout_height="@dimen/avatar_size"
             android:src="@drawable/ic_launcher" />
 
         <LinearLayout
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/text_avatar_margin"
@@ -36,7 +39,7 @@
                 android:id="@+id/author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name"
+                tools:text="Name"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="bold" />
 
@@ -44,9 +47,16 @@
                 android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Small Text"
+                tools:text="Small Text"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
+
+        <ImageButton
+            style="?android:attr/actionButtonStyle"
+            android:id="@+id/action_recommend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_share_black25_24dp" />
     </LinearLayout>
 
     <org.itishka.pointim.widgets.MyTextView
@@ -62,16 +72,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_marginLeft="@dimen/text_margin"
-        android:layout_marginRight="@dimen/text_margin"
-        android:id="@+id/comment_id"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="1"
-        android:textColor="@android:color/secondary_text_dark"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/comment_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="1"
+            android:textColor="@android:color/secondary_text_dark"
+            android:textStyle="bold" />
+    </LinearLayout>
 </LinearLayout>
