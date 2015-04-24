@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="4dp"
     android:orientation="vertical">
 
     <View
-        android:id="@+id/divider"
         android:paddingTop="4dp"
+        android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/dividerVertical" />

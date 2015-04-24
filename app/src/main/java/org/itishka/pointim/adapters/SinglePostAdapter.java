@@ -20,8 +20,10 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.activities.UserViewActivity;
+import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.Comment;
 import org.itishka.pointim.model.ExtendedPost;
+import org.itishka.pointim.model.Post;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
@@ -197,7 +199,12 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Comment comment = mPost.comments.get(i - 1);
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
             commentHolder.itemView.setTag(R.id.comment_id, comment.id);
-            commentHolder.action_recommend.setTag(R.id.comment_id, comment.id);
+            if (ConnectionManager.getInstance().loginResult.login.equalsIgnoreCase(comment.author.login)) {
+                commentHolder.action_recommend.setVisibility(View.GONE);
+            } else {
+                commentHolder.action_recommend.setTag(R.id.comment_id, comment.id);
+                commentHolder.action_recommend.setVisibility(View.VISIBLE);
+            }
             Utils.showAvatar(getContext(), comment.author.login, comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
                 commentHolder.divider.setVisibility(View.INVISIBLE);
