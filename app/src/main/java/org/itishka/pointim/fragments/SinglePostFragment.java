@@ -40,6 +40,8 @@ import org.itishka.pointim.network.requests.SinglePostRequest;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 
+import java.lang.ref.WeakReference;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -100,7 +102,7 @@ public class SinglePostFragment extends SpicedFragment {
     private Callback<PointResult> mRecommendCallback = new Callback<PointResult>() {
         @Override
         public void success(PointResult post, Response response) {
-            mProgressDialog.hide();
+            mProgressDialog.get().hide();
             if (post.isSuccess()) {
                 if (!isDetached()) {
                     Toast.makeText(getActivity(), "Recommended!", Toast.LENGTH_SHORT).show();
@@ -114,19 +116,19 @@ public class SinglePostFragment extends SpicedFragment {
 
         @Override
         public void failure(RetrofitError error) {
-            mProgressDialog.hide();
+            mProgressDialog.get().hide();
             if (!isDetached())
                 Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
     };
-    private Dialog mProgressDialog;
+    private WeakReference<Dialog> mProgressDialog;
     private ImageUploadingPanel mImagesPanel;
     private ImageButton mAttachButton;
     private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
         @Override
         public void success(PointResult post, Response response) {
             mBottomBar.setEnabled(true);
-            mProgressDialog.hide();
+            mProgressDialog.get().hide();
             if (post.isSuccess()) {
                 mCommentId.setVisibility(View.GONE);
                 mCommentId.setText("");
@@ -145,7 +147,7 @@ public class SinglePostFragment extends SpicedFragment {
         @Override
         public void failure(RetrofitError error) {
             mBottomBar.setEnabled(true);
-            mProgressDialog.hide();
+            mProgressDialog.get().hide();
             if (!isDetached())
                 Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
@@ -153,7 +155,7 @@ public class SinglePostFragment extends SpicedFragment {
     private Callback<PointResult> mDeleteCallback = new Callback<PointResult>() {
         @Override
         public void success(PointResult pointResult, Response response) {
-            mProgressDialog.hide();
+            mProgressDialog.get().hide();
             if (isDetached())
                 return;
             if (pointResult.isSuccess()) {
@@ -167,7 +169,7 @@ public class SinglePostFragment extends SpicedFragment {
 
         @Override
         public void failure(RetrofitError error) {
-            mProgressDialog.hide();
+            mProgressDialog.get().hide();
             if (!isDetached())
                 Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
         }
@@ -217,10 +219,10 @@ public class SinglePostFragment extends SpicedFragment {
             });
         }
 
-        mProgressDialog = new MaterialDialog.Builder(getActivity())
+        mProgressDialog = new WeakReference<Dialog>(new MaterialDialog.Builder(getActivity())
                 .cancelable(false)
                 .customView(R.layout.dialog_progress, false)
-                .build();
+                .build());
     }
 
     @Override
@@ -276,7 +278,7 @@ public class SinglePostFragment extends SpicedFragment {
 
                 String comment = mCommentId.getText().toString();
                 mBottomBar.setEnabled(false);
-                mProgressDialog.show();
+                mProgressDialog.get().show();
                 if (TextUtils.isEmpty(comment)) {
                     ConnectionManager.getInstance().pointIm.addComment(mPost, text, mCommentCallback);
                 } else {
@@ -304,7 +306,7 @@ public class SinglePostFragment extends SpicedFragment {
                             public void onPositive(MaterialDialog dialog) {
                                 super.onPositive(dialog);
                                 String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
-                                mProgressDialog.show();
+                                mProgressDialog.get().show();
                                 if (TextUtils.isEmpty(text)) {
                                     ConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, mRecommendCallback);
                                 } else {
@@ -389,7 +391,7 @@ public class SinglePostFragment extends SpicedFragment {
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
                             String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
-                            mProgressDialog.show();
+                            mProgressDialog.get().show();
                             if (TextUtils.isEmpty(text)) {
                                 ConnectionManager.getInstance().pointIm.recommend(mPost, mRecommendCallback);
                             } else {
@@ -410,7 +412,7 @@ public class SinglePostFragment extends SpicedFragment {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
-                            mProgressDialog.show();
+                            mProgressDialog.get().show();
                             ConnectionManager.getInstance().pointIm.deletePost(mPost, mDeleteCallback);
                         }
                     })
