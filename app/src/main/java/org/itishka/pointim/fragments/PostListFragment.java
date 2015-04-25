@@ -75,6 +75,7 @@ public abstract class PostListFragment extends SpicedFragment {
             mSwipeRefresh.setRefreshing(false);
             if (postList != null && postList.isSuccess()) {
                 mAdapter.setData(postList);
+                mRecyclerView.scrollToPosition(0);
             } else {
                 if (!isDetached())
                     Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
