@@ -24,13 +24,11 @@ import org.itishka.pointim.widgets.ScrollableFrameLayout;
 public class MailboxActivity extends ActionBarActivity {
 
     private static final int REQUEST_LOGIN = 0;
-    private FloatingActionButton mNewPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
-        //TODO switch tabs
         setContentView(R.layout.activity_mailbox);
         if (savedInstanceState == null) {
         }

@@ -21,7 +21,6 @@ public class TagViewActivity extends ActionBarActivity {
         String user = getIntent().getStringExtra("user");
         String tag = getIntent().getStringExtra("tag");
         if (savedInstanceState == null) {
-            //TODO user!!!
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, TagViewFragment.newInstance(user, tag))
                     .commit();

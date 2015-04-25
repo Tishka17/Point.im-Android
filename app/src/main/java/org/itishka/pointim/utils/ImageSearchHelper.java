@@ -46,6 +46,7 @@ public class ImageSearchHelper {
         for (Map.Entry<String, ?> s : pref.getAll().entrySet()) {
             sLinksChecked.put(s.getKey(), (String) s.getValue());
         }
+        isLoaded = true;
         isSaved = true;
     }
 
