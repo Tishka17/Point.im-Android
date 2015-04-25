@@ -54,9 +54,25 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private boolean mHasHeader = false;
 
+    @Override
+    public long getItemId(int position) {
+        switch (getItemViewType(position)) {
+            case TYPE_FOOTER:
+                return -1;
+            case TYPE_HEADER:
+                return 0;
+            default:
+                if (mHasHeader)
+                    return mPostList.posts.get(position-1).uid;
+                else
+                    return mPostList.posts.get(position).uid;
+        }
+    }
+
     public PostListAdapter(Context context) {
         super();
         mContext = new WeakReference<>(context);
+        setHasStableIds(true);
     }
 
     protected void setHasHeader(boolean hasHeader) {
@@ -69,12 +85,12 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setData(PostList postList) {
         mPostList = postList;
-        notifyDataSetChanged();
         if (mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED) {
             mTask.cancel(true);
         }
         mTask = new ImageSearchTask();
         mTask.execute(mPostList);
+        notifyDataSetChanged();
     }
 
     public void appendData(PostList postList) {

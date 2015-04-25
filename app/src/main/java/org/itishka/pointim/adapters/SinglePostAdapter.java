@@ -61,13 +61,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return 1;
     }
 
-    public Object getItem(int pos) {
-        if (pos == 0)
-            return mPost;
-        else
-            return mPost.comments.get(pos - 1);
-    }
-
     public void setData(ExtendedPost post) {
         mPost = post;
         notifyDataSetChanged();
