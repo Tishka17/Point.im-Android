@@ -15,6 +15,13 @@
             android:title="@string/action_recommend"
             app:showAsAction="ifRoom" />
     </group>
+    <group android:id="@+id/group_loaded">
+        <item
+            android:id="@+id/menu_item_share"
+            android:icon="@drawable/ic_share_variant_white_24dp"
+            android:title="@string/action_share"
+            app:showAsAction="ifRoom" />
+    </group>
     <group android:id="@+id/group_my">
         <item
             android:id="@+id/action_delete"

@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ActionProvider;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.support.v7.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +66,7 @@ public class SinglePostFragment extends SpicedFragment {
     private WeakReference<Dialog> mProgressDialog;
     private ImageUploadingPanel mImagesPanel;
     private ImageButton mAttachButton;
+    private ShareActionProvider mShareActionProvider;
 
     private RequestListener<ExtendedPost> mUpdateRequestListener = new RequestListener<ExtendedPost>() {
         @Override
@@ -365,12 +369,38 @@ public class SinglePostFragment extends SpicedFragment {
                         !mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login) &&
                         !mPointPost.recommended
         );
+
+        menu.setGroupVisible(R.id.group_loaded,  mPointPost != null );
+        //share intent
+        if (mPointPost!=null) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.setType("text/plain");
+            StringBuilder sb = new StringBuilder();
+            sb.append("@")
+                    .append(mPointPost.post.author.login)
+                    .append(":");
+            if (mPointPost.post.tags!=null)
+                for (String tag: mPointPost.post.tags) {
+                    sb.append(" *").append(tag);
+                }
+            sb.append("\n\n")
+                    .append(mPointPost.post.text.text)
+                    .append("\n\n")
+                    .append(Utils.getnerateSiteUri(mPost));
+            sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+            mShareActionProvider.setShareIntent(sendIntent);
+        }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_single_post, menu);
+
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+        mShareActionProvider = new ShareActionProvider(getActivity());
+        MenuItemCompat.setActionProvider(item, mShareActionProvider);
     }
 
     @Override
