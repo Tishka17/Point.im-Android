@@ -55,7 +55,7 @@ public class NewPostFragment extends Fragment {
     private String mPostId;
     private String mMime;
     private MultiAutoCompleteTextView mPostTags;
-    private AlertDialog mProgressDialog;
+    private MaterialDialog mProgressDialog;
     private ArrayAdapter<Tag> mTagsListAdapter;
     private List<Tag> mTags = null;
     private ImageUploadingPanel mImagesPanel;
