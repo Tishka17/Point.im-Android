@@ -4,22 +4,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.fragments.NewPostFragment;
 
 
-public class NewPostActivity extends ActionBarActivity {
+public class NewPostActivity extends ConnectedActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ConnectionManager.getInstance().updateAuthorization(this);  //we need this in every activity that can be launched from itself
         setContentView(R.layout.activity_new_post);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {

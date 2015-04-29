@@ -7,11 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.fragments.BookmarksFragment;
 import org.itishka.pointim.utils.ImageSearchHelper;
 
 
-public class BookmarksActivity extends ActionBarActivity {
+public class BookmarksActivity extends ConnectedActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +36,6 @@ public class BookmarksActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_tag_view, menu);
         return true;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ImageSearchHelper.saveCache(this);
     }
 
     @Override

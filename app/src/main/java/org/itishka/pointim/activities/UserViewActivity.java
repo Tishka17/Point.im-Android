@@ -11,7 +11,7 @@ import org.itishka.pointim.fragments.UserViewFragment;
 import org.itishka.pointim.utils.ImageSearchHelper;
 
 
-public class UserViewActivity extends ActionBarActivity {
+public class UserViewActivity extends ConnectedActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +36,6 @@ public class UserViewActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_tag_view, menu);
         return true;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ImageSearchHelper.saveCache(this);
     }
 
     @Override

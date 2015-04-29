@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -19,7 +18,6 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.fragments.AllFragment;
 import org.itishka.pointim.fragments.CommentedFragment;
 import org.itishka.pointim.fragments.RecentFragment;
@@ -27,9 +25,8 @@ import org.itishka.pointim.fragments.SelfFragment;
 import org.itishka.pointim.widgets.ScrollableFrameLayout;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ConnectedActivity {
 
-    private static final int REQUEST_LOGIN = 0;
     private FloatingActionButton mNewPost;
 
     @Override
@@ -72,27 +69,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        ConnectionManager.getInstance().updateAuthorization(this);
-        if (!ConnectionManager.getInstance().isAuthorized())
-            startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (!ConnectionManager.getInstance().isAuthorized()) {
-            finish();
-        }
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

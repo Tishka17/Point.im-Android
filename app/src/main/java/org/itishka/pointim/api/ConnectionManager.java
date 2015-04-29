@@ -90,10 +90,12 @@ public class ConnectionManager {
         }
     }
 
-    public void updateAuthorization(Context context) {
+    public void init(Context context) {
         synchronized (this) {
-            this.loginResult = AuthSaver.loadLoginResult(context);
-            createPointService();
+            if (this.loginResult==null) {
+                this.loginResult = AuthSaver.loadLoginResult(context);
+                createPointService();
+            }
         }
     }
 
@@ -124,7 +126,7 @@ public class ConnectionManager {
         synchronized (this) {
             loginResult.csrf_token = "";
             AuthSaver.saveLoginResult(context, loginResult);
-            updateAuthorization(context);
+            init(context);
         }
     }
 }
