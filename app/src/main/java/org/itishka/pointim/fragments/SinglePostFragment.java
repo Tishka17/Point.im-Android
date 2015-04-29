@@ -106,6 +106,13 @@ public class SinglePostFragment extends SpicedFragment {
     private RequestListener<ExtendedPost> mCacheRequestListener = new RequestListener<ExtendedPost>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
+            mSwipeRefresh.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefresh.setRefreshing(true);
+                    update();
+                }
+            });
         }
 
         @Override
@@ -115,6 +122,14 @@ public class SinglePostFragment extends SpicedFragment {
                 mPointPost = extendedPost;
                 if (!isDetached())
                     getActivity().supportInvalidateOptionsMenu();
+            } else {
+                mSwipeRefresh.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefresh.setRefreshing(true);
+                        update();
+                    }
+                });
             }
         }
     };
@@ -228,13 +243,6 @@ public class SinglePostFragment extends SpicedFragment {
         if (manager.isAuthorized()) {
             SinglePostRequest request = createRequest();
             getSpiceManager().getFromCache(ExtendedPost.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
-            mSwipeRefresh.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefresh.setRefreshing(true);
-                    update();
-                }
-            });
         }
     }
 

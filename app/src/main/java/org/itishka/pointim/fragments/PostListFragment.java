@@ -85,12 +85,27 @@ public abstract class PostListFragment extends SpicedFragment {
     private RequestListener<PostList> mCacheRequestListener = new RequestListener<PostList>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
+            mSwipeRefresh.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefresh.setRefreshing(true);
+                    update();
+                }
+            });
         }
 
         @Override
         public void onRequestSuccess(PostList postList) {
             if (postList != null && postList.isSuccess()) {
                 mAdapter.setData(postList);
+            } else {
+                mSwipeRefresh.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefresh.setRefreshing(true);
+                        update();
+                    }
+                });
             }
         }
     };
@@ -220,13 +235,6 @@ public abstract class PostListFragment extends SpicedFragment {
         if (manager.isAuthorized()) {
             PostListRequest request = createRequest();
             getSpiceManager().getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
-            mSwipeRefresh.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefresh.setRefreshing(true);
-                    update();
-                }
-            });
         }
     }
 
