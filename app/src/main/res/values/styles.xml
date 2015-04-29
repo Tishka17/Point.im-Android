@@ -14,6 +14,7 @@
         <item name="android:spinnerDropDownItemStyle">
             @style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar
         </item>
+        <item name="actionModeShareDrawable">@drawable/ic_share_variant_white_24dp</item>
     </style>
 
     <style name="AppTheme.ImageListItem">
