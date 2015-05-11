@@ -18,7 +18,7 @@ public class ConnectedActivity extends ActionBarActivity {
         ImageSearchHelper.saveCache(this);
     }
 
-    private static final int REQUEST_LOGIN = 0x66699900;
+    private static final int REQUEST_LOGIN = 0x6660;
     @Override
     protected void onStart() {
         super.onStart();
