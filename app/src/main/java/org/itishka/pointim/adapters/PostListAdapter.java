@@ -218,7 +218,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.author.setText("@" + post.post.author.login);
         holder.itemView.setTag(R.id.post_id, post.post.id);
 
-        holder.imageList.setImageUrls(post.post.text.images);
+        holder.imageList.setImageUrls(post.post.text.images, post.post.files);
         holder.text.setText(post.post.text.text);
         Utils.showAvatar(getContext(), post.post.author.login, post.post.author.avatar, holder.avatar);
         holder.date.setText(Utils.formatDate(post.post.created));

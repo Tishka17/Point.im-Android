@@ -1,6 +1,7 @@
 package org.itishka.pointim.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Comment {
     public AuthorData author;
@@ -9,5 +10,6 @@ public class Comment {
     public String id;
     public String post_id;
     public String to_comment_id;
+    public List<String> files;
     public boolean is_rec;
 }

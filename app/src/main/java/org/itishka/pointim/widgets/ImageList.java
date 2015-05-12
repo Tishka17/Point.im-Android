@@ -90,13 +90,21 @@ public class ImageList extends FrameLayout {
         }
     }
 
-    public void setImageUrls(List<String> urls) {
+    public void setImageUrls(List<String> urls, List<String> files) {
+        int urlCount = urls == null ? 0 : urls.size();
+        int fileCount = files == null ? 0 : files.size();
         for (int i = 0; i < sImageIds.length; i++) {
-            if (urls != null && i < urls.size()) {
+            String url = null;
+            if (i < urlCount) {
+                url = urls.get(i);
+            } else if (i - urlCount < fileCount) {
+                url = files.get(i - urlCount);
+            }
+            if (url != null) {
                 mImageViews[i].setVisibility(VISIBLE);
                 mImageViews[i].setTag(urls.get(i));
                 Picasso.with(getContext())
-                        .load(urls.get(i))
+                        .load(url)
                         .transform(transformation)
                         .into(mImageViews[i]);
             } else {
