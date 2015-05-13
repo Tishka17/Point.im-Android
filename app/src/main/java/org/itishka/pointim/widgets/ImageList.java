@@ -102,7 +102,7 @@ public class ImageList extends FrameLayout {
             }
             if (url != null) {
                 mImageViews[i].setVisibility(VISIBLE);
-                mImageViews[i].setTag(urls.get(i));
+                mImageViews[i].setTag(url);
                 Picasso.with(getContext())
                         .load(url)
                         .transform(transformation)
