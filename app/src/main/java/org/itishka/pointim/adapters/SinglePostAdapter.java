@@ -285,17 +285,13 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         protected Void doInBackground(ExtendedPost... posts) {
             ExtendedPost post = posts[0];
-            if (post.post.text.images == null) {
-                post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
-                publishProgress(0);
-            }
+            post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
+            publishProgress(-1);
             if (post.comments != null) {
                 for (int i = 0; i < post.comments.size(); i++) {
                     Comment comment = post.comments.get(i);
-                    if (comment.text.images == null) {
-                        comment.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(comment.text.text));
-                        publishProgress(i);
-                    }
+                    comment.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(comment.text.text));
+                    publishProgress(i);
                 }
             }
             return null;
