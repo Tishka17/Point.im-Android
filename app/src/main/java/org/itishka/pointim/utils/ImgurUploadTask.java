@@ -1,5 +1,6 @@
 package org.itishka.pointim.utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,8 +12,10 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.ImgurUploadResult;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import retrofit.RetrofitError;
 
@@ -43,43 +46,60 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUp
     protected ImgurUploadResult doInBackground(String... params) {
         String[] filePathColumn = {MediaStore.Images.Media.MIME_TYPE};
         String imageMime = mMime;
-        if (imageMime==null) {
+        if (imageMime == null) {
             Cursor cursor = mContext.getContentResolver().query(mUri, filePathColumn, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
                 imageMime = cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
             }
             if (cursor != null) cursor.close();
         }
-        if (imageMime==null) {
+        if (imageMime == null) {
             imageMime = "image/other";
         }
 
+        //сохраняем локально
+        InputStream in = null;
         try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), mUri);
+            in = mContext.getContentResolver().openInputStream(mUri);
             mFile.createNewFile();
             FileOutputStream fos = new FileOutputStream(mFile);
-            if ("image/png".equals(imageMime)) {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
-            } else {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+            int len;
+            byte[] buffer = new byte[1024];
+            while ((len = in.read(buffer)) > -1) {
+                fos.write(buffer, 0, len);
             }
             fos.close();
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        try {
+            if (in != null)
+                in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        publishProgress(40);
+
         mContext = null;
         final long totalSize = mFile.length();
         try {
-            return ConnectionManager.getInstance().imgurService.uploadFile(new CountingTypedFile(imageMime, mFile, new CountingTypedFile.ProgressListener() {
+            ImgurUploadResult res = ConnectionManager.getInstance().imgurService.uploadFile(new CountingTypedFile(imageMime, mFile, new CountingTypedFile.ProgressListener() {
                 @Override
                 public void transferred(long num) {
-                    publishProgress((int) ((num / (float) totalSize) * 100));
+                    publishProgress((int) ((num / (float) totalSize) * 50));
                 }
             }));
+            publishProgress(100);
+            return res;
         } catch (RetrofitError e) {
             e.printStackTrace();
             return null;
+        } finally {
+            mFile.delete();
         }
     }
 }
