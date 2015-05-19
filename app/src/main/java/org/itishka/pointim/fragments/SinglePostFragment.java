@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ActionProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,8 +41,6 @@ import org.itishka.pointim.model.PointResult;
 import org.itishka.pointim.network.requests.SinglePostRequest;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
-
-import java.lang.ref.WeakReference;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -122,6 +119,10 @@ public class SinglePostFragment extends SpicedFragment {
                 mPointPost = extendedPost;
                 if (!isDetached())
                     getActivity().supportInvalidateOptionsMenu();
+                if (shouldAutoload()) {
+                    mSwipeRefresh.setRefreshing(true);
+                    update();
+                }
             } else {
                 mSwipeRefresh.post(new Runnable() {
                     @Override

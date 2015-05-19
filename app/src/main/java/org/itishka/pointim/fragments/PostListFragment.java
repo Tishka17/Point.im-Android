@@ -98,6 +98,10 @@ public abstract class PostListFragment extends SpicedFragment {
         public void onRequestSuccess(PostList postList) {
             if (postList != null && postList.isSuccess()) {
                 mAdapter.setData(postList);
+                if (shouldAutoload()) {
+                    mSwipeRefresh.setRefreshing(true);
+                    update();
+                }
             } else {
                 mSwipeRefresh.post(new Runnable() {
                     @Override
