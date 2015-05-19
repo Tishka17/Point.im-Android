@@ -39,4 +39,5 @@
     <string name="setting_load_images">Load images</string>
     <string name="setting_multi_column">Multiple columns</string>
     <string name="action_share">Share</string>
+    <string name="gender_robot">Robot</string>
 </resources>

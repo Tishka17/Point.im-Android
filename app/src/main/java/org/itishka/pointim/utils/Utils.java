@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
@@ -141,5 +142,11 @@ public class Utils {
         public void onPrepareLoad(Drawable placeHolderDrawable) {
             mActionBar.setLogo(placeHolderDrawable);
         }
+    }
+
+    public static final int getGenderString(@Nullable Boolean gender) {
+        if (gender==null) return R.string.gender_robot;
+        else if (gender) return R.string.male;
+        else return R.string.female;
     }
 }

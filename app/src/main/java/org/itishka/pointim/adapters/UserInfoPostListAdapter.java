@@ -39,7 +39,7 @@ public class UserInfoPostListAdapter extends PostListAdapter {
             return;
         setText(mUser.about.text, headerHolder.about_group, headerHolder.about);
         setText(mUser.name, headerHolder.name, headerHolder.name);
-        Utils.showAvatar(getContext(), mUser.login, mUser.avatar, headerHolder.avatar);
+        Utils.showAvatar(getContext(), "@"+mUser.login, mUser.avatar, headerHolder.avatar);
         if (TextUtils.isEmpty(mUser.xmpp) &&
                 TextUtils.isEmpty(mUser.icq) &&
                 TextUtils.isEmpty(mUser.skype) &&
@@ -51,7 +51,7 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         } else {
             headerHolder.contacts_splitter.setVisibility(View.VISIBLE);
         }
-        headerHolder.gender.setText(mUser.gender ? getContext().getString(R.string.male) : getContext().getString(R.string.female));
+        headerHolder.gender.setText(getContext().getString(Utils.getGenderString(mUser.gender)));
         setText(mUser.xmpp, headerHolder.xmpp_group, headerHolder.xmpp);
         setText(mUser.icq, headerHolder.icq_group, headerHolder.icq);
         setText(mUser.skype, headerHolder.skype_group, headerHolder.skype);

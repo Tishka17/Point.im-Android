@@ -208,7 +208,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             commentHolder.date.setText(Utils.formatDate(comment.created));
             commentHolder.text.setText(comment.text.text);
             commentHolder.imageList.setImageUrls(comment.text.images, comment.files);
-            commentHolder.author.setText(comment.author.login);
+            commentHolder.author.setText("@"+comment.author.login);
             if (TextUtils.isEmpty(comment.to_comment_id))
                 commentHolder.comment_id.setText("/" + comment.id);
             else
