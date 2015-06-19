@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
@@ -63,7 +62,7 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 return 0;
             default:
                 if (mHasHeader)
-                    return mPostList.posts.get(position-1).uid;
+                    return mPostList.posts.get(position - 1).uid;
                 else
                     return mPostList.posts.get(position).uid;
         }
@@ -126,7 +125,7 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup viewGroup) {
 
         final View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.adapter_post, viewGroup, false);
+                .inflate(R.layout.adapter_post2, viewGroup, false);
         final ViewHolder holder = new ViewHolder(v);
         holder.webLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +134,7 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 getContext().startActivity(browserIntent);
             }
         });
-        holder.avatar.setOnClickListener(new View.OnClickListener() {
+        holder.author_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String user = (String) view.getTag();
@@ -146,6 +145,7 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             }
         });
+        /*
         holder.recomender_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,6 +165,7 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             }
         });
+        */
         return holder;
     }
 
@@ -215,14 +216,15 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void onBindItemViewHolder(PostList2Adapter.ViewHolder holder, int i) {
         Post post = mPostList.posts.get(i);
-        holder.author.setText("@" + post.post.author.login);
+        holder.author_nick.setText("@" + post.post.author.login);
         holder.itemView.setTag(R.id.post_id, post.post.id);
 
         holder.imageList.setImageUrls(post.post.text.images, post.post.files);
         holder.text.setText(post.post.text.text);
-        Utils.showAvatar(getContext(), post.post.author.login, post.post.author.avatar, holder.avatar);
-        holder.date.setText(Utils.formatDate(post.post.created));
+        Utils.showAvatar(getContext(), post.post.author.login, post.post.author.avatar, holder.author_avatar);
+        holder.post_date.setText(Utils.formatDate(post.post.created));
 
+        /*
         if (post.rec != null) {
             holder.mainContent.setBackgroundColor(getContext().getResources().getColor(R.color.quote_background));
             holder.recommend_info.setVisibility(View.VISIBLE);
@@ -244,6 +246,7 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.quote_mark.setVisibility(View.INVISIBLE);
             holder.quote_mark_top.setVisibility(View.GONE);
         }
+        */
         if (TextUtils.isEmpty(post.comment_id)) {
             holder.post_id.setText("#" + post.post.id);
         } else {
@@ -251,8 +254,8 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
         holder.post_id.setTag(post.post.id);
         holder.webLink.setTag(Utils.getnerateSiteUri(post.post.id));
-        holder.favourite.setChecked(post.bookmarked);
-        holder.favourite.setTag(post.post.id);
+        //holder.favourite.setChecked(post.bookmarked);
+        //holder.favourite.setTag(post.post.id);
 
         if (post.post.comments_count > 0) {
             holder.comments.setText(String.valueOf(post.post.comments_count));
@@ -315,18 +318,18 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     protected class ViewHolder extends RecyclerView.ViewHolder {
         final TextView text;
         final ViewGroup tags;
-        final ImageView avatar;
+        final ImageView author_avatar;
         final ImageView recomender_avatar;
         final TextView recommend_text;
         final View quote_mark;
         final View quote_mark_top;
         final TextView recommend_author;
-        final TextView author;
+        final TextView author_nick;
         final TextView post_id;
         final View recommend_info;
         final TextView recommend_id;
         final TextView comments;
-        final TextView date;
+        final TextView post_date;
         final ImageView webLink;
         final CheckBox favourite;
         final ImageList imageList;
@@ -336,18 +339,18 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(itemView);
             text = (TextView) itemView.findViewById(R.id.text);
             tags = (ViewGroup) itemView.findViewById(R.id.tags);
-            avatar = (ImageView) itemView.findViewById(R.id.avatar);
+            author_avatar = (ImageView) itemView.findViewById(R.id.author_avatar);
             recomender_avatar = (ImageView) itemView.findViewById(R.id.recommend_avatar);
             recommend_text = (TextView) itemView.findViewById(R.id.recommend_text);
             quote_mark = itemView.findViewById(R.id.quote_mark);
             quote_mark_top = itemView.findViewById(R.id.quote_mark_top);
             recommend_author = (TextView) itemView.findViewById(R.id.recommend_author);
-            author = (TextView) itemView.findViewById(R.id.author);
+            author_nick = (TextView) itemView.findViewById(R.id.author_nick);
             post_id = (TextView) itemView.findViewById(R.id.post_id);
             recommend_info = itemView.findViewById(R.id.recommend_info);
             recommend_id = (TextView) itemView.findViewById(R.id.recommend_id);
             comments = (TextView) itemView.findViewById(R.id.comments);
-            date = (TextView) itemView.findViewById(R.id.date);
+            post_date = (TextView) itemView.findViewById(R.id.post_date);
             webLink = (ImageView) itemView.findViewById(R.id.weblink);
             favourite = (CheckBox) itemView.findViewById(R.id.favourite);
             mainContent = itemView.findViewById(R.id.main_content);

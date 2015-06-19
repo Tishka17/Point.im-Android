@@ -16,7 +16,7 @@ import org.itishka.pointim.utils.Utils;
 /**
  * Created by Tishka17 on 31.01.2015.
  */
-public class UserInfoPostListAdapter extends PostListAdapter {
+public class UserInfoPostListAdapter extends PostList2Adapter {
     private User mUser;
 
     public UserInfoPostListAdapter(Context context) {

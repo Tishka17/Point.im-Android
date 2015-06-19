@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -12,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +29,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
+import org.itishka.pointim.adapters.PostList2Adapter;
 import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.Post;
@@ -42,7 +45,7 @@ import java.util.List;
  */
 public abstract class PostListFragment extends SpicedFragment {
 
-    private PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
+    private PostList2Adapter.OnPostClickListener mOnPostClickListener = new PostList2Adapter.OnPostClickListener() {
         @Override
         public void onPostClicked(View view, String post) {
             Intent intent = new Intent(getActivity(), SinglePostActivity.class);
@@ -60,7 +63,7 @@ public abstract class PostListFragment extends SpicedFragment {
 
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
-    private PostListAdapter mAdapter;
+    private PostList2Adapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
 
     private RequestListener<PostList> mUpdateRequestListener = new RequestListener<PostList>() {
@@ -181,12 +184,12 @@ public abstract class PostListFragment extends SpicedFragment {
         return 1;
     }
 
-    public PostListAdapter getAdapter() {
+    public PostList2Adapter getAdapter() {
         return mAdapter;
     }
 
-    protected PostListAdapter createAdapter() {
-        return new PostListAdapter(getActivity());
+    protected PostList2Adapter createAdapter() {
+        return new PostList2Adapter(getActivity());
     }
 
     @Override
@@ -210,10 +213,13 @@ public abstract class PostListFragment extends SpicedFragment {
                 StaggeredGridLayoutManager.VERTICAL
         );
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(8));
+
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration((int)px));
         mAdapter = createAdapter();
         mAdapter.setOnPostClickListener(mOnPostClickListener);
-        mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
+        mAdapter.setOnLoadMoreRequestListener(new PostList2Adapter.OnLoadMoreRequestListener() {
             @Override
             public boolean onLoadMoreRequested() {
                 if (mIsLoadingMore) {

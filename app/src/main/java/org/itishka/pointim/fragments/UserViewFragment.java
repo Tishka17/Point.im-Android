@@ -13,6 +13,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.adapters.PostList2Adapter;
 import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.adapters.UserInfoPostListAdapter;
 import org.itishka.pointim.api.ConnectionManager;
@@ -72,7 +73,7 @@ public class UserViewFragment extends PostListFragment {
     }
 
     @Override
-    protected PostListAdapter createAdapter() {
+    protected PostList2Adapter createAdapter() {
         return new UserInfoPostListAdapter(getActivity());
     }
 
