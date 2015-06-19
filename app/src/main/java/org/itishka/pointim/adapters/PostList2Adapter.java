@@ -27,6 +27,7 @@ import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -219,7 +220,13 @@ public class PostList2Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         holder.author_nick.setText("@" + post.post.author.login);
         holder.itemView.setTag(R.id.post_id, post.post.id);
 
-        holder.imageList.setImageUrls(post.post.text.images, post.post.files);
+        if ((post.post.text.images != null && post.post.text.images.size() > 0) ||
+                (post.post.files != null && post.post.files.size() > 0)) {
+            holder.imageList.setImageUrls(post.post.text.images, post.post.files);
+            holder.imageList.setVisibility(View.VISIBLE);
+        } else {
+            holder.imageList.setVisibility(View.GONE);
+        }
         holder.text.setText(post.post.text.text);
         Utils.showAvatar(getContext(), post.post.author.login, post.post.author.avatar, holder.author_avatar);
         holder.post_date.setText(Utils.formatDate(post.post.created));

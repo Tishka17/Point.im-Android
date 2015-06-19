@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.text.format.DateFormat;
 import android.widget.ImageView;
 
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
@@ -19,6 +20,7 @@ import org.itishka.pointim.R;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -41,9 +43,24 @@ public class Utils {
         return Uri.parse(String.format(BLOG_SITE_URL_TEMPLATE, login));
     }
 
-    public static String formatDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, dd MMM yyyy", Locale.getDefault());
-        return sdf.format(date);
+    final static String timeFormatString = "HH:mm";
+    final static String dateTimeShortFormatString = "HH:mm, dd MMM";
+    final static String dateTimeFullFormatString = "HH:mm, dd MMM yyyy";
+    public static CharSequence formatDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        Calendar now = Calendar.getInstance();
+
+        if (now.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+            return DateFormat.format(timeFormatString, calendar);
+        } else if (now.get(Calendar.DATE) - calendar.get(Calendar.DATE) == 1) {
+            return DateFormat.format(timeFormatString, calendar) + ", yesterday";
+        } else if (now.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)) {
+            return DateFormat.format(dateTimeShortFormatString, calendar).toString();
+        } else {
+            return DateFormat.format(dateTimeFullFormatString, calendar).toString();
+        }
     }
 
     public static String formatDateOnly(Date date) {
@@ -145,7 +162,7 @@ public class Utils {
     }
 
     public static final int getGenderString(@Nullable Boolean gender) {
-        if (gender==null) return R.string.gender_robot;
+        if (gender == null) return R.string.gender_robot;
         else if (gender) return R.string.male;
         else return R.string.female;
     }

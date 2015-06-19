@@ -15,7 +15,10 @@
             android:id="@+id/post_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -49,7 +52,7 @@
             android:id="@+id/tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp">
 
@@ -60,7 +63,7 @@
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textColor="#DE000000"
@@ -70,7 +73,7 @@
             android:id="@+id/imageList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:visibility="gone" />
 
         <LinearLayout
@@ -84,6 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:textColor="#8A000000"
@@ -104,8 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:drawableLeft="@drawable/ic_action_comment"
-                android:gravity="center"
-                android:minWidth="65dp"
+                android:gravity="center_vertical|left"
                 android:text="321"
                 android:textColor="#8A000000" />
         </LinearLayout>
