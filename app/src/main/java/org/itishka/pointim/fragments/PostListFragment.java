@@ -32,6 +32,7 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.Post;
 import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.network.requests.PostListRequest;
+import org.itishka.pointim.widgets.DividerItemDecoration;
 
 import java.util.List;
 
@@ -209,6 +210,7 @@ public abstract class PostListFragment extends SpicedFragment {
                 StaggeredGridLayoutManager.VERTICAL
         );
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(8));
         mAdapter = createAdapter();
         mAdapter.setOnPostClickListener(mOnPostClickListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
