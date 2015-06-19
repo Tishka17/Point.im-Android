@@ -42,7 +42,7 @@ public class MainActivity extends ConnectedActivity {
             setSupportActionBar(toolbar);
         }
         ScrollableFrameLayout scrollableFrameLayout = (ScrollableFrameLayout) findViewById(R.id.scrollableFrame);
-        scrollableFrameLayout.setToolbar(toolbar);
+        //scrollableFrameLayout.setToolbar(toolbar);
         mNewPost = (FloatingActionButton) findViewById(R.id.new_post);
         mNewPost.setOnClickListener(new View.OnClickListener() {
             @Override

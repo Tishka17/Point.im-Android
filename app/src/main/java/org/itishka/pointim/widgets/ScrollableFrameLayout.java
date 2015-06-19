@@ -43,6 +43,7 @@ public class ScrollableFrameLayout extends FrameLayout {
 
         @Override
         public boolean onDown(MotionEvent motionEvent) {
+            if (mToolbar == null) return false;
             y = motionEvent.getY();
             stopToolbarSlide();
             scrolledDistance = getToolbarOffset();
@@ -61,6 +62,7 @@ public class ScrollableFrameLayout extends FrameLayout {
 
         @Override
         public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float v, float v2) {
+            if (mToolbar == null) return false;
             mIsScrolling = true;
             boolean result = false;
             float dy = motionEvent2.getY() - y;
@@ -116,6 +118,7 @@ public class ScrollableFrameLayout extends FrameLayout {
     }
 
     public void slideToolebar() {
+        if (mToolbar == null) return;
         if (getToolbarTop(mToolbar) < -mToolbar.getHeight() / 2) {
             animateTop(mToolbar, -mToolbar.getHeight(), 1000);
         } else {
@@ -124,6 +127,7 @@ public class ScrollableFrameLayout extends FrameLayout {
     }
 
     public void stopToolbarSlide() {
+        if (mToolbar == null) return;
         Animation animation = mToolbar.getAnimation();
         if (animation != null) animation.cancel();
     }
@@ -133,6 +137,7 @@ public class ScrollableFrameLayout extends FrameLayout {
     }
 
     private static void animateTop(final Toolbar toolbar, final int top, int duration) {
+        if (toolbar == null) return;
         final int start = getToolbarTop(toolbar);
         final int realDuration = duration * Math.abs(top - start) / toolbar.getHeight();
         Animation a = new Animation() {
@@ -146,6 +151,7 @@ public class ScrollableFrameLayout extends FrameLayout {
     }
 
     private static void setToolbarTop(Toolbar toolbar, int top) {
+        if (toolbar == null) return;
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
         if (top < -toolbar.getHeight()) top = -toolbar.getHeight();
         if (top > 0) top = 0;
