@@ -58,22 +58,22 @@ public interface PointIm {
     @GET("/api/messages/outgoing")
     PostList getOutgoing(@Query("before") long before);
 
-    @GET("/api/blog/{login}")
+    @GET("/api/blog/login/{login}")
     PostList getBlog(@Path("login") String login);
 
-    @GET("/api/blog/{login}")
+    @GET("/api/blog/login/{login}")
     PostList getBlog(@Query("before") long before, @Path("login") String login);
 
-    @GET("/api/user/{login}")
+    @GET("/api/user/login/{login}")
     User getUserInfo(@Path("login") String login);
 
-    @POST("/api/user/{login}/s")
+    @POST("/api/user/login/{login}/s")
     void subscribeUser(@Path("login") String login, Callback<PointResult> callback);
 
-    @DELETE("/api/user/{login}/s")
+    @DELETE("/api/user/login/{login}/s")
     void unsubscribeUser(@Path("login") String login, Callback<PointResult> callback);
 
-    @GET("/api/tags/{login}")
+    @GET("/api/tags/login/{login}")
     void getTags(@Path("login") String login, Callback<List<Tag>> callback);
 
     @GET("/api/tags")
@@ -82,10 +82,10 @@ public interface PointIm {
     @GET("/api/tags")
     PostList getPostsByTag(@Query("before") long before, @Query("tag") String tag);
 
-    @GET("/api/tags/{login}")
+    @GET("/api/tags/login/{login}")
     PostList getPostsByUserTag(@Path("login") String login, @Query("tag") String tag);
 
-    @GET("/api/tags/{login}")
+    @GET("/api/tags/login/{login}")
     PostList getPostsByUserTag(@Query("before") long before, @Path("login") String login, @Query("tag") String tag);
 
     @GET("/api/post/{id}")
