@@ -6,11 +6,11 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="4dp"
-    card_view:cardCornerRadius="3dp">
+    card_view:cardCornerRadius="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
         android:orientation="vertical">
 
@@ -18,6 +18,7 @@
             android:id="@+id/recommend_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="@dimen/text_margin"
             android:layout_marginRight="@dimen/text_margin"
             android:orientation="horizontal">
@@ -88,6 +89,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginLeft="@dimen/text_quote_margin"
                     android:layout_marginRight="@dimen/text_margin"
                     android:orientation="horizontal">
@@ -125,9 +127,12 @@
                     android:id="@+id/tags"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginLeft="@dimen/text_quote_margin"
-                    android:layout_marginRight="@dimen/text_margin"
-                    android:layout_marginTop="4dp" />
+                    android:layout_marginRight="@dimen/text_margin">
+
+                    <include layout="@layout/tag" />
+                </org.itishka.pointim.widgets.FlowLayout>
 
                 <org.itishka.pointim.widgets.MyTextView
                     android:id="@+id/text"
@@ -145,11 +150,6 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/dividerVertical" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -161,6 +161,7 @@
                 android:id="@+id/post_id"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="#xxx"
@@ -171,29 +172,25 @@
                 android:id="@+id/favourite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:button="@null"
-                android:drawableLeft="@drawable/ic_bookmark"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
+                android:drawableLeft="@drawable/ic_bookmark" />
 
             <ImageView
                 android:id="@+id/weblink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:layout_marginRight="8dp"
                 android:src="@drawable/ic_action_internet" />
 
             <TextView
                 android:id="@+id/comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:drawableLeft="@drawable/ic_action_comment"
                 android:gravity="center"
-                android:minWidth="65dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="111"
+                android:text="123"
                 android:textColor="@android:color/secondary_text_dark" />
         </LinearLayout>
     </LinearLayout>
