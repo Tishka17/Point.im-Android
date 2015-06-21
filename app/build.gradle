@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.github.ben-manes.versions'
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -36,9 +35,7 @@ android {
     }
 }
 repositories {
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots/"
-    }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     flatDir {
         dirs 'libs'
     }
@@ -49,6 +46,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.0'
     compile 'com.android.support:cardview-v7:22.2.0'
     compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:design:22.2.0'
 
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
@@ -60,7 +58,6 @@ dependencies {
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
     compile 'com.makeramen:roundedimageview:2.1.1'
     compile 'com.afollestad:material-dialogs:0.7.6.0'
-    compile 'com.melnykov:floatingactionbutton:1.3.0'
     compile 'com.jpardogo.googleprogressbar:library:1.2.0'
     compile 'com.pnikosis:materialish-progress:1.5'
 
