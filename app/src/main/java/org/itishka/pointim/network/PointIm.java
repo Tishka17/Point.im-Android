@@ -1,6 +1,7 @@
 package org.itishka.pointim.network;
 
 import org.itishka.pointim.model.ExtendedPost;
+import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.PointResult;
 import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.model.Tag;
@@ -128,15 +129,15 @@ public interface PointIm {
 
     @FormUrlEncoded
     @POST("/api/post/")
-    void createPost(@Field("text") String text, @Field("tag") String[] tags, Callback<PointResult> callback);
+    void createPost(@Field("text") String text, @Field("tag") String[] tags, Callback<NewPostResponse> callback);
 
     @FormUrlEncoded
     @POST("/api/post/")
-    void createPrivatePost(@Field("text") String text, @Field("tag") String[] tags, @Field("private") boolean reserved, Callback<PointResult> callback);
+    void createPrivatePost(@Field("text") String text, @Field("tag") String[] tags, @Field("private") boolean reserved, Callback<NewPostResponse> callback);
 
     @FormUrlEncoded
     @PUT("/api/post/{id}")
-    void editPost(@Path("id") String id, @Field("text") String text, @Field("tag") String[] tags, Callback<PointResult> callback);
+    void editPost(@Path("id") String id, @Field("text") String text, @Field("tag") String[] tags, Callback<NewPostResponse> callback);
 
     @DELETE("/api/post/{id}")
     void deletePost(@Path("id") String id, Callback<PointResult> callback);

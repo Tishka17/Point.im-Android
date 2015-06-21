@@ -92,7 +92,7 @@ public class ConnectionManager {
 
     public void init(Context context) {
         synchronized (this) {
-            if (this.loginResult==null) {
+            if (this.loginResult == null) {
                 this.loginResult = AuthSaver.loadLoginResult(context);
                 createPointService();
             }

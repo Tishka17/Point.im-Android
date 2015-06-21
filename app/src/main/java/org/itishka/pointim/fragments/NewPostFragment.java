@@ -1,7 +1,6 @@
 package org.itishka.pointim.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,7 +26,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.PointResult;
+import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.Tag;
 import org.itishka.pointim.utils.ContentStorageHelper;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
@@ -59,12 +58,27 @@ public class NewPostFragment extends Fragment {
     private ArrayAdapter<Tag> mTagsListAdapter;
     private List<Tag> mTags = null;
     private ImageUploadingPanel mImagesPanel;
-    private Callback<PointResult> mNewPostCallback = new Callback<PointResult>() {
+    private Callback<NewPostResponse> mNewPostCallback = new Callback<NewPostResponse>() {
         @Override
-        public void success(PointResult post, Response response) {
+        public void success(NewPostResponse post, Response response) {
             mProgressDialog.hide();
             if (post.isSuccess()) {
-                Toast.makeText(getActivity(), "Post sent!", Toast.LENGTH_SHORT).show();
+                /*
+                TODO
+                final String id = post.id;
+                Snackbar
+                        .make(mImagesPanel, "Post sent!", Snackbar.LENGTH_SHORT)
+                        .setAction("View", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(getActivity(), SinglePostActivity.class);
+                                intent.putExtra("post", id);
+                                ActivityCompat.startActivity(getActivity(), intent, null);
+                            }
+                        })
+                        .show();
+                */
+                Toast.makeText(getActivity(), String.format("Post #%s sent!", post.id), Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             } else {
                 Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
@@ -146,7 +160,7 @@ public class NewPostFragment extends Fragment {
                 mMime = args.getString(ARG_MIME);
             }
         }
-        if (mPostId==null) {
+        if (mPostId == null) {
             mIsPrivate.setVisibility(View.VISIBLE);
         } else {
             mIsPrivate.setVisibility(View.GONE);
