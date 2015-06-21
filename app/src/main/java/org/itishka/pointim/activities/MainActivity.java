@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.melnykov.fab.FloatingActionButton;
+import android.support.design.widget.FloatingActionButton;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.fragments.AllFragment;

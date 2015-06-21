@@ -2,6 +2,7 @@ package org.itishka.pointim.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.view.Window;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.melnykov.fab.FloatingActionButton;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.fragments.IncomingFragment;
