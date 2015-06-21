@@ -22,8 +22,6 @@ import org.itishka.pointim.fragments.AllFragment;
 import org.itishka.pointim.fragments.CommentedFragment;
 import org.itishka.pointim.fragments.RecentFragment;
 import org.itishka.pointim.fragments.SelfFragment;
-import org.itishka.pointim.widgets.ScrollableFrameLayout;
-
 
 public class MainActivity extends ConnectedActivity {
 
@@ -41,8 +39,6 @@ public class MainActivity extends ConnectedActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
-        ScrollableFrameLayout scrollableFrameLayout = (ScrollableFrameLayout) findViewById(R.id.scrollableFrame);
-        //scrollableFrameLayout.setToolbar(toolbar);
         mNewPost = (FloatingActionButton) findViewById(R.id.new_post);
         mNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
