@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.github.ben-manes.versions'
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -54,6 +55,7 @@ dependencies {
     compile "com.squareup.picasso:picasso:2.5.2"
     compile 'com.octo.android.robospice:robospice:1.4.14'
     compile 'com.octo.android.robospice:robospice-retrofit:1.4.14'
+    compile 'com.nispok:snackbar:2.10.0'
 
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
     compile 'com.makeramen:roundedimageview:2.1.1'
