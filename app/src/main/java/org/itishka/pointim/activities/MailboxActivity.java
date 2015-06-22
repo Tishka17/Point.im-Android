@@ -16,10 +16,21 @@ import com.astuetz.PagerSlidingTabStrip;
 import org.itishka.pointim.R;
 import org.itishka.pointim.fragments.IncomingFragment;
 import org.itishka.pointim.fragments.OutgoingFragment;
+import org.itishka.pointim.utils.Utils;
 
 public class MailboxActivity extends ConnectedActivity {
 
+    private static final int REQUEST_NEW_POST = 13;
     private FloatingActionButton mNewPost;
+    private ViewPager mPager;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==RESULT_OK) {
+            Utils.showPostSentSnack(this, mPager, data.getStringExtra("post"));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +49,13 @@ public class MailboxActivity extends ConnectedActivity {
         mNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MailboxActivity.this, NewPostActivity.class));
+                startActivityForResult(new Intent(MailboxActivity.this, NewPostActivity.class), REQUEST_NEW_POST);
             }
         });
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        tabs.setViewPager(pager);
+        tabs.setViewPager(mPager);
     }
 
     private static class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

@@ -22,10 +22,21 @@ import org.itishka.pointim.fragments.AllFragment;
 import org.itishka.pointim.fragments.CommentedFragment;
 import org.itishka.pointim.fragments.RecentFragment;
 import org.itishka.pointim.fragments.SelfFragment;
+import org.itishka.pointim.utils.Utils;
 
 public class MainActivity extends ConnectedActivity {
 
+    private static final int REQUEST_NEW_POST = 13;
     private FloatingActionButton mNewPost;
+    private ViewPager mPager;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==RESULT_OK) {
+            Utils.showPostSentSnack(this, mPager, data.getStringExtra("post"));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,25 +54,25 @@ public class MainActivity extends ConnectedActivity {
         mNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, NewPostActivity.class));
+                startActivityForResult(new Intent(MainActivity.this, NewPostActivity.class), REQUEST_NEW_POST);
             }
         });
 
         // Initialize the ViewPager and set an adapter
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        pager.setOnTouchListener(new View.OnTouchListener() {
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                Log.d("pager Touch", "onTouch "+motionEvent);
+                Log.d("mPager Touch", "onTouch " + motionEvent);
                 return false;
             }
         });
 
-        pager.setOffscreenPageLimit(4);
-        pager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
+        mPager.setOffscreenPageLimit(4);
+        mPager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        tabs.setViewPager(pager);
+        tabs.setViewPager(mPager);
     }
 
     @Override

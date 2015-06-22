@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.Tag;
@@ -63,22 +64,13 @@ public class NewPostFragment extends Fragment {
         public void success(NewPostResponse post, Response response) {
             mProgressDialog.hide();
             if (post.isSuccess()) {
-                /*
-                TODO
-                final String id = post.id;
-                Snackbar
-                        .make(mImagesPanel, "Post sent!", Snackbar.LENGTH_SHORT)
-                        .setAction("View", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(getActivity(), SinglePostActivity.class);
-                                intent.putExtra("post", id);
-                                ActivityCompat.startActivity(getActivity(), intent, null);
-                            }
-                        })
-                        .show();
-                */
-                Toast.makeText(getActivity(), String.format("Post #%s sent!", post.id), Toast.LENGTH_SHORT).show();
+                if (getActivity().getCallingActivity() != null) {
+                    Intent intent = new Intent();
+                    intent.putExtra("post", post.id);
+                    getActivity().setResult(Activity.RESULT_OK, intent);
+                } else {
+                    Toast.makeText(getActivity(), String.format("Post #%s sent", post.id), Toast.LENGTH_SHORT).show();
+                }
                 getActivity().finish();
             } else {
                 Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();

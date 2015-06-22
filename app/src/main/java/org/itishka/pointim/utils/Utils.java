@@ -1,12 +1,17 @@
 package org.itishka.pointim.utils;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
@@ -15,6 +20,7 @@ import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.SinglePostActivity;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -145,8 +151,22 @@ public class Utils {
     }
 
     public static final int getGenderString(@Nullable Boolean gender) {
-        if (gender==null) return R.string.gender_robot;
+        if (gender == null) return R.string.gender_robot;
         else if (gender) return R.string.male;
         else return R.string.female;
+    }
+
+    public static void showPostSentSnack(final Activity activity, View view, final String postId) {
+        Snackbar
+                .make(view, String.format("Post #%s sent", postId), Snackbar.LENGTH_SHORT)
+                .setAction("View", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(activity, SinglePostActivity.class);
+                        intent.putExtra("post", postId);
+                        ActivityCompat.startActivity(activity, intent, null);
+                    }
+                })
+                .show();
     }
 }
