@@ -2,6 +2,7 @@ package org.itishka.pointim.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.view.Window;
 
 import com.astuetz.PagerSlidingTabStrip;
-import android.support.design.widget.FloatingActionButton;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.fragments.AllFragment;
@@ -32,7 +32,7 @@ public class MainActivity extends ConnectedActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode==RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             Utils.showPostSentSnack(this, mPager, data.getStringExtra("post"));
         }
         super.onActivityResult(requestCode, resultCode, data);

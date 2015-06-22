@@ -19,6 +19,7 @@ public class ConnectedActivity extends ActionBarActivity {
     }
 
     private static final int REQUEST_LOGIN = 0x6660;
+
     @Override
     protected void onStart() {
         super.onStart();

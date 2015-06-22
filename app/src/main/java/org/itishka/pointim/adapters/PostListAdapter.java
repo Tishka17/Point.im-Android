@@ -63,7 +63,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return 0;
             default:
                 if (mHasHeader)
-                    return mPostList.posts.get(position-1).uid;
+                    return mPostList.posts.get(position - 1).uid;
                 else
                     return mPostList.posts.get(position).uid;
         }

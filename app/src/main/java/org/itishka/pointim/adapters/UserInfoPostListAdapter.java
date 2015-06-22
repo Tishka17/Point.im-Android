@@ -71,7 +71,7 @@ public class UserInfoPostListAdapter extends PostListAdapter {
             headerHolder.birthday_group.setVisibility(View.VISIBLE);
             headerHolder.birthday.setText(Utils.formatDateOnly(mUser.birthdate));
         }
-        headerHolder.login.setText("@"+mUser.login);
+        headerHolder.login.setText("@" + mUser.login);
     }
 
     public void setUserInfo(User user) {

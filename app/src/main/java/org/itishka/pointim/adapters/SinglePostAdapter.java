@@ -16,8 +16,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
@@ -208,7 +206,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             commentHolder.date.setText(Utils.formatDate(comment.created));
             commentHolder.text.setText(comment.text.text);
             commentHolder.imageList.setImageUrls(comment.text.images, comment.files);
-            commentHolder.author.setText("@"+comment.author.login);
+            commentHolder.author.setText("@" + comment.author.login);
             if (TextUtils.isEmpty(comment.to_comment_id))
                 commentHolder.comment_id.setText("/" + comment.id);
             else

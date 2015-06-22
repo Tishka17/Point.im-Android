@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.Tag;

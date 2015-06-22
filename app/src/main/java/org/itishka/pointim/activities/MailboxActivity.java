@@ -26,7 +26,7 @@ public class MailboxActivity extends ConnectedActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode==RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             Utils.showPostSentSnack(this, mPager, data.getStringExtra("post"));
         }
         super.onActivityResult(requestCode, resultCode, data);
