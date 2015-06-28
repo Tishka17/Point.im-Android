@@ -1,12 +1,8 @@
 package org.itishka.pointim.utils;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -16,7 +12,6 @@ import android.widget.ImageView;
 
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 
 import org.itishka.pointim.R;
@@ -96,59 +91,6 @@ public class Utils {
         }
     }
 
-    public static void showAvatar(Context context, String avatar, ActionBar actionBar) {
-        if (avatar == null) {
-            actionBar.setLogo(R.drawable.ic_launcher);
-            return;
-        }
-        try {
-            URL url;
-            if (avatar.contains("/"))
-                url = new URL(avatar);
-            else
-                url = new URL(new URL(AVATAR_URL_STRING), "/a/80/" + avatar);
-            Transformation transformation = new RoundedTransformationBuilder()
-                    .borderColor(context.getResources().getColor(R.color.form_background))
-                    .borderWidthDp(1)
-                    .cornerRadiusDp(30)
-                    .oval(false)
-                    .build();
-            Picasso.with(context)
-                    .load(url.toString())
-                    .error(R.drawable.ic_action_internet)
-                    .placeholder(R.drawable.ic_launcher)
-                    .transform(transformation)
-                    .into(new PicassoActionBarTarget(actionBar));
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    private static class PicassoActionBarTarget implements Target {
-
-        private final ActionBar mActionBar;
-
-        public PicassoActionBarTarget(ActionBar actionBar) {
-            mActionBar = actionBar;
-        }
-
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            BitmapDrawable drawable = new BitmapDrawable(mActionBar.getThemedContext().getResources(), bitmap);
-            mActionBar.setLogo(drawable);
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            mActionBar.setLogo(errorDrawable);
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            mActionBar.setLogo(placeHolderDrawable);
-        }
-    }
 
     public static final int getGenderString(@Nullable Boolean gender) {
         if (gender == null) return R.string.gender_robot;
