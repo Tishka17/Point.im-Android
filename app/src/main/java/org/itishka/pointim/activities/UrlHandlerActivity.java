@@ -1,12 +1,12 @@
 package org.itishka.pointim.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
-public class UrlHandlerActivity extends ActionBarActivity {
+public class UrlHandlerActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

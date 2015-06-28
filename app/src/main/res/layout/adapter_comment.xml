@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
-        android:text="test with some many letttttttttters and so on as it can be" />
+        tools:text="test with some many letttttttttters and so on as it can be" />
 
     <org.itishka.pointim.widgets.ImageList
         android:id="@+id/imageList"
@@ -86,7 +86,7 @@
             android:layout_marginRight="@dimen/text_margin"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="1"
+            tools:text="1"
             android:textColor="@android:color/secondary_text_dark"
             android:textStyle="bold" />
     </LinearLayout>

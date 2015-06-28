@@ -3,7 +3,7 @@ package org.itishka.pointim.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.utils.ImageSearchHelper;
@@ -11,7 +11,7 @@ import org.itishka.pointim.utils.ImageSearchHelper;
 /**
  * Created by Tishka17 on 29.04.2015.
  */
-public class ConnectedActivity extends ActionBarActivity {
+public abstract class ConnectedActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
