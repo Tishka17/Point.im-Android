@@ -294,13 +294,13 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public interface OnLoadMoreRequestListener {
-        public boolean onLoadMoreRequested();//return false if cannot load more
+        boolean onLoadMoreRequested();//return false if cannot load more
     }
 
-    public static interface OnPostClickListener {
-        public void onPostClicked(View view, String post);
+    public interface OnPostClickListener {
+        void onPostClicked(View view, String post);
 
-        public void onTagClicked(View view, String tag);
+        void onTagClicked(View view, String tag);
     }
 
     protected class FooterHolder extends RecyclerView.ViewHolder {

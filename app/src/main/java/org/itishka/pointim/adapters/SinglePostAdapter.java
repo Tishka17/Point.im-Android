@@ -310,12 +310,12 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public static interface OnCommentClickListener {
-        public void onCommentClicked(View view, String commentId);
+    public interface OnCommentClickListener {
+        void onCommentClicked(View view, String commentId);
 
-        public void onRecommendCommentClicked(View view, String commentId);
+        void onRecommendCommentClicked(View view, String commentId);
 
-        public void onPostClicked(View view);
+        void onPostClicked(View view);
     }
 
     public void setOnCommentClickListener(OnCommentClickListener onCommentClickListener) {

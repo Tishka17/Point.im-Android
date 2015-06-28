@@ -38,8 +38,8 @@ import retrofit.client.Response;
 public class ImageUploadingPanel extends FrameLayout {
 
     private ViewGroup mLayout;
-    private ArrayList<Image> mImages = new ArrayList<>(1);
-    private Callback<Void> deleteCallback = new Callback<Void>() {
+    private final ArrayList<Image> mImages = new ArrayList<>(1);
+    private final Callback<Void> deleteCallback = new Callback<Void>() {
         @Override
         public void success(Void aVoid, Response response) {
             //do nothng
@@ -157,7 +157,7 @@ public class ImageUploadingPanel extends FrameLayout {
     }
 
     private static final class ImgUploadTask extends ImgurUploadTask {
-        WeakReference<Image> img;
+        final WeakReference<Image> img;
 
         ImgUploadTask(Image img, Context context) {
             super(context, img.originalPath, img.mime);

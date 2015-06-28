@@ -33,7 +33,7 @@ public class ImageList extends FrameLayout {
             R.id.imageView8,
             R.id.imageView9
     };
-    private Transformation transformation = new Transformation() {
+    private final Transformation transformation = new Transformation() {
 
         @Override
         public Bitmap transform(Bitmap source) {
@@ -57,8 +57,8 @@ public class ImageList extends FrameLayout {
             return "transformation" + " desiredWidth";
         }
     };
-    private ImageView[] mImageViews = new ImageView[sImageIds.length];
-    private OnClickListener imageClickListener = new OnClickListener() {
+    private final ImageView[] mImageViews = new ImageView[sImageIds.length];
+    private final OnClickListener imageClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) view.getTag()));
