@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="appbar_scrolling_view_behavior">org.itishka.pointim.widgets.PatchedScrollingViewBehavior</string>
     <string name="app_name">Point.im</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="hello_world">Hello world!</string>

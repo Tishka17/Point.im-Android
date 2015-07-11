@@ -60,14 +60,6 @@ public class MainActivity extends ConnectedActivity {
 
         // Initialize the ViewPager and set an adapter
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                Log.d("mPager Touch", "onTouch " + motionEvent);
-                return false;
-            }
-        });
-
         mPager.setOffscreenPageLimit(4);
         mPager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
         // Bind the tabs to the ViewPager
