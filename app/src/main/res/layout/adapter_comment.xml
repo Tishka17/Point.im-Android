@@ -29,7 +29,6 @@
             app:riv_mutate_background="true"
             app:riv_oval="false"
             android:layout_marginLeft="@dimen/text_margin"
-            android:background="?android:attr/selectableItemBackground"
             android:id="@+id/avatar"
             android:layout_width="@dimen/avatar_size"
             android:layout_height="@dimen/avatar_size"

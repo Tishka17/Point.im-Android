@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
@@ -13,7 +13,7 @@
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
     android:paddingTop="4dp"
-    card_view:cardCornerRadius="0dp">
+    app:cardCornerRadius="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +26,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.makeramen.roundedimageview.RoundedImageView
+                app:riv_corner_radius="30dip"
+                app:riv_border_width="1dip"
+                app:riv_border_color="@color/form_background"
+                app:riv_mutate_background="true"
+                app:riv_oval="false"
                 android:id="@+id/avatar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
