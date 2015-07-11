@@ -329,11 +329,7 @@ public class SinglePostFragment extends SpicedFragment {
                                 super.onPositive(dialog);
                                 String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
                                 showDialog();
-                                if (TextUtils.isEmpty(text)) {
-                                    ConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, mRecommendCallback);
-                                } else {
-                                    ConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, text, mRecommendCallback);
-                                }
+                                ConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, text, mRecommendCallback);
                             }
                         })
                         .customView(R.layout.dialog_input, true)
@@ -438,11 +434,7 @@ public class SinglePostFragment extends SpicedFragment {
                             super.onPositive(dialog);
                             String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
                             showDialog();
-                            if (TextUtils.isEmpty(text)) {
-                                ConnectionManager.getInstance().pointIm.recommend(mPost, mRecommendCallback);
-                            } else {
-                                ConnectionManager.getInstance().pointIm.recommend(mPost, text, mRecommendCallback);
-                            }
+                            ConnectionManager.getInstance().pointIm.recommend(mPost, text, mRecommendCallback);
                         }
                     })
                     .customView(R.layout.dialog_input, true)
