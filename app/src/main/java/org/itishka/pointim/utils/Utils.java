@@ -10,9 +10,9 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.makeramen.roundedimageview.RoundedTransformationBuilder;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
@@ -56,14 +56,31 @@ public class Utils {
         showAvatar(context, login, "http://point.im/avatar/" + login + "/80", imageView);
     }
 
+    private static ImageLoaderConfiguration sUilConfig;
+    public static ImageLoader getImageLoader(Context context) {
+        if (sUilConfig == null) {
+            synchronized (Utils.class) {
+                if (sUilConfig == null) {
+                    sUilConfig = new ImageLoaderConfiguration.Builder(context)
+                            .diskCacheSize(50 * 1024 * 1024)
+                            .diskCacheFileCount(100)
+                            .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+                            .memoryCacheSize(2 * 1024 * 1024)
+                            .build();
+                    ImageLoader.getInstance().init(sUilConfig);
+                }
+            }
+        }
+        return ImageLoader.getInstance();
+    }
+
     public static void showAvatar(Context context, String login, String avatar, ImageView imageView) {
+        ImageLoader imageLoader = getImageLoader(context);
+
         imageView.setTag(login);
         if (avatar == null) {
-            Picasso.with(context)
-                    .load(R.drawable.ic_launcher)
-                    .placeholder(R.drawable.ic_launcher)
-                    .fit()
-                    .into(imageView);
+            imageLoader.cancelDisplayTask(imageView);
+            imageView.setImageResource(R.drawable.ic_launcher);
             return;
         }
         try {
@@ -72,19 +89,7 @@ public class Utils {
                 url = new URL(avatar);
             else
                 url = new URL(new URL(AVATAR_URL_STRING), "/a/80/" + avatar);
-            Transformation transformation = new RoundedTransformationBuilder()
-                    .borderColor(context.getResources().getColor(R.color.form_background))
-                    .borderWidthDp(1)
-                    .cornerRadiusDp(30)
-                    .oval(false)
-                    .build();
-            Picasso.with(context)
-                    .load(url.toString())
-                    .error(R.drawable.ic_action_internet)
-                    .placeholder(R.drawable.ic_launcher)
-                    .fit()
-                    .transform(transformation)
-                    .into(imageView);
+            imageLoader.displayImage(url.toString(), imageView);
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

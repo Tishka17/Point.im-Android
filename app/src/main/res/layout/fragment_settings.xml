@@ -1,5 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="4dp"
-        card_view:cardCornerRadius="3dp">
+        app:cardCornerRadius="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,7 +68,7 @@
         android:layout_margin="4dp"
         android:checked="true"
         android:gravity="center_vertical"
-        card_view:cardCornerRadius="3dp">
+        app:cardCornerRadius="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -102,7 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="4dp"
-        card_view:cardCornerRadius="3dp">
+        app:cardCornerRadius="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,14 +131,24 @@
                 android:layout_marginTop="@dimen/text_margin"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.makeramen.roundedimageview.RoundedImageView
+                    app:riv_corner_radius="30dip"
+                    app:riv_border_width="1dip"
+                    app:riv_border_color="@color/form_background"
+                    app:riv_mutate_background="true"
+                    app:riv_oval="false"
                     android:id="@+id/avatar_tishka17"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="@dimen/text_avatar_margin"
                     android:src="@drawable/ic_launcher" />
 
-                <ImageView
+                <com.makeramen.roundedimageview.RoundedImageView
+                    app:riv_corner_radius="30dip"
+                    app:riv_border_width="1dip"
+                    app:riv_border_color="@color/form_background"
+                    app:riv_mutate_background="true"
+                    app:riv_oval="false"
                     android:id="@+id/avatar_arts"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
