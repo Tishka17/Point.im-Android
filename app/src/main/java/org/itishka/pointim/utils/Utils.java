@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -61,11 +62,16 @@ public class Utils {
         if (sUilConfig == null) {
             synchronized (Utils.class) {
                 if (sUilConfig == null) {
+                    DisplayImageOptions options = new DisplayImageOptions.Builder()
+                            .cacheInMemory(true)
+                            .cacheOnDisk(true)
+                            .build();
                     sUilConfig = new ImageLoaderConfiguration.Builder(context)
                             .diskCacheSize(50 * 1024 * 1024)
                             .diskCacheFileCount(100)
                             .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
                             .memoryCacheSize(2 * 1024 * 1024)
+                            .defaultDisplayImageOptions(options)
                             .build();
                     ImageLoader.getInstance().init(sUilConfig);
                 }
