@@ -26,17 +26,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.makeramen.roundedimageview.RoundedImageView
-                app:riv_corner_radius="30dip"
-                app:riv_border_width="1dip"
-                app:riv_border_color="@color/form_background"
-                app:riv_mutate_background="true"
-                app:riv_oval="false"
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/avatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/avatar_size"
+                android:layout_height="@dimen/avatar_size"
                 android:layout_marginRight="@dimen/text_avatar_margin"
-                android:src="@drawable/ic_launcher" />
+                android:scaleType="fitCenter"
+                app:placeholderImage="@drawable/ic_launcher"
+                app:roundAsCircle="true"
+                app:roundingBorderColor="@color/form_background"
+                app:roundingBorderWidth="1dip" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,8 +54,8 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Small Text"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    tools:text="Small Text" />
             </LinearLayout>
         </LinearLayout>
 

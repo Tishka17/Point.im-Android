@@ -10,16 +10,9 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -57,49 +50,18 @@ public class Utils {
         showAvatar(context, login, "http://point.im/avatar/" + login + "/80", imageView);
     }
 
-    private static ImageLoaderConfiguration sUilConfig;
-    public static ImageLoader getImageLoader(Context context) {
-        if (sUilConfig == null) {
-            synchronized (Utils.class) {
-                if (sUilConfig == null) {
-                    DisplayImageOptions options = new DisplayImageOptions.Builder()
-                            .cacheInMemory(true)
-                            .cacheOnDisk(true)
-                            .build();
-                    sUilConfig = new ImageLoaderConfiguration.Builder(context)
-                            .diskCacheSize(50 * 1024 * 1024)
-                            .diskCacheFileCount(100)
-                            .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-                            .memoryCacheSize(2 * 1024 * 1024)
-                            .defaultDisplayImageOptions(options)
-                            .build();
-                    ImageLoader.getInstance().init(sUilConfig);
-                }
-            }
-        }
-        return ImageLoader.getInstance();
-    }
-
     public static void showAvatar(Context context, String login, String avatar, ImageView imageView) {
-        ImageLoader imageLoader = getImageLoader(context);
-
         imageView.setTag(login);
         if (avatar == null) {
-            imageLoader.cancelDisplayTask(imageView);
             imageView.setImageResource(R.drawable.ic_launcher);
             return;
         }
-        try {
-            URL url;
-            if (avatar.contains("/"))
-                url = new URL(avatar);
-            else
-                url = new URL(new URL(AVATAR_URL_STRING), "/a/80/" + avatar);
-            imageLoader.displayImage(url.toString(), imageView);
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        Uri url;
+        if (avatar.contains("/"))
+            url = Uri.parse(avatar);
+        else
+            url = Uri.parse(AVATAR_URL_STRING + "/a/80/" + avatar);
+        imageView.setImageURI(url);
     }
 
 

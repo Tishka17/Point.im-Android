@@ -29,12 +29,17 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
+
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/avatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="@dimen/avatar_size"
+                    android:layout_height="@dimen/avatar_size"
                     android:layout_marginRight="@dimen/text_avatar_margin"
-                    android:src="@drawable/ic_launcher" />
+                    android:scaleType="fitCenter"
+                    app:placeholderImage="@drawable/ic_launcher"
+                    app:roundAsCircle="true"
+                    app:roundingBorderColor="@color/form_background"
+                    app:roundingBorderWidth="1dip" />
 
                 <TextView
                     android:id="@+id/login"
@@ -131,29 +136,27 @@
                 android:layout_marginTop="@dimen/text_margin"
                 android:orientation="horizontal">
 
-                <com.makeramen.roundedimageview.RoundedImageView
-                    app:riv_corner_radius="30dip"
-                    app:riv_border_width="1dip"
-                    app:riv_border_color="@color/form_background"
-                    app:riv_mutate_background="true"
-                    app:riv_oval="false"
-                    android:id="@+id/avatar_tishka17"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginRight="@dimen/text_avatar_margin"
-                    android:src="@drawable/ic_launcher" />
 
-                <com.makeramen.roundedimageview.RoundedImageView
-                    app:riv_corner_radius="30dip"
-                    app:riv_border_width="1dip"
-                    app:riv_border_color="@color/form_background"
-                    app:riv_mutate_background="true"
-                    app:riv_oval="false"
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/avatar_tishka17"
+                    android:layout_width="@dimen/avatar_size"
+                    android:layout_height="@dimen/avatar_size"
+                    android:scaleType="fitCenter"
+                    app:placeholderImage="@drawable/ic_launcher"
+                    app:roundAsCircle="true"
+                    app:roundingBorderColor="@color/form_background"
+                    app:roundingBorderWidth="1dip" />
+
+
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/avatar_arts"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginRight="@dimen/text_avatar_margin"
-                    android:src="@drawable/ic_launcher" />
+                    android:layout_width="@dimen/avatar_size"
+                    android:layout_height="@dimen/avatar_size"
+                    android:scaleType="fitCenter"
+                    app:placeholderImage="@drawable/ic_launcher"
+                    app:roundAsCircle="true"
+                    app:roundingBorderColor="@color/form_background"
+                    app:roundingBorderWidth="1dip" />
             </LinearLayout>
 
             <View
