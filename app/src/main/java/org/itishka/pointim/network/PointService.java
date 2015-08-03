@@ -52,6 +52,11 @@ public class PointService extends RetrofitGsonSpiceService {
     }
 
     @Override
+    public int getThreadCount() {
+        return 2;
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
         addRetrofitInterface(PointIm.class);
