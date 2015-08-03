@@ -165,6 +165,12 @@ public abstract class PostListFragment extends SpicedFragment {
         mLayoutManager.setSpanCount(getSpanCount(newConfig));
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSwipeRefresh.setRefreshing(false);
+    }
+
     private int getSpanCount(Configuration config) {
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         if (!prefs.getBoolean("multiColumns", true))
