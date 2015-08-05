@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:completionThreshold="1"
             android:hint="tags, separated by comma (,)" />
 
         <Switch
@@ -33,13 +34,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:completionThreshold="1"
         android:gravity="top|left"
         android:hint="Enter your text here"
         android:inputType="textCapSentences|textMultiLine"
         android:scrollHorizontally="false">
 
         <requestFocus />
-    </MultiAutoCompleteTextView >
+    </MultiAutoCompleteTextView>
 
     <org.itishka.pointim.widgets.ImageUploadingPanel
         android:id="@+id/imagesPanel"
