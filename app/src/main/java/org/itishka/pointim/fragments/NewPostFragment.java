@@ -16,7 +16,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Switch;
@@ -30,8 +32,10 @@ import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.Tag;
 import org.itishka.pointim.utils.ContentStorageHelper;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
+import org.itishka.pointim.widgets.SymbolTokenizer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit.Callback;
@@ -49,14 +53,16 @@ public class NewPostFragment extends Fragment {
     private static final String ARG_ID = "id";
     private static final String ARG_TAGS = "tags";
     private static final String ARG_MIME = "mime";
-    private EditText mPostText;
+    private MultiAutoCompleteTextView mPostText;
     private Switch mIsPrivate;
     private String mPostId;
     private String mMime;
     private MultiAutoCompleteTextView mPostTags;
     private MaterialDialog mProgressDialog;
+    private ArrayAdapter<String> mUsersListAdapter;
     private ArrayAdapter<Tag> mTagsListAdapter;
     private List<Tag> mTags = null;
+    private List<String> mUsers = Arrays.asList(new String[]{"tishka17", "arts"});
     private ImageUploadingPanel mImagesPanel;
     private Callback<NewPostResponse> mNewPostCallback = new Callback<NewPostResponse>() {
         @Override
@@ -127,7 +133,11 @@ public class NewPostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_post, container, false);
-        mPostText = (EditText) rootView.findViewById(R.id.postText);
+        mPostText = (MultiAutoCompleteTextView) rootView.findViewById(R.id.postText);
+        mUsersListAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line);
+        mPostText.setAdapter(mUsersListAdapter);
+        mPostText.setTokenizer(new SymbolTokenizer('@'));
+        mUsersListAdapter.addAll(mUsers);
         mIsPrivate = (Switch) rootView.findViewById(R.id.isPrivate);
         mTagsListAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line);
         mPostTags = (MultiAutoCompleteTextView) rootView.findViewById(R.id.postTags);

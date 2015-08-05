@@ -28,7 +28,7 @@
             android:thumb="@drawable/switch_thumb_lock" />
     </LinearLayout>
 
-    <EditText
+    <MultiAutoCompleteTextView
         android:id="@+id/postText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -39,7 +39,7 @@
         android:scrollHorizontally="false">
 
         <requestFocus />
-    </EditText>
+    </MultiAutoCompleteTextView >
 
     <org.itishka.pointim.widgets.ImageUploadingPanel
         android:id="@+id/imagesPanel"
