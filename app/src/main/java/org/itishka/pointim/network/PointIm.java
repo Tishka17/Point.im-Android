@@ -68,6 +68,9 @@ public interface PointIm {
     @GET("/api/user/login/{login}")
     User getUserInfo(@Path("login") String login);
 
+    @GET("/api/user/login/{login}/subscriptions")
+    void getUserSubscriptions(@Path("login") String login,  Callback<List<User>> callback);
+
     @POST("/api/user/login/{login}/s")
     void subscribeUser(@Path("login") String login, Callback<PointResult> callback);
 
