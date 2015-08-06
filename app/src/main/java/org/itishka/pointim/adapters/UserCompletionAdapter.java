@@ -23,7 +23,9 @@ import org.itishka.pointim.utils.Utils;
 public class UserCompletionAdapter implements ListAdapter, Filterable {
     private DataSetObservable mDataSetObservable = new DataSetObservable();
     private LayoutInflater mInflater;
-    private UserList mUsers;
+    private UserList mFilteredUsers = new UserList();
+    private UserList mUsers = new UserList();
+    private UserFilter mFilter;
 
     public UserCompletionAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -54,12 +56,12 @@ public class UserCompletionAdapter implements ListAdapter, Filterable {
 
     @Override
     public int getCount() {
-        return mUsers.size();
+        return mFilteredUsers.size();
     }
 
     @Override
     public User getItem(int position) {
-        return mUsers.get(position);
+        return mFilteredUsers.get(position);
     }
 
     @Override
@@ -130,6 +132,48 @@ public class UserCompletionAdapter implements ListAdapter, Filterable {
 
     @Override
     public Filter getFilter() {
-        return null;
+        if (mFilter == null) {
+            mFilter = new UserFilter();
+        }
+        return mFilter;
+    }
+
+    private class UserFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            if (constraint == null || constraint.length() == 0) {
+                filterResults.values = mUsers;
+                filterResults.count = mUsers.size();
+            } else {
+                final String lastToken = constraint.toString().toLowerCase();
+                final int count = mUsers.size();
+                final UserList list = new UserList();
+                User user;
+
+                for (int i = 0; i < count; i++) {
+                    user = mFilteredUsers.get(i);
+                    if (user.login.toLowerCase().startsWith(lastToken)) {
+                        list.add(user);
+                    }
+                }
+
+                filterResults.values = list;
+                filterResults.count = list.size();
+            }
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mFilteredUsers = (UserList) results.values;
+            if (results.count > 0) {
+                notifyDataSetChanged();
+            } else {
+                notifyDataSetInvalidated();
+            }
+        }
+
     }
 }
