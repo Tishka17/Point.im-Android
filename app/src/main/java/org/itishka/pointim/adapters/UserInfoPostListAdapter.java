@@ -10,14 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.model.User;
+import org.itishka.pointim.model.ExtendedUser;
 import org.itishka.pointim.utils.Utils;
 
 /**
  * Created by Tishka17 on 31.01.2015.
  */
 public class UserInfoPostListAdapter extends PostListAdapter {
-    private User mUser;
+    private ExtendedUser mUser;
 
     public UserInfoPostListAdapter(Context context) {
         super(context);
@@ -74,7 +74,7 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         headerHolder.login.setText("@" + mUser.login);
     }
 
-    public void setUserInfo(User user) {
+    public void setUserInfo(ExtendedUser user) {
         if (user == null)
             return;
         mUser = user;

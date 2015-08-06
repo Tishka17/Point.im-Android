@@ -1,15 +1,12 @@
 package org.itishka.pointim.network;
 
 import org.itishka.pointim.model.ExtendedPost;
+import org.itishka.pointim.model.ExtendedUser;
 import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.PointResult;
 import org.itishka.pointim.model.PostList;
-import org.itishka.pointim.model.Tag;
 import org.itishka.pointim.model.TagList;
-import org.itishka.pointim.model.User;
 import org.itishka.pointim.model.UserList;
-
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.DELETE;
@@ -68,7 +65,7 @@ public interface PointIm {
     PostList getBlog(@Query("before") long before, @Path("login") String login);
 
     @GET("/api/user/login/{login}")
-    User getUserInfo(@Path("login") String login);
+    ExtendedUser getUserInfo(@Path("login") String login);
 
     @GET("/api/user/login/{login}/subscriptions")
     UserList getUserSubscriptions(@Path("login") String login);

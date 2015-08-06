@@ -39,6 +39,7 @@ import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
 import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.model.Comment;
 import org.itishka.pointim.model.ExtendedPost;
 import org.itishka.pointim.model.PointResult;
 import org.itishka.pointim.model.UserList;
@@ -99,6 +100,8 @@ public class SinglePostFragment extends SpicedFragment {
             if (extendedPost != null && extendedPost.isSuccess()) {
                 mAdapter.setData(extendedPost);
                 mPointPost = extendedPost;
+                addAuthorsToCompletion();
+                mUsersListAdapter.notifyDataSetChanged();
                 if (!isDetached())
                     getActivity().supportInvalidateOptionsMenu();
             } else {
@@ -124,6 +127,8 @@ public class SinglePostFragment extends SpicedFragment {
             if (extendedPost != null && extendedPost.isSuccess()) {
                 mAdapter.setData(extendedPost);
                 mPointPost = extendedPost;
+                addAuthorsToCompletion();
+                mUsersListAdapter.notifyDataSetChanged();
                 if (!isDetached())
                     getActivity().supportInvalidateOptionsMenu();
                 if (shouldAutoload()) {
@@ -508,8 +513,18 @@ public class SinglePostFragment extends SpicedFragment {
             Log.d("SinglePostFragment", "users: " + users);
             if (users != null) {
                 mUsersListAdapter.setData(users);
+                addAuthorsToCompletion();
                 mUsersListAdapter.notifyDataSetChanged();
             }
         }
     };
+
+    private void addAuthorsToCompletion() {
+        if (mPointPost == null)
+            return;
+        mUsersListAdapter.addIfAbsent(mPointPost.post.author);
+        for (Comment c : mPointPost.comments) {
+            mUsersListAdapter.addIfAbsent(c.author);
+        }
+    }
 }

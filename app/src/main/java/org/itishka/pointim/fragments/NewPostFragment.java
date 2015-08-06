@@ -30,7 +30,6 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.Tag;
 import org.itishka.pointim.model.TagList;
-import org.itishka.pointim.model.User;
 import org.itishka.pointim.model.UserList;
 import org.itishka.pointim.network.requests.TagsRequest;
 import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
@@ -38,8 +37,6 @@ import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.itishka.pointim.widgets.SymbolTokenizer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;

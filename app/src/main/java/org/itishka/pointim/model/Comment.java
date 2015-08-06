@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Comment {
-    public AuthorData author;
+    public User author;
     public TextWithImages text;
     public Date created;
     public String id;

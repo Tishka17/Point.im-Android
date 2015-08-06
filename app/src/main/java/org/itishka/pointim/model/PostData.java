@@ -9,7 +9,7 @@ public class PostData {
     public List<String> tags;
     public List<String> files;
     public int comments_count;
-    public AuthorData author;
+    public User author;
     public TextWithImages text;
     public Date created;
     public Type type;

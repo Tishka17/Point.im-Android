@@ -3,7 +3,6 @@ package org.itishka.pointim.adapters;
 import android.content.Context;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,6 +135,13 @@ public class UserCompletionAdapter implements ListAdapter, Filterable {
             mFilter = new UserFilter();
         }
         return mFilter;
+    }
+
+    public void addIfAbsent(User user) {
+        for (User u: mUsers) {
+            if (u.id==user.id) return;
+        }
+        mUsers.add(user);
     }
 
     private class UserFilter extends Filter {
