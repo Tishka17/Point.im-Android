@@ -3,6 +3,7 @@ package org.itishka.pointim.adapters;
 import android.content.Context;
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,7 +153,7 @@ public class UserCompletionAdapter implements ListAdapter, Filterable {
                 User user;
 
                 for (int i = 0; i < count; i++) {
-                    user = mFilteredUsers.get(i);
+                    user = mUsers.get(i);
                     if (user.login.toLowerCase().startsWith(lastToken)) {
                         list.add(user);
                     }
