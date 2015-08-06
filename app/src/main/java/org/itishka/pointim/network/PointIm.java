@@ -7,6 +7,7 @@ import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.model.Tag;
 import org.itishka.pointim.model.TagList;
 import org.itishka.pointim.model.User;
+import org.itishka.pointim.model.UserList;
 
 import java.util.List;
 
@@ -70,7 +71,7 @@ public interface PointIm {
     User getUserInfo(@Path("login") String login);
 
     @GET("/api/user/login/{login}/subscriptions")
-    void getUserSubscriptions(@Path("login") String login,  Callback<List<User>> callback);
+    UserList getUserSubscriptions(@Path("login") String login);
 
     @POST("/api/user/login/{login}/s")
     void subscribeUser(@Path("login") String login, Callback<PointResult> callback);

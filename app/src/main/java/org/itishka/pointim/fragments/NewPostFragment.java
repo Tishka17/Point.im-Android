@@ -29,7 +29,10 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.Tag;
 import org.itishka.pointim.model.TagList;
+import org.itishka.pointim.model.User;
+import org.itishka.pointim.model.UserList;
 import org.itishka.pointim.network.requests.TagsRequest;
+import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.itishka.pointim.widgets.SymbolTokenizer;
 
@@ -58,9 +61,8 @@ public class NewPostFragment extends SpicedFragment {
     private String mMime;
     private MultiAutoCompleteTextView mPostTags;
     private MaterialDialog mProgressDialog;
-    private ArrayAdapter<String> mUsersListAdapter;
+    private ArrayAdapter<User> mUsersListAdapter;
     private ArrayAdapter<Tag> mTagsListAdapter;
-    private List<String> mUsers = Arrays.asList(new String[]{"tishka17", "arts"});
     private ImageUploadingPanel mImagesPanel;
     private Callback<NewPostResponse> mNewPostCallback = new Callback<NewPostResponse>() {
         @Override
@@ -135,7 +137,6 @@ public class NewPostFragment extends SpicedFragment {
         mUsersListAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line);
         mPostText.setAdapter(mUsersListAdapter);
         mPostText.setTokenizer(new SymbolTokenizer('@'));
-        mUsersListAdapter.addAll(mUsers);
         mIsPrivate = (Switch) rootView.findViewById(R.id.isPrivate);
         mTagsListAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line);
         mPostTags = (MultiAutoCompleteTextView) rootView.findViewById(R.id.postTags);
@@ -170,8 +171,9 @@ public class NewPostFragment extends SpicedFragment {
                 .build();
 
         TagsRequest request = new TagsRequest(ConnectionManager.getInstance().loginResult.login);
-        //getSpiceManager().getFromCache(TagList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mRequestListener);
-        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mRequestListener);
+        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mTagsRequestListener);
+        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(ConnectionManager.getInstance().loginResult.login);
+        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
         return rootView;
     }
 
@@ -220,7 +222,7 @@ public class NewPostFragment extends SpicedFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private RequestListener<TagList> mRequestListener = new RequestListener<TagList>() {
+    private RequestListener<TagList> mTagsRequestListener = new RequestListener<TagList>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             //
@@ -228,10 +230,27 @@ public class NewPostFragment extends SpicedFragment {
 
         @Override
         public void onRequestSuccess(TagList tags) {
-            Log.d("TAG", "tags: "+tags);
+            Log.d("NewPostFragment", "tags: "+tags);
             if (tags != null) {
                 mTagsListAdapter.clear();
                 mTagsListAdapter.addAll(tags);
+                mTagsListAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
+    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            //
+        }
+
+        @Override
+        public void onRequestSuccess(UserList users) {
+            Log.d("NewPostFragment", "users: "+users);
+            if (users != null) {
+                mTagsListAdapter.clear();
+                mUsersListAdapter.addAll(users);
                 mTagsListAdapter.notifyDataSetChanged();
             }
         }

@@ -24,4 +24,8 @@ public class User extends PointResult {
     public String homepage;
     public String email;
     public String location;
+
+    public String toString() {
+        return login;
+    }
 }
