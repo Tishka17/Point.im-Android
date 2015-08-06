@@ -250,9 +250,8 @@ public class NewPostFragment extends SpicedFragment {
         public void onRequestSuccess(UserList users) {
             Log.d("NewPostFragment", "users: "+users);
             if (users != null) {
-                mTagsListAdapter.clear();
                 mUsersListAdapter.setData(users);
-                mTagsListAdapter.notifyDataSetChanged();
+                mUsersListAdapter.notifyDataSetChanged();
             }
         }
     };

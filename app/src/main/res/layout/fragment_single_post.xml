@@ -68,11 +68,12 @@
                     android:layout_height="@dimen/touch_size"
                     android:src="@drawable/ic_attach_file_grey600_24dp" />
 
-                <EditText
+                <MultiAutoCompleteTextView
                     android:id="@+id/text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:completionThreshold="1"
                     android:inputType="textCapSentences|textMultiLine" />
 
                 <ImageButton

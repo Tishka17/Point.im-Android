@@ -33,7 +33,6 @@ public class UserCompletionAdapter implements ListAdapter, Filterable {
 
     public void setData(UserList users) {
         mUsers = users;
-        notifyDataSetChanged();
     }
 
     @Override
@@ -56,7 +55,7 @@ public class UserCompletionAdapter implements ListAdapter, Filterable {
 
     @Override
     public int getCount() {
-        return mFilteredUsers.size();
+        return (mFilteredUsers!=null)?mFilteredUsers.size():0;
     }
 
     @Override

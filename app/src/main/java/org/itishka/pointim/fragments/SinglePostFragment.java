@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,12 +37,16 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.adapters.SinglePostAdapter;
+import org.itishka.pointim.adapters.UserCompletionAdapter;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.ExtendedPost;
 import org.itishka.pointim.model.PointResult;
+import org.itishka.pointim.model.UserList;
 import org.itishka.pointim.network.requests.SinglePostRequest;
+import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
+import org.itishka.pointim.widgets.SymbolTokenizer;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -56,7 +62,7 @@ public class SinglePostFragment extends SpicedFragment {
     private LinearLayoutManager mLayoutManager;
     private SinglePostAdapter mAdapter;
     private TextView mCommentId;
-    private EditText mText;
+    private MultiAutoCompleteTextView mText;
     private ImageButton mSendButton;
     private View mBottomBar;
     private ExtendedPost mPointPost;
@@ -64,6 +70,7 @@ public class SinglePostFragment extends SpicedFragment {
     private ImageUploadingPanel mImagesPanel;
     private ImageButton mAttachButton;
     private ShareActionProvider mShareActionProvider;
+    private UserCompletionAdapter mUsersListAdapter;
 
     private void hideDialog() {
         if (mProgressDialog != null) mProgressDialog.hide();
@@ -251,6 +258,7 @@ public class SinglePostFragment extends SpicedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_single_post, container, false);
+        mUsersListAdapter = new UserCompletionAdapter(getActivity());
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.post);
         mSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -277,7 +285,9 @@ public class SinglePostFragment extends SpicedFragment {
                 mCommentId.setVisibility(View.GONE);
             }
         });
-        mText = (EditText) rootView.findViewById(R.id.text);
+        mText = (MultiAutoCompleteTextView) rootView.findViewById(R.id.text);
+        mText.setAdapter(mUsersListAdapter);
+        mText.setTokenizer(new SymbolTokenizer('@'));
         mSendButton = (ImageButton) rootView.findViewById(R.id.send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -353,6 +363,9 @@ public class SinglePostFragment extends SpicedFragment {
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
+
+        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(ConnectionManager.getInstance().loginResult.login);
+        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
         return rootView;
     }
 
@@ -482,4 +495,21 @@ public class SinglePostFragment extends SpicedFragment {
             mImagesPanel.addImage(data.getData(), data.getType());
         }
     }
+
+
+    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            //
+        }
+
+        @Override
+        public void onRequestSuccess(UserList users) {
+            Log.d("SinglePostFragment", "users: " + users);
+            if (users != null) {
+                mUsersListAdapter.setData(users);
+                mUsersListAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 }
