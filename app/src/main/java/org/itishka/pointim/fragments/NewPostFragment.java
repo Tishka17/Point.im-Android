@@ -25,6 +25,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.adapters.UserCompletionAdapter;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.Tag;
@@ -61,7 +62,7 @@ public class NewPostFragment extends SpicedFragment {
     private String mMime;
     private MultiAutoCompleteTextView mPostTags;
     private MaterialDialog mProgressDialog;
-    private ArrayAdapter<User> mUsersListAdapter;
+    private UserCompletionAdapter mUsersListAdapter;
     private ArrayAdapter<Tag> mTagsListAdapter;
     private ImageUploadingPanel mImagesPanel;
     private Callback<NewPostResponse> mNewPostCallback = new Callback<NewPostResponse>() {
@@ -134,7 +135,7 @@ public class NewPostFragment extends SpicedFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_post, container, false);
         mPostText = (MultiAutoCompleteTextView) rootView.findViewById(R.id.postText);
-        mUsersListAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line);
+        mUsersListAdapter = new UserCompletionAdapter(getActivity());
         mPostText.setAdapter(mUsersListAdapter);
         mPostText.setTokenizer(new SymbolTokenizer('@'));
         mIsPrivate = (Switch) rootView.findViewById(R.id.isPrivate);
@@ -250,7 +251,7 @@ public class NewPostFragment extends SpicedFragment {
             Log.d("NewPostFragment", "users: "+users);
             if (users != null) {
                 mTagsListAdapter.clear();
-                mUsersListAdapter.addAll(users);
+                mUsersListAdapter.setData(users);
                 mTagsListAdapter.notifyDataSetChanged();
             }
         }
