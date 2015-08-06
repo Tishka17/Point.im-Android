@@ -485,6 +485,7 @@ public class SinglePostFragment extends SpicedFragment {
             Intent intent = new Intent(getActivity(), NewPostActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("id", mPost);
+            bundle.putBoolean("private", mPointPost.post.isPrivate);
             bundle.putString("text", mPointPost.post.text.text.toString());
             bundle.putStringArray("tags", mPointPost.post.tags.toArray(new String[mPointPost.post.tags.size()]));
             intent.putExtras(bundle);

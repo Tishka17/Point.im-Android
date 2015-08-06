@@ -49,7 +49,9 @@ public class MailboxActivity extends ConnectedActivity {
         mNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(MailboxActivity.this, NewPostActivity.class), REQUEST_NEW_POST);
+                Intent intent = new Intent(MailboxActivity.this, NewPostActivity.class);
+                intent.putExtra("private", true);
+                startActivityForResult(intent, REQUEST_NEW_POST);
             }
         });
         mPager = (ViewPager) findViewById(R.id.pager);

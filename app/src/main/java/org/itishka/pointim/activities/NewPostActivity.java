@@ -42,15 +42,18 @@ public class NewPostActivity extends ConnectedActivity {
                 String id = getIntent().getStringExtra("id");
                 String text = getIntent().getStringExtra("text");
                 String[] tags = getIntent().getStringArrayExtra("tags");
-                if (!TextUtils.isEmpty(id))
-                    fragment = NewPostFragment.newInstanceForEdit(id, text, tags);
+                boolean isPrivate = getIntent().getBooleanExtra("private", false);
+                if (!TextUtils.isEmpty(id)) {
+                    fragment = NewPostFragment.newInstanceForEdit(id, text, tags, isPrivate);
+                } else {
+                    fragment = NewPostFragment.newInstance(isPrivate);
+                }
                 if (!TextUtils.isEmpty(id)) {
                     getSupportActionBar().setTitle("#" + id);
                 }
             }
-            if (fragment == null) {
-                fragment = NewPostFragment.newInstance();
-            }
+            if (fragment==null)
+                fragment = NewPostFragment.newInstance(false);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, fragment)

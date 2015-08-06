@@ -53,6 +53,7 @@ public class NewPostFragment extends SpicedFragment {
     private static final String ARG_ID = "id";
     private static final String ARG_TAGS = "tags";
     private static final String ARG_MIME = "mime";
+    private static final String ARG_PRIVATE = "private";
     private MultiAutoCompleteTextView mPostText;
     private Switch mIsPrivate;
     private String mPostId;
@@ -97,6 +98,13 @@ public class NewPostFragment extends SpicedFragment {
         fragment.setArguments(args);
         return fragment;
     }
+    public static NewPostFragment newInstance(boolean isPrivate) {
+        NewPostFragment fragment = new NewPostFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_PRIVATE, isPrivate);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public static NewPostFragment newInstance(ArrayList<Parcelable> images, String mime) {
         NewPostFragment fragment = new NewPostFragment();
@@ -113,18 +121,15 @@ public class NewPostFragment extends SpicedFragment {
         return newInstance(images, mime);
     }
 
-    public static NewPostFragment newInstanceForEdit(String id, String text, String[] tags) {
+    public static NewPostFragment newInstanceForEdit(String id, String text, String[] tags, boolean isPrivate) {
         NewPostFragment fragment = new NewPostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_ID, id);
         args.putString(ARG_TEXT, text);
         args.putStringArray(ARG_TAGS, tags);
+        args.putBoolean(ARG_PRIVATE, isPrivate);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public static NewPostFragment newInstance() {
-        return new NewPostFragment();
     }
 
     @Override
@@ -148,6 +153,7 @@ public class NewPostFragment extends SpicedFragment {
                 mPostId = args.getString(ARG_ID);
                 mPostText.setText(args.getString(ARG_TEXT, ""));
                 String[] tags = args.getStringArray(ARG_TAGS);
+                mIsPrivate.setChecked(args.getBoolean(ARG_PRIVATE));
                 if (tags != null) {
                     mPostTags.setText(TextUtils.join(", ", tags));
                 }
