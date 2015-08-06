@@ -1,36 +1,35 @@
 package org.itishka.pointim.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.Tag;
-import org.itishka.pointim.utils.ContentStorageHelper;
+import org.itishka.pointim.model.TagList;
+import org.itishka.pointim.network.requests.TagsRequest;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.itishka.pointim.widgets.SymbolTokenizer;
 
@@ -45,7 +44,7 @@ import retrofit.client.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewPostFragment extends Fragment {
+public class NewPostFragment extends SpicedFragment {
 
     private static final int RESULT_LOAD_IMAGE = 17;
     private static final String ARG_TEXT = "text";
@@ -61,7 +60,6 @@ public class NewPostFragment extends Fragment {
     private MaterialDialog mProgressDialog;
     private ArrayAdapter<String> mUsersListAdapter;
     private ArrayAdapter<Tag> mTagsListAdapter;
-    private List<Tag> mTags = null;
     private List<String> mUsers = Arrays.asList(new String[]{"tishka17", "arts"});
     private ImageUploadingPanel mImagesPanel;
     private Callback<NewPostResponse> mNewPostCallback = new Callback<NewPostResponse>() {
@@ -170,18 +168,11 @@ public class NewPostFragment extends Fragment {
                 .cancelable(false)
                 .customView(R.layout.dialog_progress, false)
                 .build();
-        new LoadTagsAsyncTask().execute();
-        return rootView;
-    }
 
-    private void applyTags(List<Tag> tags) {
-        if (isDetached() || tags == null)
-            return;
-        ContentStorageHelper.saveTags(getActivity(), tags);
-        mTags = tags;
-        mTagsListAdapter.clear();
-        mTagsListAdapter.addAll(mTags);
-        mTagsListAdapter.notifyDataSetChanged();
+        TagsRequest request = new TagsRequest(ConnectionManager.getInstance().loginResult.login);
+        //getSpiceManager().getFromCache(TagList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mRequestListener);
+        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mRequestListener);
+        return rootView;
     }
 
     @Override
@@ -229,42 +220,20 @@ public class NewPostFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private class LoadTagsAsyncTask extends AsyncTask<Void, Void, Void> {
-        ContentStorageHelper.TagList tagList = null;
-
+    private RequestListener<TagList> mRequestListener = new RequestListener<TagList>() {
         @Override
-        protected Void doInBackground(Void... voids) {
-            Context context = getActivity();
-            if (context != null) {
-                tagList = ContentStorageHelper.loadTags(context);
-                if (tagList != null)
-                    mTags = tagList.tags;
-            }
-            return null;
+        public void onRequestFailure(SpiceException spiceException) {
+            //
         }
 
         @Override
-        protected void onPostExecute(Void b) {
-            super.onPostExecute(b);
-            if (mTags != null) {
+        public void onRequestSuccess(TagList tags) {
+            Log.d("TAG", "tags: "+tags);
+            if (tags != null) {
                 mTagsListAdapter.clear();
-                mTagsListAdapter.addAll(mTags);
+                mTagsListAdapter.addAll(tags);
                 mTagsListAdapter.notifyDataSetChanged();
             }
-            if (mTags == null || tagList == null || System.currentTimeMillis() - tagList.updated > 24 * 60 * 60 * 1000) {
-                ConnectionManager.getInstance().pointIm.getTags(ConnectionManager.getInstance().loginResult.login, new Callback<List<Tag>>() {
-                    @Override
-                    public void success(List<Tag> tags, Response response) {
-                        if (tags != null)
-                            applyTags(tags);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-                        //nothing
-                    }
-                });
-            }
         }
-    }
+    };
 }
