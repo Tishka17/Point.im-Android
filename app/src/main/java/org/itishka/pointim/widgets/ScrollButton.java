@@ -1,5 +1,7 @@
 package org.itishka.pointim.widgets;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -23,6 +25,25 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
     private OnClickListener mOnClickListener = null;
     private final int MIN_SCROLL_DISTANCE = 10;
 
+    private Animator.AnimatorListener mOnHideAnimationEnd = new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            ScrollButton.this.setVisibility(INVISIBLE);
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animator) {
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animator) {
+        }
+    };
+
     private RecyclerView.OnScrollListener mOnScrollListener = new OnScrollListener() {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -32,14 +53,29 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            if (dy>0 && mDirection>0 && recyclerView.canScrollVertically(1)
-                    || dy<0 && mDirection<0 && recyclerView.canScrollVertically(-1)) {
-                if (getVisibility()==INVISIBLE) setVisibility(VISIBLE);
+            if (dy > 0 && mDirection > 0 && recyclerView.canScrollVertically(1)
+                    || dy < 0 && mDirection < 0 && recyclerView.canScrollVertically(-1)) {
+                if (getAlpha() == 0) {
+                    setVisibility(VISIBLE);
+                    if (mAnimator != null) mAnimator.cancel();
+                    mAnimator = ObjectAnimator.ofFloat(ScrollButton.this, "alpha", 1f);
+                    mAnimator.setDuration(100);
+                    mAnimator.start();
+                }
             } else {
-                if (getVisibility()==VISIBLE) setVisibility(INVISIBLE);
+                if (getAlpha() == 1) {
+                    if (mAnimator != null) mAnimator.cancel();
+                    mAnimator = ObjectAnimator.ofFloat(ScrollButton.this, "alpha", 0f);
+                    mAnimator.setDuration(100);
+                    mAnimator.addListener(mOnHideAnimationEnd);
+                    mAnimator.start();
+                }
             }
         }
     };
+
+    private ObjectAnimator mAnimator = null;
+
 
     @Override
     public boolean callOnClick() {
@@ -49,26 +85,26 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
 
     public ScrollButton(Context context) {
         super(context);
-        super.setOnClickListener(this);
+        initView();
     }
 
     public ScrollButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         parseAttrs(context, attrs);
-        super.setOnClickListener(this);
+        initView();
     }
 
     public ScrollButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         parseAttrs(context, attrs);
-        super.setOnClickListener(this);
+        initView();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public ScrollButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         parseAttrs(context, attrs);
-        super.setOnClickListener(this);
+        initView();
     }
 
     RecyclerView.OnScrollListener getOnScrollListener() {
@@ -78,6 +114,12 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
     @Override
     public void setOnClickListener(OnClickListener l) {
         mOnClickListener = l;
+    }
+
+    private void initView() {
+        super.setOnClickListener(this);
+        setAlpha(0f);
+        setVisibility(INVISIBLE);
     }
 
     private void parseAttrs(Context context, AttributeSet attrs) {
@@ -94,22 +136,23 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
     }
 
     public void setRecyclerView(RecyclerView recyclerView) {
-        if (mRecyclerView!=null) {
+        if (mRecyclerView != null) {
             mRecyclerView.removeOnScrollListener(mOnScrollListener);
         }
         mRecyclerView = recyclerView;
         mRecyclerView.addOnScrollListener(mOnScrollListener);
+        setAlpha(0f);
     }
 
     @Override
     public void onClick(View view) {
         if (mRecyclerView != null) {
-            if (mDirection <0)
+            if (mDirection < 0)
                 mRecyclerView.scrollToPosition(0);
-            else if (mDirection >0)
+            else if (mDirection > 0)
                 mRecyclerView.scrollToPosition(mRecyclerView.getAdapter().getItemCount() - 1);
         }
-        if (mOnClickListener!=null) {
+        if (mOnClickListener != null) {
             mOnClickListener.onClick(view);
         }
     }
