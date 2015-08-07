@@ -2,8 +2,10 @@
 <resources>
     <declare-styleable name="ScrollButton">
         <attr name="direction" format="enum">
-            <enum name="up" value="-1"/>
-            <enum name="down" value="1"/>
+            <enum name="up" value="-1" />
+            <enum name="down" value="1" />
         </attr>
+        <attr name="auto_hide" format="boolean" />
+        <attr name="scrollButtonStyle" format="reference" />
     </declare-styleable>
 </resources>

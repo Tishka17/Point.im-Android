@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:src="@android:drawable/arrow_up_float"
+            android:src="@drawable/ic_chevron_double_up_grey600_36dp"
             app:direction="up" />
 
         <org.itishka.pointim.widgets.ScrollButton
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:src="@android:drawable/arrow_down_float"
+            android:src="@drawable/ic_chevron_double_down_grey600_36dp"
             app:direction="down" />
     </RelativeLayout>
 

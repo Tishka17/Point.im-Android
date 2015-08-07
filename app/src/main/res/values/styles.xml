@@ -15,6 +15,15 @@
             @style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar
         </item>
         <item name="actionModeShareDrawable">@drawable/ic_share_variant_white_24dp</item>
+        <item name="scrollButtonStyle">
+            @style/AppTheme.ScrollButtonStyle
+        </item>
+    </style>
+
+    <style name="AppTheme.ScrollButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:scaleType">center</item>
     </style>
 
     <style name="AppTheme.ImageListItem">

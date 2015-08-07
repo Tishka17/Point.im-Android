@@ -23,7 +23,7 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
     private int mDirection = DIRECTION_NO;
     private RecyclerView mRecyclerView = null;
     private OnClickListener mOnClickListener = null;
-    private final int MIN_SCROLL_DISTANCE = 10;
+    private boolean mAutoHide = true;
 
     private Animator.AnimatorListener mOnHideAnimationEnd = new Animator.AnimatorListener() {
         @Override
@@ -53,22 +53,24 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            if (dy > 0 && mDirection > 0 && recyclerView.canScrollVertically(1)
-                    || dy < 0 && mDirection < 0 && recyclerView.canScrollVertically(-1)) {
-                if (getAlpha() == 0) {
-                    setVisibility(VISIBLE);
-                    if (mAnimator != null) mAnimator.cancel();
-                    mAnimator = ObjectAnimator.ofFloat(ScrollButton.this, "alpha", 1f);
-                    mAnimator.setDuration(100);
-                    mAnimator.start();
-                }
-            } else {
-                if (getAlpha() == 1) {
-                    if (mAnimator != null) mAnimator.cancel();
-                    mAnimator = ObjectAnimator.ofFloat(ScrollButton.this, "alpha", 0f);
-                    mAnimator.setDuration(100);
-                    mAnimator.addListener(mOnHideAnimationEnd);
-                    mAnimator.start();
+            if (mAutoHide) {
+                if (dy > 0 && mDirection > 0 && recyclerView.canScrollVertically(1)
+                        || dy < 0 && mDirection < 0 && recyclerView.canScrollVertically(-1)) {
+                    if (getAlpha() == 0) {
+                        setVisibility(VISIBLE);
+                        if (mAnimator != null) mAnimator.cancel();
+                        mAnimator = ObjectAnimator.ofFloat(ScrollButton.this, "alpha", 1f);
+                        mAnimator.setDuration(100);
+                        mAnimator.start();
+                    }
+                } else {
+                    if (getAlpha() == 1) {
+                        if (mAnimator != null) mAnimator.cancel();
+                        mAnimator = ObjectAnimator.ofFloat(ScrollButton.this, "alpha", 0f);
+                        mAnimator.setDuration(100);
+                        mAnimator.addListener(mOnHideAnimationEnd);
+                        mAnimator.start();
+                    }
                 }
             }
         }
@@ -84,14 +86,11 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
 
 
     public ScrollButton(Context context) {
-        super(context);
-        initView();
+        this(context, null, R.attr.scrollButtonStyle);
     }
 
     public ScrollButton(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        parseAttrs(context, attrs);
-        initView();
+        this(context, attrs, R.attr.scrollButtonStyle);
     }
 
     public ScrollButton(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -118,11 +117,15 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
 
     private void initView() {
         super.setOnClickListener(this);
-        setAlpha(0f);
-        setVisibility(INVISIBLE);
+        if (mAutoHide) {
+            setAlpha(0f);
+            setVisibility(INVISIBLE);
+        }
     }
 
     private void parseAttrs(Context context, AttributeSet attrs) {
+        if (attrs==null)
+            return;
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.ScrollButton,
@@ -130,6 +133,7 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
 
         try {
             mDirection = a.getInteger(R.styleable.ScrollButton_direction, DIRECTION_NO);
+            mAutoHide = a.getBoolean(R.styleable.ScrollButton_auto_hide, true);
         } finally {
             a.recycle();
         }
