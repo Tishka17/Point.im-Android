@@ -47,6 +47,7 @@ import org.itishka.pointim.network.requests.SinglePostRequest;
 import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
+import org.itishka.pointim.widgets.ScrollButton;
 import org.itishka.pointim.widgets.SymbolTokenizer;
 
 import retrofit.Callback;
@@ -280,6 +281,8 @@ public class SinglePostFragment extends SpicedFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new SinglePostAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
+        ((ScrollButton) rootView.findViewById(R.id.scroll_up)).setRecyclerView(mRecyclerView);
+        ((ScrollButton) rootView.findViewById(R.id.scroll_down)).setRecyclerView(mRecyclerView);
 
         mBottomBar = rootView.findViewById(R.id.bottom_bar);
         mCommentId = (TextView) rootView.findViewById(R.id.comment_id);
