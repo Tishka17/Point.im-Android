@@ -32,6 +32,7 @@ import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.model.Post;
 import org.itishka.pointim.model.PostList;
 import org.itishka.pointim.network.requests.PostListRequest;
+import org.itishka.pointim.widgets.ScrollButton;
 
 import java.util.List;
 
@@ -215,6 +216,7 @@ public abstract class PostListFragment extends SpicedFragment {
                 StaggeredGridLayoutManager.VERTICAL
         );
         mRecyclerView.setLayoutManager(mLayoutManager);
+        ((ScrollButton) rootView.findViewById(R.id.scroll_up)).setRecyclerView(mRecyclerView);
         mAdapter = createAdapter();
         mAdapter.setOnPostClickListener(mOnPostClickListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
