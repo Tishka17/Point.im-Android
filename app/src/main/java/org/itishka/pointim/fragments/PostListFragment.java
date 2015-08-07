@@ -217,6 +217,7 @@ public abstract class PostListFragment extends SpicedFragment {
         );
         mRecyclerView.setLayoutManager(mLayoutManager);
         ((ScrollButton) rootView.findViewById(R.id.scroll_up)).setRecyclerView(mRecyclerView);
+        ((ScrollButton) rootView.findViewById(R.id.scroll_down)).setRecyclerView(mRecyclerView);
         mAdapter = createAdapter();
         mAdapter.setOnPostClickListener(mOnPostClickListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
