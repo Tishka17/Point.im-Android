@@ -45,14 +45,16 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
     };
 
     private RecyclerView.OnScrollListener mOnScrollListener = new OnScrollListener() {
+        private int lastDy = 0;
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
+            if (newState==RecyclerView.SCROLL_STATE_IDLE) {
+                updateVisibility(recyclerView, lastDy);
+            }
         }
 
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
+        private void updateVisibility(RecyclerView recyclerView, int dy) {
             if (mAutoHide) {
                 if (dy > 0 && mDirection > 0 && recyclerView.canScrollVertically(1)
                         || dy < 0 && mDirection < 0 && recyclerView.canScrollVertically(-1)) {
@@ -73,6 +75,12 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
                     }
                 }
             }
+        }
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            updateVisibility(recyclerView, dy);
+            lastDy = dy;
         }
     };
 
