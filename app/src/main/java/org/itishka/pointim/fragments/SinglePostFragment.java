@@ -73,6 +73,8 @@ public class SinglePostFragment extends SpicedFragment {
     private ImageButton mAttachButton;
     private ShareActionProvider mShareActionProvider;
     private UserCompletionAdapter mUsersListAdapter;
+    private ScrollButton mUpButton;
+    private ScrollButton mDownButton;
 
     private void hideDialog() {
         if (mProgressDialog != null) mProgressDialog.hide();
@@ -103,6 +105,7 @@ public class SinglePostFragment extends SpicedFragment {
                 mPointPost = extendedPost;
                 addAuthorsToCompletion();
                 mUsersListAdapter.notifyDataSetChanged();
+                mDownButton.updateVisibility();
                 if (!isDetached())
                     getActivity().supportInvalidateOptionsMenu();
             } else {
@@ -281,8 +284,10 @@ public class SinglePostFragment extends SpicedFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new SinglePostAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
-        ((ScrollButton) rootView.findViewById(R.id.scroll_up)).setRecyclerView(mRecyclerView);
-        ((ScrollButton) rootView.findViewById(R.id.scroll_down)).setRecyclerView(mRecyclerView);
+        mUpButton = (ScrollButton) rootView.findViewById(R.id.scroll_up);
+        mUpButton.setRecyclerView(mRecyclerView);
+        mDownButton = (ScrollButton) rootView.findViewById(R.id.scroll_down);
+        mDownButton.setRecyclerView(mRecyclerView);
 
         mBottomBar = rootView.findViewById(R.id.bottom_bar);
         mCommentId = (TextView) rootView.findViewById(R.id.comment_id);
