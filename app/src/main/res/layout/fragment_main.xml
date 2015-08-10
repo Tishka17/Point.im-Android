@@ -31,12 +31,4 @@
         android:layout_alignParentTop="true"
         android:src="@drawable/ic_chevron_double_up_grey600_36dp" />
 
-    <org.itishka.pointim.widgets.ScrollButton
-        android:id="@+id/scroll_down"
-        app:direction="down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_chevron_double_down_grey600_36dp" />
 </RelativeLayout>
