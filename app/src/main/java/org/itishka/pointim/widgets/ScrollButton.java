@@ -64,20 +64,21 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
     }
 
     public void show() {
-        if (getAlpha() == 0 || mIsHidingProgress) {
+        if (getVisibility()==INVISIBLE || mIsHidingProgress) {
+            Log.d("SCrollButton", "show()");
             setVisibility(VISIBLE);
             if (mAnimator != null) mAnimator.cancel();
             mAnimator = ObjectAnimator.ofFloat(ScrollButton.this, "alpha", 1f);
-            mAnimator.setDuration(100);
+            mAnimator.setDuration(250);
             mAnimator.start();
         }
     }
 
     public void hide() {
-        if (getAlpha() > 0 && !mIsHidingProgress) {
+        if (getVisibility()==VISIBLE && !mIsHidingProgress) {
             if (mAnimator != null) mAnimator.cancel();
             mAnimator = ObjectAnimator.ofFloat(ScrollButton.this, "alpha", 0f);
-            mAnimator.setDuration(100);
+            mAnimator.setDuration(250);
             mAnimator.addListener(mOnHideAnimationEnd);
             mAnimator.start();
         }
