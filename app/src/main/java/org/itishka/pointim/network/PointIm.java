@@ -70,8 +70,9 @@ public interface PointIm {
     @GET("/api/user/login/{login}/subscriptions")
     UserList getUserSubscriptions(@Path("login") String login);
 
+    @FormUrlEncoded
     @POST("/api/user/login/{login}/s")
-    void subscribeUser(@Path("login") String login, Callback<PointResult> callback);
+    void subscribeUser(@Path("login") String login, @Field("text") String text, Callback<PointResult> callback);
 
     @DELETE("/api/user/login/{login}/s")
     void unsubscribeUser(@Path("login") String login, Callback<PointResult> callback);

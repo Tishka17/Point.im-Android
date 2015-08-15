@@ -114,7 +114,7 @@ public class UserViewFragment extends PostListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_subscribe) {
-            ConnectionManager.getInstance().pointIm.subscribeUser(mUser, new Callback<PointResult>() {
+            ConnectionManager.getInstance().pointIm.subscribeUser(mUser, "", new Callback<PointResult>() {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {
