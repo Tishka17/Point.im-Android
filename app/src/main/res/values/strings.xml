@@ -40,4 +40,6 @@
     <string name="setting_multi_column">Multiple columns</string>
     <string name="action_share">Share</string>
     <string name="gender_robot">robot</string>
+    <string name="title_activity_search">Search</string>
+    <string name="action_search">Search</string>
 </resources>

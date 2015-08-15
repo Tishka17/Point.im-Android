@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.itishka.pointim.activities.MainActivity">
     <item
+        android:id="@+id/action_search"
+        android:title="@string/action_search"
+        android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_bookmarks"
         android:title="@string/action_bookmarks"
         app:showAsAction="never" />

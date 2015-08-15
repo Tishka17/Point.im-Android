@@ -89,6 +89,8 @@ public class MainActivity extends ConnectedActivity {
 
         } else if (id == R.id.action_mailbox) {
             startActivity(new Intent(this, MailboxActivity.class));
+        } else if (id == R.id.action_search) {
+            startActivity(new Intent(this, SearchActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

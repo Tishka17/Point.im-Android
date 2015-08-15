@@ -27,6 +27,15 @@
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
+            android:name=".activities.SearchActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_search"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
             android:name=".activities.SinglePostActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_single_post"
