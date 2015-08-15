@@ -1,28 +1,17 @@
 package org.itishka.pointim.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.MultiAutoCompleteTextView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -30,9 +19,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.adapters.UserCompletionAdapter;
 import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.NewPostResponse;
 import org.itishka.pointim.model.Tag;
 import org.itishka.pointim.model.TagList;
 import org.itishka.pointim.model.User;
@@ -41,14 +28,6 @@ import org.itishka.pointim.network.requests.TagsRequest;
 import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.FlowLayout;
-import org.itishka.pointim.widgets.ImageUploadingPanel;
-import org.itishka.pointim.widgets.SymbolTokenizer;
-
-import java.util.ArrayList;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -78,7 +57,7 @@ public class SearchFragment extends SpicedFragment {
         }
     };
 
-    public static SearchFragment newInstance(String text) {
+    public static SearchFragment newInstance() {
         SearchFragment fragment = new SearchFragment();
         return fragment;
     }
