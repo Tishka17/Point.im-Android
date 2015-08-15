@@ -59,7 +59,7 @@ public class ImageSearchHelper {
             if (!MIME_ERROR.equals(s.getValue()))
                 editor.putString(s.getKey(), (String) s.getValue());
         }
-        editor.commit();
+        editor.apply();
         isSaved = true;
     }
 
