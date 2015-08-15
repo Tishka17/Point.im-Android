@@ -102,7 +102,6 @@ public class SearchFragment extends SpicedFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_new_post, menu);
     }
 
     @Override
@@ -153,7 +152,7 @@ public class SearchFragment extends SpicedFragment {
                     v.setTag(user.login);
                     ((TextView)v.findViewById(R.id.login)).setText(user.login);
                     mUsersLayout.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    Utils.showAvatar(getActivity(), user.avatar, user.login, (ImageView) v.findViewById(R.id.avatar));
+                    Utils.showAvatar(user.login, user.avatar, (ImageView) v.findViewById(R.id.avatar));
                     v.setOnClickListener(mOnUserClickListener);
                 }
             }

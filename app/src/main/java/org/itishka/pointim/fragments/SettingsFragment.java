@@ -47,7 +47,7 @@ public class SettingsFragment extends Fragment {
         name.setText(ConnectionManager.getInstance().loginResult.login);
 
         avatar = (ImageView) rootView.findViewById(R.id.avatar);
-        Utils.showAvatarByLogin(getActivity(), ConnectionManager.getInstance().loginResult.login, avatar);
+        Utils.showAvatarByLogin(ConnectionManager.getInstance().loginResult.login, avatar);
 
         logout = (ImageButton) rootView.findViewById(R.id.action_logout);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class SettingsFragment extends Fragment {
         });
 
         ImageView avatarTishka17 = (ImageView) rootView.findViewById(R.id.avatar_tishka17);
-        Utils.showAvatarByLogin(getActivity(), "Tishka17", avatarTishka17);
+        Utils.showAvatarByLogin("Tishka17", avatarTishka17);
         avatarTishka17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,7 +88,7 @@ public class SettingsFragment extends Fragment {
         });
 
         ImageView avatarArts = (ImageView) rootView.findViewById(R.id.avatar_arts);
-        Utils.showAvatarByLogin(getActivity(), "arts", avatarArts);
+        Utils.showAvatarByLogin("arts", avatarArts);
         avatarArts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

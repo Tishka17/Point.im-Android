@@ -157,7 +157,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             postHolder.author.setText("@" + mPost.post.author.login);
             postHolder.text.setText(mPost.post.text.text);
             postHolder.imageList.setImageUrls(mPost.post.text.images, mPost.post.files);
-            Utils.showAvatar(getContext(), mPost.post.author.login, mPost.post.author.avatar, postHolder.avatar);
+            Utils.showAvatar(mPost.post.author.login, mPost.post.author.avatar, postHolder.avatar);
             postHolder.date.setText(Utils.formatDate(mPost.post.created));
 
             postHolder.post_id.setText("#" + mPost.post.id);
@@ -197,7 +197,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 commentHolder.action_recommend.setTag(R.id.comment_id, comment.id);
                 commentHolder.action_recommend.setVisibility(View.VISIBLE);
             }
-            Utils.showAvatar(getContext(), comment.author.login, comment.author.avatar, commentHolder.avatar);
+            Utils.showAvatar(comment.author.login, comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
                 commentHolder.divider.setVisibility(View.INVISIBLE);
             } else {

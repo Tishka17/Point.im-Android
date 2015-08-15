@@ -125,7 +125,7 @@ public class UserCompletionAdapter implements ListAdapter, Filterable {
 
         holder.login.setText(user.login);
         holder.name.setText(user.name);
-        Utils.showAvatar(view.getContext(), user.login, user.avatar, holder.avatar);
+        Utils.showAvatar(user.login, user.avatar, holder.avatar);
         return view;
     }
 

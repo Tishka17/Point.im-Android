@@ -46,14 +46,14 @@ public class Utils {
         return sdf.format(date);
     }
 
-    public static void showAvatarByLogin(Context context, String login, ImageView imageView) {
-        showAvatar(context, login, "http://point.im/avatar/" + login + "/80", imageView);
+    public static void showAvatarByLogin(String login, ImageView imageView) {
+        showAvatar(login, "http://point.im/avatar/" + login + "/80", imageView);
     }
 
-    public static void showAvatar(Context context, String login, String avatar, ImageView imageView) {
+    public static void showAvatar(String login, String avatar, ImageView imageView) {
         imageView.setTag(login);
         if (avatar == null) {
-            imageView.setImageResource(R.drawable.ic_launcher);
+            imageView.setImageURI(null);
             return;
         }
         Uri url;
