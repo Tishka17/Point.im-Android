@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +38,11 @@ import org.itishka.pointim.widgets.FlowLayout;
 public class SearchFragment extends SpicedFragment {
     FlowLayout mUsersLayout;
     FlowLayout mTagsLayout;
+    TagList mTags;
+    UserList mUsers;
+    TagList mFilteredTags;
+    UserList mFilteredUsers;
+    private SearchView mSearchView;
 
     public SearchFragment() {
     }
@@ -97,6 +104,9 @@ public class SearchFragment extends SpicedFragment {
             }
         });
         searchMenuItem.expandActionView();
+        mSearchView = (SearchView) searchMenuItem.getActionView();
+        mSearchView.setOnQueryTextListener(mOnQueryTextListener);
+        //searchMenuItem
     }
 
     @Override
@@ -114,20 +124,47 @@ public class SearchFragment extends SpicedFragment {
         @Override
         public void onRequestSuccess(TagList tags) {
             if (tags != null) {
-                int n = 0;
-                mTagsLayout.removeAllViews();
-                for (Tag tag : tags) {
-                    LayoutInflater li;
-                    li = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                    final TextView v = (TextView) li.inflate(R.layout.tag, null);
-                    v.setText(tag.tag);
-                    mTagsLayout.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    v.setOnClickListener(mOnTagClickListener);
-                }
+                mTags = tags;
+                mFilteredTags = filterTags(tags, mSearchView.getQuery());
+                showTags(mFilteredTags);
             }
         }
     };
+
+    private void showTags(TagList tags) {
+        if (tags != null) {
+            int n = 0;
+            mTagsLayout.removeAllViews();
+            for (Tag tag : tags) {
+                LayoutInflater li;
+                li = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                final TextView v = (TextView) li.inflate(R.layout.tag, null);
+                v.setText(tag.tag);
+                mTagsLayout.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                v.setOnClickListener(mOnTagClickListener);
+            }
+        }
+    }
+
+
+    private void showUsers(UserList users) {
+        if (users != null) {
+            int n = 0;
+            mUsersLayout.removeAllViews();
+            for (User user : users) {
+                LayoutInflater li;
+                li = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                final View v = li.inflate(R.layout.user_chip, null);
+                v.setTag(user.login);
+                ((TextView) v.findViewById(R.id.login)).setText(user.login);
+                mUsersLayout.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                Utils.showAvatar(user.login, user.avatar, (ImageView) v.findViewById(R.id.avatar));
+                v.setOnClickListener(mOnUserClickListener);
+            }
+        }
+    }
 
     private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
         @Override
@@ -137,20 +174,73 @@ public class SearchFragment extends SpicedFragment {
 
         @Override
         public void onRequestSuccess(UserList users) {
-            if (users != null) { int n = 0;
-                mUsersLayout.removeAllViews();
-                for (User user : users) {
-                    LayoutInflater li;
-                    li = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                    final View v = li.inflate(R.layout.user_chip, null);
-                    v.setTag(user.login);
-                    ((TextView)v.findViewById(R.id.login)).setText(user.login);
-                    mUsersLayout.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    Utils.showAvatar(user.login, user.avatar, (ImageView) v.findViewById(R.id.avatar));
-                    v.setOnClickListener(mOnUserClickListener);
-                }
+            if (users != null) {
+                mUsers = users;
+                mFilteredUsers = filterUsers(mUsers, mSearchView.getQuery());
+                showUsers(mFilteredUsers);
             }
+        }
+    };
+
+    private static TagList filterTags(TagList tags, CharSequence query) {
+        if (TextUtils.isEmpty(query))
+            return tags;
+        String queryString = query.toString().toLowerCase();
+        TagList filtered = new TagList();
+        boolean found = false;
+        for (Tag tag: tags) {
+            if (queryString.equalsIgnoreCase(tag.tag)) {
+                filtered.add(0, tag);
+                found = true;
+            } else if (tag.tag.toLowerCase().startsWith(queryString)) {
+                filtered.add(tag);
+            }
+        }
+        if (!found) {
+            Tag tag = new Tag();
+            tag.tag = queryString;
+            tag.count = 0;
+            filtered.add(0, tag);
+        }
+        return filtered;
+    }
+
+    private static UserList filterUsers(UserList users, CharSequence query) {
+        if (TextUtils.isEmpty(query))
+            return users;
+        String queryString = query.toString().toLowerCase();
+        UserList filtered = new UserList();
+        boolean found = false;
+        for (User user: users) {
+            if (queryString.equalsIgnoreCase(user.login)) {
+                filtered.add(0, user);
+                found = true;
+            } else if (user.login.toLowerCase().startsWith(queryString)) {
+                filtered.add(user);
+            }
+        }
+        if (!found) {
+            User user = new User();
+            user.login = queryString;
+            user.avatar = Utils.getAvatarByLogin(user.login);
+            filtered.add(0, user);
+        }
+        return filtered;
+    }
+
+    SearchView.OnQueryTextListener mOnQueryTextListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            mFilteredTags = filterTags(mTags, newText);
+            showTags(mFilteredTags);
+            mFilteredUsers = filterUsers(mUsers, newText);
+            showUsers(mFilteredUsers);
+            return true;
         }
     };
 }

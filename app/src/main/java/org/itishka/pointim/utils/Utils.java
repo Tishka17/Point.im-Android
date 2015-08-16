@@ -45,8 +45,12 @@ public class Utils {
         return sdf.format(date);
     }
 
+    public static String getAvatarByLogin(String login) {
+        return "http://point.im/avatar/login/" + login + "/80";
+    }
+
     public static void showAvatarByLogin(String login, ImageView imageView) {
-        showAvatar(login, "http://point.im/avatar/" + login + "/80", imageView);
+        showAvatar(login,getAvatarByLogin(login), imageView);
     }
 
     public static void showAvatar(String login, String avatar, ImageView imageView) {
