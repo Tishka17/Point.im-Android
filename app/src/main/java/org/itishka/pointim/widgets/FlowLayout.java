@@ -51,6 +51,7 @@ public class FlowLayout extends ViewGroup {
                 mHeight = Math.max(mHeight, ypos + childh + PAD_V);
             }
         }
+        if (mHeight > getPaddingTop()) mHeight -= PAD_V;
         if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.UNSPECIFIED) {
             height = mHeight + getPaddingBottom();
         } else if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST) {
