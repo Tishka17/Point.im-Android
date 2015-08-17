@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.itishka.pointim">
+    package="org.itishka.pointim" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -11,12 +11,12 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,7 @@
             android:name=".activities.SearchActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_search"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
@@ -39,7 +39,7 @@
             android:name=".activities.SinglePostActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_single_post"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
@@ -49,7 +49,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_new_post"
             android:parentActivityName=".activities.MainActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
@@ -58,7 +58,7 @@
         <activity-alias
             android:name=".ShareWithActivity"
             android:label="@string/app_name"
-            android:targetActivity=".activities.NewPostActivity">
+            android:targetActivity=".activities.NewPostActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -86,7 +86,7 @@
             android:name=".activities.TagViewActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_tag_view"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
@@ -95,7 +95,7 @@
             android:name=".activities.UserViewActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_user_view"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
@@ -104,7 +104,7 @@
             android:name=".activities.MailboxActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_mailbox"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
@@ -113,7 +113,7 @@
             android:name=".activities.BookmarksActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_bookmarks"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
@@ -121,12 +121,12 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-        <activity android:name=".activities.UrlHandlerActivity">
+        <activity android:name=".activities.UrlHandlerActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -152,6 +152,11 @@
             android:name=".network.PointService"
             android:enabled="true"
             android:exported="false" />
+        <service
+            android:name=".WebSocketService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

@@ -31,6 +31,7 @@ public class ConnectionManager {
     public static final String USER_AGENT = "Tishka17 Point.im Client";
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String ENDPOINT = "https://point.im";
+    public static final String POINT_WS = "wss://point.im/ws";
     public static final String IMGUR_ENDPOINT = "https://api.imgur.com/3/";
     private static final ConnectionManager instance = new ConnectionManager();
     public final OkHttpClient okHttpClient;

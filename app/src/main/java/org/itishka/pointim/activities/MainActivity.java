@@ -16,6 +16,7 @@ import android.view.Window;
 import com.astuetz.PagerSlidingTabStrip;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.WebSocketService;
 import org.itishka.pointim.fragments.AllFragment;
 import org.itishka.pointim.fragments.CommentedFragment;
 import org.itishka.pointim.fragments.RecentFragment;
@@ -63,6 +64,8 @@ public class MainActivity extends ConnectedActivity {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(mPager);
+
+        startService(new Intent(this, WebSocketService.class));
     }
 
     @Override
