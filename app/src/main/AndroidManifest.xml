@@ -24,6 +24,8 @@
             </intent-filter>
         </activity>
         <activity
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.LoginForm"
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity

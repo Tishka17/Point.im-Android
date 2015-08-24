@@ -42,4 +42,8 @@
     <string name="gender_robot">robot</string>
     <string name="title_activity_search">Search</string>
     <string name="action_search">Search</string>
+    <string name="register_link"><a href="https://point.im/register">Do not have an account?</a></string>
+    <string name="forgot_password"><a href="https://point.im/remember">Forgot your password?</a></string>
+    <string name="point_im">Point.im</string>
+    <string name="register">Create new account</string>
 </resources>

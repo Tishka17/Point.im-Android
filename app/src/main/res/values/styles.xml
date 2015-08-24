@@ -28,6 +28,20 @@
         <item name="android:scaleType">center</item>
     </style>
 
+    <style name="AppTheme.LoginForm.Base" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="AppTheme.LoginForm" parent="AppTheme.LoginForm.Base"></style>
+
     <style name="AppTheme.ImageListItem">
         <item name="android:maxWidth">384dp</item>
         <item name="android:layout_height">192dp</item>
@@ -35,5 +49,9 @@
         <item name="android:visibility">gone</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:layout_margin">2dp</item>
+    </style>
+
+    <style name="PrimaryButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="colorButtonNormal">?attr/colorAccent</item>
     </style>
 </resources>
