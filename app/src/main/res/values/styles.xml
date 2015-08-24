@@ -18,7 +18,9 @@
         <item name="scrollButtonStyle">
             @style/AppTheme.ScrollButtonStyle
         </item>
+        <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
+
 
     <style name="AppTheme.ScrollButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:minHeight">48dp</item>

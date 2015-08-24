@@ -8,4 +8,7 @@
         <attr name="auto_hide" format="boolean" />
         <attr name="scrollButtonStyle" format="reference" />
     </declare-styleable>
+    <declare-styleable name="AppTheme">
+        <attr name="toolbarTheme" format="reference" />
+    </declare-styleable>
 </resources>
