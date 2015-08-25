@@ -21,5 +21,6 @@
 
     <color name="textSecondaryDark">#bebebe</color>
     <color name="darkerTransparent">#000000aa</color>
+    <color name="lighterTransparent">#ffffffaa</color>
 
 </resources>
