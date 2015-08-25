@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="textColorPrimaryInverse">@color/white</item>
+        <item name="roundingBorderColor">@color/form_background</item>
 
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

@@ -31,7 +31,6 @@
                 android:scaleType="fitCenter"
                 app:placeholderImage="@drawable/ic_account_grey600_36dp"
                 app:roundAsCircle="true"
-                app:roundingBorderColor="@color/form_background"
                 app:roundingBorderWidth="1dip" />
 
             <LinearLayout
@@ -105,7 +104,6 @@
                         android:layout_height="@dimen/avatar_size"
                         app:placeholderImage="@drawable/ic_account_grey600_36dp"
                         app:roundAsCircle="true"
-                        app:roundingBorderColor="@color/form_background"
                         app:roundingBorderWidth="1dip" />
 
                     <LinearLayout

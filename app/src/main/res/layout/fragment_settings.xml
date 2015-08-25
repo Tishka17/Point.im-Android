@@ -38,7 +38,6 @@
                     android:scaleType="fitCenter"
                     app:placeholderImage="@drawable/ic_account_grey600_36dp"
                     app:roundAsCircle="true"
-                    app:roundingBorderColor="@color/form_background"
                     app:roundingBorderWidth="1dip" />
 
                 <TextView
@@ -144,7 +143,6 @@
                     android:scaleType="fitCenter"
                     app:placeholderImage="@drawable/ic_account_grey600_36dp"
                     app:roundAsCircle="true"
-                    app:roundingBorderColor="@color/form_background"
                     app:roundingBorderWidth="1dip" />
 
 
@@ -155,7 +153,6 @@
                     android:scaleType="fitCenter"
                     app:placeholderImage="@drawable/ic_account_grey600_36dp"
                     app:roundAsCircle="true"
-                    app:roundingBorderColor="@color/form_background"
                     app:roundingBorderWidth="1dip" />
             </LinearLayout>
 
