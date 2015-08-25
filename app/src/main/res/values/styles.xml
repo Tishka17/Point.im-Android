@@ -2,11 +2,12 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- customize the color palette -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/accent</item>
+        <item name="colorPrimary">@color/material_blue_700</item>
+        <item name="colorPrimaryDark">@color/material_blue_800</item>
+        <item name="colorAccent">@color/accent_material_light</item>
         <item name="textColorPrimaryInverse">@color/white</item>
-        <item name="roundingBorderColor">@color/form_background</item>
+
+        <item name="roundingBorderColor">@color/white</item>
         <item name="textSecondaryDark">@color/textSecondaryDark</item>
 
         <item name="android:windowNoTitle">true</item>
@@ -39,19 +40,6 @@
         <item name="android:scaleType">center</item>
     </style>
 
-    <style name="AppTheme.LoginForm.Base" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/accent</item>
-
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowNoTitle">true</item>
-        <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-    </style>
-
-    <style name="AppTheme.LoginForm" parent="AppTheme.LoginForm.Base"></style>
 
     <style name="AppTheme.ImageListItem">
         <item name="android:maxWidth">384dp</item>
@@ -65,4 +53,20 @@
     <style name="PrimaryButtonStyle" parent="Widget.AppCompat.Button">
         <item name="colorButtonNormal">?attr/colorAccent</item>
     </style>
+
+
+    <!-- Login form has special style -->
+    <style name="AppTheme.LoginForm.Base" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/material_blue_700</item>
+        <item name="colorPrimaryDark">@color/material_blue_800</item>
+        <item name="colorAccent">@color/accent_material_light</item>
+
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="AppTheme.LoginForm" parent="AppTheme.LoginForm.Base"></style>
 </resources>
