@@ -169,7 +169,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:textColor="@android:color/secondary_text_dark"
+                android:textColor="?attr/textSecondaryDark"
                 android:textStyle="bold"
                 tools:text="#xxx" />
 
@@ -195,7 +195,7 @@
                 android:layout_marginRight="8dp"
                 android:drawableLeft="@drawable/ic_action_comment"
                 android:gravity="center"
-                android:textColor="@android:color/secondary_text_dark"
+                android:textColor="?attr/textSecondaryDark"
                 tools:text="123" />
         </LinearLayout>
     </LinearLayout>

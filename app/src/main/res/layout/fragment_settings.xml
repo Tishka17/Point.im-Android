@@ -119,14 +119,14 @@
                 android:layout_height="wrap_content"
                 android:text="Point.im for Android"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/secondary_text_default_material_light"
+                android:textColor="?attr/textSecondaryDark"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/version"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/secondary_text_default_material_light"
+                android:textColor="?attr/textSecondaryDark"
                 tools:text="Version: 1.7" />
 
             <LinearLayout
