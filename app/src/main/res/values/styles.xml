@@ -19,11 +19,16 @@
         <item name="scrollButtonStyle">
             @style/AppTheme.ScrollButtonStyle
         </item>
+        <item name="popupTheme">@style/AppTheme.PopupTheme</item>
         <item name="toolbarTheme">@style/AppTheme.ToolbarTheme</item>
     </style>
 
     <style name="AppTheme.ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.PopupTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">?attr/md_background_color</item>
     </style>
 
     <style name="AppTheme.ScrollButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless">
