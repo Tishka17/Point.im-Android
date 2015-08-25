@@ -15,7 +15,7 @@ public class TagViewActivity extends ConnectedActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tag_view);
+        setContentView(R.layout.activity_single);
         String user = getIntent().getStringExtra("user");
         String tag = getIntent().getStringExtra("tag");
         if (savedInstanceState == null) {
