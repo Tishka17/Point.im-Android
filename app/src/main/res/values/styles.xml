@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="textColorPrimaryInverse">@color/white</item>
 
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -18,9 +19,12 @@
         <item name="scrollButtonStyle">
             @style/AppTheme.ScrollButtonStyle
         </item>
-        <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="toolbarTheme">@style/AppTheme.ToolbarTheme</item>
     </style>
 
+    <style name="AppTheme.ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
 
     <style name="AppTheme.ScrollButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:minHeight">48dp</item>

@@ -10,5 +10,6 @@
     </declare-styleable>
     <declare-styleable name="AppTheme">
         <attr name="toolbarTheme" format="reference" />
+        <attr name="textColorPrimaryInverse" format="reference" />
     </declare-styleable>
 </resources>
