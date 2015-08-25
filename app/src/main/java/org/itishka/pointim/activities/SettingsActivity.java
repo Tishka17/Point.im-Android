@@ -8,7 +8,7 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.fragments.SettingsFragment;
 
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends ThemedActivity {
 
 
     @Override

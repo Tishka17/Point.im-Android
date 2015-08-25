@@ -96,6 +96,14 @@
                 android:layout_margin="@dimen/text_margin"
                 android:checked="true"
                 android:text="@string/setting_multi_column" />
+
+            <Switch
+                android:id="@+id/swThemeDark"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:checked="true"
+                android:text="@string/setting_theme_dark" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

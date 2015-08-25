@@ -120,6 +120,16 @@ public class SettingsFragment extends Fragment {
                 editor.apply();
             }
         });
+        Switch swThemeDark = (Switch) rootView.findViewById(R.id.swThemeDark);
+        swThemeDark.setChecked(prefs.getBoolean("themeDark", false));
+        swThemeDark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("themeDark", isChecked);
+                editor.apply();
+            }
+        });
         return rootView;
     }
 
