@@ -148,6 +148,9 @@
                     app:roundAsCircle="true"
                     app:roundingBorderWidth="1dip" />
 
+                <Space
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent" />
 
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/avatar_arts"
