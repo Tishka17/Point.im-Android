@@ -117,14 +117,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:src="@drawable/ic_action_internet" />
+                android:src="@drawable/ic_action_internet_tinted" />
 
             <TextView
                 android:id="@+id/comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:drawableLeft="@drawable/ic_action_comment"
+                android:drawableLeft="@drawable/ic_action_comment_tinted"
                 android:gravity="center"
                 android:textColor="?attr/textSecondaryDark"
                 tools:text="123" />

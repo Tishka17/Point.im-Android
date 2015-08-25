@@ -60,7 +60,7 @@
             style="?android:attr/actionButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_share_black25_24dp" />
+            android:src="@drawable/ic_action_share_tinted" />
     </LinearLayout>
 
     <org.itishka.pointim.widgets.MyTextView
