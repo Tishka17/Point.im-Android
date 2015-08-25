@@ -23,7 +23,7 @@
         <item name="scrollButtonStyle">
             @style/AppTheme.ScrollButtonStyle
         </item>
-        <item name="popupTheme">@style/AppTheme.PopupTheme</item>
+        <item name="popupTheme">@style/AppTheme.PopupTheme.Light</item>
         <item name="toolbarTheme">@style/AppTheme.ToolbarTheme</item>
     </style>
 
