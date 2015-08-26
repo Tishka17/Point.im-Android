@@ -105,6 +105,6 @@ public class Utils {
                 DrawableCompat.setTint(cs[i], c);
             }
         }
-        v.setCompoundDrawables(cs[0], cs[1], cs[2], cs[3]);
+        v.setCompoundDrawablesWithIntrinsicBounds(cs[0], cs[1], cs[2], cs[3]);
     }
 }
