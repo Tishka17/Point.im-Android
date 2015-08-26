@@ -80,7 +80,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/text_margin"
-                            android:background="@drawable/tag"
+                            android:background="?attr/chipDrawable"
                             android:gravity="bottom"
                             android:visibility="gone" />
                     </FrameLayout>

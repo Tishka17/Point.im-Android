@@ -12,6 +12,6 @@
         <attr name="toolbarTheme" format="reference" />
         <attr name="textColorPrimaryInverse" format="reference" />
         <attr name="textSecondaryDark" format="reference" />
-        <attr name="chipColor" format="reference" />
+        <attr name="chipDrawable" format="reference" />
     </declare-styleable>
 </resources>
