@@ -245,9 +245,11 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             author = (TextView) itemView.findViewById(R.id.author);
             post_id = (TextView) itemView.findViewById(R.id.post_id);
             comments = (TextView) itemView.findViewById(R.id.comments);
+            Utils.setTint(comments);
             date = (TextView) itemView.findViewById(R.id.date);
             webLink = (ImageView) itemView.findViewById(R.id.weblink);
             favourite = (CheckBox) itemView.findViewById(R.id.favourite);
+            Utils.setTint(favourite);
             mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
         }

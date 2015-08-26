@@ -1,13 +1,18 @@
 package org.itishka.pointim.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
@@ -50,7 +55,7 @@ public class Utils {
     }
 
     public static void showAvatarByLogin(String login, ImageView imageView) {
-        showAvatar(login,getAvatarByLogin(login), imageView);
+        showAvatar(login, getAvatarByLogin(login), imageView);
     }
 
     public static void showAvatar(String login, String avatar, ImageView imageView) {
@@ -86,5 +91,20 @@ public class Utils {
                     }
                 })
                 .show();
+    }
+
+    public static void setTint(TextView v) {
+        Drawable[] ds = v.getCompoundDrawables();
+        Drawable[] cs = new Drawable[ds.length];
+        int c = v.getCurrentTextColor();
+        for (int i = 0; i < ds.length; i++) {
+            if (ds[i] == null) {
+                cs[i] = null;
+            } else {
+                cs[i] = DrawableCompat.wrap(ds[i]);
+                DrawableCompat.setTint(cs[i], c);
+            }
+        }
+        v.setCompoundDrawables(cs[0], cs[1], cs[2], cs[3]);
     }
 }

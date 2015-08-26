@@ -110,22 +110,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:button="@null"
-                android:drawableLeft="@drawable/ic_bookmark" />
+                android:drawableLeft="@drawable/ic_bookmark"
+                android:padding="4dp"
+                android:textColor="?attr/textSecondaryDark" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/weblink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="?android:attr/actionButtonStyle"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginRight="8dp"
-                android:src="@drawable/ic_action_internet_tinted" />
+                android:padding="4dp"
+                android:src="@drawable/ic_earth_black_24dp"
+                android:tint="?attr/textSecondaryDark" />
 
             <TextView
                 android:id="@+id/comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:drawableLeft="@drawable/ic_action_comment_tinted"
+                android:drawableLeft="@drawable/ic_message_reply_black_24dp"
+                android:drawablePadding="4dip"
                 android:gravity="center"
+                android:padding="4dp"
                 android:textColor="?attr/textSecondaryDark"
                 tools:text="123" />
         </LinearLayout>
