@@ -23,6 +23,6 @@ public class UserSubscriptionsRequest extends RetrofitSpiceRequest<UserList, Poi
     }
 
     public String getCacheName() {
-        return getClass().getCanonicalName()+"-"+mUserName;
+        return getClass().getCanonicalName() + "-" + mUserName;
     }
 }

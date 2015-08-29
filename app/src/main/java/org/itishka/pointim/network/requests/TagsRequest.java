@@ -43,6 +43,6 @@ public class TagsRequest extends RetrofitSpiceRequest<TagList, PointIm> {
     }
 
     public String getCacheName() {
-        return getClass().getCanonicalName()+"-"+mUserName;
+        return getClass().getCanonicalName() + "-" + mUserName;
     }
 }

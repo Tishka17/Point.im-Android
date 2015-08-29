@@ -5,6 +5,7 @@ public class User extends PointResult {
     public String name;
     public String avatar;
     public int id;
+
     public String toString() {
         return login;
     }

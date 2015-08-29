@@ -188,7 +188,7 @@ public class SearchFragment extends SpicedFragment {
         String queryString = query.toString().toLowerCase();
         TagList filtered = new TagList();
         boolean found = false;
-        for (Tag tag: tags) {
+        for (Tag tag : tags) {
             if (queryString.equalsIgnoreCase(tag.tag)) {
                 filtered.add(0, tag);
                 found = true;
@@ -211,7 +211,7 @@ public class SearchFragment extends SpicedFragment {
         String queryString = query.toString().toLowerCase();
         UserList filtered = new UserList();
         boolean found = false;
-        for (User user: users) {
+        for (User user : users) {
             if (queryString.equalsIgnoreCase(user.login)) {
                 filtered.add(0, user);
                 found = true;

@@ -55,7 +55,7 @@ public class UserCompletionAdapter implements ListAdapter, Filterable {
 
     @Override
     public int getCount() {
-        return (mFilteredUsers!=null)?mFilteredUsers.size():0;
+        return (mFilteredUsers != null) ? mFilteredUsers.size() : 0;
     }
 
     @Override
@@ -138,8 +138,8 @@ public class UserCompletionAdapter implements ListAdapter, Filterable {
     }
 
     public void addIfAbsent(User user) {
-        for (User u: mUsers) {
-            if (u.id==user.id) return;
+        for (User u : mUsers) {
+            if (u.id == user.id) return;
         }
         mUsers.add(user);
     }

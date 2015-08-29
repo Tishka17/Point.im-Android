@@ -55,7 +55,7 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
     }
 
     public void updateVisibility() {
-        if (!mAutoHide || mRecyclerView==null) return;
+        if (!mAutoHide || mRecyclerView == null) return;
         if (mRecyclerView.canScrollVertically(mDirection)) {
             show();
         } else {
@@ -64,7 +64,7 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
     }
 
     public void show() {
-        if (getVisibility()==INVISIBLE || mIsHidingProgress) {
+        if (getVisibility() == INVISIBLE || mIsHidingProgress) {
             Log.d("SCrollButton", "show()");
             setVisibility(VISIBLE);
             if (mAnimator != null) mAnimator.cancel();
@@ -75,7 +75,7 @@ public class ScrollButton extends ImageButton implements View.OnClickListener {
     }
 
     public void hide() {
-        if (getVisibility()==VISIBLE && !mIsHidingProgress) {
+        if (getVisibility() == VISIBLE && !mIsHidingProgress) {
             if (mAnimator != null) mAnimator.cancel();
             mAnimator = ObjectAnimator.ofFloat(ScrollButton.this, "alpha", 0f);
             mAnimator.setDuration(250);

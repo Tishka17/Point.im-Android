@@ -56,8 +56,8 @@
         <item name="android:background">?attr/colorPrimary</item>
     </style>
 
-    <style name="AppTheme.PopupTheme" parent="ThemeOverlay.AppCompat">
-    </style>
+    <style name="AppTheme.PopupTheme" parent="ThemeOverlay.AppCompat"></style>
+
     <style name="AppTheme.PopupTheme.Light" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:background">?attr/md_background_color</item>
     </style>

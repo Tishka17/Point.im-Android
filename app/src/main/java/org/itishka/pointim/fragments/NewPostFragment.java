@@ -98,6 +98,7 @@ public class NewPostFragment extends SpicedFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public static NewPostFragment newInstance(boolean isPrivate) {
         NewPostFragment fragment = new NewPostFragment();
         Bundle args = new Bundle();
@@ -234,7 +235,7 @@ public class NewPostFragment extends SpicedFragment {
 
         @Override
         public void onRequestSuccess(TagList tags) {
-            Log.d("NewPostFragment", "tags: "+tags);
+            Log.d("NewPostFragment", "tags: " + tags);
             if (tags != null) {
                 mTagsListAdapter.clear();
                 mTagsListAdapter.addAll(tags);
@@ -251,7 +252,7 @@ public class NewPostFragment extends SpicedFragment {
 
         @Override
         public void onRequestSuccess(UserList users) {
-            Log.d("NewPostFragment", "users: "+users);
+            Log.d("NewPostFragment", "users: " + users);
             if (users != null) {
                 mUsersListAdapter.setData(users);
                 mUsersListAdapter.notifyDataSetChanged();
