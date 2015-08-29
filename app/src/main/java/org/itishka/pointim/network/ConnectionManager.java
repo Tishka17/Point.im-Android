@@ -1,4 +1,4 @@
-package org.itishka.pointim.api;
+package org.itishka.pointim.network;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -8,10 +8,8 @@ import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
 import org.itishka.pointim.BuildConfig;
-import org.itishka.pointim.model.LoginResult;
-import org.itishka.pointim.model.TextWithImages;
-import org.itishka.pointim.network.PointIm;
-import org.itishka.pointim.network.PointImAuth;
+import org.itishka.pointim.model.point.LoginResult;
+import org.itishka.pointim.model.point.TextWithImages;
 import org.itishka.pointim.utils.AuthSaver;
 import org.itishka.pointim.utils.DateDeserializer;
 import org.itishka.pointim.utils.TextParser;
@@ -32,6 +30,7 @@ public class ConnectionManager {
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String ENDPOINT = "https://point.im";
     public static final String IMGUR_ENDPOINT = "https://api.imgur.com/3/";
+    public static final String IMGUR_AUTH_ENDPOINT = "https://api.imgur.com/oauth2/";
     private static final ConnectionManager instance = new ConnectionManager();
     public final OkHttpClient okHttpClient;
     public final OkClient okClient;
@@ -43,7 +42,8 @@ public class ConnectionManager {
     public PointIm pointIm = null;
     public PointImAuth pointAuthService = null;
     public LoginResult loginResult = null;
-    public ImgurService imgurService = null;
+    public Imgur imgurService = null;
+    public ImgurAuth imgurAuthService = null;
 
     private ConnectionManager() {
         okHttpClient = new OkHttpClient();
@@ -75,7 +75,19 @@ public class ConnectionManager {
                 .setEndpoint(IMGUR_ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
                 .build();
-        imgurService = restAdapter.create(ImgurService.class);
+        imgurService = restAdapter.create(Imgur.class);
+        RestAdapter imgurAuthRestAdapter = new RestAdapter.Builder()
+                .setRequestInterceptor(new RequestInterceptor() {
+                    @Override
+                    public void intercept(RequestFacade requestFacade) {
+                        requestFacade.addHeader("User-Agent", USER_AGENT);
+                    }
+                })
+                .setClient(okClient)
+                .setEndpoint(IMGUR_AUTH_ENDPOINT)
+                .setConverter(new GsonConverter(mGson))
+                .build();
+        imgurAuthService = imgurAuthRestAdapter.create(ImgurAuth.class);
     }
 
     public static ConnectionManager getInstance() {

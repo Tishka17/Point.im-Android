@@ -3,7 +3,7 @@ package org.itishka.pointim.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.itishka.pointim.model.LoginResult;
+import org.itishka.pointim.model.point.LoginResult;
 
 /**
  * Created by atikhonov on 05.05.2014.

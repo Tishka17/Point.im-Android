@@ -13,8 +13,8 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.model.User;
-import org.itishka.pointim.model.UserList;
+import org.itishka.pointim.model.point.User;
+import org.itishka.pointim.model.point.UserList;
 import org.itishka.pointim.utils.Utils;
 
 /**

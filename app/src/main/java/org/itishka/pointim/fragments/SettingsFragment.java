@@ -22,7 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.network.ConnectionManager;
 import org.itishka.pointim.utils.Utils;
 
 /**

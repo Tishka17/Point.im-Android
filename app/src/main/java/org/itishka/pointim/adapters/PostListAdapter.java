@@ -21,8 +21,8 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.model.Post;
-import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.model.point.Post;
+import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;

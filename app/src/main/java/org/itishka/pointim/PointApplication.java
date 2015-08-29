@@ -6,7 +6,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.backends.okhttp.OkHttpImagePipelineConfigFactory;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 
-import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.network.ConnectionManager;
 import org.itishka.pointim.utils.ImageSearchHelper;
 
 /**

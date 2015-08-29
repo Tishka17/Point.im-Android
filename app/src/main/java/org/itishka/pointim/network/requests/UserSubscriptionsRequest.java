@@ -2,7 +2,7 @@ package org.itishka.pointim.network.requests;
 
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
-import org.itishka.pointim.model.UserList;
+import org.itishka.pointim.model.point.UserList;
 import org.itishka.pointim.network.PointIm;
 
 /**

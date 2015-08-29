@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.network.ConnectionManager;
 import org.itishka.pointim.utils.ImageSearchHelper;
 
 /**
