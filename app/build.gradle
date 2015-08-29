@@ -16,6 +16,7 @@ android {
         versionName "2.9"
         buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId', "null")
         buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret', "null")
+        buildConfigField "String", "IMGUR_REDIRECT_URL", properties.getProperty('imgurRedirectUrl', "null")
     }
     buildTypes {
         release {
