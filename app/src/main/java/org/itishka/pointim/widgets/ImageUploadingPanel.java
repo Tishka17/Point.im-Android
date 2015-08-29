@@ -20,8 +20,7 @@ import com.squareup.picasso.Transformation;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.network.ConnectionManager;
-import org.itishka.pointim.model.imgur.ImgurImage;
-import org.itishka.pointim.model.imgur.ImgurUploadResult;
+import org.itishka.pointim.model.imgur.UploadResult;
 import org.itishka.pointim.utils.ImgurUploadTask;
 
 import java.lang.ref.WeakReference;
@@ -182,7 +181,7 @@ public class ImageUploadingPanel extends FrameLayout {
         }
 
         @Override
-        protected void onPostExecute(ImgurUploadResult result) {
+        protected void onPostExecute(UploadResult result) {
             super.onPostExecute(result);
             if (result != null && result.success) {
                 img.get().viewFinished.setVisibility(VISIBLE);
@@ -210,7 +209,7 @@ public class ImageUploadingPanel extends FrameLayout {
 
         boolean uploaded = false;
         ImgurUploadTask task = null;
-        ImgurImage uploadInfo;
+        org.itishka.pointim.model.imgur.Image uploadInfo;
     }
 
     private class CropSquareTransformation implements Transformation {

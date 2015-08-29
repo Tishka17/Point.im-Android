@@ -1,6 +1,6 @@
 package org.itishka.pointim.network;
 
-import org.itishka.pointim.model.imgur.TokenResponse;
+import org.itishka.pointim.model.imgur.Token;
 
 import retrofit.Callback;
 import retrofit.http.Field;
@@ -18,7 +18,7 @@ public interface ImgurAuth {
                   @Field("client_secret") String client_secret,
                   @Field("grant_type") String grant_type,
                   @Field("code") String code,
-                  Callback<TokenResponse> callback);
+                  Callback<Token> callback);
 
     @FormUrlEncoded
     @POST("/token")
@@ -26,5 +26,5 @@ public interface ImgurAuth {
                   @Field("client_secret") String client_secret,
                   @Field("grant_type") String grant_type,
                   @Field("refresh_token") String refresh_token,
-                  Callback<TokenResponse> callback);
+                  Callback<Token> callback);
 }

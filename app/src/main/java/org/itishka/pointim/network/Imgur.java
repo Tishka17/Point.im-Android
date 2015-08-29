@@ -1,7 +1,7 @@
 package org.itishka.pointim.network;
 
-import org.itishka.pointim.model.imgur.ImgurImage;
-import org.itishka.pointim.model.imgur.ImgurUploadResult;
+import org.itishka.pointim.model.imgur.Image;
+import org.itishka.pointim.model.imgur.UploadResult;
 
 import retrofit.Callback;
 import retrofit.http.DELETE;
@@ -18,11 +18,11 @@ import retrofit.mime.TypedFile;
 public interface Imgur {
     @Multipart
     @POST("/upload")
-    ImgurUploadResult uploadFile(@Part("image") TypedFile resource);
+    UploadResult uploadFile(@Part("image") TypedFile resource);
 
 
     @GET("/image/{id}")
-    ImgurImage getImageInfo(@Path("id") String id);
+    Image getImageInfo(@Path("id") String id);
 
     @DELETE("/image/{id}")
     void deleteImage(@Path("id") String id, Callback<Void> callback);

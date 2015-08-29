@@ -2,6 +2,7 @@ package org.itishka.pointim.network;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -86,6 +87,13 @@ public class ConnectionManager {
                 .setClient(okClient)
                 .setEndpoint(IMGUR_AUTH_ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLog(new RestAdapter.Log() {
+                    @Override
+                    public void log(String msg) {
+                        Log.i("IMGUR_AUTH", msg);
+                    }
+                })
                 .build();
         imgurAuthService = imgurAuthRestAdapter.create(ImgurAuth.class);
     }

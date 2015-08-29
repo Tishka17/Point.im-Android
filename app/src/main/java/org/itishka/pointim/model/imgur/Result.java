@@ -1,10 +1,9 @@
 package org.itishka.pointim.model.imgur;
 
 /**
- * Created by Tishka17 on 30.12.2014.
+ * Created by Tishka17 on 29.08.2015.
  */
-public class ImgurUploadResult {
-    public ImgurImage data;
+public class Result {
     public boolean success;
     public int status;
 }

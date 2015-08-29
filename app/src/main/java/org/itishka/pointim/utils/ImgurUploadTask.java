@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 
 import org.itishka.pointim.network.ConnectionManager;
-import org.itishka.pointim.model.imgur.ImgurUploadResult;
+import org.itishka.pointim.model.imgur.UploadResult;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +20,7 @@ import retrofit.RetrofitError;
 /**
  * Created by Tishka17 on 30.12.2014.
  */
-public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUploadResult> {
+public abstract class ImgurUploadTask extends AsyncTask<String, Integer, UploadResult> {
     private final Uri mUri;
     private File mFile;
     private Context mContext;
@@ -41,7 +41,7 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUp
 
 
     @Override
-    protected ImgurUploadResult doInBackground(String... params) {
+    protected UploadResult doInBackground(String... params) {
         String[] filePathColumn = {MediaStore.Images.Media.MIME_TYPE};
         String imageMime = mMime;
         if (imageMime == null) {
@@ -85,7 +85,7 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, ImgurUp
         mContext = null;
         final long totalSize = mFile.length();
         try {
-            ImgurUploadResult res = ConnectionManager.getInstance().imgurService.uploadFile(new CountingTypedFile(imageMime, mFile, new CountingTypedFile.ProgressListener() {
+            UploadResult res = ConnectionManager.getInstance().imgurService.uploadFile(new CountingTypedFile(imageMime, mFile, new CountingTypedFile.ProgressListener() {
                 @Override
                 public void transferred(long num) {
                     publishProgress((int) ((num / (float) totalSize) * 50));

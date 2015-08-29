@@ -9,9 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.R;
+import org.itishka.pointim.model.imgur.Token;
+import org.itishka.pointim.network.ConnectionManager;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -34,14 +41,20 @@ public class ImgurAuthFragment extends Fragment {
                 Log.d("My Webview", url);
                 Uri uri = Uri.parse(url);
                 if (url.startsWith(BuildConfig.IMGUR_REDIRECT_URL + "?")) {
-                    uri.getQueryParameter("code");
-                    return false;
+                    processCode(uri.getQueryParameter("code"));
+                    view.loadData("", "text/html", "UTF-8");
+                    return true;
                 }
                 if (uri.getHost() != "api.imgur.com")
                     return true;
                 return false; //Allow WebView to load url
             }
         });
+        load();
+        return newView;
+    }
+
+    private void load() {
         Uri auth = new Uri.Builder()
                 .scheme("https")
                 .authority("api.imgur.com")
@@ -50,6 +63,34 @@ public class ImgurAuthFragment extends Fragment {
                 .appendQueryParameter("client_id", BuildConfig.IMGUR_ID)
                 .build();
         mWebView.loadUrl(auth.toString());
-        return newView;
+    }
+
+    private void processCode(String code) {
+        ConnectionManager.getInstance().imgurAuthService.getToken(
+                BuildConfig.IMGUR_ID,
+                BuildConfig.IMGUR_SECRET,
+                "authorization_code", code,
+                new Callback<Token>() {
+                    @Override
+                    public void success(Token token, Response response) {
+                        if (token.access_token != null) {
+                            Toast.makeText(getActivity(), "Authorized!", Toast.LENGTH_SHORT).show();
+                            getActivity().finish();
+                        } else {
+                            if (!isDetached()) {
+                                Toast.makeText(getActivity(), "Error!", Toast.LENGTH_SHORT).show();
+                                load();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        if (!isDetached()) {
+                            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                            load();
+                        }
+                    }
+                });
     }
 }
