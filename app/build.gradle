@@ -14,17 +14,13 @@ android {
         targetSdkVersion 23
         versionCode 23
         versionName "2.9"
+        buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId', "null")
+        buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret', "null")
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId')
-            buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret')
-        }
-        debug {
-            buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId')
-            buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret')
         }
     }
     packagingOptions {
