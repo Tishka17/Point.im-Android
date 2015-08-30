@@ -5,26 +5,22 @@ Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.0"
 
     defaultConfig {
         applicationId "org.itishka.pointim"
         minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 21
-        versionName "2.7"
+        targetSdkVersion 23
+        versionCode 23
+        versionName "2.9"
+        buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId', "null")
+        buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret', "null")
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId')
-            buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret')
-        }
-        debug {
-            buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId')
-            buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret')
         }
     }
     packagingOptions {
@@ -44,23 +40,23 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile 'com.android.support:cardview-v7:22.2.1'
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile 'com.android.support:cardview-v7:23.0.0'
+    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:design:23.0.0'
 
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.squareup.okhttp:okhttp-ws:2.4.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
+    compile 'com.squareup.okhttp:okhttp-ws:2.5.0'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
     compile "com.squareup.retrofit:retrofit:1.9.0"
     compile "com.squareup.picasso:picasso:2.5.2"
-    compile 'com.facebook.fresco:fresco:0.6.1'
+    compile 'com.facebook.fresco:fresco:0.7.0'
     compile "com.facebook.fresco:imagepipeline-okhttp:0.6.1"
     compile 'com.octo.android.robospice:robospice:1.4.14'
     compile 'com.octo.android.robospice:robospice-retrofit:1.4.14'
 
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
-    compile 'com.afollestad:material-dialogs:0.7.8.1'
+    compile 'com.afollestad:material-dialogs:0.7.9.0'
     compile 'com.jpardogo.googleprogressbar:library:1.2.0'
     compile 'com.pnikosis:materialish-progress:1.5'
 

@@ -12,7 +12,7 @@ public class SinglePostActivity extends ConnectedActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_post);
+        setContentView(R.layout.activity_single);
         if (savedInstanceState == null) {
             String post = getIntent().getStringExtra("post");
             getSupportFragmentManager().beginTransaction()

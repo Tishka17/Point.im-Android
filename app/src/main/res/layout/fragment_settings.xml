@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="4dp"
+        app:cardBackgroundColor="?attr/cardBackgroundColor"
         app:cardCornerRadius="3dp">
 
         <LinearLayout
@@ -38,7 +39,6 @@
                     android:scaleType="fitCenter"
                     app:placeholderImage="@drawable/ic_account_grey600_36dp"
                     app:roundAsCircle="true"
-                    app:roundingBorderColor="@color/form_background"
                     app:roundingBorderWidth="1dip" />
 
                 <TextView
@@ -73,6 +73,7 @@
         android:layout_margin="4dp"
         android:checked="true"
         android:gravity="center_vertical"
+        app:cardBackgroundColor="?attr/cardBackgroundColor"
         app:cardCornerRadius="3dp">
 
         <LinearLayout
@@ -95,6 +96,14 @@
                 android:layout_margin="@dimen/text_margin"
                 android:checked="true"
                 android:text="@string/setting_multi_column" />
+
+            <Switch
+                android:id="@+id/swThemeDark"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:checked="true"
+                android:text="@string/setting_theme_dark" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
@@ -107,6 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="4dp"
+        app:cardBackgroundColor="?attr/cardBackgroundColor"
         app:cardCornerRadius="3dp">
 
         <LinearLayout
@@ -120,14 +130,14 @@
                 android:layout_height="wrap_content"
                 android:text="Point.im for Android"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/secondary_text_default_material_light"
+                android:textColor="?attr/textSecondaryDark"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/version"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/secondary_text_default_material_light"
+                android:textColor="?attr/textSecondaryDark"
                 tools:text="Version: 1.7" />
 
             <LinearLayout
@@ -144,9 +154,11 @@
                     android:scaleType="fitCenter"
                     app:placeholderImage="@drawable/ic_account_grey600_36dp"
                     app:roundAsCircle="true"
-                    app:roundingBorderColor="@color/form_background"
                     app:roundingBorderWidth="1dip" />
 
+                <Space
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent" />
 
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/avatar_arts"
@@ -155,7 +167,6 @@
                     android:scaleType="fitCenter"
                     app:placeholderImage="@drawable/ic_account_grey600_36dp"
                     app:roundAsCircle="true"
-                    app:roundingBorderColor="@color/form_background"
                     app:roundingBorderWidth="1dip" />
             </LinearLayout>
 

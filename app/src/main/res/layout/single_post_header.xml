@@ -11,6 +11,7 @@
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
     android:paddingTop="4dp"
+    app:cardBackgroundColor="?attr/cardBackgroundColor"
     app:cardCornerRadius="0dp">
 
     <LinearLayout
@@ -35,7 +36,6 @@
                 android:scaleType="fitCenter"
                 app:placeholderImage="@drawable/ic_account_grey600_36dp"
                 app:roundAsCircle="true"
-                app:roundingBorderColor="@color/form_background"
                 app:roundingBorderWidth="1dip" />
 
             <LinearLayout
@@ -100,7 +100,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:textColor="@android:color/secondary_text_dark"
+                android:textColor="?attr/textSecondaryDark"
                 android:textStyle="bold"
                 tools:text="#xxx" />
 
@@ -110,23 +110,30 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:button="@null"
-                android:drawableLeft="@drawable/ic_bookmark" />
+                android:drawableLeft="@drawable/ic_bookmark"
+                android:padding="4dp"
+                android:textColor="?attr/textSecondaryDark" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/weblink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="?android:attr/actionButtonStyle"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginRight="8dp"
-                android:src="@drawable/ic_action_internet" />
+                android:padding="4dp"
+                android:src="@drawable/ic_earth_black_24dp"
+                android:tint="?attr/textSecondaryDark" />
 
             <TextView
                 android:id="@+id/comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:drawableLeft="@drawable/ic_action_comment"
+                android:drawableLeft="@drawable/ic_message_reply_black_24dp"
+                android:drawablePadding="4dip"
                 android:gravity="center"
-                android:textColor="@android:color/secondary_text_dark"
+                android:padding="4dp"
+                android:textColor="?attr/textSecondaryDark"
                 tools:text="123" />
         </LinearLayout>
     </LinearLayout>

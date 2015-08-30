@@ -10,6 +10,5 @@
         android:id="@+id/progress_wheel"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        app:matProg_barColor="@color/secondary_text_default_material_light"
         app:matProg_progressIndeterminate="true" />
 </LinearLayout>

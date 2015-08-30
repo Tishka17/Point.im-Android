@@ -36,7 +36,7 @@ public class MailboxActivity extends ConnectedActivity {
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mailbox);
+        setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

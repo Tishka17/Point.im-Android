@@ -347,9 +347,11 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             recommend_info = itemView.findViewById(R.id.recommend_info);
             recommend_id = (TextView) itemView.findViewById(R.id.recommend_id);
             comments = (TextView) itemView.findViewById(R.id.comments);
+            Utils.setTint(comments);
             date = (TextView) itemView.findViewById(R.id.date);
             webLink = (ImageView) itemView.findViewById(R.id.weblink);
             favourite = (CheckBox) itemView.findViewById(R.id.favourite);
+            Utils.setTint(favourite);
             mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
         }

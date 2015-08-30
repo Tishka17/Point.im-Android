@@ -14,7 +14,7 @@ public class BookmarksActivity extends ConnectedActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tag_view);
+        setContentView(R.layout.activity_single);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new BookmarksFragment())

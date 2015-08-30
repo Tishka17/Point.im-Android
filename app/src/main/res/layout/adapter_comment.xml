@@ -30,7 +30,6 @@
             android:scaleType="fitCenter"
             app:placeholderImage="@drawable/ic_account_grey600_36dp"
             app:roundAsCircle="true"
-            app:roundingBorderColor="@color/form_background"
             app:roundingBorderWidth="1dip" />
 
         <LinearLayout
@@ -61,7 +60,8 @@
             style="?android:attr/actionButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_share_black25_24dp" />
+            android:src="@drawable/ic_share_black_24dp"
+            android:tint="?attr/textSecondaryDark" />
     </LinearLayout>
 
     <org.itishka.pointim.widgets.MyTextView
@@ -90,7 +90,7 @@
             android:layout_marginRight="@dimen/text_margin"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:textColor="@android:color/secondary_text_dark"
+            android:textColor="?attr/textSecondaryDark"
             android:textStyle="bold"
             tools:text="1" />
     </LinearLayout>

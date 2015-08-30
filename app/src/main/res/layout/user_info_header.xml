@@ -13,6 +13,7 @@
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
     android:paddingTop="4dp"
+    app:cardBackgroundColor="?attr/cardBackgroundColor"
     app:cardCornerRadius="0dp">
 
     <LinearLayout
@@ -32,9 +33,8 @@
                 android:layout_height="@dimen/avatar_size"
                 android:layout_marginRight="@dimen/text_avatar_margin"
                 android:scaleType="fitCenter"
-                app:placeholderImage="@drawable/ic_launcher"
+                app:placeholderImage="@drawable/ic_account_grey600_36dp"
                 app:roundAsCircle="true"
-                app:roundingBorderColor="@color/form_background"
                 app:roundingBorderWidth="1dip" />
 
             <LinearLayout

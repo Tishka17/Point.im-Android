@@ -11,7 +11,7 @@ import org.itishka.pointim.utils.ImageSearchHelper;
 /**
  * Created by Tishka17 on 29.04.2015.
  */
-public abstract class ConnectedActivity extends AppCompatActivity {
+public abstract class ConnectedActivity extends ThemedActivity {
     @Override
     protected void onStop() {
         super.onStop();

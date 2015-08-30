@@ -1,14 +1,19 @@
 package org.itishka.pointim.activities;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -33,12 +38,6 @@ public class LoginActivity extends AppCompatActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-        }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     /**
@@ -63,7 +62,14 @@ public class LoginActivity extends AppCompatActivity {
                     .cancelable(false)
                     .customView(R.layout.dialog_progress, false)
                     .build();
-
+            ((TextView) rootView.findViewById(R.id.forgot_password)).setMovementMethod(LinkMovementMethod.getInstance());
+            rootView.findViewById(R.id.register_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://point.im/register"));
+                    getActivity().startActivity(browserIntent);
+                }
+            });
             mLoginEdit = (EditText) rootView.findViewById(R.id.login);
             mPasswordEdit = (EditText) rootView.findViewById(R.id.password);
             mButton = (Button) rootView.findViewById(R.id.button);

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:background="@drawable/chip"
+    android:background="?attr/chipDrawable"
     android:orientation="horizontal">
 
     <com.facebook.drawee.view.SimpleDraweeView
@@ -15,7 +15,6 @@
         android:scaleType="fitCenter"
         app:placeholderImage="@drawable/ic_account_white_36dp"
         app:roundAsCircle="true"
-        app:roundingBorderColor="@color/form_background"
         app:roundingBorderWidth="1dip" />
 
     <TextView
