@@ -41,19 +41,6 @@ public class ImgurConnectionManager extends ConnectionManager {
         mOkHttpClient.setReadTimeout(120, TimeUnit.SECONDS);
         mOkClient = new OkClient(mOkHttpClient);
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade requestFacade) {
-                        requestFacade.addHeader("Authorization", "Client-ID " + BuildConfig.IMGUR_ID);
-                        requestFacade.addHeader("User-Agent", USER_AGENT);
-                    }
-                })
-                .setClient(mOkClient)
-                .setEndpoint(IMGUR_ENDPOINT)
-                .setConverter(new GsonConverter(mGson))
-                .build();
-        imgurService = restAdapter.create(Imgur.class);
         RestAdapter imgurAuthRestAdapter = new RestAdapter.Builder()
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
@@ -64,13 +51,6 @@ public class ImgurConnectionManager extends ConnectionManager {
                 .setClient(mOkClient)
                 .setEndpoint(IMGUR_AUTH_ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setLog(new RestAdapter.Log() {
-                    @Override
-                    public void log(String msg) {
-                        Log.i("IMGUR_AUTH", msg);
-                    }
-                })
                 .build();
         imgurAuthService = imgurAuthRestAdapter.create(ImgurAuth.class);
     }
