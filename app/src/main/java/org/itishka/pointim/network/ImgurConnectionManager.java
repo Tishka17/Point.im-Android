@@ -108,7 +108,7 @@ public class ImgurConnectionManager extends ConnectionManager {
     @Override
     public void resetAuthorization(Context context) {
         synchronized (this) {
-            token.access_token = "";
+            token = null;
             saveAuthorization(context, PREFERENCE, token);
             init(context);
         }

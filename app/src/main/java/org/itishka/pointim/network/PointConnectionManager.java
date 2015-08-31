@@ -112,7 +112,7 @@ public class PointConnectionManager extends ConnectionManager {
     @Override
     public void resetAuthorization(Context context) {
         synchronized (this) {
-            loginResult.csrf_token = "";
+            loginResult = null;
             saveAuthorization(context, PREFERENCE, loginResult);
             init(context);
         }
