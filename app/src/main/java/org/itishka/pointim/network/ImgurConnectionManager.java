@@ -2,7 +2,6 @@ package org.itishka.pointim.network;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,6 +44,7 @@ public class ImgurConnectionManager extends ConnectionManager {
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
                     public void intercept(RequestFacade requestFacade) {
+                        requestFacade.addHeader("Authorization", "Client-ID " + BuildConfig.IMGUR_ID);
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
@@ -89,7 +89,10 @@ public class ImgurConnectionManager extends ConnectionManager {
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
                     public void intercept(RequestFacade requestFacade) {
-                        requestFacade.addHeader("Authorization", token.access_token);
+                        if (token != null)
+                            requestFacade.addHeader("Authorization", "Bearer " + token.access_token);
+                        else
+                            requestFacade.addHeader("Authorization", "Client-ID " + BuildConfig.IMGUR_ID);
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
