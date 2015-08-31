@@ -19,7 +19,8 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.network.ConnectionManager;
+import org.itishka.pointim.network.ImgurConnectionManager;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.model.imgur.UploadResult;
 import org.itishka.pointim.utils.ImgurUploadTask;
 
@@ -117,7 +118,7 @@ public class ImageUploadingPanel extends FrameLayout {
                     img.task = new ImgUploadTask(img, getContext());
                     img.task.execute();
                 } else if (img.uploaded && !TextUtils.isEmpty(img.uploadInfo.deletehash)) {
-                    ConnectionManager.getInstance().imgurService.deleteImage(img.uploadInfo.deletehash, deleteCallback);
+                    ImgurConnectionManager.getInstance().imgurService.deleteImage(img.uploadInfo.deletehash, deleteCallback);
                 }
             }
         });
@@ -137,7 +138,7 @@ public class ImageUploadingPanel extends FrameLayout {
                 i.task.cancel(true);
             } else if (i.uploaded && !TextUtils.isEmpty(i.uploadInfo.deletehash)) {
                 //FIXME delete uploaded images on view cancel
-                //ConnectionManager.getInstance().imgurService.deleteImage(i.uploadInfo.deletehash, deleteCallback);
+                //PointConnectionManager.getInstance().imgurService.deleteImage(i.uploadInfo.deletehash, deleteCallback);
             }
         }
     }

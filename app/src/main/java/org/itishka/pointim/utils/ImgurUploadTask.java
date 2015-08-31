@@ -6,8 +6,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 
-import org.itishka.pointim.network.ConnectionManager;
 import org.itishka.pointim.model.imgur.UploadResult;
+import org.itishka.pointim.network.ImgurConnectionManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -85,7 +85,7 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, UploadR
         mContext = null;
         final long totalSize = mFile.length();
         try {
-            UploadResult res = ConnectionManager.getInstance().imgurService.uploadFile(new CountingTypedFile(imageMime, mFile, new CountingTypedFile.ProgressListener() {
+            UploadResult res = ImgurConnectionManager.getInstance().imgurService.uploadFile(new CountingTypedFile(imageMime, mFile, new CountingTypedFile.ProgressListener() {
                 @Override
                 public void transferred(long num) {
                     publishProgress((int) ((num / (float) totalSize) * 50));

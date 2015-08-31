@@ -14,7 +14,7 @@ import android.widget.Toast;
 import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.R;
 import org.itishka.pointim.model.imgur.Token;
-import org.itishka.pointim.network.ConnectionManager;
+import org.itishka.pointim.network.ImgurConnectionManager;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -66,7 +66,7 @@ public class ImgurAuthFragment extends Fragment {
     }
 
     private void processCode(String code) {
-        ConnectionManager.getInstance().imgurAuthService.getToken(
+        ImgurConnectionManager.getInstance().imgurAuthService.getToken(
                 BuildConfig.IMGUR_ID,
                 BuildConfig.IMGUR_SECRET,
                 "authorization_code", code,

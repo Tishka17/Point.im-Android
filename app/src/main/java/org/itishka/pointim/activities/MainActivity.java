@@ -63,8 +63,6 @@ public class MainActivity extends ConnectedActivity {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(mPager);
-
-        startActivity(new Intent(this, ImgurAuthActivity.class));
     }
 
     @Override

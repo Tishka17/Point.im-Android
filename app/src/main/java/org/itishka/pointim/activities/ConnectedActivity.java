@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import org.itishka.pointim.network.ConnectionManager;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.ImageSearchHelper;
 
 /**
@@ -22,20 +22,19 @@ public abstract class ConnectedActivity extends ThemedActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (!ConnectionManager.getInstance().isAuthorized())
+        if (!PointConnectionManager.getInstance().isAuthorized())
             startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        ConnectionManager.getInstance().init(this);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (!ConnectionManager.getInstance().isAuthorized()) {
+        if (!PointConnectionManager.getInstance().isAuthorized()) {
             finish();
         }
     }

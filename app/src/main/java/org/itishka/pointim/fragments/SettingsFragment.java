@@ -22,7 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.network.ConnectionManager;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.Utils;
 
 /**
@@ -44,10 +44,10 @@ public class SettingsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
         name = (TextView) rootView.findViewById(R.id.login);
-        name.setText(ConnectionManager.getInstance().loginResult.login);
+        name.setText(PointConnectionManager.getInstance().loginResult.login);
 
         avatar = (ImageView) rootView.findViewById(R.id.avatar);
-        Utils.showAvatarByLogin(ConnectionManager.getInstance().loginResult.login, avatar);
+        Utils.showAvatarByLogin(PointConnectionManager.getInstance().loginResult.login, avatar);
 
         logout = (ImageButton) rootView.findViewById(R.id.action_logout);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +142,7 @@ public class SettingsFragment extends Fragment {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        ConnectionManager.getInstance().resetAuthorization(getActivity());
+                        PointConnectionManager.getInstance().resetAuthorization(getActivity());
                         avatar.setVisibility(View.GONE);
                         logout.setVisibility(View.GONE);
                         name.setText("<logged out>");

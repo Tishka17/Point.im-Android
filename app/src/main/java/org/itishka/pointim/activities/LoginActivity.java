@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.network.ConnectionManager;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.model.point.LoginResult;
 
 import retrofit.Callback;
@@ -82,12 +82,12 @@ public class LoginActivity extends AppCompatActivity {
                         mPasswordEdit.requestFocus();
                     } else {
                         mProgressDialog.show();
-                        ConnectionManager.getInstance().pointAuthService.login(mLoginEdit.getText().toString(), mPasswordEdit.getText().toString(), new Callback<LoginResult>() {
+                        PointConnectionManager.getInstance().pointAuthService.login(mLoginEdit.getText().toString(), mPasswordEdit.getText().toString(), new Callback<LoginResult>() {
                             @Override
                             public void success(LoginResult result, Response response) {
                                 if (result.isSuccess()) {
                                     result.login = mLoginEdit.getText().toString();
-                                    ConnectionManager.getInstance().updateAuthorization(getActivity(), result);
+                                    PointConnectionManager.getInstance().updateAuthorization(getActivity(), result);
                                     getActivity().finish();
                                     mProgressDialog.hide();
                                 } else {

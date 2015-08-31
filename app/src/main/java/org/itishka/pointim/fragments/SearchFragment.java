@@ -22,7 +22,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.network.ConnectionManager;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.model.point.Tag;
 import org.itishka.pointim.model.point.TagList;
 import org.itishka.pointim.model.point.User;
@@ -79,9 +79,9 @@ public class SearchFragment extends SpicedFragment {
         mTagsLayout = (FlowLayout) rootView.findViewById(R.id.tags);
         mUsersLayout = (FlowLayout) rootView.findViewById(R.id.users);
 
-        TagsRequest request = new TagsRequest(ConnectionManager.getInstance().loginResult.login);
+        TagsRequest request = new TagsRequest(PointConnectionManager.getInstance().loginResult.login);
         getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mTagsRequestListener);
-        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(ConnectionManager.getInstance().loginResult.login);
+        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
         getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
         return rootView;
     }
