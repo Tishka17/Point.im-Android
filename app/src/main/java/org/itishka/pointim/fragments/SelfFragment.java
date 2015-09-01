@@ -1,7 +1,7 @@
 package org.itishka.pointim.fragments;
 
-import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.model.point.PostList;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.PostListRequest;
 
 /**

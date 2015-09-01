@@ -26,11 +26,11 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
-import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.model.point.NewPostResponse;
 import org.itishka.pointim.model.point.Tag;
 import org.itishka.pointim.model.point.TagList;
 import org.itishka.pointim.model.point.UserList;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.TagsRequest;
 import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.widgets.ImageUploadingPanel;

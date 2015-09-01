@@ -54,6 +54,7 @@
                         android:text="Name"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -61,12 +62,14 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="?attr/textSecondaryDark"
                         android:textStyle="bold" />
+
                     <ImageButton
                         android:id="@+id/action_point_logout"
                         style="@style/Widget.AppCompat.ActionButton"
                         android:layout_width="@dimen/touch_size"
                         android:layout_height="@dimen/touch_size"
                         android:src="@drawable/ic_logout_grey600_24dp" />
+
                     <ImageButton
                         android:visibility="gone"
                         android:id="@+id/action_point_login"
@@ -110,12 +113,14 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="?attr/textSecondaryDark"
                         android:textStyle="bold" />
+
                     <ImageButton
                         android:id="@+id/action_imgur_logout"
                         style="@style/Widget.AppCompat.ActionButton"
                         android:layout_width="@dimen/touch_size"
                         android:layout_height="@dimen/touch_size"
                         android:src="@drawable/ic_logout_grey600_24dp" />
+
                     <ImageButton
                         android:visibility="gone"
                         android:id="@+id/action_imgur_login"
