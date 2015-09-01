@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -18,15 +19,18 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.R;
-import org.itishka.pointim.network.ImgurConnectionManager;
-import org.itishka.pointim.network.PointConnectionManager;
+import org.itishka.pointim.model.imgur.Token;
 import org.itishka.pointim.model.imgur.UploadResult;
+import org.itishka.pointim.network.ImgurConnectionManager;
 import org.itishka.pointim.utils.ImgurUploadTask;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -39,6 +43,27 @@ public class ImageUploadingPanel extends FrameLayout {
 
     private ViewGroup mLayout;
     private final ArrayList<Image> mImages = new ArrayList<>(1);
+
+    private enum AuthProlongationState {
+        NotStarted,
+        Started,
+        Finished,
+        TemporarilyError,
+        AuthError,
+        NotAuthorized;
+    }
+
+    ;
+    private AuthProlongationState mAuthProlonged = AuthProlongationState.NotStarted;
+    private AuthProlongationTask mAuthProlongationTask = null;
+    private Object mAuthProlongationLock = new Object();
+    private Executor mExecutor = Executors.newSingleThreadExecutor();
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        return super.onSaveInstanceState();
+    }
+
     private final Callback<Void> deleteCallback = new Callback<Void>() {
         @Override
         public void success(Void aVoid, Response response) {
@@ -96,6 +121,9 @@ public class ImageUploadingPanel extends FrameLayout {
                 }
                 ImageUploadingPanel.this.mLayout.removeView(newView);
                 mImages.remove(img);
+                if (img.uploaded && !TextUtils.isEmpty(img.uploadInfo.deletehash)) {
+                    ImgurConnectionManager.getInstance().imgurService.deleteImage(img.uploadInfo.deletehash, deleteCallback);
+                }
             }
         });
         img.imageView.setColorFilter(Color.argb(220, 255, 255, 255), PorterDuff.Mode.LIGHTEN);
@@ -109,19 +137,29 @@ public class ImageUploadingPanel extends FrameLayout {
         img.originalPath = uri;
         mImages.add(img);
 
+        if (mImages.size() == 1)
+            startAuthProlongation();
         img.task = new ImgUploadTask(img, getContext());
-        img.task.execute();
+        img.task.executeOnExecutor(mExecutor);
         newView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!img.uploaded && img.task != null && img.task.getStatus() == AsyncTask.Status.FINISHED) {
+                    startAuthProlongation();
                     img.task = new ImgUploadTask(img, getContext());
-                    img.task.execute();
-                } else if (img.uploaded && !TextUtils.isEmpty(img.uploadInfo.deletehash)) {
-                    ImgurConnectionManager.getInstance().imgurService.deleteImage(img.uploadInfo.deletehash, deleteCallback);
+                    img.task.executeOnExecutor(mExecutor);
                 }
             }
         });
+    }
+
+    private void startAuthProlongation() {
+        if (mAuthProlonged != AuthProlongationState.Finished
+                && mAuthProlonged != AuthProlongationState.NotAuthorized
+                && mAuthProlonged != AuthProlongationState.AuthError) {
+            mAuthProlongationTask = new AuthProlongationTask();
+            mAuthProlongationTask.executeOnExecutor(mExecutor);
+        }
     }
 
     public List<String> getLinks() {
@@ -156,13 +194,30 @@ public class ImageUploadingPanel extends FrameLayout {
         mLayout.removeAllViews();
     }
 
-    private static final class ImgUploadTask extends ImgurUploadTask {
+    private final class ImgUploadTask extends ImgurUploadTask {
         final WeakReference<Image> img;
 
         ImgUploadTask(Image img, Context context) {
             super(context, img.originalPath, img.mime);
             this.img = new WeakReference<>(img);
 
+        }
+
+        @Override
+        protected UploadResult doInBackground(String... params) {
+            synchronized (mAuthProlongationLock) {
+                while (mAuthProlonged == AuthProlongationState.Started) {
+                    try {
+                        mAuthProlongationLock.wait();
+                    } catch (InterruptedException e) {
+                        return null;
+                    }
+                }
+            }
+            if (mAuthProlonged != AuthProlongationState.Finished && mAuthProlonged != AuthProlongationState.NotAuthorized) {
+                return null;
+            }
+            return super.doInBackground(params);
         }
 
         @Override
@@ -231,4 +286,42 @@ public class ImageUploadingPanel extends FrameLayout {
             return "square()";
         }
     }
+
+    private class AuthProlongationTask extends AsyncTask<Void, Void, Token> {
+        @Override
+        protected Token doInBackground(Void... voids) {
+            mAuthProlonged = AuthProlongationState.Started;
+            Token token = ImgurConnectionManager.getInstance().token;
+            if (token == null || token.refresh_token == null) {
+                mAuthProlonged = AuthProlongationState.NotAuthorized;
+                return null;
+            }
+            try {
+                return ImgurConnectionManager.getInstance().imgurAuthService.refreshToken(
+                        BuildConfig.IMGUR_ID,
+                        BuildConfig.IMGUR_SECRET,
+                        "refresh_token",
+                        token.refresh_token);
+            } catch (RetrofitError e) {
+                if (e.getKind() == RetrofitError.Kind.HTTP && e.getResponse().getStatus() == 403)
+                    mAuthProlonged = AuthProlongationState.AuthError;
+                mAuthProlonged = AuthProlongationState.TemporarilyError;
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Token newToken) {
+            super.onPostExecute(newToken);
+            if (newToken != null && newToken.error == null && newToken.access_token != null) {
+                ImgurConnectionManager.getInstance().updateAuthorization(getContext(), newToken);
+                mAuthProlonged = AuthProlongationState.Finished;
+            }
+            synchronized (mAuthProlongationLock) {
+                mAuthProlongationLock.notifyAll();
+            }
+        }
+    }
+
+    ;
 }

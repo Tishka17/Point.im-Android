@@ -22,9 +22,8 @@ public interface ImgurAuth {
 
     @FormUrlEncoded
     @POST("/token")
-    void refreshToken(@Field("client_id") String client_id,
+    Token refreshToken(@Field("client_id") String client_id,
                   @Field("client_secret") String client_secret,
                   @Field("grant_type") String grant_type,
-                  @Field("refresh_token") String refresh_token,
-                  Callback<Token> callback);
+                  @Field("refresh_token") String refresh_token);
 }
