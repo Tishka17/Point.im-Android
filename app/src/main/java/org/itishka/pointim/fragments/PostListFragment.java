@@ -28,9 +28,9 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.adapters.PostListAdapter;
-import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.Post;
-import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.model.point.Post;
+import org.itishka.pointim.model.point.PostList;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.PostListRequest;
 import org.itishka.pointim.widgets.ScrollButton;
 
@@ -204,7 +204,7 @@ public abstract class PostListFragment extends SpicedFragment {
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                ConnectionManager manager = ConnectionManager.getInstance();
+                PointConnectionManager manager = PointConnectionManager.getInstance();
                 if (manager.isAuthorized()) {
                     update();
                 }
@@ -243,7 +243,7 @@ public abstract class PostListFragment extends SpicedFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ConnectionManager manager = ConnectionManager.getInstance();
+        PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
             PostListRequest request = createRequest();
             getSpiceManager().getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);

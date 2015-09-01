@@ -24,10 +24,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.LoginForm"
             android:name=".activities.LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.LoginForm"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.SearchActivity"
             android:configChanges="orientation|screenSize"
@@ -154,6 +154,15 @@
             android:name=".network.PointService"
             android:enabled="true"
             android:exported="false" />
+
+        <activity
+            android:name=".activities.ImgurAuthActivity"
+            android:label="@string/title_activity_imgur_auth"
+            android:parentActivityName=".activities.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.itishka.pointim.activities.SettingsActivity" />
+        </activity>
     </application>
 
 </manifest>

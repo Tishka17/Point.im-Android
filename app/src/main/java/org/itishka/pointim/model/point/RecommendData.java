@@ -1,4 +1,4 @@
-package org.itishka.pointim.model;
+package org.itishka.pointim.model.point;
 
 public class RecommendData {
     public TextWithImages text;

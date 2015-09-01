@@ -1,7 +1,7 @@
 package org.itishka.pointim.fragments;
 
-import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.model.point.PostList;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.PostListRequest;
 
 /**
@@ -31,12 +31,12 @@ public class SelfFragment extends PostListFragment {
 
         @Override
         public PostList load() throws Exception {
-            return getService().getBlog(ConnectionManager.getInstance().loginResult.login);
+            return getService().getBlog(PointConnectionManager.getInstance().loginResult.login);
         }
 
         @Override
         public PostList loadBefore(long before) throws Exception {
-            return getService().getBlog(before, ConnectionManager.getInstance().loginResult.login);
+            return getService().getBlog(before, PointConnectionManager.getInstance().loginResult.login);
         }
 
     }

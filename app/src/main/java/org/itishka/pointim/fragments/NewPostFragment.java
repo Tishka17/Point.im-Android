@@ -26,11 +26,11 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
-import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.NewPostResponse;
-import org.itishka.pointim.model.Tag;
-import org.itishka.pointim.model.TagList;
-import org.itishka.pointim.model.UserList;
+import org.itishka.pointim.model.point.NewPostResponse;
+import org.itishka.pointim.model.point.Tag;
+import org.itishka.pointim.model.point.TagList;
+import org.itishka.pointim.model.point.UserList;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.TagsRequest;
 import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
@@ -98,6 +98,7 @@ public class NewPostFragment extends SpicedFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public static NewPostFragment newInstance(boolean isPrivate) {
         NewPostFragment fragment = new NewPostFragment();
         Bundle args = new Bundle();
@@ -174,9 +175,9 @@ public class NewPostFragment extends SpicedFragment {
                 .customView(R.layout.dialog_progress, false)
                 .build();
 
-        TagsRequest request = new TagsRequest(ConnectionManager.getInstance().loginResult.login);
+        TagsRequest request = new TagsRequest(PointConnectionManager.getInstance().loginResult.login);
         getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mTagsRequestListener);
-        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(ConnectionManager.getInstance().loginResult.login);
+        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
         getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
         return rootView;
     }
@@ -212,11 +213,11 @@ public class NewPostFragment extends SpicedFragment {
             mProgressDialog.show();
             if (TextUtils.isEmpty(mPostId)) {
                 if (mIsPrivate.isChecked())
-                    ConnectionManager.getInstance().pointIm.createPrivatePost(sb.toString().trim(), tags, mIsPrivate.isChecked(), mNewPostCallback);
+                    PointConnectionManager.getInstance().pointIm.createPrivatePost(sb.toString().trim(), tags, mIsPrivate.isChecked(), mNewPostCallback);
                 else
-                    ConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mNewPostCallback);
+                    PointConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mNewPostCallback);
             } else {
-                ConnectionManager.getInstance().pointIm.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
+                PointConnectionManager.getInstance().pointIm.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
             }
             return true;
         } else if (id == R.id.attach) {
@@ -234,7 +235,7 @@ public class NewPostFragment extends SpicedFragment {
 
         @Override
         public void onRequestSuccess(TagList tags) {
-            Log.d("NewPostFragment", "tags: "+tags);
+            Log.d("NewPostFragment", "tags: " + tags);
             if (tags != null) {
                 mTagsListAdapter.clear();
                 mTagsListAdapter.addAll(tags);
@@ -251,7 +252,7 @@ public class NewPostFragment extends SpicedFragment {
 
         @Override
         public void onRequestSuccess(UserList users) {
-            Log.d("NewPostFragment", "users: "+users);
+            Log.d("NewPostFragment", "users: " + users);
             if (users != null) {
                 mUsersListAdapter.setData(users);
                 mUsersListAdapter.notifyDataSetChanged();

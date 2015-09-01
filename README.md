@@ -10,4 +10,6 @@ If you are going to use Imgur, please set secret and id in local.properties. E.g
 ```
 imgurSecret="sssseeecret"
 imgurId="iiiiid"
+imgurId="iiiiid"
+imgurRedirectUrl="https\://your_url"
 ```

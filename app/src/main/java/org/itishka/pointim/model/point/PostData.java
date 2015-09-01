@@ -1,4 +1,4 @@
-package org.itishka.pointim.model;
+package org.itishka.pointim.model.point;
 
 import com.google.gson.annotations.SerializedName;
 

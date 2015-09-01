@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.fragments.SettingsFragment;
+import org.itishka.pointim.fragments.ImgurAuthFragment;
 
-
-public class SettingsActivity extends ThemedActivity {
-
+public class ImgurAuthActivity extends ThemedActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +14,7 @@ public class SettingsActivity extends ThemedActivity {
         setContentView(R.layout.activity_single);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new SettingsFragment())
+                    .add(R.id.container, new ImgurAuthFragment())
                     .commit();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -25,5 +23,4 @@ public class SettingsActivity extends ThemedActivity {
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
 }

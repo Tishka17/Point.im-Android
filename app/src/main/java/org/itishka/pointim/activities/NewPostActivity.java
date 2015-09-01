@@ -52,7 +52,7 @@ public class NewPostActivity extends ConnectedActivity {
                     getSupportActionBar().setTitle("#" + id);
                 }
             }
-            if (fragment==null)
+            if (fragment == null)
                 fragment = NewPostFragment.newInstance(false);
 
             getSupportFragmentManager().beginTransaction()

@@ -1,4 +1,4 @@
-package org.itishka.pointim.model;
+package org.itishka.pointim.model.point;
 
 /**
  * Created by atikhonov on 28.04.2014.

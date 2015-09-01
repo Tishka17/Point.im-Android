@@ -1,4 +1,4 @@
-package org.itishka.pointim.api;
+package org.itishka.pointim.network;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -7,12 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
-import org.itishka.pointim.BuildConfig;
-import org.itishka.pointim.model.LoginResult;
-import org.itishka.pointim.model.TextWithImages;
-import org.itishka.pointim.network.PointIm;
-import org.itishka.pointim.network.PointImAuth;
-import org.itishka.pointim.utils.AuthSaver;
+import org.itishka.pointim.model.point.LoginResult;
+import org.itishka.pointim.model.point.TextWithImages;
 import org.itishka.pointim.utils.DateDeserializer;
 import org.itishka.pointim.utils.TextParser;
 
@@ -27,14 +23,13 @@ import retrofit.converter.GsonConverter;
 /**
  * Created by Tishka17 on 21.10.2014.
  */
-public class ConnectionManager {
-    public static final String USER_AGENT = "Tishka17 Point.im Client";
+public class PointConnectionManager extends ConnectionManager {
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String ENDPOINT = "https://point.im";
-    public static final String IMGUR_ENDPOINT = "https://api.imgur.com/3/";
-    private static final ConnectionManager instance = new ConnectionManager();
-    public final OkHttpClient okHttpClient;
-    public final OkClient okClient;
+    private static final String PREFERENCE = "PointConnectionManager";
+    private static final PointConnectionManager sInstance = new PointConnectionManager();
+    private final OkHttpClient mOkHttpClient;
+    private final OkClient mOkClient;
     private final Gson mGson = new GsonBuilder()
             .setDateFormat(DATE_FORMAT)
             .registerTypeAdapter(Date.class, new DateDeserializer())
@@ -43,12 +38,11 @@ public class ConnectionManager {
     public PointIm pointIm = null;
     public PointImAuth pointAuthService = null;
     public LoginResult loginResult = null;
-    public ImgurService imgurService = null;
 
-    private ConnectionManager() {
-        okHttpClient = new OkHttpClient();
-        okHttpClient.setReadTimeout(120, TimeUnit.SECONDS);
-        okClient = new OkClient(okHttpClient);
+    private PointConnectionManager() {
+        mOkHttpClient = new OkHttpClient();
+        mOkHttpClient.setReadTimeout(120, TimeUnit.SECONDS);
+        mOkClient = new OkClient(mOkHttpClient);
 
         RestAdapter authRestAdapter = new RestAdapter.Builder()
                 .setRequestInterceptor(new RequestInterceptor() {
@@ -57,49 +51,43 @@ public class ConnectionManager {
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
-                .setClient(okClient)
+                .setClient(mOkClient)
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
                 .build();
         pointAuthService = authRestAdapter.create(PointImAuth.class);
-
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade requestFacade) {
-                        requestFacade.addHeader("Authorization", "Client-ID " + BuildConfig.IMGUR_ID);
-                        requestFacade.addHeader("User-Agent", USER_AGENT);
-                    }
-                })
-                .setClient(okClient)
-                .setEndpoint(IMGUR_ENDPOINT)
-                .setConverter(new GsonConverter(mGson))
-                .build();
-        imgurService = restAdapter.create(ImgurService.class);
     }
 
-    public static ConnectionManager getInstance() {
-        return instance;
+    public static PointConnectionManager getInstance() {
+        return sInstance;
     }
 
-    public void updateAuthorization(Context context, LoginResult loginResult) {
+    @Override
+    protected Gson getGson() {
+        return mGson;
+    }
+
+    @Override
+    public void updateAuthorization(Context context, Object loginResult) {
         synchronized (this) {
-            this.loginResult = loginResult;
-            AuthSaver.saveLoginResult(context, loginResult);
-            createPointService();
+            this.loginResult = (LoginResult) loginResult;
+            saveAuthorization(context, PREFERENCE, loginResult);
+            createService();
         }
     }
 
+    @Override
     public void init(Context context) {
         synchronized (this) {
             if (this.loginResult == null) {
-                this.loginResult = AuthSaver.loadLoginResult(context);
-                createPointService();
+                loginResult = loadAuthorization(context, PREFERENCE, LoginResult.class);
+                createService();
             }
         }
     }
 
-    private void createPointService() {
+    @Override
+    protected void createService() {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
@@ -109,23 +97,23 @@ public class ConnectionManager {
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
-                .setClient(okClient)
+                .setClient(mOkClient)
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
                 .build();
         pointIm = restAdapter.create(PointIm.class);
     }
 
-    //----- IMGUR ---
-
+    @Override
     synchronized public boolean isAuthorized() {
         return loginResult != null && !TextUtils.isEmpty(loginResult.csrf_token);
     }
 
+    @Override
     public void resetAuthorization(Context context) {
         synchronized (this) {
-            loginResult.csrf_token = "";
-            AuthSaver.saveLoginResult(context, loginResult);
+            loginResult = null;
+            saveAuthorization(context, PREFERENCE, loginResult);
             init(context);
         }
     }

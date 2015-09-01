@@ -15,10 +15,10 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.adapters.UserInfoPostListAdapter;
-import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.ExtendedUser;
-import org.itishka.pointim.model.PointResult;
-import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.model.point.ExtendedUser;
+import org.itishka.pointim.model.point.PointResult;
+import org.itishka.pointim.model.point.PostList;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.PostListRequest;
 import org.itishka.pointim.network.requests.UserInfoRequest;
 
@@ -114,7 +114,7 @@ public class UserViewFragment extends PostListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_subscribe) {
-            ConnectionManager.getInstance().pointIm.subscribeUser(mUser, "", new Callback<PointResult>() {
+            PointConnectionManager.getInstance().pointIm.subscribeUser(mUser, "", new Callback<PointResult>() {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {
@@ -133,7 +133,7 @@ public class UserViewFragment extends PostListFragment {
             });
             return true;
         } else if (id == R.id.action_unsubscribe) {
-            ConnectionManager.getInstance().pointIm.unsubscribeUser(mUser, new Callback<PointResult>() {
+            PointConnectionManager.getInstance().pointIm.unsubscribeUser(mUser, new Callback<PointResult>() {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {

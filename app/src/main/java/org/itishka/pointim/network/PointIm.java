@@ -1,12 +1,12 @@
 package org.itishka.pointim.network;
 
-import org.itishka.pointim.model.ExtendedPost;
-import org.itishka.pointim.model.ExtendedUser;
-import org.itishka.pointim.model.NewPostResponse;
-import org.itishka.pointim.model.PointResult;
-import org.itishka.pointim.model.PostList;
-import org.itishka.pointim.model.TagList;
-import org.itishka.pointim.model.UserList;
+import org.itishka.pointim.model.point.ExtendedPost;
+import org.itishka.pointim.model.point.ExtendedUser;
+import org.itishka.pointim.model.point.NewPostResponse;
+import org.itishka.pointim.model.point.PointResult;
+import org.itishka.pointim.model.point.PostList;
+import org.itishka.pointim.model.point.TagList;
+import org.itishka.pointim.model.point.UserList;
 
 import retrofit.Callback;
 import retrofit.http.DELETE;

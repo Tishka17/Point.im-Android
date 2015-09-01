@@ -47,4 +47,5 @@
     <string name="point_im">Point.im</string>
     <string name="register">Create new account</string>
     <string name="setting_theme_dark">Use dark theme</string>
+    <string name="title_activity_imgur_auth">Imgur Auth</string>
 </resources>

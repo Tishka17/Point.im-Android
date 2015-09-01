@@ -22,11 +22,11 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.Tag;
-import org.itishka.pointim.model.TagList;
-import org.itishka.pointim.model.User;
-import org.itishka.pointim.model.UserList;
+import org.itishka.pointim.model.point.Tag;
+import org.itishka.pointim.model.point.TagList;
+import org.itishka.pointim.model.point.User;
+import org.itishka.pointim.model.point.UserList;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.TagsRequest;
 import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.utils.Utils;
@@ -79,9 +79,9 @@ public class SearchFragment extends SpicedFragment {
         mTagsLayout = (FlowLayout) rootView.findViewById(R.id.tags);
         mUsersLayout = (FlowLayout) rootView.findViewById(R.id.users);
 
-        TagsRequest request = new TagsRequest(ConnectionManager.getInstance().loginResult.login);
+        TagsRequest request = new TagsRequest(PointConnectionManager.getInstance().loginResult.login);
         getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mTagsRequestListener);
-        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(ConnectionManager.getInstance().loginResult.login);
+        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
         getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
         return rootView;
     }
@@ -188,7 +188,7 @@ public class SearchFragment extends SpicedFragment {
         String queryString = query.toString().toLowerCase();
         TagList filtered = new TagList();
         boolean found = false;
-        for (Tag tag: tags) {
+        for (Tag tag : tags) {
             if (queryString.equalsIgnoreCase(tag.tag)) {
                 filtered.add(0, tag);
                 found = true;
@@ -211,7 +211,7 @@ public class SearchFragment extends SpicedFragment {
         String queryString = query.toString().toLowerCase();
         UserList filtered = new UserList();
         boolean found = false;
-        for (User user: users) {
+        for (User user : users) {
             if (queryString.equalsIgnoreCase(user.login)) {
                 filtered.add(0, user);
                 found = true;

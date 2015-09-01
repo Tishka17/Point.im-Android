@@ -16,6 +16,7 @@ android {
         versionName "2.9"
         buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId', "null")
         buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret', "null")
+        buildConfigField "String", "IMGUR_REDIRECT_URL", properties.getProperty('imgurRedirectUrl', "null")
     }
     buildTypes {
         release {
@@ -50,12 +51,12 @@ dependencies {
     compile "com.squareup.retrofit:retrofit:1.9.0"
     compile "com.squareup.picasso:picasso:2.5.2"
     compile 'com.facebook.fresco:fresco:0.7.0'
-    compile "com.facebook.fresco:imagepipeline-okhttp:0.6.1"
+    compile "com.facebook.fresco:imagepipeline-okhttp:0.7.0"
     compile 'com.octo.android.robospice:robospice:1.4.14'
     compile 'com.octo.android.robospice:robospice-retrofit:1.4.14'
 
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
-    compile 'com.afollestad:material-dialogs:0.7.9.0'
+    compile 'com.afollestad:material-dialogs:0.7.9.1'
     compile 'com.jpardogo.googleprogressbar:library:1.2.0'
     compile 'com.pnikosis:materialish-progress:1.5'
 

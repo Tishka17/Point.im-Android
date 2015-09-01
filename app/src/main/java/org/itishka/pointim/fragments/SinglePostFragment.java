@@ -38,11 +38,11 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
-import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.Comment;
-import org.itishka.pointim.model.ExtendedPost;
-import org.itishka.pointim.model.PointResult;
-import org.itishka.pointim.model.UserList;
+import org.itishka.pointim.model.point.Comment;
+import org.itishka.pointim.model.point.ExtendedPost;
+import org.itishka.pointim.model.point.PointResult;
+import org.itishka.pointim.model.point.UserList;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.SinglePostRequest;
 import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.utils.Utils;
@@ -256,7 +256,7 @@ public class SinglePostFragment extends SpicedFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ConnectionManager manager = ConnectionManager.getInstance();
+        PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
             SinglePostRequest request = createRequest();
             getSpiceManager().getFromCache(ExtendedPost.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
@@ -273,7 +273,7 @@ public class SinglePostFragment extends SpicedFragment {
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                ConnectionManager manager = ConnectionManager.getInstance();
+                PointConnectionManager manager = PointConnectionManager.getInstance();
                 if (manager.isAuthorized()) {
                     update();
                 }
@@ -325,9 +325,9 @@ public class SinglePostFragment extends SpicedFragment {
                 mBottomBar.setEnabled(false);
                 showDialog();
                 if (TextUtils.isEmpty(comment)) {
-                    ConnectionManager.getInstance().pointIm.addComment(mPost, text, mCommentCallback);
+                    PointConnectionManager.getInstance().pointIm.addComment(mPost, text, mCommentCallback);
                 } else {
-                    ConnectionManager.getInstance().pointIm.addComment(mPost, text, comment, mCommentCallback);
+                    PointConnectionManager.getInstance().pointIm.addComment(mPost, text, comment, mCommentCallback);
                 }
             }
         });
@@ -352,7 +352,7 @@ public class SinglePostFragment extends SpicedFragment {
                                 super.onPositive(dialog);
                                 String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
                                 showDialog();
-                                ConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, text, mRecommendCallback);
+                                PointConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, text, mRecommendCallback);
                             }
                         })
                         .customView(R.layout.dialog_input, true)
@@ -377,7 +377,7 @@ public class SinglePostFragment extends SpicedFragment {
             }
         });
 
-        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(ConnectionManager.getInstance().loginResult.login);
+        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
         getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
         return rootView;
     }
@@ -396,16 +396,16 @@ public class SinglePostFragment extends SpicedFragment {
         super.onPrepareOptionsMenu(menu);
         menu.setGroupVisible(R.id.group_my,
                 mPointPost != null &&
-                        mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login)
+                        mPointPost.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
         );
         menu.setGroupVisible(R.id.group_my_editable,
                 mPointPost != null &&
-                        mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login)
+                        mPointPost.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
                 // mPointPost.editable //FIXME
         );
         menu.setGroupVisible(R.id.group_not_recommended,
                 mPointPost != null &&
-                        !mPointPost.post.author.login.equalsIgnoreCase(ConnectionManager.getInstance().loginResult.login) &&
+                        !mPointPost.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) &&
                         !mPointPost.recommended
         );
 
@@ -460,7 +460,7 @@ public class SinglePostFragment extends SpicedFragment {
                             super.onPositive(dialog);
                             String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
                             showDialog();
-                            ConnectionManager.getInstance().pointIm.recommend(mPost, text, mRecommendCallback);
+                            PointConnectionManager.getInstance().pointIm.recommend(mPost, text, mRecommendCallback);
                         }
                     })
                     .customView(R.layout.dialog_input, true)
@@ -477,7 +477,7 @@ public class SinglePostFragment extends SpicedFragment {
                         public void onPositive(MaterialDialog dialog) {
                             super.onPositive(dialog);
                             showDialog();
-                            ConnectionManager.getInstance().pointIm.deletePost(mPost, mDeleteCallback);
+                            PointConnectionManager.getInstance().pointIm.deletePost(mPost, mDeleteCallback);
                         }
                     })
                     .build();

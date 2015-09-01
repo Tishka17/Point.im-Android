@@ -21,20 +21,70 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.ImgurAuthActivity;
+import org.itishka.pointim.activities.LoginActivity;
 import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.api.ConnectionManager;
+import org.itishka.pointim.model.imgur.Token;
+import org.itishka.pointim.model.point.LoginResult;
+import org.itishka.pointim.network.ImgurConnectionManager;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.Utils;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class SettingsFragment extends Fragment {
+    private static final int REQUEST_LOGIN_POINT = 1;
+    private static final int REQUEST_LOGIN_IMGUR = 2;
     SharedPreferences prefs;
-    private ImageView avatar;
-    private ImageButton logout;
-    private TextView name;
+    private ImageView mPointAvatar;
+    private ImageButton mPointLogout;
+    private TextView mPointName;
+    private ImageButton mPointLogin;
+    private ImageButton mImgurLogin;
+    private ImageButton mImgurLogout;
+    private TextView mImgurName;
+    private ImageView mImgurAvatar;
 
     public SettingsFragment() {
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LOGIN_POINT || requestCode == REQUEST_LOGIN_IMGUR) {
+            updateViews();
+        }
+    }
+
+    private void updateViews() {
+        LoginResult loginResult = PointConnectionManager.getInstance().loginResult;
+        if (loginResult == null) {
+            mPointAvatar.setVisibility(View.GONE);
+            mPointLogout.setVisibility(View.GONE);
+            mPointLogin.setVisibility(View.VISIBLE);
+            mPointName.setText("<logged out>");
+        } else {
+            mPointAvatar.setVisibility(View.VISIBLE);
+            mPointLogout.setVisibility(View.VISIBLE);
+            mPointLogin.setVisibility(View.GONE);
+            mPointName.setText(loginResult.login);
+            Utils.showAvatarByLogin(loginResult.login, mPointAvatar);
+        }
+
+        Token imgutToken = ImgurConnectionManager.getInstance().token;
+        if (imgutToken == null) {
+            mImgurAvatar.setVisibility(View.GONE);
+            mImgurLogout.setVisibility(View.GONE);
+            mImgurLogin.setVisibility(View.VISIBLE);
+            mImgurName.setText("<logged out>");
+        } else {
+            mImgurAvatar.setVisibility(View.VISIBLE);
+            mImgurLogout.setVisibility(View.VISIBLE);
+            mImgurLogin.setVisibility(View.GONE);
+            mImgurName.setText(imgutToken.account_username);
+        }
+
     }
 
     @Override
@@ -43,20 +93,41 @@ public class SettingsFragment extends Fragment {
         prefs = getActivity().getApplicationContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        name = (TextView) rootView.findViewById(R.id.login);
-        name.setText(ConnectionManager.getInstance().loginResult.login);
+        mPointName = (TextView) rootView.findViewById(R.id.point_login);
+        mImgurName = (TextView) rootView.findViewById(R.id.imgur_login);
 
-        avatar = (ImageView) rootView.findViewById(R.id.avatar);
-        Utils.showAvatarByLogin(ConnectionManager.getInstance().loginResult.login, avatar);
+        mPointAvatar = (ImageView) rootView.findViewById(R.id.point_avatar);
+        mImgurAvatar = (ImageView) rootView.findViewById(R.id.imgur_avatar);
 
-        logout = (ImageButton) rootView.findViewById(R.id.action_logout);
-        logout.setOnClickListener(new View.OnClickListener() {
+        mPointLogout = (ImageButton) rootView.findViewById(R.id.action_point_logout);
+        mPointLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                askLogout();
+                askPointLogout();
+            }
+        });
+        mPointLogin = (ImageButton) rootView.findViewById(R.id.action_point_login);
+        mPointLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                askPointLogin();
             }
         });
 
+        mImgurLogin = (ImageButton) rootView.findViewById(R.id.action_imgur_login);
+        mImgurLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                askImgurLogin();
+            }
+        });
+        mImgurLogout = (ImageButton) rootView.findViewById(R.id.action_imgur_logout);
+        mImgurLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                askImgurLogout();
+            }
+        });
 
         TextView version = (TextView) rootView.findViewById(R.id.version);
         version.setText("Version: " + BuildConfig.VERSION_NAME);
@@ -130,22 +201,47 @@ public class SettingsFragment extends Fragment {
                 editor.apply();
             }
         });
+
+        updateViews();
         return rootView;
     }
 
-    private void askLogout() {
+    private void askImgurLogout() {
         final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title("Really logout?")
+                .title("Really logout from Imgur.com?")
                 .positiveText(android.R.string.ok)
                 .negativeText("Cancel")
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        ConnectionManager.getInstance().resetAuthorization(getActivity());
-                        avatar.setVisibility(View.GONE);
-                        logout.setVisibility(View.GONE);
-                        name.setText("<logged out>");
+                        ImgurConnectionManager.getInstance().resetAuthorization(getActivity());
+                        updateViews();
+                    }
+                })
+                .build();
+        dialog.show();
+    }
+
+    private void askImgurLogin() {
+        startActivityForResult(new Intent(getActivity(), ImgurAuthActivity.class), REQUEST_LOGIN_IMGUR);
+    }
+
+    private void askPointLogin() {
+        startActivityForResult(new Intent(getActivity(), LoginActivity.class), REQUEST_LOGIN_POINT);
+    }
+
+    private void askPointLogout() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                .title("Really logout from Point.im?")
+                .positiveText(android.R.string.ok)
+                .negativeText("Cancel")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        PointConnectionManager.getInstance().resetAuthorization(getActivity());
+                        updateViews();
                     }
                 })
                 .build();

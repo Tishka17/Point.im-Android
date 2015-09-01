@@ -1,10 +1,8 @@
 package org.itishka.pointim.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
@@ -19,8 +17,8 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.LoginResult;
+import org.itishka.pointim.model.point.LoginResult;
+import org.itishka.pointim.network.PointConnectionManager;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -84,12 +82,12 @@ public class LoginActivity extends AppCompatActivity {
                         mPasswordEdit.requestFocus();
                     } else {
                         mProgressDialog.show();
-                        ConnectionManager.getInstance().pointAuthService.login(mLoginEdit.getText().toString(), mPasswordEdit.getText().toString(), new Callback<LoginResult>() {
+                        PointConnectionManager.getInstance().pointAuthService.login(mLoginEdit.getText().toString(), mPasswordEdit.getText().toString(), new Callback<LoginResult>() {
                             @Override
                             public void success(LoginResult result, Response response) {
                                 if (result.isSuccess()) {
                                     result.login = mLoginEdit.getText().toString();
-                                    ConnectionManager.getInstance().updateAuthorization(getActivity(), result);
+                                    PointConnectionManager.getInstance().updateAuthorization(getActivity(), result);
                                     getActivity().finish();
                                     mProgressDialog.hide();
                                 } else {
