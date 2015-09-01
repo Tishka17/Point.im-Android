@@ -233,7 +233,7 @@ public class ImageUploadingPanel extends FrameLayout {
             super.onProgressUpdate(values);
             img.get().progress.setProgress(values[0] * 0.9f);
             //progress 0..100 -> fkmaf 255..55
-            img.get().imageView.setColorFilter(Color.argb(220 - values[0] * 2, 255, 255, 255), PorterDuff.Mode.LIGHTEN);
+            img.get().imageView.setColorFilter(Color.argb(220 - values[0] * 2, 255, 255, 255));
         }
 
         @Override
@@ -248,7 +248,7 @@ public class ImageUploadingPanel extends FrameLayout {
             } else {
                 img.get().viewError.setVisibility(VISIBLE);
                 img.get().progress.setVisibility(GONE);
-                img.get().imageView.setColorFilter(Color.argb(220, 200, 100, 100), PorterDuff.Mode.LIGHTEN);
+                img.get().imageView.setColorFilter(Color.argb(128, 200, 100, 100));
                 //Toast.makeText(getActivity(), "Error uploading photo", Toast.LENGTH_SHORT).show();
             }
         }
