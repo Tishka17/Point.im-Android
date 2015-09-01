@@ -76,7 +76,7 @@
                         style="@style/Widget.AppCompat.ActionButton"
                         android:layout_width="@dimen/touch_size"
                         android:layout_height="@dimen/touch_size"
-                        android:src="@drawable/ic_logout_grey600_24dp" />
+                        android:src="@drawable/ic_login_grey600_24dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -127,7 +127,7 @@
                         style="@style/Widget.AppCompat.ActionButton"
                         android:layout_width="@dimen/touch_size"
                         android:layout_height="@dimen/touch_size"
-                        android:src="@drawable/ic_logout_grey600_24dp" />
+                        android:src="@drawable/ic_login_grey600_24dp" />
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
