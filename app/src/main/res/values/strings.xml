@@ -86,4 +86,6 @@
     <string name="toast_error_template">Error: %s</string>
     <string name="toast_subscribed">Subscribed!</string>
     <string name="toast_unsubscribed">Unsubscribed!</string>
+    <string name="action_view">View</string>
+    <string name="snack_posted_template">Post #%s sent</string>
 </resources>

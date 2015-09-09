@@ -79,12 +79,12 @@ public class Utils {
 
     public static void showPostSentSnack(final Activity activity, View view, final String postId) {
         Snackbar
-                .make(view, String.format("Post #%s sent", postId), Snackbar.LENGTH_SHORT)
-                .setAction("View", new View.OnClickListener() {
+                .make(view, String.format(activity.getString(R.string.snack_posted_template), postId), Snackbar.LENGTH_SHORT)
+                .setAction(R.string.action_view, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(activity, SinglePostActivity.class);
-                        intent.putExtra("post", postId);
+                        intent.putExtra(SinglePostActivity.EXTRA_POST, postId);
                         ActivityCompat.startActivity(activity, intent, null);
                     }
                 })
