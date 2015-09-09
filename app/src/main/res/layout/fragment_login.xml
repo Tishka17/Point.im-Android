@@ -5,6 +5,7 @@
     tools:context="org.itishka.pointim.activities.LoginActivity$PlaceholderFragment">
 
     <ImageView
+        android:contentDescription="@string/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -40,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Login"
+                android:hint="@string/login_hint"
                 android:inputType="textPersonName"
                 android:text="" />
 
@@ -49,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Password"
+                android:hint="@string/password_hint"
                 android:inputType="textPassword" />
 
 
@@ -60,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginTop="8dp"
-                android:text="Login" />
+                android:text="@string/action_login" />
 
             <TextView
                 android:id="@+id/forgot_password"

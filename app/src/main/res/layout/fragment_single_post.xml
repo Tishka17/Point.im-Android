@@ -90,6 +90,7 @@
                 </LinearLayout>
 
                 <ImageButton
+                    android:contentDescription="@string/action_attach"
                     android:id="@+id/attach"
                     style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="@dimen/touch_size"
@@ -105,6 +106,7 @@
                     android:inputType="textCapSentences|textMultiLine" />
 
                 <ImageButton
+                    android:contentDescription="@string/action_send"
                     android:id="@+id/send"
                     style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="@dimen/touch_size"

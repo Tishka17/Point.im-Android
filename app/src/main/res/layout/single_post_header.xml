@@ -47,7 +47,7 @@
                     android:id="@+id/author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
+                    tools:text="Name"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textStyle="bold" />
 
@@ -115,6 +115,7 @@
                 android:textColor="?attr/textSecondaryDark" />
 
             <ImageButton
+                android:contentDescription="@string/action_open_browser"
                 android:id="@+id/weblink"
                 style="?android:attr/actionButtonStyle"
                 android:layout_width="32dp"

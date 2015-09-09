@@ -43,4 +43,24 @@
     <string name="register">Create new account</string>
     <string name="setting_theme_dark">Use dark theme</string>
     <string name="title_activity_imgur_auth">Imgur Auth</string>
+    <string name="input_hint">Type text here</string>
+    <string name="action_attach">Attach</string>
+    <string name="action_send">Send</string>
+    <string name="tags_hint">tags, separated by comma (,)</string>
+    <string name="login_hint">Login</string>
+    <string name="password_hint">Password</string>
+    <string name="action_login">Login</string>
+    <string name="point_site_name">Point.im</string>
+    <string name="imgur_site_name">Imgur.com</string>
+    <string name="app_name_full">Point.im for Android</string>
+    <string name="google_play">Google Play</string>
+    <string name="source_code">Source code</string>
+    <string name="action_recommend_comment">Recommend comment</string>
+    <string name="action_open_browser">Open Browser</string>
+    <string name="action_logout">Logout</string>
+    <string name="image">Image</string>
+    <string name="background" />
+    <string name="progress_bar">Progress bar</string>
+    <string name="image_uploaded">Image uploaded</string>
+    <string name="image_upload_error">Image upload error</string>
 </resources>

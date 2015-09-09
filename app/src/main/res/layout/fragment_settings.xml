@@ -51,19 +51,20 @@
                         android:layout_marginBottom="@dimen/text_margin"
                         android:layout_marginTop="@dimen/text_margin"
                         android:layout_weight="1"
-                        android:text="Name"
+                        tools:text="Name"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Point.im"
+                        android:text="@string/point_site_name"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="?attr/textSecondaryDark"
                         android:textStyle="bold" />
 
                     <ImageButton
+                        android:contentDescription="@string/action_logout"
                         android:id="@+id/action_point_logout"
                         style="@style/Widget.AppCompat.ActionButton"
                         android:layout_width="@dimen/touch_size"
@@ -71,6 +72,7 @@
                         android:src="@drawable/ic_logout_grey600_24dp" />
 
                     <ImageButton
+                        android:contentDescription="@string/action_login"
                         android:visibility="gone"
                         android:id="@+id/action_point_login"
                         style="@style/Widget.AppCompat.ActionButton"
@@ -102,19 +104,20 @@
                         android:layout_marginBottom="@dimen/text_margin"
                         android:layout_marginTop="@dimen/text_margin"
                         android:layout_weight="1"
-                        android:text="Name"
+                        tools:text="Name"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Imgur.com"
+                        android:text="@string/imgur_site_name"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="?attr/textSecondaryDark"
                         android:textStyle="bold" />
 
                     <ImageButton
+                        android:contentDescription="@string/action_logout"
                         android:id="@+id/action_imgur_logout"
                         style="@style/Widget.AppCompat.ActionButton"
                         android:layout_width="@dimen/touch_size"
@@ -122,6 +125,7 @@
                         android:src="@drawable/ic_logout_grey600_24dp" />
 
                     <ImageButton
+                        android:contentDescription="@string/action_login"
                         android:visibility="gone"
                         android:id="@+id/action_imgur_login"
                         style="@style/Widget.AppCompat.ActionButton"
@@ -198,7 +202,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Point.im for Android"
+                    android:text="@string/app_name_full"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="?attr/textSecondaryDark"
                     android:textStyle="bold" />
@@ -252,7 +256,7 @@
                     android:drawableLeft="@drawable/ic_google_play_grey600_24dp"
                     android:drawablePadding="@dimen/text_avatar_margin"
                     android:gravity="center_vertical"
-                    android:text="Google Play" />
+                    android:text="@string/google_play" />
 
                 <TextView
                     android:id="@+id/github"
@@ -262,7 +266,7 @@
                     android:drawableLeft="@drawable/ic_github_circle_grey600_24dp"
                     android:drawablePadding="@dimen/text_avatar_margin"
                     android:gravity="center_vertical"
-                    android:text="Source code" />
+                    android:text="@string/source_code" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>

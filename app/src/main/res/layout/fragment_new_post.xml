@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:completionThreshold="1"
-            android:hint="tags, separated by comma (,)" />
+            android:hint="@string/tags_hint" />
 
         <Switch
             android:id="@+id/isPrivate"
@@ -36,7 +36,7 @@
         android:layout_weight="1"
         android:completionThreshold="1"
         android:gravity="top|left"
-        android:hint="Enter your text here"
+        android:hint="@string/input_hint"
         android:inputType="textCapSentences|textMultiLine"
         android:scrollHorizontally="false">
 
