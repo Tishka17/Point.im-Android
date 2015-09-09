@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.MultiAutoCompleteTextView;
@@ -299,6 +300,7 @@ public class SinglePostFragment extends SpicedFragment {
             }
         });
         mText = (MultiAutoCompleteTextView) rootView.findViewById(R.id.text);
+        mText.setInputType(mText.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE | EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT);
         mText.setAdapter(mUsersListAdapter);
         mText.setTokenizer(new SymbolTokenizer('@'));
         mSendButton = (ImageButton) rootView.findViewById(R.id.send);
