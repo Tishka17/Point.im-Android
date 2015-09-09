@@ -45,9 +45,7 @@ public class ImgurAuthFragment extends Fragment {
                     view.loadData("", "text/html", "UTF-8");
                     return true;
                 }
-                if (uri.getHost() != "api.imgur.com")
-                    return true;
-                return false; //Allow WebView to load url
+                return uri.getHost() != "api.imgur.com";
             }
         });
         load();

@@ -50,10 +50,9 @@ public class ImageUploadingPanel extends FrameLayout {
         Finished,
         TemporarilyError,
         AuthError,
-        NotAuthorized;
+        NotAuthorized
     }
 
-    ;
     private AuthProlongationState mAuthProlonged = AuthProlongationState.NotStarted;
     private AuthProlongationTask mAuthProlongationTask = null;
     private Object mAuthProlongationLock = new Object();
@@ -323,5 +322,4 @@ public class ImageUploadingPanel extends FrameLayout {
         }
     }
 
-    ;
 }
