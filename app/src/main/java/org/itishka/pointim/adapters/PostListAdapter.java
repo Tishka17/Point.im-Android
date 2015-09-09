@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -224,7 +225,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.date.setText(Utils.formatDate(post.post.created));
 
         if (post.rec != null) {
-            holder.mainContent.setBackgroundColor(getContext().getResources().getColor(R.color.quote_background));
+            holder.mainContent.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.quote_background));
             holder.recommend_info.setVisibility(View.VISIBLE);
             if (post.rec.text != null) {
                 holder.recommend_text.setVisibility(View.VISIBLE);

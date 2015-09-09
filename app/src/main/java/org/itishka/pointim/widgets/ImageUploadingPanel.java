@@ -55,7 +55,7 @@ public class ImageUploadingPanel extends FrameLayout {
 
     private AuthProlongationState mAuthProlonged = AuthProlongationState.NotStarted;
     private AuthProlongationTask mAuthProlongationTask = null;
-    private Object mAuthProlongationLock = new Object();
+    private final Object mAuthProlongationLock = new Object();
     private Executor mExecutor = Executors.newSingleThreadExecutor();
 
     @Override

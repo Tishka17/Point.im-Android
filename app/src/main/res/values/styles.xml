@@ -56,7 +56,7 @@
         <item name="android:background">?attr/colorPrimary</item>
     </style>
 
-    <style name="AppTheme.PopupTheme" parent="ThemeOverlay.AppCompat"></style>
+    <style name="AppTheme.PopupTheme" parent="ThemeOverlay.AppCompat"/>
 
     <style name="AppTheme.PopupTheme.Light" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:background">?attr/md_background_color</item>
@@ -97,5 +97,5 @@
         <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
-    <style name="AppTheme.LoginForm" parent="AppTheme.LoginForm.Base"></style>
+    <style name="AppTheme.LoginForm" parent="AppTheme.LoginForm.Base"/>
 </resources>

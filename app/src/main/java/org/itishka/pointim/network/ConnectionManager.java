@@ -1,6 +1,7 @@
 package org.itishka.pointim.network;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 
@@ -23,7 +24,7 @@ public abstract class ConnectionManager {
 
     protected abstract void createService();
 
-    protected void saveAuthorization(Context context, String preference, Object data) {
+    protected void saveAuthorization(Context context, String preference, @Nullable Object data) {
         context.getSharedPreferences(preference, Context.MODE_PRIVATE).edit().putString(KEY, getGson().toJson(data)).commit();
     }
 

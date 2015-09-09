@@ -66,8 +66,7 @@ public class SearchFragment extends SpicedFragment {
     };
 
     public static SearchFragment newInstance() {
-        SearchFragment fragment = new SearchFragment();
-        return fragment;
+        return new SearchFragment();
     }
 
     @Override
