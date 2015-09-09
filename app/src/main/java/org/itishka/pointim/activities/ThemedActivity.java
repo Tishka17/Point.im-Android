@@ -10,7 +10,7 @@ import org.itishka.pointim.R;
 /**
  * Created by Tishka17 on 26.08.2015.
  */
-public class ThemedActivity extends AppCompatActivity {
+public abstract class ThemedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
