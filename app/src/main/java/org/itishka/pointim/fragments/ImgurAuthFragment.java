@@ -72,12 +72,12 @@ public class ImgurAuthFragment extends Fragment {
                     @Override
                     public void success(Token token, Response response) {
                         if (token.access_token != null) {
-                            Toast.makeText(getActivity(), "Authorized!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), getString(R.string.toast_authorized), Toast.LENGTH_SHORT).show();
                             ImgurConnectionManager.getInstance().updateAuthorization(getActivity(), token);
                             getActivity().finish();
                         } else {
                             if (!isDetached()) {
-                                Toast.makeText(getActivity(), "Error!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.toast_error), Toast.LENGTH_SHORT).show();
                                 load();
                             }
                         }

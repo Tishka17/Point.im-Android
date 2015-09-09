@@ -26,6 +26,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
 import org.itishka.pointim.model.point.NewPostResponse;
 import org.itishka.pointim.model.point.Tag;
@@ -71,10 +72,10 @@ public class NewPostFragment extends SpicedFragment {
             if (post.isSuccess()) {
                 if (getActivity().getCallingActivity() != null) {
                     Intent intent = new Intent();
-                    intent.putExtra("post", post.id);
+                    intent.putExtra(NewPostActivity.EXTRA_RESULT_POST, post.id);
                     getActivity().setResult(Activity.RESULT_OK, intent);
                 } else {
-                    Toast.makeText(getActivity(), String.format("Post #%s sent", post.id), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), String.format(getString(R.string.toast_posted_template), post.id), Toast.LENGTH_SHORT).show();
                 }
                 getActivity().finish();
             } else {
@@ -204,7 +205,7 @@ public class NewPostFragment extends SpicedFragment {
         int id = item.getItemId();
         if (id == R.id.send) {
             if (!mImagesPanel.isUploadFinished()) {
-                Toast.makeText(getActivity(), "Wait or check for errors!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.toast_upload_not_finished), Toast.LENGTH_SHORT).show();
                 return true;
             }
             final String text = mPostText.getText().toString();

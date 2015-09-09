@@ -63,7 +63,7 @@ public class SettingsFragment extends Fragment {
             mPointAvatar.setVisibility(View.GONE);
             mPointLogout.setVisibility(View.GONE);
             mPointLogin.setVisibility(View.VISIBLE);
-            mPointName.setText("<logged out>");
+            mPointName.setText(getString(R.string.logged_out_stub));
         } else {
             mPointAvatar.setVisibility(View.VISIBLE);
             mPointLogout.setVisibility(View.VISIBLE);
@@ -77,7 +77,7 @@ public class SettingsFragment extends Fragment {
             mImgurAvatar.setVisibility(View.GONE);
             mImgurLogout.setVisibility(View.GONE);
             mImgurLogin.setVisibility(View.VISIBLE);
-            mImgurName.setText("<logged out>");
+            mImgurName.setText(getString(R.string.logged_out_stub));
         } else {
             mImgurAvatar.setVisibility(View.VISIBLE);
             mImgurLogout.setVisibility(View.VISIBLE);

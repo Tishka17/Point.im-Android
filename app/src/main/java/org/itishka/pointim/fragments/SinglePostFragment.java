@@ -158,7 +158,7 @@ public class SinglePostFragment extends SpicedFragment {
             hideDialog();
             if (post.isSuccess()) {
                 if (!isDetached()) {
-                    Toast.makeText(getActivity(), "Recommended!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
                     update();
                 }
             } else {
@@ -187,7 +187,7 @@ public class SinglePostFragment extends SpicedFragment {
                 mImagesPanel.reset();
                 if (!isDetached()) {
                     update();
-                    Toast.makeText(getActivity(), "Comment added!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.toast_commented), Toast.LENGTH_SHORT).show();
                 }
             } else {
                 if (!isDetached())
@@ -211,7 +211,7 @@ public class SinglePostFragment extends SpicedFragment {
                 return;
             if (pointResult.isSuccess()) {
 
-                Toast.makeText(getActivity(), "Deleted!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             } else {
                 Toast.makeText(getActivity(), pointResult.error, Toast.LENGTH_SHORT).show();
@@ -309,7 +309,7 @@ public class SinglePostFragment extends SpicedFragment {
             public void onClick(View view) {
                 String text = mText.getText().toString();
                 if (!mImagesPanel.isUploadFinished()) {
-                    Toast.makeText(getActivity(), "Wait or check for errors!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.toast_upload_not_finished), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 StringBuilder sb = new StringBuilder(text);
@@ -319,7 +319,7 @@ public class SinglePostFragment extends SpicedFragment {
                 text = sb.toString().trim();
 
                 if (TextUtils.isEmpty(text)) {
-                    Toast.makeText(getActivity(), "Empty comment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.toast_empty_comment), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -345,9 +345,9 @@ public class SinglePostFragment extends SpicedFragment {
             public void onRecommendCommentClicked(View view, String commentId) {
                 final String cid = commentId;
                 final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .title("Recommend #" + mPost + "/" + commentId + "?")
+                        .title(String.format(getString(R.string.dialog_recommend_comment_title_template), mPost, commentId))
                         .positiveText(android.R.string.ok)
-                        .negativeText("Cancel")
+                        .negativeText(android.R.string.cancel)
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
@@ -453,7 +453,7 @@ public class SinglePostFragment extends SpicedFragment {
             return true;
         } else if (id == R.id.action_recommend) {
             final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                    .title("Recommend #" + mPost + "?")
+                    .title(String.format(getString(R.string.dialog_recommend_title_template), mPost))
                     .positiveText(android.R.string.ok)
                     .negativeText("Cancel")
                     .callback(new MaterialDialog.ButtonCallback() {
@@ -471,9 +471,9 @@ public class SinglePostFragment extends SpicedFragment {
             return true;
         } else if (id == R.id.action_delete) {
             final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                    .title("Really delete #" + mPost + "?")
+                    .title(String.format(getString(R.string.dialog_delete_title_template), mPost))
                     .positiveText(android.R.string.ok)
-                    .negativeText("Cancel")
+                    .negativeText(android.R.string.cancel)
                     .callback(new MaterialDialog.ButtonCallback() {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
@@ -490,14 +490,14 @@ public class SinglePostFragment extends SpicedFragment {
             Uri uri = Utils.getnerateSiteUri(mPost);
             ClipData clip = ClipData.newRawUri(uri.toString(), uri);
             clipboard.setPrimaryClip(clip);
-            Toast.makeText(getActivity(), "Link copied: " + uri.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), String.format(getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_edit) {
             Intent intent = new Intent(getActivity(), NewPostActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("id", mPost);
-            bundle.putBoolean("private", mPointPost.post.isPrivate);
-            bundle.putString("text", mPointPost.post.text.text.toString());
-            bundle.putStringArray("tags", mPointPost.post.tags.toArray(new String[mPointPost.post.tags.size()]));
+            bundle.putString(NewPostActivity.EXTRA_ID, mPost);
+            bundle.putBoolean(NewPostActivity.EXTRA_PRIVATE, mPointPost.post.isPrivate);
+            bundle.putString(NewPostActivity.EXTRA_TEXT, mPointPost.post.text.text.toString());
+            bundle.putStringArray(NewPostActivity.EXTRA_TAGS, mPointPost.post.tags.toArray(new String[mPointPost.post.tags.size()]));
             intent.putExtras(bundle);
             getActivity().startActivity(intent);
         }

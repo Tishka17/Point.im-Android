@@ -38,7 +38,7 @@ public class UserViewFragment extends PostListFragment {
             if (user != null && user.isSuccess()) {
                 ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
             } else if (!isDetached()) {
-                Toast.makeText(getActivity(), "Error: " + ((user == null) ? "null" : user.error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), String.format(getString(R.string.toast_error_template), (user == null) ? "null" : user.error), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -118,7 +118,7 @@ public class UserViewFragment extends PostListFragment {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {
-                        Toast.makeText(getActivity(), "Subscribed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.toast_subscribed), Toast.LENGTH_SHORT).show();
                     } else {
                         if (!isDetached())
                             Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
@@ -137,7 +137,7 @@ public class UserViewFragment extends PostListFragment {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {
-                        Toast.makeText(getActivity(), "Unsubscribed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.toast_unsubscribed), Toast.LENGTH_SHORT).show();
                     } else {
                         if (!isDetached())
                             Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();

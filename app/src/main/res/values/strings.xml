@@ -70,4 +70,20 @@
     <string name="tab_commented">Commented</string>
     <string name="tab_blog">Blog</string>
     <string name="tab_all">All</string>
+    <string name="toast_authorized">Authorized!</string>
+    <string name="toast_error">Error!</string>
+    <string name="toast_posted_template">Post #%s sent</string>
+    <string name="toast_upload_not_finished">Wait or check for errors!</string>
+    <string name="logged_out_stub"><![CDATA[<logged out>]]></string>
+    <string name="toast_recommended">Recommended!</string>
+    <string name="toast_commented">Comment added!</string>
+    <string name="toast_deleted">Deleted!</string>
+    <string name="toast_empty_comment">Empty comment</string>
+    <string name="dialog_recommend_comment_title_template">Recommend #%1$s/%2$s?</string>
+    <string name="dialog_recommend_title_template">Recommend #%s?</string>
+    <string name="dialog_delete_title_template">Really delete #%s?</string>
+    <string name="toast_link_copied__template">Link copied: %s</string>
+    <string name="toast_error_template">Error: %s</string>
+    <string name="toast_subscribed">Subscribed!</string>
+    <string name="toast_unsubscribed">Unsubscribed!</string>
 </resources>
