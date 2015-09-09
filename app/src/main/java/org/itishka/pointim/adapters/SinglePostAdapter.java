@@ -181,9 +181,9 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     LayoutInflater li;
                     li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                    final TextView v = (TextView) li.inflate(R.layout.tag, null);
+                    final TextView v = (TextView) li.inflate(R.layout.tag, postHolder.tags, false);
                     v.setText(tag);
-                    postHolder.tags.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    postHolder.tags.addView(v, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                     v.setOnClickListener(mOnTagClickListener);
                 }
             }

@@ -138,9 +138,9 @@ public class SearchFragment extends SpicedFragment {
                 LayoutInflater li;
                 li = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                final TextView v = (TextView) li.inflate(R.layout.tag, null);
+                final TextView v = (TextView) li.inflate(R.layout.tag, mTagsLayout, false);
                 v.setText(tag.tag);
-                mTagsLayout.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                mTagsLayout.addView(v, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 v.setOnClickListener(mOnTagClickListener);
             }
         }
@@ -155,10 +155,10 @@ public class SearchFragment extends SpicedFragment {
                 LayoutInflater li;
                 li = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                final View v = li.inflate(R.layout.user_chip, null);
+                final View v = li.inflate(R.layout.user_chip, mUsersLayout, false);
                 v.setTag(user.login);
                 ((TextView) v.findViewById(R.id.login)).setText(user.login);
-                mUsersLayout.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                mUsersLayout.addView(v, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 Utils.showAvatar(user.login, user.avatar, (ImageView) v.findViewById(R.id.avatar));
                 v.setOnClickListener(mOnUserClickListener);
             }

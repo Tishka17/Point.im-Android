@@ -114,7 +114,7 @@ public class UserCompletionAdapter implements ListAdapter, Filterable {
     public View getView(int position, View view, ViewGroup viewGroup) {
         Holder holder;
         if (view == null) {
-            view = mInflater.inflate(R.layout.adapter_user_completion, null);
+            view = mInflater.inflate(R.layout.adapter_user_completion, viewGroup, false);
 
             holder = new Holder(view);
             view.setTag(holder);

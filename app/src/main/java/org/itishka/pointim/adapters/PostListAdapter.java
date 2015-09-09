@@ -272,9 +272,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             int n = 0;
             for (String tag : post.post.tags) {
-                final TextView v = (TextView) li.inflate(R.layout.tag, null);
+                final TextView v = (TextView) li.inflate(R.layout.tag, holder.tags, false);
                 v.setText(tag);
-                holder.tags.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                holder.tags.addView(v, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 v.setOnClickListener(mOnTagClickListener);
             }
         }
