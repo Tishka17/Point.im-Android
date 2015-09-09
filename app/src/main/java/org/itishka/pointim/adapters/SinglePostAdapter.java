@@ -38,7 +38,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(getContext(), TagViewActivity.class);
-            intent.putExtra("tag", ((TextView) view).getText());
+            intent.putExtra(TagViewActivity.EXTRA_TAG, ((TextView) view).getText());
             getContext().startActivity(intent);
         }
     };
@@ -88,7 +88,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     String user = (String) view.getTag();
                     if (!TextUtils.isEmpty(user)) {
                         Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                        intent.putExtra("user", user);
+                        intent.putExtra(UserViewActivity.EXTRA_USER, user);
                         ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
                     }
                 }
@@ -97,7 +97,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View view) {
                     Intent browserIntent = new Intent(getContext(), SinglePostActivity.class);
-                    browserIntent.putExtra("post", view.getTag().toString());
+                    browserIntent.putExtra(SinglePostActivity.EXTRA_POST, view.getTag().toString());
                     getContext().startActivity(browserIntent);
                 }
             });
@@ -119,7 +119,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     String user = (String) view.getTag();
                     if (!TextUtils.isEmpty(user)) {
                         Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                        intent.putExtra("user", user);
+                        intent.putExtra(UserViewActivity.EXTRA_USER, user);
                         ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
                     }
                 }

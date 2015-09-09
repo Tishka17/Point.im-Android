@@ -142,7 +142,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 String user = (String) view.getTag();
                 if (!TextUtils.isEmpty(user)) {
                     Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                    intent.putExtra("user", user);
+                    intent.putExtra(UserViewActivity.EXTRA_USER, user);
                     ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
                 }
             }
@@ -153,7 +153,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 String user = (String) view.getTag();
                 if (!TextUtils.isEmpty(user)) {
                     Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                    intent.putExtra("user", user);
+                    intent.putExtra(UserViewActivity.EXTRA_USER, user);
                     ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
                 }
             }
