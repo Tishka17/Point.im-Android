@@ -130,7 +130,7 @@ public class SettingsFragment extends Fragment {
         });
 
         TextView version = (TextView) rootView.findViewById(R.id.version);
-        version.setText("Version: " + BuildConfig.VERSION_NAME);
+        version.setText(getString(R.string.version) + BuildConfig.VERSION_NAME);
 
         rootView.findViewById(R.id.google_play).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +153,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                intent.putExtra("user", "Tishka17");
+                intent.putExtra(UserViewActivity.EXTRA_USER, "Tishka17");
                 ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
             }
         });
@@ -164,7 +164,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                intent.putExtra("user", "arts");
+                intent.putExtra(UserViewActivity.EXTRA_USER, "arts");
                 ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
             }
         });
@@ -208,9 +208,9 @@ public class SettingsFragment extends Fragment {
 
     private void askImgurLogout() {
         final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title("Really logout from Imgur.com?")
+                .title(R.string.dialog_logout_imgur_title)
                 .positiveText(android.R.string.ok)
-                .negativeText("Cancel")
+                .negativeText(android.R.string.cancel)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
@@ -233,9 +233,9 @@ public class SettingsFragment extends Fragment {
 
     private void askPointLogout() {
         final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title("Really logout from Point.im?")
+                .title(R.string.dialog_logout_point_title)
                 .positiveText(android.R.string.ok)
-                .negativeText("Cancel")
+                .negativeText(android.R.string.cancel)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
