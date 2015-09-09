@@ -11,6 +11,8 @@ import org.itishka.pointim.fragments.UserViewFragment;
 
 public class UserViewActivity extends ConnectedActivity {
 
+    public static final String EXTRA_USER = "user";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +28,7 @@ public class UserViewActivity extends ConnectedActivity {
             setSupportActionBar(toolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("@" + getIntent().getStringExtra("user"));
+        getSupportActionBar().setTitle("@" + getIntent().getStringExtra(EXTRA_USER));
     }
 
 

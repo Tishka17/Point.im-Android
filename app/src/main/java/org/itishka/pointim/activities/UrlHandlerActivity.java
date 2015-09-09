@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 public class UrlHandlerActivity extends Activity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,28 +22,28 @@ public class UrlHandlerActivity extends Activity {
             if (TextUtils.isEmpty(tag)) {
                 if (TextUtils.isEmpty(user)) { //all
                     intent = new Intent(this, MainActivity.class);
-                    intent.putExtra("target", "all");
+                    intent.putExtra(MainActivity.EXTRA_TARGET, "all");
                 } else { //blog
                     intent = new Intent(this, UserViewActivity.class);
-                    intent.putExtra("user", user);
+                    intent.putExtra(UserViewActivity.EXTRA_USER, user);
                 }
             } else { //tag
                 intent = new Intent(this, TagViewActivity.class);
-                intent.putExtra("tag", tag);
-                intent.putExtra("user", user);
+                intent.putExtra(TagViewActivity.EXTRA_TAG, tag);
+                intent.putExtra(TagViewActivity.EXTRA_USER, user);
             }
         } else if ("recent".equals(post)
                 || "all".equals(post)
                 || "comments".equals(post)) {
             intent = new Intent(this, MainActivity.class);
-            intent.putExtra("target", post);
+            intent.putExtra(MainActivity.EXTRA_TARGET, post);
         } else if ("bookmarks".equals(post)) {
             intent = new Intent(this, BookmarksActivity.class);
-            intent.putExtra("target", post);
+            intent.putExtra(MainActivity.EXTRA_TARGET, post);
         } else { //post
             intent = new Intent(this, SinglePostActivity.class);
-            intent.putExtra("post", post);
-            intent.putExtra("comment", comment);
+            intent.putExtra(SinglePostActivity.EXTRA_POST, post);
+            intent.putExtra(SinglePostActivity.EXTRA_COMMENT, comment);
         }
         startActivity(intent);
         finish();

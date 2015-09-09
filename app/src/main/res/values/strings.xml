@@ -64,4 +64,10 @@
     <string name="image_uploaded">Image uploaded</string>
     <string name="image_upload_error">Image upload error</string>
     <string name="action_cancel">Cancel</string>
+    <string name="tab_incomming">Incoming</string>
+    <string name="tab_outgoing">Outgoing</string>
+    <string name="tab_recent">Recent</string>
+    <string name="tab_commented">Commented</string>
+    <string name="tab_blog">Blog</string>
+    <string name="tab_all">All</string>
 </resources>

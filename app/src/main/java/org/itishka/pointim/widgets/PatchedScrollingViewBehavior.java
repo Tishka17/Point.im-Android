@@ -26,7 +26,7 @@ public class PatchedScrollingViewBehavior extends AppBarLayout.ScrollingViewBeha
     @Override
     public boolean onMeasureChild(CoordinatorLayout parent, View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
         if (child.getLayoutParams().height == -1) {
-            List dependencies = parent.getDependencies(child);
+            List<View> dependencies = parent.getDependencies(child);
             if (dependencies.isEmpty()) {
                 return false;
             }

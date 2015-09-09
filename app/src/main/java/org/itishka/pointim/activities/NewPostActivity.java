@@ -14,6 +14,12 @@ import org.itishka.pointim.fragments.NewPostFragment;
 
 public class NewPostActivity extends ConnectedActivity {
 
+    public static final String EXTRA_ID = "id";
+    public static final String EXTRA_TEXT = "text";
+    public static final String EXTRA_TAGS = "tags";
+    public static final String EXTRA_PRIVATE = "private";
+    public static final String EXTRA_RESULT_POST = "post";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +45,10 @@ public class NewPostActivity extends ConnectedActivity {
                     fragment = NewPostFragment.newInstance(intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM), type);
                 }
             } else {
-                String id = getIntent().getStringExtra("id");
-                String text = getIntent().getStringExtra("text");
-                String[] tags = getIntent().getStringArrayExtra("tags");
-                boolean isPrivate = getIntent().getBooleanExtra("private", false);
+                String id = getIntent().getStringExtra(EXTRA_ID);
+                String text = getIntent().getStringExtra(EXTRA_TEXT);
+                String[] tags = getIntent().getStringArrayExtra(EXTRA_TAGS);
+                boolean isPrivate = getIntent().getBooleanExtra(EXTRA_PRIVATE, false);
                 if (!TextUtils.isEmpty(id)) {
                     fragment = NewPostFragment.newInstanceForEdit(id, text, tags, isPrivate);
                 } else {

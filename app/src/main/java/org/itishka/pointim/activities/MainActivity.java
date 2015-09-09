@@ -1,5 +1,6 @@
 package org.itishka.pointim.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -27,11 +28,12 @@ public class MainActivity extends ConnectedActivity {
     private static final int REQUEST_NEW_POST = 13;
     private FloatingActionButton mNewPost;
     private ViewPager mPager;
+    public static final String EXTRA_TARGET = "target";
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            Utils.showPostSentSnack(this, mPager, data.getStringExtra("post"));
+            Utils.showPostSentSnack(this, mPager, data.getStringExtra(NewPostActivity.EXTRA_RESULT_POST));
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -59,7 +61,7 @@ public class MainActivity extends ConnectedActivity {
         // Initialize the ViewPager and set an adapter
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setOffscreenPageLimit(4);
-        mPager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
+        mPager.setAdapter(new ScreenSlidePagerAdapter(this, getSupportFragmentManager()));
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(mPager);
@@ -97,15 +99,16 @@ public class MainActivity extends ConnectedActivity {
     }
 
     private static class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        private static final String[] titles = new String[]{
-                "Recent",
-                "Commented",
-                "Blog",
-                "All",
-        };
+        private final String[] titles;
 
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
+        public ScreenSlidePagerAdapter(Context context, FragmentManager fm) {
             super(fm);
+            titles = new String[]{
+                    context.getString(R.string.tab_recent),
+                    context.getString(R.string.tab_commented),
+                    context.getString(R.string.tab_blog),
+                    context.getString(R.string.tab_all),
+            };
         }
 
         @Override

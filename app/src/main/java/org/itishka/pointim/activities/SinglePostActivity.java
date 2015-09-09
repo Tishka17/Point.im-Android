@@ -9,12 +9,15 @@ import org.itishka.pointim.fragments.SinglePostFragment;
 
 public class SinglePostActivity extends ConnectedActivity {
 
+    public static final String EXTRA_POST = "post";
+    public static final String EXTRA_COMMENT = "comment";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single);
         if (savedInstanceState == null) {
-            String post = getIntent().getStringExtra("post");
+            String post = getIntent().getStringExtra(EXTRA_POST);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, SinglePostFragment.newInstance(post))
                     .commit();
@@ -24,7 +27,7 @@ public class SinglePostActivity extends ConnectedActivity {
             setSupportActionBar(toolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("#" + getIntent().getStringExtra("post"));
+        getSupportActionBar().setTitle("#" + getIntent().getStringExtra(EXTRA_POST));
     }
 
 

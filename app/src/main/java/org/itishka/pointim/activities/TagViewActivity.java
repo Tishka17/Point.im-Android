@@ -12,12 +12,15 @@ import org.itishka.pointim.fragments.TagViewFragment;
 
 public class TagViewActivity extends ConnectedActivity {
 
+    public static final String EXTRA_USER = "user";
+    public static final String EXTRA_TAG = "tag";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single);
-        String user = getIntent().getStringExtra("user");
-        String tag = getIntent().getStringExtra("tag");
+        String user = getIntent().getStringExtra(EXTRA_USER);
+        String tag = getIntent().getStringExtra(EXTRA_TAG);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, TagViewFragment.newInstance(user, tag))

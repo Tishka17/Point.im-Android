@@ -1,5 +1,6 @@
 package org.itishka.pointim.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -27,7 +28,7 @@ public class MailboxActivity extends ConnectedActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            Utils.showPostSentSnack(this, mPager, data.getStringExtra("post"));
+            Utils.showPostSentSnack(this, mPager, data.getStringExtra(NewPostActivity.EXTRA_RESULT_POST));
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -50,24 +51,25 @@ public class MailboxActivity extends ConnectedActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MailboxActivity.this, NewPostActivity.class);
-                intent.putExtra("private", true);
+                intent.putExtra(NewPostActivity.EXTRA_PRIVATE, true);
                 startActivityForResult(intent, REQUEST_NEW_POST);
             }
         });
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
+        mPager.setAdapter(new ScreenSlidePagerAdapter(this, getSupportFragmentManager()));
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(mPager);
     }
 
     private static class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        private static final String[] titles = new String[]{
-                "Incoming",
-                "Outgoing",
-        };
+        private final String[] titles;
 
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
+        public ScreenSlidePagerAdapter(Context context, FragmentManager fm) {
             super(fm);
+            titles = new String[]{
+                    context.getString(R.string.tab_incomming),
+                    context.getString(R.string.tab_outgoing),
+            };
         }
 
         @Override
