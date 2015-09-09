@@ -130,7 +130,7 @@ public class SettingsFragment extends Fragment {
         });
 
         TextView version = (TextView) rootView.findViewById(R.id.version);
-        version.setText(getString(R.string.version) + BuildConfig.VERSION_NAME);
+        version.setText(getString(R.string.version) + " " + BuildConfig.VERSION_NAME);
 
         rootView.findViewById(R.id.google_play).setOnClickListener(new View.OnClickListener() {
             @Override
