@@ -12,8 +12,8 @@ android {
         applicationId "org.itishka.pointim"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 24
-        versionName "2.10"
+        versionCode 25
+        versionName "2.11"
         buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId', "null")
         buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret', "null")
         buildConfigField "String", "IMGUR_REDIRECT_URL", properties.getProperty('imgurRedirectUrl', "null")
