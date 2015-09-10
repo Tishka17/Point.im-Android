@@ -74,27 +74,28 @@
                     android:layout_height="@dimen/touch_size"
                     android:gravity="center">
 
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/comment_id"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_margin"
-                            android:background="?attr/chipDrawable"
-                            android:gravity="bottom"
-                            android:visibility="gone" />
-                    </FrameLayout>
+                    <TextView
+                        android:id="@+id/comment_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_margin"
+                        android:background="?attr/chipDrawable"
+                        android:gravity="bottom"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="4dp"
+                        android:visibility="visible"
+                        tools:text="12" />
                 </LinearLayout>
 
                 <ImageButton
-                    android:contentDescription="@string/action_attach"
                     android:id="@+id/attach"
                     style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="@dimen/touch_size"
                     android:layout_height="@dimen/touch_size"
+                    android:contentDescription="@string/action_attach"
                     android:src="@drawable/ic_attach_file_grey600_24dp" />
 
                 <MultiAutoCompleteTextView
@@ -106,11 +107,11 @@
                     android:inputType="textCapSentences|textMultiLine" />
 
                 <ImageButton
-                    android:contentDescription="@string/action_send"
                     android:id="@+id/send"
                     style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="@dimen/touch_size"
                     android:layout_height="@dimen/touch_size"
+                    android:contentDescription="@string/action_send"
                     android:src="@drawable/ic_send_grey600_24dp" />
             </LinearLayout>
 
