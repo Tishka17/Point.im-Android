@@ -86,7 +86,7 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingTop="4dp"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         tools:text="12" />
                 </LinearLayout>
 
