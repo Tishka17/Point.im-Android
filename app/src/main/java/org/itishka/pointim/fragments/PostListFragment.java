@@ -75,7 +75,7 @@ public abstract class PostListFragment extends SpicedFragment {
         public void onRequestSuccess(PostList postList) {
             mSwipeRefresh.setRefreshing(false);
             if (postList != null && postList.isSuccess()) {
-                mAdapter.setData(postList);
+                mAdapter.setData(getActivity(), postList);
                 mRecyclerView.scrollToPosition(0);
             } else {
                 if (!isDetached())
@@ -98,7 +98,7 @@ public abstract class PostListFragment extends SpicedFragment {
         @Override
         public void onRequestSuccess(PostList postList) {
             if (postList != null && postList.isSuccess()) {
-                mAdapter.setData(postList);
+                mAdapter.setData(getActivity(), postList);
                 if (shouldAutoload()) {
                     mSwipeRefresh.setRefreshing(true);
                     update();
@@ -126,7 +126,7 @@ public abstract class PostListFragment extends SpicedFragment {
         @Override
         public void onRequestSuccess(PostList postList) {
             if (postList != null && postList.isSuccess()) {
-                mAdapter.appendData(postList);
+                mAdapter.appendData(getActivity(), postList);
             } else {
                 if (!isDetached())
                     Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();

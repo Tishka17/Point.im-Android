@@ -51,7 +51,7 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         } else {
             headerHolder.contacts_splitter.setVisibility(View.VISIBLE);
         }
-        headerHolder.gender.setText(getContext().getString(Utils.getGenderString(mUser.gender)));
+        headerHolder.gender.setText(holder.itemView.getContext().getString(Utils.getGenderString(mUser.gender)));
         setText(mUser.xmpp, headerHolder.xmpp_group, headerHolder.xmpp);
         setText(mUser.icq, headerHolder.icq_group, headerHolder.icq);
         setText(mUser.skype, headerHolder.skype_group, headerHolder.skype);

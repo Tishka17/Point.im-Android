@@ -40,7 +40,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_HEADER = -1;
 
-    private final WeakReference<Context> mContext;
     private PostList mPostList = null;
     private ImageSearchTask mTask;
     private OnLoadMoreRequestListener mOnLoadMoreRequestListener = null;
@@ -72,7 +71,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public PostListAdapter(Context context) {
         super();
-        mContext = new WeakReference<>(context);
         setHasStableIds(true);
     }
 
@@ -84,22 +82,22 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mPostList;
     }
 
-    public void setData(PostList postList) {
+    public void setData(Context context, PostList postList) {
         mPostList = postList;
         if (mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED) {
             mTask.cancel(true);
         }
-        mTask = new ImageSearchTask();
+        mTask = new ImageSearchTask(context);
         mTask.execute(mPostList);
         notifyDataSetChanged();
     }
 
-    public void appendData(PostList postList) {
+    public void appendData(Context context, PostList postList) {
         int oldLength = mPostList.posts.size();
         mPostList.append(postList);
         notifyItemRangeInserted(oldLength, postList.posts.size());
         if (mTask == null || mTask.getStatus() == AsyncTask.Status.FINISHED) {
-            mTask = new ImageSearchTask();
+            mTask = new ImageSearchTask(context);
             mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mPostList);
         }
     }
@@ -133,7 +131,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             @Override
             public void onClick(View view) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri) view.getTag());
-                getContext().startActivity(browserIntent);
+                holder.itemView.getContext().startActivity(browserIntent);
             }
         });
         holder.avatar.setOnClickListener(new View.OnClickListener() {
@@ -180,10 +178,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    protected Context getContext() {
-        return mContext.get();
-    }
-
     public void onBindFooterViewHolder(RecyclerView.ViewHolder holder) {
         FooterHolder footerHolder = (FooterHolder) holder;
         if (mPostList.has_next) {
@@ -225,7 +219,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.date.setText(Utils.formatDate(post.post.created));
 
         if (post.rec != null) {
-            holder.mainContent.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.quote_background));
+            holder.mainContent.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.quote_background));
             holder.recommend_info.setVisibility(View.VISIBLE);
             if (post.rec.text != null) {
                 holder.recommend_text.setVisibility(View.VISIBLE);
@@ -263,7 +257,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             // holder.comments.setVisibility(View.GONE);
         }
         LayoutInflater li;
-        li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        li = (LayoutInflater) holder.itemView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         holder.tags.removeAllViews();
         if (post.post.tags == null || post.post.tags.size() == 0) {
             holder.tags.setVisibility(View.GONE);
@@ -360,7 +354,11 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private class ImageSearchTask extends AsyncTask<PostList, Integer, Void> {
         SharedPreferences prefs;
-        boolean loadImages;
+        private final boolean loadImages;
+        ImageSearchTask(Context context) {
+            prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
+            loadImages = prefs.getBoolean("loadImages", true);
+        }
 
         @Override
         protected Void doInBackground(PostList... postLists) {
@@ -375,8 +373,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @Override
         protected void onPreExecute() {
-            prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
-            loadImages = prefs.getBoolean("loadImages", true);
             if (!loadImages) cancel(true);
             super.onPreExecute();
 
