@@ -59,5 +59,6 @@ dependencies {
     compile 'com.afollestad:material-dialogs:0.7.9.1'
     compile 'com.jpardogo.googleprogressbar:library:1.2.0'
     compile 'com.pnikosis:materialish-progress:1.5'
+    compile 'com.commit451:PhotoView:1.2.4'
 
 }

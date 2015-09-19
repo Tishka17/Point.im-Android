@@ -91,4 +91,5 @@
     <string name="version">Version:</string>
     <string name="dialog_logout_imgur_title">Really logout from Imgur.com?</string>
     <string name="dialog_logout_point_title">Really logout from Point.im?</string>
+    <string name="title_activity_image_view">Image</string>
 </resources>
