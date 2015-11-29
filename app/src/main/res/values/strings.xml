@@ -53,7 +53,7 @@
     <string name="point_site_name">Point.im</string>
     <string name="imgur_site_name">Imgur.com</string>
     <string name="app_name_full">Point.im for Android</string>
-    <string name="google_play">Google Play</string>
+    <string name="google_play" translatable="false">Google Play</string>
     <string name="source_code">Source code</string>
     <string name="action_recommend_comment">Recommend comment</string>
     <string name="action_open_browser">Open Browser</string>
@@ -93,4 +93,8 @@
     <string name="dialog_logout_point_title">Really logout from Point.im?</string>
     <string name="title_activity_image_view">Image</string>
     <string name="title_choose_app">Choose application</string>
+    <string name="toast_bookmarked_template">Bookmark #%1$s added</string>
+    <string name="toast_bookmark_error_template">Bookmark #%1$s not added: %2$s</string>
+    <string name="toast_bookmark_remove_template">Bookmark #%1$s removed</string>
+    <string name="toast_bookmark_remove_error_template">Bookmark #%1$s not removed: %2$s</string>
 </resources>

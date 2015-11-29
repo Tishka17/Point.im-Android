@@ -90,4 +90,8 @@
     <string name="dialog_logout_point_title">Действительно выйти из профиля point.im?</string>
     <string name="title_activity_image_view">Изображение</string>
     <string name="title_choose_app">Выберите приложение</string>
+    <string name="toast_bookmark_error_template">Закладка #%1$s не добавлена: %2$s</string>
+    <string name="toast_bookmark_remove_template">Закладка #%1$s удалена</string>
+    <string name="toast_bookmarked_template">Закладка #%1$s добавлена</string>
+    <string name="toast_bookmark_remove_error_template">Закладка #%1$s не удалена: %2$s</string>
 </resources>
