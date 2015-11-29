@@ -64,7 +64,7 @@
     <string name="image_uploaded">Image uploaded</string>
     <string name="image_upload_error">Image upload error</string>
     <string name="action_cancel">Cancel</string>
-    <string name="tab_incomming">Incoming</string>
+    <string name="tab_incoming">Incoming</string>
     <string name="tab_outgoing">Outgoing</string>
     <string name="tab_recent">Recent</string>
     <string name="tab_commented">Commented</string>
@@ -73,7 +73,7 @@
     <string name="toast_authorized">Authorized!</string>
     <string name="toast_error">Error!</string>
     <string name="toast_posted_template">Post #%s sent</string>
-    <string name="toast_upload_not_finished">Uplaod not finished. Wait or check for errors!</string>
+    <string name="toast_upload_not_finished">Upload not finished. Wait or check for errors!</string>
     <string name="logged_out_stub"><![CDATA[<logged out>]]></string>
     <string name="toast_recommended">Recommended!</string>
     <string name="toast_commented">Comment added!</string>

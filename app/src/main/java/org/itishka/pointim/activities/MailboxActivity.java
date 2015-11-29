@@ -67,7 +67,7 @@ public class MailboxActivity extends ConnectedActivity {
         public ScreenSlidePagerAdapter(Context context, FragmentManager fm) {
             super(fm);
             titles = new String[]{
-                    context.getString(R.string.tab_incomming),
+                    context.getString(R.string.tab_incoming),
                     context.getString(R.string.tab_outgoing),
             };
         }
