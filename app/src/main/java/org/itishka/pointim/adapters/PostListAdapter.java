@@ -28,7 +28,6 @@ import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -131,7 +130,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             @Override
             public void onClick(View view) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri) view.getTag());
-                holder.itemView.getContext().startActivity(browserIntent);
+                holder.itemView.getContext().startActivity(Intent.createChooser(browserIntent, holder.itemView.getContext().getString(R.string.title_choose_app)));
             }
         });
         holder.avatar.setOnClickListener(new View.OnClickListener() {
@@ -245,7 +244,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.post_id.setText("#" + post.post.id + "/" + post.comment_id);
         }
         holder.post_id.setTag(post.post.id);
-        holder.webLink.setTag(Utils.getnerateSiteUri(post.post.id));
+        holder.webLink.setTag(Utils.generateSiteUri(post.post.id));
         holder.favourite.setChecked(post.bookmarked);
         holder.favourite.setTag(post.post.id);
 
@@ -355,6 +354,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private class ImageSearchTask extends AsyncTask<PostList, Integer, Void> {
         SharedPreferences prefs;
         private final boolean loadImages;
+
         ImageSearchTask(Context context) {
             prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
             loadImages = prefs.getBoolean("loadImages", true);

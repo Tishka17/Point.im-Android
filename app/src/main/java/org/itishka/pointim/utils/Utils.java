@@ -26,15 +26,15 @@ public class Utils {
     public static final String SITE_URL_STRING = "https://point.im/";
     public static final String BLOG_SITE_URL_TEMPLATE = "https://%s.point.im/blog";
 
-    public static Uri getnerateSiteUri(String postId) {
+    public static Uri generateSiteUri(String postId) {
         return Uri.parse(SITE_URL_STRING + postId);
     }
 
-    public static Uri getnerateSiteUri(String postId, String commendId) {
+    public static Uri generateSiteUri(String postId, String commendId) {
         return Uri.parse(SITE_URL_STRING + postId + "#" + (commendId == null ? "" : commendId));
     }
 
-    public static Uri getnerateBlogUri(String login) {
+    public static Uri generateBlogUri(String login) {
         return Uri.parse(String.format(BLOG_SITE_URL_TEMPLATE, login));
     }
 

@@ -87,4 +87,8 @@
     <string name="toast_unsubscribed">Подписка удалена!</string>
     <string name="toast_upload_not_finished">Загрузка не завершена. Подождите или проверьте наличие ошибок</string>
     <string name="version">Версия:</string>
+    <string name="dialog_logout_imgur_title">Действительно выйти из профиля imgur.com?</string>
+    <string name="dialog_logout_point_title">Действительно выйти из профиля point.im?</string>
+    <string name="title_activity_image_view">Изображение</string>
+    <string name="title_choose_app">Выберите приложение</string>
 </resources>
