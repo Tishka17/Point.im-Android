@@ -36,6 +36,12 @@ public class ImageViewFragment extends SpicedFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        mImageView.setImageDrawable(null);
+        super.onDestroyView();
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mImageView = (ImageView) view.findViewById(R.id.imageView);
