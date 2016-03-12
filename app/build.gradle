@@ -33,7 +33,7 @@ android {
     }
 }
 repositories {
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://jitpack.io" }
     flatDir {
         dirs 'libs'
     }
@@ -56,7 +56,9 @@ dependencies {
     compile 'com.octo.android.robospice:robospice-retrofit:1.4.14'
 
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
-    compile 'com.afollestad:material-dialogs:0.7.9.1'
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.1@aar') {
+        transitive = true
+    }
     compile 'com.jpardogo.googleprogressbar:library:1.2.0'
     compile 'com.pnikosis:materialish-progress:1.7'
     compile 'com.commit451:PhotoView:1.2.4'
