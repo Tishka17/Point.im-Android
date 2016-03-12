@@ -2,6 +2,7 @@ package org.itishka.pointim.widgets;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -21,6 +22,8 @@ import java.util.List;
  */
 public class ImageList extends FrameLayout {
 
+    SharedPreferences mPreferences;
+
     private static final int[] sImageIds = new int[]{
             R.id.imageView0,
             R.id.imageView1,
@@ -33,7 +36,7 @@ public class ImageList extends FrameLayout {
             R.id.imageView8,
             R.id.imageView9
     };
-    private Transformation transformation = new Transformation() {
+    private final Transformation transformation = new Transformation() {
 
         @Override
         public Bitmap transform(Bitmap source) {
@@ -57,8 +60,8 @@ public class ImageList extends FrameLayout {
             return "transformation" + " desiredWidth";
         }
     };
-    private ImageView[] mImageViews = new ImageView[sImageIds.length];
-    private OnClickListener imageClickListener = new OnClickListener() {
+    private final ImageView[] mImageViews = new ImageView[sImageIds.length];
+    private final OnClickListener imageClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) view.getTag()));
@@ -82,6 +85,7 @@ public class ImageList extends FrameLayout {
     }
 
     private void init() {
+        mPreferences = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         inflate(getContext(), R.layout.image_list, this);
         for (int i = 0; i < sImageIds.length; i++) {
             mImageViews[i] = (ImageView) findViewById(sImageIds[i]);
@@ -90,13 +94,26 @@ public class ImageList extends FrameLayout {
         }
     }
 
-    public void setImageUrls(List<String> urls) {
+    public void setImageUrls(List<String> urls, List<String> files) {
+        if (!mPreferences.getBoolean("loadImages", true)) {
+            for (int i = 0; i < sImageIds.length; i++)
+                mImageViews[i].setVisibility(GONE);
+            return;
+        }
+        int urlCount = urls == null ? 0 : urls.size();
+        int fileCount = files == null ? 0 : files.size();
         for (int i = 0; i < sImageIds.length; i++) {
-            if (urls != null && i < urls.size()) {
+            String url = null;
+            if (i < urlCount) {
+                url = urls.get(i);
+            } else if (i - urlCount < fileCount) {
+                url = files.get(i - urlCount);
+            }
+            if (url != null) {
                 mImageViews[i].setVisibility(VISIBLE);
-                mImageViews[i].setTag(urls.get(i));
+                mImageViews[i].setTag(url);
                 Picasso.with(getContext())
-                        .load(urls.get(i))
+                        .load(url)
                         .transform(transformation)
                         .into(mImageViews[i]);
             } else {

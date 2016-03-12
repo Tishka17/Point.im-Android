@@ -13,15 +13,14 @@
     <color name="material_light_blue_900">#01579B</color>
 
 
-
     <color name="material_green_A200">#5af158</color>
-    <color name="form_background">#fff</color>
     <color name="white">#fff</color>
+    <color name="black">#000</color>
     <color name="material_blue_700_alpha">#30455ede</color>
     <color name="quote_background">#309e9e9e</color>
 
-    <color name="primary">@color/material_blue_700</color>
-    <color name="primaryDark">@color/material_blue_800</color>
-    <color name="accent">@color/accent_material_light</color>
+    <color name="textSecondaryDark">#bebebe</color>
+    <color name="darkerTransparent">#000000aa</color>
+    <color name="lighterTransparent">#ffffffaa</color>
 
 </resources>

@@ -6,8 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.octo.android.robospice.retrofit.RetrofitGsonSpiceService;
 
-import org.itishka.pointim.model.TextWithImages;
-import org.itishka.pointim.utils.AuthSaver;
+import org.itishka.pointim.model.point.TextWithImages;
 import org.itishka.pointim.utils.DateDeserializer;
 import org.itishka.pointim.utils.TextParser;
 import org.itishka.pointim.utils.TextSerializer;
@@ -41,7 +40,7 @@ public class PointService extends RetrofitGsonSpiceService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //FIXME
-        mRequestInterceptor.setAuthorization(AuthSaver.loadLoginResult(this));
+        mRequestInterceptor.setAuthorization(PointConnectionManager.getInstance().loginResult);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -49,6 +48,11 @@ public class PointService extends RetrofitGsonSpiceService {
     protected RestAdapter.Builder createRestAdapterBuilder() {
         return super.createRestAdapterBuilder()
                 .setRequestInterceptor(mRequestInterceptor);
+    }
+
+    @Override
+    public int getThreadCount() {
+        return 2;
     }
 
     @Override

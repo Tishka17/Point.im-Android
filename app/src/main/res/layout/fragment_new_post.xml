@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="tags, separated by comma (,)" />
+            android:completionThreshold="1"
+            android:hint="@string/tags_hint" />
 
         <Switch
             android:id="@+id/isPrivate"
@@ -29,18 +29,19 @@
             android:thumb="@drawable/switch_thumb_lock" />
     </LinearLayout>
 
-    <EditText
+    <MultiAutoCompleteTextView
         android:id="@+id/postText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:completionThreshold="1"
         android:gravity="top|left"
-        android:hint="Enter your text here"
+        android:hint="@string/input_hint"
         android:inputType="textCapSentences|textMultiLine"
         android:scrollHorizontally="false">
 
         <requestFocus />
-    </EditText>
+    </MultiAutoCompleteTextView>
 
     <org.itishka.pointim.widgets.ImageUploadingPanel
         android:id="@+id/imagesPanel"

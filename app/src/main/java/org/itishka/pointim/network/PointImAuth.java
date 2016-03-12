@@ -1,6 +1,6 @@
 package org.itishka.pointim.network;
 
-import org.itishka.pointim.model.LoginResult;
+import org.itishka.pointim.model.point.LoginResult;
 
 import retrofit.Callback;
 import retrofit.http.Field;

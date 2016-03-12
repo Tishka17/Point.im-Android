@@ -5,11 +5,11 @@
     <item
         android:id="@+id/attach"
         android:icon="@drawable/ic_attach_file_white_24dp"
-        android:title="Attach"
+        android:title="@string/action_attach"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/send"
         android:icon="@drawable/ic_send_white_24dp"
-        android:title="Send"
+        android:title="@string/action_send"
         app:showAsAction="ifRoom|withText" />
 </menu>

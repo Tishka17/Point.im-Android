@@ -15,10 +15,10 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.adapters.UserInfoPostListAdapter;
-import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.PointResult;
-import org.itishka.pointim.model.PostList;
-import org.itishka.pointim.model.User;
+import org.itishka.pointim.model.point.ExtendedUser;
+import org.itishka.pointim.model.point.PointResult;
+import org.itishka.pointim.model.point.PostList;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.PostListRequest;
 import org.itishka.pointim.network.requests.UserInfoRequest;
 
@@ -32,13 +32,13 @@ import retrofit.client.Response;
 public class UserViewFragment extends PostListFragment {
 
     private String mUser;
-    private RequestListener<User> mUserInfoRequestListener = new RequestListener<User>() {
+    private RequestListener<ExtendedUser> mUserInfoRequestListener = new RequestListener<ExtendedUser>() {
         @Override
-        public void onRequestSuccess(User user) {
+        public void onRequestSuccess(ExtendedUser user) {
             if (user != null && user.isSuccess()) {
                 ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
             } else if (!isDetached()) {
-                Toast.makeText(getActivity(), "Error: " + ((user==null)?"null":user.error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), String.format(getString(R.string.toast_error_template), (user == null) ? "null" : user.error), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -50,9 +50,9 @@ public class UserViewFragment extends PostListFragment {
         }
     };
 
-    private RequestListener<User> mUserInfoCacheListener = new RequestListener<User>() {
+    private RequestListener<ExtendedUser> mUserInfoCacheListener = new RequestListener<ExtendedUser>() {
         @Override
-        public void onRequestSuccess(User user) {
+        public void onRequestSuccess(ExtendedUser user) {
             if (user != null && user.isSuccess()) {
                 ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
             }
@@ -99,7 +99,7 @@ public class UserViewFragment extends PostListFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         UserInfoRequest request = createUserInfoRequest();
-        getSpiceManager().getFromCache(User.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mUserInfoCacheListener);
+        getSpiceManager().getFromCache(ExtendedUser.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mUserInfoCacheListener);
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -114,11 +114,11 @@ public class UserViewFragment extends PostListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_subscribe) {
-            ConnectionManager.getInstance().pointIm.subscribeUser(mUser, new Callback<PointResult>() {
+            PointConnectionManager.getInstance().pointIm.subscribeUser(mUser, "", new Callback<PointResult>() {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {
-                        Toast.makeText(getActivity(), "Subscribed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.toast_subscribed), Toast.LENGTH_SHORT).show();
                     } else {
                         if (!isDetached())
                             Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
@@ -133,11 +133,11 @@ public class UserViewFragment extends PostListFragment {
             });
             return true;
         } else if (id == R.id.action_unsubscribe) {
-            ConnectionManager.getInstance().pointIm.unsubscribeUser(mUser, new Callback<PointResult>() {
+            PointConnectionManager.getInstance().pointIm.unsubscribeUser(mUser, new Callback<PointResult>() {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {
-                        Toast.makeText(getActivity(), "Unsubscribed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.toast_unsubscribed), Toast.LENGTH_SHORT).show();
                     } else {
                         if (!isDetached())
                             Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();

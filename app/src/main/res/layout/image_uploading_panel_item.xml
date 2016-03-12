@@ -12,6 +12,7 @@
 
 
         <ImageView
+            android:contentDescription="@string/image"
             android:id="@+id/imageView"
             android:layout_width="96dp"
             android:layout_height="96dp"
@@ -23,10 +24,11 @@
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            app:matProg_barColor="@color/primary"
+            app:matProg_barColor="?attr/colorPrimary"
             app:matProg_progressIndeterminate="true" />
 
         <ImageView
+            android:contentDescription="@string/image_uploaded"
             android:visibility="gone"
             android:id="@+id/viewFinished"
             android:layout_width="wrap_content"
@@ -35,6 +37,7 @@
             android:src="@drawable/ic_cloud_check_white_48dp" />
 
         <ImageView
+            android:contentDescription="@string/image_upload_error"
             android:visibility="gone"
             android:id="@+id/viewError"
             android:layout_width="wrap_content"
@@ -49,6 +52,7 @@
             android:gravity="right">
 
             <ImageButton
+                android:contentDescription="@string/action_cancel"
                 android:background="@null"
                 android:id="@+id/action_cancel"
                 android:layout_width="wrap_content"

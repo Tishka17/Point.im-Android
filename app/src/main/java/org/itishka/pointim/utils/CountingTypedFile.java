@@ -29,8 +29,8 @@ public class CountingTypedFile extends TypedFile {
             int read;
             while ((read = in.read(buffer)) != -1) {
                 total += read;
-                this.listener.transferred(total);
                 out.write(buffer, 0, read);
+                this.listener.transferred(total);
             }
         } finally {
             in.close();

@@ -5,7 +5,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-import org.itishka.pointim.model.TextWithImages;
+import org.itishka.pointim.model.point.TextWithImages;
 
 import java.lang.reflect.Type;
 
@@ -18,7 +18,7 @@ public class TextParser implements JsonDeserializer<TextWithImages> {
         TextWithImages textWithImages = new TextWithImages();
         String text = json.getAsJsonPrimitive().getAsString();
         textWithImages.text = TextLinkify.addLinks(text);
-        textWithImages.images = null;
+        textWithImages.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(textWithImages.text), true);
         TextLinkify.markNicks(textWithImages.text);
         TextLinkify.markPostNumbers(textWithImages.text);
         return textWithImages;

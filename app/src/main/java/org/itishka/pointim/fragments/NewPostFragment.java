@@ -1,39 +1,44 @@
 package org.itishka.pointim.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.PointResult;
-import org.itishka.pointim.model.Tag;
-import org.itishka.pointim.utils.ContentStorageHelper;
+import org.itishka.pointim.activities.NewPostActivity;
+import org.itishka.pointim.adapters.UserCompletionAdapter;
+import org.itishka.pointim.model.point.NewPostResponse;
+import org.itishka.pointim.model.point.Tag;
+import org.itishka.pointim.model.point.TagList;
+import org.itishka.pointim.model.point.UserList;
+import org.itishka.pointim.network.PointConnectionManager;
+import org.itishka.pointim.network.requests.TagsRequest;
+import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
+import org.itishka.pointim.widgets.SymbolTokenizer;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -42,27 +47,36 @@ import retrofit.client.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewPostFragment extends Fragment {
+public class NewPostFragment extends SpicedFragment {
 
     private static final int RESULT_LOAD_IMAGE = 17;
     private static final String ARG_TEXT = "text";
     private static final String ARG_IMAGES = "images";
     private static final String ARG_ID = "id";
     private static final String ARG_TAGS = "tags";
-    private EditText mPostText;
+    private static final String ARG_MIME = "mime";
+    private static final String ARG_PRIVATE = "private";
+    private MultiAutoCompleteTextView mPostText;
     private Switch mIsPrivate;
     private String mPostId;
+    private String mMime;
     private MultiAutoCompleteTextView mPostTags;
-    private AlertDialog mProgressDialog;
+    private MaterialDialog mProgressDialog;
+    private UserCompletionAdapter mUsersListAdapter;
     private ArrayAdapter<Tag> mTagsListAdapter;
-    private List<Tag> mTags = null;
     private ImageUploadingPanel mImagesPanel;
-    private Callback<PointResult> mNewPostCallback = new Callback<PointResult>() {
+    private Callback<NewPostResponse> mNewPostCallback = new Callback<NewPostResponse>() {
         @Override
-        public void success(PointResult post, Response response) {
+        public void success(NewPostResponse post, Response response) {
             mProgressDialog.hide();
             if (post.isSuccess()) {
-                Toast.makeText(getActivity(), "Post sent!", Toast.LENGTH_SHORT).show();
+                if (getActivity().getCallingActivity() != null) {
+                    Intent intent = new Intent();
+                    intent.putExtra(NewPostActivity.EXTRA_RESULT_POST, post.id);
+                    getActivity().setResult(Activity.RESULT_OK, intent);
+                } else {
+                    Toast.makeText(getActivity(), String.format(getString(R.string.toast_posted_template), post.id), Toast.LENGTH_SHORT).show();
+                }
                 getActivity().finish();
             } else {
                 Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
@@ -87,42 +101,53 @@ public class NewPostFragment extends Fragment {
         return fragment;
     }
 
-    public static NewPostFragment newInstance(ArrayList<Parcelable> images) {
+    public static NewPostFragment newInstance(boolean isPrivate) {
         NewPostFragment fragment = new NewPostFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(ARG_IMAGES, images);
+        args.putBoolean(ARG_PRIVATE, isPrivate);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static NewPostFragment newInstance(Uri image) {
-        ArrayList<Parcelable> images = new ArrayList<>(1);
-        images.add(image);
-        return newInstance(images);
+    public static NewPostFragment newInstance(ArrayList<Parcelable> images, String mime) {
+        NewPostFragment fragment = new NewPostFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(ARG_IMAGES, images);
+        args.putString(ARG_MIME, mime);
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    public static NewPostFragment newInstanceForEdit(String id, String text, String[] tags) {
+    public static NewPostFragment newInstance(Uri image, String mime) {
+        ArrayList<Parcelable> images = new ArrayList<>(1);
+        images.add(image);
+        return newInstance(images, mime);
+    }
+
+    public static NewPostFragment newInstanceForEdit(String id, String text, String[] tags, boolean isPrivate) {
         NewPostFragment fragment = new NewPostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_ID, id);
         args.putString(ARG_TEXT, text);
         args.putStringArray(ARG_TAGS, tags);
+        args.putBoolean(ARG_PRIVATE, isPrivate);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public static NewPostFragment newInstance() {
-        return new NewPostFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_post, container, false);
-        mPostText = (EditText) rootView.findViewById(R.id.postText);
+        mPostText = (MultiAutoCompleteTextView) rootView.findViewById(R.id.postText);
+        mUsersListAdapter = new UserCompletionAdapter(getActivity());
+        mPostText.setAdapter(mUsersListAdapter);
+        mPostText.setTokenizer(new SymbolTokenizer('@'));
+        mPostText.setInputType(mPostText.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE | EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT);
         mIsPrivate = (Switch) rootView.findViewById(R.id.isPrivate);
         mTagsListAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line);
         mPostTags = (MultiAutoCompleteTextView) rootView.findViewById(R.id.postTags);
+        mPostTags.setInputType(mPostTags.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE | EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT);
         mPostTags.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         mPostTags.setAdapter(mTagsListAdapter);
         mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
@@ -133,16 +158,18 @@ public class NewPostFragment extends Fragment {
                 mPostId = args.getString(ARG_ID);
                 mPostText.setText(args.getString(ARG_TEXT, ""));
                 String[] tags = args.getStringArray(ARG_TAGS);
+                mIsPrivate.setChecked(args.getBoolean(ARG_PRIVATE));
                 if (tags != null) {
                     mPostTags.setText(TextUtils.join(", ", tags));
                 }
                 ArrayList<Uri> images = args.getParcelableArrayList(ARG_IMAGES);
                 if (images != null) for (Uri image : images) {
-                    mImagesPanel.addImage(image);
+                    mImagesPanel.addImage(image, mMime);
                 }
+                mMime = args.getString(ARG_MIME);
             }
         }
-        if (mPostId==null) {
+        if (mPostId == null) {
             mIsPrivate.setVisibility(View.VISIBLE);
         } else {
             mIsPrivate.setVisibility(View.GONE);
@@ -151,18 +178,12 @@ public class NewPostFragment extends Fragment {
                 .cancelable(false)
                 .customView(R.layout.dialog_progress, false)
                 .build();
-        new LoadTagsAsyncTask().execute();
-        return rootView;
-    }
 
-    private void applyTags(List<Tag> tags) {
-        if (isDetached() || tags == null)
-            return;
-        ContentStorageHelper.saveTags(getActivity(), tags);
-        mTags = tags;
-        mTagsListAdapter.clear();
-        mTagsListAdapter.addAll(mTags);
-        mTagsListAdapter.notifyDataSetChanged();
+        TagsRequest request = new TagsRequest(PointConnectionManager.getInstance().loginResult.login);
+        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mTagsRequestListener);
+        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
+        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
+        return rootView;
     }
 
     @Override
@@ -175,7 +196,7 @@ public class NewPostFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
-            mImagesPanel.addImage(data.getData());
+            mImagesPanel.addImage(data.getData(), data.getType());
         }
     }
 
@@ -184,7 +205,7 @@ public class NewPostFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.send) {
             if (!mImagesPanel.isUploadFinished()) {
-                Toast.makeText(getActivity(), "Wait or check for errors!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.toast_upload_not_finished), Toast.LENGTH_SHORT).show();
                 return true;
             }
             final String text = mPostText.getText().toString();
@@ -196,11 +217,11 @@ public class NewPostFragment extends Fragment {
             mProgressDialog.show();
             if (TextUtils.isEmpty(mPostId)) {
                 if (mIsPrivate.isChecked())
-                    ConnectionManager.getInstance().pointIm.createPrivatePost(sb.toString().trim(), tags, mIsPrivate.isChecked(), mNewPostCallback);
+                    PointConnectionManager.getInstance().pointIm.createPrivatePost(sb.toString().trim(), tags, mIsPrivate.isChecked(), mNewPostCallback);
                 else
-                    ConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mNewPostCallback);
+                    PointConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mNewPostCallback);
             } else {
-                ConnectionManager.getInstance().pointIm.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
+                PointConnectionManager.getInstance().pointIm.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
             }
             return true;
         } else if (id == R.id.attach) {
@@ -210,42 +231,36 @@ public class NewPostFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private class LoadTagsAsyncTask extends AsyncTask<Void, Void, Void> {
-        ContentStorageHelper.TagList tagList = null;
-
+    private RequestListener<TagList> mTagsRequestListener = new RequestListener<TagList>() {
         @Override
-        protected Void doInBackground(Void... voids) {
-            Context context = getActivity();
-            if (context != null) {
-                tagList = ContentStorageHelper.loadTags(context);
-                if (tagList != null)
-                    mTags = tagList.tags;
-            }
-            return null;
+        public void onRequestFailure(SpiceException spiceException) {
+            //
         }
 
         @Override
-        protected void onPostExecute(Void b) {
-            super.onPostExecute(b);
-            if (mTags != null) {
+        public void onRequestSuccess(TagList tags) {
+            Log.d("NewPostFragment", "tags: " + tags);
+            if (tags != null) {
                 mTagsListAdapter.clear();
-                mTagsListAdapter.addAll(mTags);
+                mTagsListAdapter.addAll(tags);
                 mTagsListAdapter.notifyDataSetChanged();
             }
-            if (mTags == null || tagList == null || System.currentTimeMillis() - tagList.updated > 24 * 60 * 60 * 1000) {
-                ConnectionManager.getInstance().pointIm.getTags(ConnectionManager.getInstance().loginResult.login, new Callback<List<Tag>>() {
-                    @Override
-                    public void success(List<Tag> tags, Response response) {
-                        if (tags != null)
-                            applyTags(tags);
-                    }
+        }
+    };
 
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-                        //nothing
-                    }
-                });
+    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            //
+        }
+
+        @Override
+        public void onRequestSuccess(UserList users) {
+            Log.d("NewPostFragment", "users: " + users);
+            if (users != null) {
+                mUsersListAdapter.setData(users);
+                mUsersListAdapter.notifyDataSetChanged();
             }
         }
-    }
+    };
 }

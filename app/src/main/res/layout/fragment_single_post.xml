@@ -1,25 +1,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefresh"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:layout_weight="1">
 
-        <org.itishka.pointim.widgets.FixedRecyclerView
-            android:id="@+id/post"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:layout_weight="1"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/post"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        <org.itishka.pointim.widgets.ScrollButton
+            android:id="@+id/scroll_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_chevron_double_up_grey600_36dp"
+            app:direction="up"
+            tools:ignore="RelativeOverlap" />
+
+        <org.itishka.pointim.widgets.ScrollButton
+            android:id="@+id/scroll_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_chevron_double_down_grey600_36dp"
+            app:direction="down"
+            tools:ignore="RelativeOverlap" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +54,8 @@
         android:layout_marginBottom="-4dp"
         android:layout_marginLeft="-4dp"
         android:layout_marginRight="-4dp"
-        card_view:cardCornerRadius="0dp">
+        app:cardBackgroundColor="?attr/cardBackgroundColor"
+        app:cardCornerRadius="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,19 +74,20 @@
                     android:layout_height="@dimen/touch_size"
                     android:gravity="center">
 
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/comment_id"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/text_margin"
-                            android:background="@drawable/tag"
-                            android:gravity="bottom"
-                            android:visibility="gone" />
-                    </FrameLayout>
+                    <TextView
+                        android:id="@+id/comment_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_margin"
+                        android:background="?attr/chipDrawable"
+                        android:gravity="bottom"
+                        android:paddingBottom="4dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="4dp"
+                        android:visibility="gone"
+                        tools:text="12" />
                 </LinearLayout>
 
                 <ImageButton
@@ -66,13 +95,15 @@
                     style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="@dimen/touch_size"
                     android:layout_height="@dimen/touch_size"
+                    android:contentDescription="@string/action_attach"
                     android:src="@drawable/ic_attach_file_grey600_24dp" />
 
-                <EditText
+                <MultiAutoCompleteTextView
                     android:id="@+id/text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:completionThreshold="1"
                     android:inputType="textCapSentences|textMultiLine" />
 
                 <ImageButton
@@ -80,6 +111,7 @@
                     style="@style/Widget.AppCompat.ActionButton"
                     android:layout_width="@dimen/touch_size"
                     android:layout_height="@dimen/touch_size"
+                    android:contentDescription="@string/action_send"
                     android:src="@drawable/ic_send_grey600_24dp" />
             </LinearLayout>
 

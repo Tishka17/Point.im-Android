@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,7 +13,8 @@
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
     android:paddingTop="4dp"
-    card_view:cardCornerRadius="0dp">
+    app:cardBackgroundColor="?attr/cardBackgroundColor"
+    app:cardCornerRadius="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,12 +27,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/avatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/avatar_size"
+                android:layout_height="@dimen/avatar_size"
                 android:layout_marginRight="@dimen/text_avatar_margin"
-                android:src="@drawable/ic_launcher" />
+                android:scaleType="fitCenter"
+                app:placeholderImage="@drawable/ic_account_grey600_36dp"
+                app:roundAsCircle="true"
+                app:roundingBorderWidth="1dip" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,7 +46,7 @@
                     android:id="@+id/login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
+                    tools:text="Name"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textStyle="bold" />
 
@@ -49,8 +54,8 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Small Text"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    tools:text="Small Text" />
             </LinearLayout>
         </LinearLayout>
 
@@ -261,7 +266,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="test with some many letttttttttters and so on as it can be" />
+                tools:text="test with some many letttttttttters and so on as it can be" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

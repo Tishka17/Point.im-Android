@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="4dp"
-    card_view:cardCornerRadius="3dp">
+    app:cardBackgroundColor="?attr/cardBackgroundColor"
+    app:cardCornerRadius="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
         android:orientation="vertical">
 
@@ -18,15 +20,19 @@
             android:id="@+id/recommend_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="@dimen/text_margin"
             android:layout_marginRight="@dimen/text_margin"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/recommend_avatar"
                 android:layout_width="@dimen/avatar_size"
                 android:layout_height="@dimen/avatar_size"
-                android:src="@drawable/ic_launcher" />
+                android:scaleType="fitCenter"
+                app:placeholderImage="@drawable/ic_account_grey600_36dp"
+                app:roundAsCircle="true"
+                app:roundingBorderWidth="1dip" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,7 +44,7 @@
                     android:id="@+id/recommend_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
+                    tools:text="Name"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textStyle="bold" />
 
@@ -46,8 +52,8 @@
                     android:id="@+id/recommend_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Small Text"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    tools:text="Small Text" />
             </LinearLayout>
         </LinearLayout>
 
@@ -57,14 +63,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/text_margin"
             android:layout_marginRight="@dimen/text_margin"
-            android:text="recommend test with some many letttttttttters and so on as it can be" />
+            tools:text="recommend test with some many letttttttttters and so on as it can be" />
 
-        <View
+        <Space
             android:id="@+id/quote_mark_top"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="4dp"
-            android:background="@android:color/transparent" />
+            android:layout_marginTop="4dp" />
 
         <LinearLayout
             android:id="@+id/main_content"
@@ -88,15 +93,18 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginLeft="@dimen/text_quote_margin"
                     android:layout_marginRight="@dimen/text_margin"
                     android:orientation="horizontal">
 
-                    <ImageView
+                    <com.facebook.drawee.view.SimpleDraweeView
                         android:id="@+id/avatar"
                         android:layout_width="@dimen/avatar_size"
                         android:layout_height="@dimen/avatar_size"
-                        android:src="@drawable/ic_launcher" />
+                        app:placeholderImage="@drawable/ic_account_grey600_36dp"
+                        app:roundAsCircle="true"
+                        app:roundingBorderWidth="1dip" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -108,7 +116,7 @@
                             android:id="@+id/author"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Name"
+                            tools:text="Name"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textStyle="bold" />
 
@@ -116,8 +124,8 @@
                             android:id="@+id/date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Small Text"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            tools:text="Small Text" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -125,9 +133,12 @@
                     android:id="@+id/tags"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginLeft="@dimen/text_quote_margin"
-                    android:layout_marginRight="@dimen/text_margin"
-                    android:layout_marginTop="4dp" />
+                    android:layout_marginRight="@dimen/text_margin">
+
+                    <include layout="@layout/tag" />
+                </org.itishka.pointim.widgets.FlowLayout>
 
                 <org.itishka.pointim.widgets.MyTextView
                     android:id="@+id/text"
@@ -135,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/text_quote_margin"
                     android:layout_marginRight="@dimen/text_margin"
-                    android:text="test with some many letttttttttters and so on as it can be" />
+                    tools:text="test with some many letttttttttters and so on as it can be" />
 
                 <org.itishka.pointim.widgets.ImageList
                     android:id="@+id/imageList"
@@ -144,11 +155,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/dividerVertical" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -161,40 +167,45 @@
                 android:id="@+id/post_id"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="#xxx"
-                android:textColor="@android:color/secondary_text_dark"
-                android:textStyle="bold" />
+                android:textColor="?attr/textSecondaryDark"
+                android:textStyle="bold"
+                tools:text="#xxx" />
 
             <CheckBox
                 android:id="@+id/favourite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:button="@null"
                 android:drawableLeft="@drawable/ic_bookmark"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
+                android:padding="4dp"
+                android:textColor="?attr/textSecondaryDark" />
 
-            <ImageView
+            <ImageButton
+                android:contentDescription="@string/action_open_browser"
                 android:id="@+id/weblink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:src="@drawable/ic_action_internet" />
+                style="?android:attr/actionButtonStyle"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="8dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_earth_black_24dp"
+                android:tint="?attr/textSecondaryDark" />
 
             <TextView
                 android:id="@+id/comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_action_comment"
+                android:layout_marginRight="8dp"
+                android:drawableLeft="@drawable/ic_message_reply_black_24dp"
+                android:drawablePadding="4dip"
                 android:gravity="center"
-                android:minWidth="65dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="111"
-                android:textColor="@android:color/secondary_text_dark" />
+                android:padding="4dp"
+                android:textColor="?attr/textSecondaryDark"
+                tools:text="123" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -3,7 +3,7 @@ package org.itishka.pointim.fragments;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.requests.PostListRequest;
 
 /**
@@ -11,14 +11,16 @@ import org.itishka.pointim.network.requests.PostListRequest;
  */
 public class TagViewFragment extends PostListFragment {
 
+    public static final String ARG_USER = "user";
+    public static final String ARG_TAG = "tag";
     private String mTag;
     private String mUser;
 
     public static TagViewFragment newInstance(String user, String tag) {
         TagViewFragment fragment = new TagViewFragment();
         Bundle args = new Bundle();
-        args.putString("tag", tag);
-        args.putString("user", user);
+        args.putString(ARG_TAG, tag);
+        args.putString(ARG_USER, user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -26,8 +28,8 @@ public class TagViewFragment extends PostListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTag = getArguments().getString("tag");
-        mUser = getArguments().getString("user");
+        mTag = getArguments().getString(ARG_TAG);
+        mUser = getArguments().getString(ARG_USER);
     }
 
     @Override

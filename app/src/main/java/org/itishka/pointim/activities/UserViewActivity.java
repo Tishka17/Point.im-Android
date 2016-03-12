@@ -1,22 +1,22 @@
 package org.itishka.pointim.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.fragments.UserViewFragment;
-import org.itishka.pointim.utils.ImageSearchHelper;
 
 
-public class UserViewActivity extends ActionBarActivity {
+public class UserViewActivity extends ConnectedActivity {
+
+    public static final String EXTRA_USER = "user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tag_view);
+        setContentView(R.layout.activity_single);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, UserViewFragment.newInstance(getIntent().getStringExtra("user")))
@@ -28,7 +28,7 @@ public class UserViewActivity extends ActionBarActivity {
             setSupportActionBar(toolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("@" + getIntent().getStringExtra("user"));
+        getSupportActionBar().setTitle("@" + getIntent().getStringExtra(EXTRA_USER));
     }
 
 
@@ -36,12 +36,6 @@ public class UserViewActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_tag_view, menu);
         return true;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ImageSearchHelper.saveCache(this);
     }
 
     @Override

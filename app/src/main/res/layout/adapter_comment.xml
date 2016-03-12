@@ -1,52 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="4dp"
-    android:paddingTop="4dp">
+    android:paddingBottom="4dp">
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/dividerVertical" />
+        android:background="?android:attr/dividerVertical"
+        android:paddingTop="4dp" />
 
     <LinearLayout
-        android:layout_marginTop="@dimen/text_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/text_margin"
-        android:layout_marginRight="@dimen/text_margin"
+        android:layout_marginTop="@dimen/text_margin"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/avatar"
             android:layout_width="@dimen/avatar_size"
             android:layout_height="@dimen/avatar_size"
-            android:src="@drawable/ic_launcher" />
+            android:layout_marginLeft="@dimen/text_margin"
+            android:scaleType="fitCenter"
+            app:placeholderImage="@drawable/ic_account_grey600_36dp"
+            app:roundAsCircle="true"
+            app:roundingBorderWidth="1dip" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/text_avatar_margin"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Name" />
 
             <TextView
                 android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Small Text"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                tools:text="Small Text" />
         </LinearLayout>
+
+        <ImageButton
+            android:contentDescription="@string/action_recommend_comment"
+            android:id="@+id/action_recommend"
+            style="?android:attr/actionButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_share_black_24dp"
+            android:tint="?attr/textSecondaryDark" />
     </LinearLayout>
 
     <org.itishka.pointim.widgets.MyTextView
@@ -55,23 +71,28 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
-        android:text="test with some many letttttttttters and so on as it can be" />
+        tools:text="test with some many letttttttttters and so on as it can be" />
 
     <org.itishka.pointim.widgets.ImageList
         android:id="@+id/imageList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_marginLeft="@dimen/text_margin"
-        android:layout_marginRight="@dimen/text_margin"
-        android:id="@+id/comment_id"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="1"
-        android:textColor="@android:color/secondary_text_dark"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/comment_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="?attr/textSecondaryDark"
+            android:textStyle="bold"
+            tools:text="1" />
+    </LinearLayout>
 </LinearLayout>

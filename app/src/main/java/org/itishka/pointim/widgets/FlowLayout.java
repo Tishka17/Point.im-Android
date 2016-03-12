@@ -26,7 +26,6 @@ public class FlowLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        assert (MeasureSpec.getMode(widthMeasureSpec) != MeasureSpec.UNSPECIFIED);
         final int width = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
         int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
         final int count = getChildCount();
@@ -43,22 +42,23 @@ public class FlowLayout extends ViewGroup {
             if (child.getVisibility() != GONE) {
                 child.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST), childHeightMeasureSpec);
                 final int childw = child.getMeasuredWidth();
-                mHeight = Math.max(mHeight, child.getMeasuredHeight() + PAD_V);
+                final int childh = child.getMeasuredHeight();
                 if (xpos + childw > width) {
                     xpos = getPaddingLeft();
-                    ypos += mHeight;
+                    ypos = mHeight;
                 }
                 xpos += childw + PAD_H;
+                mHeight = Math.max(mHeight, ypos + childh + PAD_V);
             }
         }
+        if (mHeight > getPaddingTop()) mHeight -= PAD_V;
         if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.UNSPECIFIED) {
-            height = ypos + mHeight;
+            height = mHeight + getPaddingBottom();
         } else if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST) {
             if (ypos + mHeight < height) {
-                height = ypos + mHeight;
+                height = mHeight + getPaddingBottom();
             }
         }
-        height += 5; // Fudge to avoid clipping bottom of last row.
         setMeasuredDimension(width, height);
     } // end onMeasure()
 
@@ -67,6 +67,7 @@ public class FlowLayout extends ViewGroup {
         final int width = r - l;
         int xpos = getPaddingLeft();
         int ypos = getPaddingTop();
+        int height = 0;
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
@@ -74,8 +75,9 @@ public class FlowLayout extends ViewGroup {
                 final int childh = child.getMeasuredHeight();
                 if (xpos + childw > width) {
                     xpos = getPaddingLeft();
-                    ypos += mHeight;
+                    ypos = height;
                 }
+                height = Math.max(height, ypos + childh + PAD_V);
                 child.layout(xpos, ypos, xpos + childw, ypos + childh);
                 xpos += childw + PAD_H;
             }

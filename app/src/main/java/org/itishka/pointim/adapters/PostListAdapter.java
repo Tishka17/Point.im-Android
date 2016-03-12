@@ -8,27 +8,39 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
 
+import org.itishka.pointim.PointApplication;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.model.Post;
-import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.model.point.PointResult;
+import org.itishka.pointim.model.point.Post;
+import org.itishka.pointim.model.point.PostList;
+import org.itishka.pointim.network.PointConnectionManager;
+import org.itishka.pointim.network.PointIm;
+import org.itishka.pointim.network.PointService;
+import org.itishka.pointim.utils.BookmarkToggleListener;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by Tishka17 on 20.10.2014.
@@ -39,7 +51,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_HEADER = -1;
 
-    private final WeakReference<Context> mContext;
     private PostList mPostList = null;
     private ImageSearchTask mTask;
     private OnLoadMoreRequestListener mOnLoadMoreRequestListener = null;
@@ -54,9 +65,24 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private boolean mHasHeader = false;
 
+    @Override
+    public long getItemId(int position) {
+        switch (getItemViewType(position)) {
+            case TYPE_FOOTER:
+                return -1;
+            case TYPE_HEADER:
+                return 0;
+            default:
+                if (mHasHeader)
+                    return mPostList.posts.get(position - 1).uid;
+                else
+                    return mPostList.posts.get(position).uid;
+        }
+    }
+
     public PostListAdapter(Context context) {
         super();
-        mContext = new WeakReference<>(context);
+        setHasStableIds(true);
     }
 
     protected void setHasHeader(boolean hasHeader) {
@@ -67,22 +93,22 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mPostList;
     }
 
-    public void setData(PostList postList) {
+    public void setData(Context context, PostList postList) {
         mPostList = postList;
-        notifyDataSetChanged();
         if (mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED) {
             mTask.cancel(true);
         }
-        mTask = new ImageSearchTask();
+        mTask = new ImageSearchTask(context);
         mTask.execute(mPostList);
+        notifyDataSetChanged();
     }
 
-    public void appendData(PostList postList) {
+    public void appendData(Context context, PostList postList) {
         int oldLength = mPostList.posts.size();
         mPostList.append(postList);
         notifyItemRangeInserted(oldLength, postList.posts.size());
         if (mTask == null || mTask.getStatus() == AsyncTask.Status.FINISHED) {
-            mTask = new ImageSearchTask();
+            mTask = new ImageSearchTask(context);
             mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mPostList);
         }
     }
@@ -116,7 +142,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             @Override
             public void onClick(View view) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri) view.getTag());
-                getContext().startActivity(browserIntent);
+                holder.itemView.getContext().startActivity(Intent.createChooser(browserIntent, holder.itemView.getContext().getString(R.string.title_choose_app)));
             }
         });
         holder.avatar.setOnClickListener(new View.OnClickListener() {
@@ -125,18 +151,19 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 String user = (String) view.getTag();
                 if (!TextUtils.isEmpty(user)) {
                     Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                    intent.putExtra("user", user);
+                    intent.putExtra(UserViewActivity.EXTRA_USER, user);
                     ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
                 }
             }
         });
-        holder.recommender_avatar.setOnClickListener(new View.OnClickListener() {
+        holder.favourite.setOnClickListener(new BookmarkToggleListener());
+        holder.recomender_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String user = (String) view.getTag();
                 if (!TextUtils.isEmpty(user)) {
                     Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                    intent.putExtra("user", user);
+                    intent.putExtra(UserViewActivity.EXTRA_USER, user);
                     ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
                 }
             }
@@ -161,10 +188,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else {
             return onCreateItemViewHolder(viewGroup);
         }
-    }
-
-    protected Context getContext() {
-        return mContext.get();
     }
 
     public void onBindFooterViewHolder(RecyclerView.ViewHolder holder) {
@@ -202,13 +225,13 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.author.setText("@" + post.post.author.login);
         holder.itemView.setTag(R.id.post_id, post.post.id);
 
-        holder.imageList.setImageUrls(post.post.text.images);
+        holder.imageList.setImageUrls(post.post.text.images, post.post.files);
         holder.text.setText(post.post.text.text);
-        Utils.showAvatar(getContext(), post.post.author.login, post.post.author.avatar, holder.avatar);
+        Utils.showAvatar(post.post.author.login, post.post.author.avatar, holder.avatar);
         holder.date.setText(Utils.formatDate(post.post.created));
 
         if (post.rec != null) {
-            holder.mainConent.setBackgroundColor(getContext().getResources().getColor(R.color.quote_background));
+            holder.mainContent.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.quote_background));
             holder.recommend_info.setVisibility(View.VISIBLE);
             if (post.rec.text != null) {
                 holder.recommend_text.setVisibility(View.VISIBLE);
@@ -220,9 +243,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.quote_mark_top.setVisibility(View.VISIBLE);
             holder.recommend_author.setText("@" + post.rec.author.login);
             holder.recommend_id.setText("");
-            Utils.showAvatar(getContext(), post.rec.author.login, post.rec.author.avatar, holder.recommender_avatar);
+            Utils.showAvatar(post.rec.author.login, post.rec.author.avatar, holder.recomender_avatar);
         } else {
-            holder.mainConent.setBackgroundColor(Color.TRANSPARENT);
+            holder.mainContent.setBackgroundColor(Color.TRANSPARENT);
             holder.recommend_info.setVisibility(View.GONE);
             holder.recommend_text.setVisibility(View.GONE);
             holder.quote_mark.setVisibility(View.INVISIBLE);
@@ -234,7 +257,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.post_id.setText("#" + post.post.id + "/" + post.comment_id);
         }
         holder.post_id.setTag(post.post.id);
-        holder.webLink.setTag(Utils.getnerateSiteUri(post.post.id));
+        holder.webLink.setTag(Utils.generateSiteUri(post.post.id));
         holder.favourite.setChecked(post.bookmarked);
         holder.favourite.setTag(post.post.id);
 
@@ -246,7 +269,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             // holder.comments.setVisibility(View.GONE);
         }
         LayoutInflater li;
-        li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        li = (LayoutInflater) holder.itemView.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         holder.tags.removeAllViews();
         if (post.post.tags == null || post.post.tags.size() == 0) {
             holder.tags.setVisibility(View.GONE);
@@ -255,9 +278,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             int n = 0;
             for (String tag : post.post.tags) {
-                final TextView v = (TextView) li.inflate(R.layout.tag, null);
+                final TextView v = (TextView) li.inflate(R.layout.tag, holder.tags, false);
                 v.setText(tag);
-                holder.tags.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                holder.tags.addView(v, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 v.setOnClickListener(mOnTagClickListener);
             }
         }
@@ -278,13 +301,13 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public interface OnLoadMoreRequestListener {
-        public boolean onLoadMoreRequested();//return false if cannot load more
+        boolean onLoadMoreRequested();//return false if cannot load more
     }
 
-    public static interface OnPostClickListener {
-        public void onPostClicked(View view, String post);
+    public interface OnPostClickListener {
+        void onPostClicked(View view, String post);
 
-        public void onTagClicked(View view, String tag);
+        void onTagClicked(View view, String tag);
     }
 
     protected class FooterHolder extends RecyclerView.ViewHolder {
@@ -297,31 +320,31 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        ViewGroup tags;
-        ImageView avatar;
-        ImageView recommender_avatar;
-        TextView recommend_text;
-        View quote_mark;
-        View quote_mark_top;
-        TextView recommend_author;
-        TextView author;
-        TextView post_id;
-        View recommend_info;
-        TextView recommend_id;
-        TextView comments;
-        TextView date;
-        ImageView webLink;
-        CheckBox favourite;
-        ImageList imageList;
-        View mainConent;
+        final TextView text;
+        final ViewGroup tags;
+        final ImageView avatar;
+        final ImageView recomender_avatar;
+        final TextView recommend_text;
+        final View quote_mark;
+        final View quote_mark_top;
+        final TextView recommend_author;
+        final TextView author;
+        final TextView post_id;
+        final View recommend_info;
+        final TextView recommend_id;
+        final TextView comments;
+        final TextView date;
+        final ImageView webLink;
+        final CheckBox favourite;
+        final ImageList imageList;
+        final View mainContent;
 
         public ViewHolder(View itemView) {
             super(itemView);
             text = (TextView) itemView.findViewById(R.id.text);
             tags = (ViewGroup) itemView.findViewById(R.id.tags);
             avatar = (ImageView) itemView.findViewById(R.id.avatar);
-            recommender_avatar = (ImageView) itemView.findViewById(R.id.recommend_avatar);
+            recomender_avatar = (ImageView) itemView.findViewById(R.id.recommend_avatar);
             recommend_text = (TextView) itemView.findViewById(R.id.recommend_text);
             quote_mark = itemView.findViewById(R.id.quote_mark);
             quote_mark_top = itemView.findViewById(R.id.quote_mark_top);
@@ -331,35 +354,38 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             recommend_info = itemView.findViewById(R.id.recommend_info);
             recommend_id = (TextView) itemView.findViewById(R.id.recommend_id);
             comments = (TextView) itemView.findViewById(R.id.comments);
+            Utils.setTint(comments);
             date = (TextView) itemView.findViewById(R.id.date);
             webLink = (ImageView) itemView.findViewById(R.id.weblink);
             favourite = (CheckBox) itemView.findViewById(R.id.favourite);
-            mainConent = itemView.findViewById(R.id.main_content);
+            Utils.setTint(favourite);
+            mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
         }
     }
 
     private class ImageSearchTask extends AsyncTask<PostList, Integer, Void> {
         SharedPreferences prefs;
-        boolean loadImages;
+        private final boolean loadImages;
+
+        ImageSearchTask(Context context) {
+            prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
+            loadImages = prefs.getBoolean("loadImages", true);
+        }
 
         @Override
         protected Void doInBackground(PostList... postLists) {
             List<Post> posts = postLists[0].posts;
             for (int i = 0; i < posts.size(); i++) {
                 Post post = posts.get(i);
-                if (post.post.text.images == null) {
-                    post.post.text.images = ImageSearchHelper.checkImageLinks(getContext(), ImageSearchHelper.getAllLinks(post.post.text.text));
-                    publishProgress(i);
-                }
+                post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
+                publishProgress(i);
             }
             return null;
         }
 
         @Override
         protected void onPreExecute() {
-            prefs = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
-            loadImages = prefs.getBoolean("loadImages", true);
             if (!loadImages) cancel(true);
             super.onPreExecute();
 

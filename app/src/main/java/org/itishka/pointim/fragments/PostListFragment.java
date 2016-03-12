@@ -28,10 +28,11 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.adapters.PostListAdapter;
-import org.itishka.pointim.api.ConnectionManager;
-import org.itishka.pointim.model.Post;
-import org.itishka.pointim.model.PostList;
+import org.itishka.pointim.model.point.Post;
+import org.itishka.pointim.model.point.PostList;
+import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.PostListRequest;
+import org.itishka.pointim.widgets.ScrollButton;
 
 import java.util.List;
 
@@ -74,7 +75,8 @@ public abstract class PostListFragment extends SpicedFragment {
         public void onRequestSuccess(PostList postList) {
             mSwipeRefresh.setRefreshing(false);
             if (postList != null && postList.isSuccess()) {
-                mAdapter.setData(postList);
+                mAdapter.setData(getActivity(), postList);
+                mRecyclerView.scrollToPosition(0);
             } else {
                 if (!isDetached())
                     Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
@@ -84,12 +86,31 @@ public abstract class PostListFragment extends SpicedFragment {
     private RequestListener<PostList> mCacheRequestListener = new RequestListener<PostList>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
+            mSwipeRefresh.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefresh.setRefreshing(true);
+                    update();
+                }
+            });
         }
 
         @Override
         public void onRequestSuccess(PostList postList) {
             if (postList != null && postList.isSuccess()) {
-                mAdapter.setData(postList);
+                mAdapter.setData(getActivity(), postList);
+                if (shouldAutoload()) {
+                    mSwipeRefresh.setRefreshing(true);
+                    update();
+                }
+            } else {
+                mSwipeRefresh.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefresh.setRefreshing(true);
+                        update();
+                    }
+                });
             }
         }
     };
@@ -105,7 +126,7 @@ public abstract class PostListFragment extends SpicedFragment {
         @Override
         public void onRequestSuccess(PostList postList) {
             if (postList != null && postList.isSuccess()) {
-                mAdapter.appendData(postList);
+                mAdapter.appendData(getActivity(), postList);
             } else {
                 if (!isDetached())
                     Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
@@ -145,6 +166,12 @@ public abstract class PostListFragment extends SpicedFragment {
         mLayoutManager.setSpanCount(getSpanCount(newConfig));
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSwipeRefresh.setRefreshing(false);
+    }
+
     private int getSpanCount(Configuration config) {
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         if (!prefs.getBoolean("multiColumns", true))
@@ -177,7 +204,7 @@ public abstract class PostListFragment extends SpicedFragment {
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                ConnectionManager manager = ConnectionManager.getInstance();
+                PointConnectionManager manager = PointConnectionManager.getInstance();
                 if (manager.isAuthorized()) {
                     update();
                 }
@@ -189,6 +216,7 @@ public abstract class PostListFragment extends SpicedFragment {
                 StaggeredGridLayoutManager.VERTICAL
         );
         mRecyclerView.setLayoutManager(mLayoutManager);
+        ((ScrollButton) rootView.findViewById(R.id.scroll_up)).setRecyclerView(mRecyclerView);
         mAdapter = createAdapter();
         mAdapter.setOnPostClickListener(mOnPostClickListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
@@ -215,17 +243,10 @@ public abstract class PostListFragment extends SpicedFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ConnectionManager manager = ConnectionManager.getInstance();
+        PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
             PostListRequest request = createRequest();
             getSpiceManager().getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
-            mSwipeRefresh.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefresh.setRefreshing(true);
-                    update();
-                }
-            });
         }
     }
 

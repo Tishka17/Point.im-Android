@@ -20,8 +20,10 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.activities.UserViewActivity;
-import org.itishka.pointim.model.Comment;
-import org.itishka.pointim.model.ExtendedPost;
+import org.itishka.pointim.model.point.Comment;
+import org.itishka.pointim.model.point.ExtendedPost;
+import org.itishka.pointim.network.PointConnectionManager;
+import org.itishka.pointim.utils.BookmarkToggleListener;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
@@ -37,7 +39,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(getContext(), TagViewActivity.class);
-            intent.putExtra("tag", ((TextView) view).getText());
+            intent.putExtra(TagViewActivity.EXTRA_TAG, ((TextView) view).getText());
             getContext().startActivity(intent);
         }
     };
@@ -56,13 +58,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return 0;
         else
             return 1;
-    }
-
-    public Object getItem(int pos) {
-        if (pos == 0)
-            return mPost;
-        else
-            return mPost.comments.get(pos - 1);
     }
 
     public void setData(ExtendedPost post) {
@@ -85,7 +80,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View view) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri) view.getTag());
-                    getContext().startActivity(browserIntent);
+                    getContext().startActivity(Intent.createChooser(browserIntent, getContext().getString(R.string.title_choose_app)));
                 }
             });
             holder.avatar.setOnClickListener(new View.OnClickListener() {
@@ -94,16 +89,17 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     String user = (String) view.getTag();
                     if (!TextUtils.isEmpty(user)) {
                         Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                        intent.putExtra("user", user);
+                        intent.putExtra(UserViewActivity.EXTRA_USER, user);
                         ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
                     }
                 }
             });
+            holder.favourite.setOnClickListener(new BookmarkToggleListener());
             holder.post_id.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent browserIntent = new Intent(getContext(), SinglePostActivity.class);
-                    browserIntent.putExtra("post", view.getTag().toString());
+                    browserIntent.putExtra(SinglePostActivity.EXTRA_POST, view.getTag().toString());
                     getContext().startActivity(browserIntent);
                 }
             });
@@ -125,11 +121,20 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     String user = (String) view.getTag();
                     if (!TextUtils.isEmpty(user)) {
                         Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                        intent.putExtra("user", user);
+                        intent.putExtra(UserViewActivity.EXTRA_USER, user);
                         ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
                     }
                 }
             });
+            holder.action_recommend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mOnCommentClickListener != null) {
+                        mOnCommentClickListener.onRecommendCommentClicked(v, view.getTag(R.id.comment_id).toString());
+                    }
+                }
+            });
+
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -153,13 +158,14 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             PostViewHolder postHolder = (PostViewHolder) holder;
             postHolder.author.setText("@" + mPost.post.author.login);
             postHolder.text.setText(mPost.post.text.text);
-            postHolder.imageList.setImageUrls(mPost.post.text.images);
-            Utils.showAvatar(getContext(), mPost.post.author.login, mPost.post.author.avatar, postHolder.avatar);
+            postHolder.imageList.setImageUrls(mPost.post.text.images, mPost.post.files);
+            Utils.showAvatar(mPost.post.author.login, mPost.post.author.avatar, postHolder.avatar);
             postHolder.date.setText(Utils.formatDate(mPost.post.created));
 
             postHolder.post_id.setText("#" + mPost.post.id);
             postHolder.post_id.setTag(mPost.post.id);
-            postHolder.webLink.setTag(Utils.getnerateSiteUri(mPost.post.id));
+            postHolder.favourite.setTag(mPost.post.id);
+            postHolder.webLink.setTag(Utils.generateSiteUri(mPost.post.id));
             //postHolder.favourite.setChecked(mPost.);
             //postHolder.favourite.setTag(mPost.post.id);
 
@@ -178,9 +184,9 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     LayoutInflater li;
                     li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                    final TextView v = (TextView) li.inflate(R.layout.tag, null);
+                    final TextView v = (TextView) li.inflate(R.layout.tag, postHolder.tags, false);
                     v.setText(tag);
-                    postHolder.tags.addView(v, n++, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    postHolder.tags.addView(v, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                     v.setOnClickListener(mOnTagClickListener);
                 }
             }
@@ -188,7 +194,13 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Comment comment = mPost.comments.get(i - 1);
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
             commentHolder.itemView.setTag(R.id.comment_id, comment.id);
-            Utils.showAvatar(getContext(), comment.author.login, comment.author.avatar, commentHolder.avatar);
+            if (PointConnectionManager.getInstance().loginResult.login.equalsIgnoreCase(comment.author.login)) {
+                commentHolder.action_recommend.setVisibility(View.GONE);
+            } else {
+                commentHolder.action_recommend.setTag(R.id.comment_id, comment.id);
+                commentHolder.action_recommend.setVisibility(View.VISIBLE);
+            }
+            Utils.showAvatar(comment.author.login, comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
                 commentHolder.divider.setVisibility(View.INVISIBLE);
             } else {
@@ -196,8 +208,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
             commentHolder.date.setText(Utils.formatDate(comment.created));
             commentHolder.text.setText(comment.text.text);
-            commentHolder.imageList.setImageUrls(comment.text.images);
-            commentHolder.author.setText(comment.author.login);
+            commentHolder.imageList.setImageUrls(comment.text.images, comment.files);
+            commentHolder.author.setText("@" + comment.author.login);
             if (TextUtils.isEmpty(comment.to_comment_id))
                 commentHolder.comment_id.setText("/" + comment.id);
             else
@@ -216,17 +228,17 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     protected class PostViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        ViewGroup tags;
-        ImageView avatar;
-        TextView author;
-        TextView post_id;
-        TextView comments;
-        TextView date;
-        ImageView webLink;
-        CheckBox favourite;
-        View mainConent;
-        ImageList imageList;
+        final TextView text;
+        final ViewGroup tags;
+        final ImageView avatar;
+        final TextView author;
+        final TextView post_id;
+        final TextView comments;
+        final TextView date;
+        final ImageView webLink;
+        final CheckBox favourite;
+        final View mainContent;
+        final ImageList imageList;
 
         public PostViewHolder(View itemView) {
             super(itemView);
@@ -236,22 +248,25 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             author = (TextView) itemView.findViewById(R.id.author);
             post_id = (TextView) itemView.findViewById(R.id.post_id);
             comments = (TextView) itemView.findViewById(R.id.comments);
+            Utils.setTint(comments);
             date = (TextView) itemView.findViewById(R.id.date);
             webLink = (ImageView) itemView.findViewById(R.id.weblink);
             favourite = (CheckBox) itemView.findViewById(R.id.favourite);
-            mainConent = itemView.findViewById(R.id.main_content);
+            Utils.setTint(favourite);
+            mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
         }
     }
 
     protected class CommentViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        ImageView avatar;
-        TextView author;
-        TextView date;
-        View divider;
-        TextView comment_id;
-        ImageList imageList;
+        final TextView text;
+        final ImageView avatar;
+        final TextView author;
+        final TextView date;
+        final View divider;
+        final TextView comment_id;
+        final ImageList imageList;
+        final View action_recommend;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
@@ -262,6 +277,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             divider = itemView.findViewById(R.id.divider);
             comment_id = (TextView) itemView.findViewById(R.id.comment_id);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
+            action_recommend = itemView.findViewById(R.id.action_recommend);
         }
     }
 
@@ -272,17 +288,13 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         protected Void doInBackground(ExtendedPost... posts) {
             ExtendedPost post = posts[0];
-            if (post.post.text.images == null) {
-                post.post.text.images = ImageSearchHelper.checkImageLinks(getContext(), ImageSearchHelper.getAllLinks(post.post.text.text));
-                publishProgress(0);
-            }
+            post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
+            publishProgress(-1);
             if (post.comments != null) {
                 for (int i = 0; i < post.comments.size(); i++) {
                     Comment comment = post.comments.get(i);
-                    if (comment.text.images == null) {
-                        comment.text.images = ImageSearchHelper.checkImageLinks(getContext(), ImageSearchHelper.getAllLinks(comment.text.text));
-                        publishProgress(i);
-                    }
+                    comment.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(comment.text.text));
+                    publishProgress(i);
                 }
             }
             return null;
@@ -303,10 +315,12 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public static interface OnCommentClickListener {
-        public void onCommentClicked(View view, String commentId);
+    public interface OnCommentClickListener {
+        void onCommentClicked(View view, String commentId);
 
-        public void onPostClicked(View view);
+        void onRecommendCommentClicked(View view, String commentId);
+
+        void onPostClicked(View view);
     }
 
     public void setOnCommentClickListener(OnCommentClickListener onCommentClickListener) {

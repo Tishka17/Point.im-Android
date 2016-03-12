@@ -1,38 +1,42 @@
 package org.itishka.pointim.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.melnykov.fab.FloatingActionButton;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.api.ConnectionManager;
 import org.itishka.pointim.fragments.AllFragment;
 import org.itishka.pointim.fragments.CommentedFragment;
 import org.itishka.pointim.fragments.RecentFragment;
 import org.itishka.pointim.fragments.SelfFragment;
-import org.itishka.pointim.utils.ImageSearchHelper;
-import org.itishka.pointim.widgets.ScrollableFrameLayout;
+import org.itishka.pointim.utils.Utils;
 
+public class MainActivity extends ConnectedActivity {
 
-public class MainActivity extends ActionBarActivity {
-
-    private static final int REQUEST_LOGIN = 0;
+    private static final int REQUEST_NEW_POST = 13;
     private FloatingActionButton mNewPost;
+    private ViewPager mPager;
+    public static final String EXTRA_TARGET = "target";
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Utils.showPostSentSnack(this, mPager, data.getStringExtra(NewPostActivity.EXTRA_RESULT_POST));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,39 +50,21 @@ public class MainActivity extends ActionBarActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
-        ScrollableFrameLayout scrollableFrameLayout = (ScrollableFrameLayout) findViewById(R.id.scrollableFrame);
-        scrollableFrameLayout.setToolbar(toolbar);
         mNewPost = (FloatingActionButton) findViewById(R.id.new_post);
         mNewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, NewPostActivity.class));
+                startActivityForResult(new Intent(MainActivity.this, NewPostActivity.class), REQUEST_NEW_POST);
             }
         });
 
         // Initialize the ViewPager and set an adapter
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        pager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                Log.d("pager Touch", "onTouch "+motionEvent);
-                return false;
-            }
-        });
-
-        pager.setOffscreenPageLimit(4);
-        pager.setAdapter(new ScreenSlidePagerAdapter(getSupportFragmentManager()));
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPager.setOffscreenPageLimit(4);
+        mPager.setAdapter(new ScreenSlidePagerAdapter(this, getSupportFragmentManager()));
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        tabs.setViewPager(pager);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        ConnectionManager.getInstance().updateAuthorization(this);
-        if (!ConnectionManager.getInstance().isAuthorized())
-            startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_LOGIN);
+        tabs.setViewPager(mPager);
     }
 
     @Override
@@ -88,19 +74,6 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (!ConnectionManager.getInstance().isAuthorized()) {
-            finish();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ImageSearchHelper.saveCache(this);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -118,21 +91,24 @@ public class MainActivity extends ActionBarActivity {
 
         } else if (id == R.id.action_mailbox) {
             startActivity(new Intent(this, MailboxActivity.class));
+        } else if (id == R.id.action_search) {
+            startActivity(new Intent(this, SearchActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     private static class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        private static final String[] titles = new String[]{
-                "Recent",
-                "Commented",
-                "Blog",
-                "All",
-        };
+        private final String[] titles;
 
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
+        public ScreenSlidePagerAdapter(Context context, FragmentManager fm) {
             super(fm);
+            titles = new String[]{
+                    context.getString(R.string.tab_recent),
+                    context.getString(R.string.tab_commented),
+                    context.getString(R.string.tab_blog),
+                    context.getString(R.string.tab_all),
+            };
         }
 
         @Override

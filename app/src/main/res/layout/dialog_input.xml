@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:hint="Type text here"
+        android:hint="@string/input_hint"
         android:id="@+id/recommend_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

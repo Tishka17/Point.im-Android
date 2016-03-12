@@ -1,22 +1,20 @@
 package org.itishka.pointim.utils;
 
-import android.app.ActionBar;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.view.View;
 import android.widget.ImageView;
-
-import com.makeramen.roundedimageview.RoundedTransformationBuilder;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-import com.squareup.picasso.Transformation;
+import android.widget.TextView;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.SinglePostActivity;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -28,15 +26,15 @@ public class Utils {
     public static final String SITE_URL_STRING = "https://point.im/";
     public static final String BLOG_SITE_URL_TEMPLATE = "https://%s.point.im/blog";
 
-    public static Uri getnerateSiteUri(String postId) {
+    public static Uri generateSiteUri(String postId) {
         return Uri.parse(SITE_URL_STRING + postId);
     }
 
-    public static Uri getnerateSiteUri(String postId, String commendId) {
+    public static Uri generateSiteUri(String postId, String commendId) {
         return Uri.parse(SITE_URL_STRING + postId + "#" + (commendId == null ? "" : commendId));
     }
 
-    public static Uri getnerateBlogUri(String login) {
+    public static Uri generateBlogUri(String login) {
         return Uri.parse(String.format(BLOG_SITE_URL_TEMPLATE, login));
     }
 
@@ -50,92 +48,61 @@ public class Utils {
         return sdf.format(date);
     }
 
-    public static void showAvatarByLogin(Context context, String login, ImageView imageView) {
-        showAvatar(context, login, "http://point.im/avatar/" + login + "/80", imageView);
+    public static String getAvatarByLogin(String login) {
+        return "http://point.im/avatar/login/" + login + "/80";
     }
 
-    public static void showAvatar(Context context, String login, String avatar, ImageView imageView) {
+    public static void showAvatarByLogin(String login, ImageView imageView) {
+        showAvatar(login, getAvatarByLogin(login), imageView);
+    }
+
+    public static void showAvatar(String login, String avatar, ImageView imageView) {
         imageView.setTag(login);
         if (avatar == null) {
-            imageView.setImageResource(R.drawable.ic_launcher);
+            imageView.setImageURI(null);
             return;
         }
-        try {
-            URL url;
-            if (avatar.contains("/"))
-                url = new URL(avatar);
-            else
-                url = new URL(new URL(AVATAR_URL_STRING), "/a/80/" + avatar);
-            Transformation transformation = new RoundedTransformationBuilder()
-                    .borderColor(context.getResources().getColor(R.color.form_background))
-                    .borderWidthDp(1)
-                    .cornerRadiusDp(30)
-                    .oval(false)
-                    .build();
-            Picasso.with(context)
-                    .load(url.toString())
-                    .error(R.drawable.ic_action_internet)
-                    .placeholder(R.drawable.ic_launcher)
-                    .fit()
-                    .transform(transformation)
-                    .into(imageView);
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        Uri url;
+        if (avatar.contains("/"))
+            url = Uri.parse(avatar);
+        else
+            url = Uri.parse(AVATAR_URL_STRING + "/a/80/" + avatar);
+        imageView.setImageURI(url);
     }
 
-    public static void showAvatar(Context context, String avatar, ActionBar actionBar) {
-        if (avatar == null) {
-            actionBar.setLogo(R.drawable.ic_launcher);
-            return;
-        }
-        try {
-            URL url;
-            if (avatar.contains("/"))
-                url = new URL(avatar);
-            else
-                url = new URL(new URL(AVATAR_URL_STRING), "/a/80/" + avatar);
-            Transformation transformation = new RoundedTransformationBuilder()
-                    .borderColor(context.getResources().getColor(R.color.form_background))
-                    .borderWidthDp(1)
-                    .cornerRadiusDp(30)
-                    .oval(false)
-                    .build();
-            Picasso.with(context)
-                    .load(url.toString())
-                    .error(R.drawable.ic_action_internet)
-                    .placeholder(R.drawable.ic_launcher)
-                    .transform(transformation)
-                    .into(new PicassoActionBarTarget(actionBar));
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+
+    public static final int getGenderString(@Nullable Boolean gender) {
+        if (gender == null) return R.string.gender_robot;
+        else if (gender) return R.string.male;
+        else return R.string.female;
     }
 
-    private static class PicassoActionBarTarget implements Target {
+    public static void showPostSentSnack(final Activity activity, View view, final String postId) {
+        Snackbar
+                .make(view, String.format(activity.getString(R.string.snack_posted_template), postId), Snackbar.LENGTH_SHORT)
+                .setAction(R.string.action_view, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(activity, SinglePostActivity.class);
+                        intent.putExtra(SinglePostActivity.EXTRA_POST, postId);
+                        ActivityCompat.startActivity(activity, intent, null);
+                    }
+                })
+                .show();
+    }
 
-        private final ActionBar mActionBar;
-
-        public PicassoActionBarTarget(ActionBar actionBar) {
-            mActionBar = actionBar;
+    public static void setTint(TextView v) {
+        Drawable[] ds = v.getCompoundDrawables();
+        Drawable[] cs = new Drawable[ds.length];
+        int c = v.getCurrentTextColor();
+        for (int i = 0; i < ds.length; i++) {
+            if (ds[i] == null) {
+                cs[i] = null;
+            } else {
+                cs[i] = DrawableCompat.wrap(ds[i]);
+                DrawableCompat.setTint(cs[i], c);
+            }
         }
-
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            BitmapDrawable drawable = new BitmapDrawable(mActionBar.getThemedContext().getResources(), bitmap);
-            mActionBar.setLogo(drawable);
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            mActionBar.setLogo(errorDrawable);
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            mActionBar.setLogo(placeHolderDrawable);
-        }
+        v.setCompoundDrawablesWithIntrinsicBounds(cs[0], cs[1], cs[2], cs[3]);
     }
 }
