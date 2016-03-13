@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,7 +58,7 @@ public class NewPostFragment extends SpicedFragment {
     private static final String ARG_MIME = "mime";
     private static final String ARG_PRIVATE = "private";
     private MultiAutoCompleteTextView mPostText;
-    private Switch mIsPrivate;
+    private SwitchCompat mIsPrivate;
     private String mPostId;
     private String mMime;
     private MultiAutoCompleteTextView mPostTags;
@@ -144,7 +145,7 @@ public class NewPostFragment extends SpicedFragment {
         mPostText.setAdapter(mUsersListAdapter);
         mPostText.setTokenizer(new SymbolTokenizer('@'));
         mPostText.setInputType(mPostText.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE | EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT);
-        mIsPrivate = (Switch) rootView.findViewById(R.id.isPrivate);
+        mIsPrivate = (SwitchCompat) rootView.findViewById(R.id.isPrivate);
         mTagsListAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line);
         mPostTags = (MultiAutoCompleteTextView) rootView.findViewById(R.id.postTags);
         mPostTags.setInputType(mPostTags.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE | EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT);

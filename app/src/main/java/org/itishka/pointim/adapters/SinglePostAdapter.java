@@ -23,6 +23,7 @@ import org.itishka.pointim.activities.UserViewActivity;
 import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.ExtendedPost;
 import org.itishka.pointim.network.PointConnectionManager;
+import org.itishka.pointim.utils.BookmarkToggleListener;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
@@ -79,7 +80,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View view) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri) view.getTag());
-                    getContext().startActivity(browserIntent);
+                    getContext().startActivity(Intent.createChooser(browserIntent, getContext().getString(R.string.title_choose_app)));
                 }
             });
             holder.avatar.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +94,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 }
             });
+            holder.favourite.setOnClickListener(new BookmarkToggleListener());
             holder.post_id.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -162,7 +164,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             postHolder.post_id.setText("#" + mPost.post.id);
             postHolder.post_id.setTag(mPost.post.id);
-            postHolder.webLink.setTag(Utils.getnerateSiteUri(mPost.post.id));
+            postHolder.favourite.setTag(mPost.post.id);
+            postHolder.webLink.setTag(Utils.generateSiteUri(mPost.post.id));
             //postHolder.favourite.setChecked(mPost.);
             //postHolder.favourite.setTag(mPost.post.id);
 

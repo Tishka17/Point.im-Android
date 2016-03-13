@@ -428,7 +428,7 @@ public class SinglePostFragment extends SpicedFragment {
             sb.append("\n\n")
                     .append(mPointPost.post.text.text)
                     .append("\n\n")
-                    .append(Utils.getnerateSiteUri(mPost));
+                    .append(Utils.generateSiteUri(mPost));
             sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
             mShareActionProvider.setShareIntent(sendIntent);
         }
@@ -487,7 +487,7 @@ public class SinglePostFragment extends SpicedFragment {
             return true;
         } else if (id == R.id.action_copy_link) {
             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            Uri uri = Utils.getnerateSiteUri(mPost);
+            Uri uri = Utils.generateSiteUri(mPost);
             ClipData clip = ClipData.newRawUri(uri.toString(), uri);
             clipboard.setPrimaryClip(clip);
             Toast.makeText(getActivity(), String.format(getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();

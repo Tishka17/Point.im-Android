@@ -26,7 +26,7 @@
     <string name="action_send">Отправить</string>
     <string name="action_settings">Настройки</string>
     <string name="action_share">Поделиться</string>
-    <string name="action_subscribe">Пописаться</string>
+    <string name="action_subscribe">Подписаться</string>
     <string name="action_unsubscribe">Отписаться</string>
     <string name="action_view">Просмотреть</string>
     <string name="app_name_full">Point.im для Android</string>
@@ -39,7 +39,6 @@
     <string name="forgot_password"><a href="https://point.im/remember">Забыли пароль?</a></string>
     <string name="gender_robot">робот</string>
     <string name="image">Изображение</string>
-    <string name="google_play" translatable="false">Google Play</string>
     <string name="image_upload_error">Ошибка загрузки изображения</string>
     <string name="image_uploaded">Изображение загружено</string>
     <string name="imgur_site_name">Imgur.com</string>
@@ -60,7 +59,7 @@
     <string name="tab_all">Все</string>
     <string name="tab_blog">Блог</string>
     <string name="tab_commented">Комментарии</string>
-    <string name="tab_incomming">Входящие</string>
+    <string name="tab_incoming">Входящие</string>
     <string name="tab_outgoing">Исходящие</string>
     <string name="tab_recent">Лента</string>
     <string name="tags_hint">тэги, разделенные запятой (,)</string>
@@ -87,4 +86,12 @@
     <string name="toast_unsubscribed">Подписка удалена!</string>
     <string name="toast_upload_not_finished">Загрузка не завершена. Подождите или проверьте наличие ошибок</string>
     <string name="version">Версия:</string>
+    <string name="dialog_logout_imgur_title">Действительно выйти из профиля imgur.com?</string>
+    <string name="dialog_logout_point_title">Действительно выйти из профиля point.im?</string>
+    <string name="title_activity_image_view">Изображение</string>
+    <string name="title_choose_app">Выберите приложение</string>
+    <string name="toast_bookmark_error_template">Закладка #%1$s не добавлена: %2$s</string>
+    <string name="toast_bookmark_remove_template">Закладка #%1$s удалена</string>
+    <string name="toast_bookmarked_template">Закладка #%1$s добавлена</string>
+    <string name="toast_bookmark_remove_error_template">Закладка #%1$s не удалена: %2$s</string>
 </resources>

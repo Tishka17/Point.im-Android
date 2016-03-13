@@ -100,7 +100,7 @@ public interface PointIm {
     void addBookmark(@Path("id") String id, @Field("text") String text, Callback<PointResult> callback);
 
     @DELETE("/api/post/{id}/b")
-    void deleteBookmark(@Path("id") String id, Callback<PointResult> callback);
+    void deleteBookmark(@Path("id") String id, Callback<Void> callback);
 
     @FormUrlEncoded
     @POST("/api/post/{id}")
