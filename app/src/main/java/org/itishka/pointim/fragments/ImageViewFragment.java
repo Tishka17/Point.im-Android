@@ -19,9 +19,9 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class ImageViewFragment extends SpicedFragment {
 
-    private static final String ARG_POST = "post";
+    private static final String ARG_INDEX = "index";
     private static final String ARG_URL = "url";
-    private String mPost;
+    private int mIndex;
     private String mUrl;
     private ImageView mImageView;
     private PhotoViewAttacher mAttacher;
@@ -65,15 +65,15 @@ public class ImageViewFragment extends SpicedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mPost = getArguments().getString(ARG_POST);
+            mIndex = getArguments().getInt(ARG_INDEX);
             mUrl = getArguments().getString(ARG_URL);
         }
     }
 
-    public static Fragment newInstance(String post, String url) {
+    public static Fragment newInstance(int index, String url) {
         ImageViewFragment fragment = new ImageViewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_POST, post);
+        args.putInt(ARG_INDEX, index);
         args.putString(ARG_URL, url);
         fragment.setArguments(args);
         return fragment;

@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.ImageViewActivity;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
  */
 public class ImageList extends FrameLayout {
 
+    private static final int TAG_INDEX = R.id.imageView0;
     SharedPreferences mPreferences;
 
     private static final int[] sImageIds = new int[]{
@@ -61,10 +63,14 @@ public class ImageList extends FrameLayout {
         }
     };
     private final ImageView[] mImageViews = new ImageView[sImageIds.length];
+    private String []mUrls = null;
     private final OnClickListener imageClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) view.getTag()));
+            browserIntent.putExtra(ImageViewActivity.EXTRA_URLS, mUrls);
+            browserIntent.putExtra(ImageViewActivity.EXTRA_INDEX, (int)view.getTag(TAG_INDEX));
+            browserIntent.setClass(getContext(), ImageViewActivity.class);
             getContext().startActivity(browserIntent);
         }
     };
@@ -91,6 +97,7 @@ public class ImageList extends FrameLayout {
             mImageViews[i] = (ImageView) findViewById(sImageIds[i]);
             mImageViews[i].setVisibility(GONE);
             mImageViews[i].setOnClickListener(imageClickListener);
+            mImageViews[i].setTag(TAG_INDEX, i);
         }
     }
 
@@ -102,6 +109,7 @@ public class ImageList extends FrameLayout {
         }
         int urlCount = urls == null ? 0 : urls.size();
         int fileCount = files == null ? 0 : files.size();
+        mUrls = new String[urlCount + fileCount];
         for (int i = 0; i < sImageIds.length; i++) {
             String url = null;
             if (i < urlCount) {
@@ -110,6 +118,7 @@ public class ImageList extends FrameLayout {
                 url = files.get(i - urlCount);
             }
             if (url != null) {
+                mUrls[i] = url;
                 mImageViews[i].setVisibility(VISIBLE);
                 mImageViews[i].setTag(url);
                 Picasso.with(getContext())

@@ -9,19 +9,18 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.fragments.ImageViewFragment;
 
 public class ImageViewActivity  extends ConnectedActivity {
-    public static final String EXTRA_POST = "post";
-    public static final String EXTRA_URL = "url";
-    public static final String EXTRA_COMMENT = "comment";
+    public static final String EXTRA_URLS = "urls";
+    public static final String EXTRA_INDEX = "index";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single);
+        int index = getIntent().getIntExtra(EXTRA_INDEX, 0);
+        String url = getIntent().getData().toString();
         if (savedInstanceState == null) {
-            String post = getIntent().getStringExtra(EXTRA_POST);
-            String url = getIntent().getStringExtra(EXTRA_URL);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, ImageViewFragment.newInstance(post, url))
+                    .add(R.id.container, ImageViewFragment.newInstance(index, url))
                     .commit();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -29,7 +28,7 @@ public class ImageViewActivity  extends ConnectedActivity {
             setSupportActionBar(toolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("#" + getIntent().getStringExtra(EXTRA_POST));
+        getSupportActionBar().setTitle(url);
     }
 
     @Override
