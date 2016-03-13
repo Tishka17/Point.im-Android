@@ -1,5 +1,7 @@
 package org.itishka.pointim.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -11,16 +13,17 @@ import org.itishka.pointim.fragments.ImageViewFragment;
 public class ImageViewActivity  extends ConnectedActivity {
     public static final String EXTRA_URLS = "urls";
     public static final String EXTRA_INDEX = "index";
+    private String mUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single);
         int index = getIntent().getIntExtra(EXTRA_INDEX, 0);
-        String url = getIntent().getData().toString();
+        mUrl = getIntent().getData().toString();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, ImageViewFragment.newInstance(index, url))
+                    .add(R.id.container, ImageViewFragment.newInstance(index, mUrl))
                     .commit();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -28,7 +31,7 @@ public class ImageViewActivity  extends ConnectedActivity {
             setSupportActionBar(toolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(url);
+        getSupportActionBar().setTitle(mUrl);
     }
 
     @Override
@@ -46,7 +49,9 @@ public class ImageViewActivity  extends ConnectedActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.weblink) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl));
+            startActivity(browserIntent);
             return true;
         }
 

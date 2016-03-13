@@ -54,6 +54,7 @@
     <!-- common styles -->
     <style name="AppTheme.ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:background">?attr/colorPrimary</item>
+
     </style>
 
     <style name="AppTheme.PopupTheme" parent="ThemeOverlay.AppCompat"/>
