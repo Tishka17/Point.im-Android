@@ -25,10 +25,17 @@ public class NewPostActivity extends ConnectedActivity {
     public static final String EXTRA_RESULT_POST = "post";
     private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
 
+    private boolean mPermissionRequestOk = false;
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        setupFragment();
+        for (int i: grantResults) {
+            if (i==PackageManager.PERMISSION_DENIED) {
+                return;
+            }
+        }
+        mPermissionRequestOk = true;
     }
 
     @Override
@@ -53,8 +60,16 @@ public class NewPostActivity extends ConnectedActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mPermissionRequestOk)
+            setupFragment();
+    }
+
     private void setupFragment() {
         Fragment fragment = null;
+        mPermissionRequestOk = false;
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
