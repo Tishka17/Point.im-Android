@@ -68,6 +68,7 @@ public class ImageViewFragment extends SpicedFragment {
                 return new PicassoRegionDecoder(client);
             }
         });
+        mImageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
         mImageView.setImage(ImageSource.uri(mUrl));
     }
 

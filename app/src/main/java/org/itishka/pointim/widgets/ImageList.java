@@ -10,9 +10,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import org.itishka.pointim.PointApplication;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.ImageViewActivity;
 
@@ -63,13 +63,13 @@ public class ImageList extends FrameLayout {
         }
     };
     private final ImageView[] mImageViews = new ImageView[sImageIds.length];
-    private String []mUrls = null;
+    private String[] mUrls = null;
     private final OnClickListener imageClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) view.getTag()));
             browserIntent.putExtra(ImageViewActivity.EXTRA_URLS, mUrls);
-            browserIntent.putExtra(ImageViewActivity.EXTRA_INDEX, (int)view.getTag(TAG_INDEX));
+            browserIntent.putExtra(ImageViewActivity.EXTRA_INDEX, (int) view.getTag(TAG_INDEX));
             browserIntent.setClass(getContext(), ImageViewActivity.class);
             getContext().startActivity(browserIntent);
         }
@@ -121,7 +121,7 @@ public class ImageList extends FrameLayout {
                 mUrls[i] = url;
                 mImageViews[i].setVisibility(VISIBLE);
                 mImageViews[i].setTag(url);
-                Picasso.with(getContext())
+                ((PointApplication) getContext().getApplicationContext()).getPicasso()
                         .load(url)
                         .transform(transformation)
                         .into(mImageViews[i]);

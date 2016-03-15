@@ -84,6 +84,7 @@ public class ImageListViewFragment extends SpicedFragment {
                 //
             }
         });
+        mPager.setCurrentItem(mIndex);
     }
 
     @Override
