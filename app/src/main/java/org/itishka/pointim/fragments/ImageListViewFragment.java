@@ -87,8 +87,8 @@ public class ImageListViewFragment extends SpicedFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onResume() {
+        super.onResume();
         updateTitle();
     }
 
