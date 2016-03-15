@@ -10,25 +10,29 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.squareup.picasso.Callback;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.davemorrissey.labs.subscaleview.decoder.DecoderFactory;
+import com.davemorrissey.labs.subscaleview.decoder.ImageDecoder;
+import com.davemorrissey.labs.subscaleview.decoder.ImageRegionDecoder;
+import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
+import org.itishka.pointim.PointApplication;
 import org.itishka.pointim.R;
-
-import uk.co.senab.photoview.PhotoViewAttacher;
+import org.itishka.pointim.utils.PicassoDecoder;
+import org.itishka.pointim.utils.PicassoRegionDecoder;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class ImageViewFragment extends SpicedFragment {
 
-    private static final String ARG_INDEX = "index";
     private static final String ARG_URL = "url";
     private String mUrl;
-    private ImageView mImageView;
-    private PhotoViewAttacher mAttacher;
+    private SubsamplingScaleImageView mImageView;
+    private Picasso mPicasso;
 
     public ImageViewFragment() {
     }
@@ -41,28 +45,30 @@ public class ImageViewFragment extends SpicedFragment {
 
     @Override
     public void onDestroyView() {
-        mImageView.setImageDrawable(null);
+        mPicasso.cancelTag(mUrl);
         super.onDestroyView();
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mImageView = (ImageView) view.findViewById(R.id.imageView);
-        mAttacher = new PhotoViewAttacher(mImageView);
-        Picasso.with(getActivity())
-                .load(mUrl)
-                .into(mImageView, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        mAttacher.update();
-                    }
+        mImageView = (SubsamplingScaleImageView) view.findViewById(R.id.imageView);
 
-                    @Override
-                    public void onError() {
-                        mAttacher.update();
-                    }
-                });
+        final OkHttpClient client = ((PointApplication) mImageView.getContext().getApplicationContext()).getOkHttpClient();
+        mPicasso =((PointApplication) mImageView.getContext().getApplicationContext()).getPicasso();
+
+        mImageView.setBitmapDecoderFactory(new DecoderFactory<ImageDecoder>() {
+            public ImageDecoder make() {
+                return new PicassoDecoder(mUrl, mPicasso);
+            }
+        });
+        mImageView.setRegionDecoderFactory(new DecoderFactory<ImageRegionDecoder>() {
+            @Override
+            public ImageRegionDecoder make() throws IllegalAccessException, java.lang.InstantiationException {
+                return new PicassoRegionDecoder(client);
+            }
+        });
+        mImageView.setImage(ImageSource.uri(mUrl));
     }
 
     @Override

@@ -62,6 +62,6 @@ dependencies {
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
     compile 'com.jpardogo.googleprogressbar:library:1.2.0'
     compile 'com.pnikosis:materialish-progress:1.7'
-    compile 'com.commit451:PhotoView:1.2.4'
     compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.4.1'
 }
