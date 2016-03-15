@@ -97,4 +97,7 @@
     <string name="toast_bookmark_error_template">Bookmark #%1$s not added: %2$s</string>
     <string name="toast_bookmark_remove_template">Bookmark #%1$s removed</string>
     <string name="toast_bookmark_remove_error_template">Bookmark #%1$s not removed: %2$s</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

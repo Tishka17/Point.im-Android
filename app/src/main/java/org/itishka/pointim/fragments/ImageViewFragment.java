@@ -1,8 +1,13 @@
 package org.itishka.pointim.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,7 +26,6 @@ public class ImageViewFragment extends SpicedFragment {
 
     private static final String ARG_INDEX = "index";
     private static final String ARG_URL = "url";
-    private int mIndex;
     private String mUrl;
     private ImageView mImageView;
     private PhotoViewAttacher mAttacher;
@@ -65,17 +69,34 @@ public class ImageViewFragment extends SpicedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mIndex = getArguments().getInt(ARG_INDEX);
             mUrl = getArguments().getString(ARG_URL);
         }
+        setHasOptionsMenu(true);
     }
 
-    public static Fragment newInstance(int index, String url) {
+    public static Fragment newInstance(String url) {
         ImageViewFragment fragment = new ImageViewFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_INDEX, index);
         args.putString(ARG_URL, url);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_image_view, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.weblink) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl));
+            startActivity(browserIntent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
