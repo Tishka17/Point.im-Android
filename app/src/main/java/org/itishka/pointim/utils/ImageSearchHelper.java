@@ -7,9 +7,13 @@ import android.text.style.URLSpan;
 import android.util.Log;
 import android.util.LruCache;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.itishka.pointim.PointApplication;
+
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +27,12 @@ public class ImageSearchHelper {
     private static final String PREFERENCE = "linkTypes";
     private static boolean isLoaded = false;
     private static boolean isSaved = false;
+    private static OkHttpClient sOkHttpClient;
 
     public static void initCache(Context context) {
         synchronized (ImageSearchHelper.class) {
             if (!isLoaded) {
+                sOkHttpClient = ((PointApplication) context.getApplicationContext()).getOkHttpClient();
                 reloadCache(context);
             }
         }
@@ -93,10 +99,12 @@ public class ImageSearchHelper {
     public static String checkImageLink(String link) {
         try {
             Log.d("ImageSearchHelper", "Checking: " + link);
-            URLConnection connection = new URL(link).openConnection();
-            connection.setDoInput(false);
-            connection.setDoOutput(false);
-            return connection.getHeaderField("Content-Type");
+            Request request = new Request.Builder()
+                    .head()
+                    .url(link)
+                    .build();
+            Response response = sOkHttpClient.newCall(request).execute();
+            return response.header("Content-Type");
         } catch (IOException e) {
             e.printStackTrace();
             return null;

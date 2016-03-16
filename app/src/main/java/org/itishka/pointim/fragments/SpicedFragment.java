@@ -35,7 +35,6 @@ public class SpicedFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getSpiceManager().start(getActivity());
-        ImageSearchHelper.initCache(getActivity());
     }
 
     @Override
