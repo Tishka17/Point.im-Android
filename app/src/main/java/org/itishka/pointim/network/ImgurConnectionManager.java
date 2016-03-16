@@ -5,16 +5,13 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.OkHttpClient;
 
 import org.itishka.pointim.BuildConfig;
+import org.itishka.pointim.PointApplication;
 import org.itishka.pointim.model.imgur.Token;
-
-import java.util.concurrent.TimeUnit;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
-import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -27,8 +24,6 @@ public class ImgurConnectionManager extends ConnectionManager {
     public static final String IMGUR_AUTH_ENDPOINT = "https://api.imgur.com/oauth2/";
 
     private static final ImgurConnectionManager sInstance = new ImgurConnectionManager();
-    private final OkHttpClient mOkHttpClient;
-    private final OkClient mOkClient;
     private final Gson mGson = new GsonBuilder().create();
 
     public Token token = null;
@@ -36,23 +31,7 @@ public class ImgurConnectionManager extends ConnectionManager {
     public ImgurAuth imgurAuthService = null;
 
     private ImgurConnectionManager() {
-        mOkHttpClient = new OkHttpClient();
-        mOkHttpClient.setReadTimeout(120, TimeUnit.SECONDS);
-        mOkClient = new OkClient(mOkHttpClient);
 
-        RestAdapter imgurAuthRestAdapter = new RestAdapter.Builder()
-                .setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade requestFacade) {
-                        requestFacade.addHeader("Authorization", "Client-ID " + BuildConfig.IMGUR_ID);
-                        requestFacade.addHeader("User-Agent", USER_AGENT);
-                    }
-                })
-                .setClient(mOkClient)
-                .setEndpoint(IMGUR_AUTH_ENDPOINT)
-                .setConverter(new GsonConverter(mGson))
-                .build();
-        imgurAuthService = imgurAuthRestAdapter.create(ImgurAuth.class);
     }
 
     public static ImgurConnectionManager getInstance() {
@@ -74,10 +53,24 @@ public class ImgurConnectionManager extends ConnectionManager {
     }
 
     @Override
-    public void init(Context context) {
+    public void init(PointApplication application) {
+        super.init(application);
+        RestAdapter imgurAuthRestAdapter = new RestAdapter.Builder()
+                .setRequestInterceptor(new RequestInterceptor() {
+                    @Override
+                    public void intercept(RequestFacade requestFacade) {
+                        requestFacade.addHeader("Authorization", "Client-ID " + BuildConfig.IMGUR_ID);
+                        requestFacade.addHeader("User-Agent", USER_AGENT);
+                    }
+                })
+                .setClient(getOkClient())
+                .setEndpoint(IMGUR_AUTH_ENDPOINT)
+                .setConverter(new GsonConverter(mGson))
+                .build();
+        imgurAuthService = imgurAuthRestAdapter.create(ImgurAuth.class);
         synchronized (this) {
             if (this.token == null) {
-                token = loadAuthorization(context, PREFERENCE, Token.class);
+                token = loadAuthorization(application, PREFERENCE, Token.class);
                 createService();
             }
         }
@@ -96,7 +89,7 @@ public class ImgurConnectionManager extends ConnectionManager {
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
-                .setClient(mOkClient)
+                .setClient(getOkClient())
                 .setEndpoint(IMGUR_ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
                 .build();
@@ -113,7 +106,7 @@ public class ImgurConnectionManager extends ConnectionManager {
         synchronized (this) {
             token = null;
             saveAuthorization(context, PREFERENCE, token);
-            init(context);
+            init((PointApplication) context.getApplicationContext());
         }
     }
 }

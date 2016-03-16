@@ -16,7 +16,6 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.davemorrissey.labs.subscaleview.decoder.DecoderFactory;
 import com.davemorrissey.labs.subscaleview.decoder.ImageDecoder;
 import com.davemorrissey.labs.subscaleview.decoder.ImageRegionDecoder;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
 import org.itishka.pointim.PointApplication;
@@ -53,19 +52,19 @@ public class ImageViewFragment extends SpicedFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mImageView = (SubsamplingScaleImageView) view.findViewById(R.id.imageView);
-
-        final OkHttpClient client = ((PointApplication) mImageView.getContext().getApplicationContext()).getOkHttpClient();
-        mPicasso =((PointApplication) mImageView.getContext().getApplicationContext()).getPicasso();
-
+        mPicasso = Picasso.with(getContext());
         mImageView.setBitmapDecoderFactory(new DecoderFactory<ImageDecoder>() {
             public ImageDecoder make() {
                 return new PicassoDecoder(mUrl, mPicasso);
             }
         });
+
         mImageView.setRegionDecoderFactory(new DecoderFactory<ImageRegionDecoder>() {
             @Override
             public ImageRegionDecoder make() throws IllegalAccessException, java.lang.InstantiationException {
-                return new PicassoRegionDecoder(client);
+                return new PicassoRegionDecoder(
+                        ((PointApplication) mImageView.getContext().getApplicationContext()).getOkHttpClient()
+                );
             }
         });
         mImageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);

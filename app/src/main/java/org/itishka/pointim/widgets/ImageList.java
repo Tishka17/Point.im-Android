@@ -10,9 +10,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
-import org.itishka.pointim.PointApplication;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.ImageViewActivity;
 
@@ -121,7 +121,7 @@ public class ImageList extends FrameLayout {
                 mUrls[i] = url;
                 mImageViews[i].setVisibility(VISIBLE);
                 mImageViews[i].setTag(url);
-                ((PointApplication) getContext().getApplicationContext()).getPicasso()
+                Picasso.with(getContext())
                         .load(url)
                         .transform(transformation)
                         .into(mImageViews[i]);

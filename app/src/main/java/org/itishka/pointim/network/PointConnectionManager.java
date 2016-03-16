@@ -5,19 +5,17 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.OkHttpClient;
 
+import org.itishka.pointim.PointApplication;
 import org.itishka.pointim.model.point.LoginResult;
 import org.itishka.pointim.model.point.TextWithImages;
 import org.itishka.pointim.utils.DateDeserializer;
 import org.itishka.pointim.utils.TextParser;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
-import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -28,8 +26,6 @@ public class PointConnectionManager extends ConnectionManager {
     public static final String ENDPOINT = "https://point.im";
     private static final String PREFERENCE = "PointConnectionManager";
     private static final PointConnectionManager sInstance = new PointConnectionManager();
-    private final OkHttpClient mOkHttpClient;
-    private final OkClient mOkClient;
     private final Gson mGson = new GsonBuilder()
             .setDateFormat(DATE_FORMAT)
             .registerTypeAdapter(Date.class, new DateDeserializer())
@@ -40,22 +36,6 @@ public class PointConnectionManager extends ConnectionManager {
     public LoginResult loginResult = null;
 
     private PointConnectionManager() {
-        mOkHttpClient = new OkHttpClient();
-        mOkHttpClient.setReadTimeout(120, TimeUnit.SECONDS);
-        mOkClient = new OkClient(mOkHttpClient);
-
-        RestAdapter authRestAdapter = new RestAdapter.Builder()
-                .setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade requestFacade) {
-                        requestFacade.addHeader("User-Agent", USER_AGENT);
-                    }
-                })
-                .setClient(mOkClient)
-                .setEndpoint(ENDPOINT)
-                .setConverter(new GsonConverter(mGson))
-                .build();
-        pointAuthService = authRestAdapter.create(PointImAuth.class);
     }
 
     public static PointConnectionManager getInstance() {
@@ -77,10 +57,26 @@ public class PointConnectionManager extends ConnectionManager {
     }
 
     @Override
-    public void init(Context context) {
+    public void init(PointApplication application) {
+        super.init(application);
+
+
+        RestAdapter authRestAdapter = new RestAdapter.Builder()
+                .setRequestInterceptor(new RequestInterceptor() {
+                    @Override
+                    public void intercept(RequestFacade requestFacade) {
+                        requestFacade.addHeader("User-Agent", USER_AGENT);
+                    }
+                })
+                .setClient(getOkClient())
+                .setEndpoint(ENDPOINT)
+                .setConverter(new GsonConverter(mGson))
+                .build();
+        pointAuthService = authRestAdapter.create(PointImAuth.class);
+
         synchronized (this) {
             if (this.loginResult == null) {
-                loginResult = loadAuthorization(context, PREFERENCE, LoginResult.class);
+                loginResult = loadAuthorization(application, PREFERENCE, LoginResult.class);
                 createService();
             }
         }
@@ -97,7 +93,7 @@ public class PointConnectionManager extends ConnectionManager {
                         requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
-                .setClient(mOkClient)
+                .setClient(getOkClient())
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
                 .build();
@@ -114,7 +110,7 @@ public class PointConnectionManager extends ConnectionManager {
         synchronized (this) {
             loginResult = null;
             saveAuthorization(context, PREFERENCE, loginResult);
-            init(context);
+            init((PointApplication) context.getApplicationContext());
         }
     }
 }
