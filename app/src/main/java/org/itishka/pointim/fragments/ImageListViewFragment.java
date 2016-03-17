@@ -66,24 +66,15 @@ public class ImageListViewFragment extends SpicedFragment {
                 return mUrls.length;
             }
         });
-        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                //
-            }
-
+        mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 mIndex = position;
                 updateTitle();
             }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                //
-            }
         });
         mPager.setCurrentItem(mIndex);
+        mPager.setOffscreenPageLimit(3);
     }
 
     @Override

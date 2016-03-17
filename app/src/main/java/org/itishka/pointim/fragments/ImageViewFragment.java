@@ -45,6 +45,16 @@ public class ImageViewFragment extends SpicedFragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (this.isVisible()) {
+            if (!isVisibleToUser) {
+                mImageView.resetScaleAndCenter();
+            }
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         mPicasso.cancelTag(mUrl);
         super.onDestroyView();
