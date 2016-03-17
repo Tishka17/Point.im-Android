@@ -51,13 +51,16 @@
         <item name="toolbarTheme">@style/AppTheme.ToolbarTheme</item>
     </style>
 
+    <style name="AppTheme.ImageViewActivity" parent="AppTheme">
+    </style>
+
     <!-- common styles -->
     <style name="AppTheme.ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:background">?attr/colorPrimary</item>
 
     </style>
 
-    <style name="AppTheme.PopupTheme" parent="ThemeOverlay.AppCompat"/>
+    <style name="AppTheme.PopupTheme" parent="ThemeOverlay.AppCompat" />
 
     <style name="AppTheme.PopupTheme.Light" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:background">?attr/md_background_color</item>
@@ -98,5 +101,5 @@
         <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
-    <style name="AppTheme.LoginForm" parent="AppTheme.LoginForm.Base"/>
+    <style name="AppTheme.LoginForm" parent="AppTheme.LoginForm.Base" />
 </resources>
