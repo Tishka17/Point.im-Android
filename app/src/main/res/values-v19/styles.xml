@@ -15,7 +15,4 @@
     <style name="AppTheme.ImageViewActivity.ToolbarTheme" parent="AppTheme.ToolbarTheme">
         <item name="android:background">@android:color/transparent</item>
     </style>
-    <style name="AppTheme.ImageViewActivity.ToolbarStyle" parent="AppTheme.ImageViewActivity.ToolbarTheme">
-        <item name="android:background">@color/darkerTransparent</item>
-    </style>
 </resources>

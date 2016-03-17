@@ -30,8 +30,8 @@ public class NewPostActivity extends ConnectedActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        for (int i: grantResults) {
-            if (i==PackageManager.PERMISSION_DENIED) {
+        for (int i : grantResults) {
+            if (i == PackageManager.PERMISSION_DENIED) {
                 return;
             }
         }

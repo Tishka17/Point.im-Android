@@ -1,6 +1,5 @@
 package org.itishka.pointim.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -98,7 +97,7 @@ public class ImageListViewFragment extends SpicedFragment {
             if (mUrls == null || mUrls.length == 0)
                 getActivity().setTitle("[]");
             else
-                getActivity().setTitle(String.format("[%s/%s] %s", mIndex+1, mUrls.length, mUrls[mIndex]));
+                getActivity().setTitle(String.format("[%s/%s] %s", mIndex + 1, mUrls.length, mUrls[mIndex]));
         }
     }
 

@@ -19,7 +19,7 @@ import org.itishka.pointim.utils.ImageSearchHelper;
  */
 public class PointApplication extends Application {
     private OkHttpClient mOkHttpClient;
-    private static final int MAX_CACHE_SIZE = 50*1024*1024; //50 MiB
+    private static final int MAX_CACHE_SIZE = 50 * 1024 * 1024; //50 MiB
 
     @Override
     public void onCreate() {
