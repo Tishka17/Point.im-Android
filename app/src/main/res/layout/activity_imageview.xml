@@ -1,8 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".activities.ImageViewActivity">
 
@@ -13,14 +13,19 @@
         tools:context=".fragments.ImageListViewFragment"
         tools:ignore="MergeRootFrame" />
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:fitsSystemWindows="true"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:theme="?attr/toolbarTheme"
-        android:background="@color/darkTransparent"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:minHeight="?attr/actionBarSize" />
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:background="@color/darkerTransparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:theme="?attr/toolbarTheme" />
+    </FrameLayout>
 </FrameLayout>
