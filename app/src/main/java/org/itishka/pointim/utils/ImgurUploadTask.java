@@ -25,6 +25,7 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, UploadR
     private File mFile;
     private Context mContext;
     private String mMime;
+    private String mError = null;
 
 
     public ImgurUploadTask(Context context, Uri uri, String mime) {
@@ -69,6 +70,7 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, UploadR
             fos.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            mError = e.toString();
             return null;
         } catch (IOException e) {
             e.printStackTrace();
@@ -97,9 +99,14 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, UploadR
             return res;
         } catch (RetrofitError e) {
             e.printStackTrace();
+            mError = e.toString();
             return null;
         } finally {
             mFile.delete();
         }
+    }
+
+    protected String getError() {
+        return mError;
     }
 }

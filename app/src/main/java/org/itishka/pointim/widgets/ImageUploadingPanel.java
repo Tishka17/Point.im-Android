@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.squareup.picasso.Picasso;
@@ -248,7 +249,7 @@ public class ImageUploadingPanel extends FrameLayout {
                 img.get().viewError.setVisibility(VISIBLE);
                 img.get().progress.setVisibility(GONE);
                 img.get().imageView.setColorFilter(Color.argb(128, 200, 100, 100));
-                //Toast.makeText(getActivity(), "Error uploading photo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), String.valueOf(getError()), Toast.LENGTH_SHORT).show();
             }
         }
     }
