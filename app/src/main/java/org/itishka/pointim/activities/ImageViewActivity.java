@@ -9,9 +9,10 @@ import android.view.View;
 import org.itishka.pointim.R;
 import org.itishka.pointim.fragments.ImageListViewFragment;
 
-public class ImageViewActivity extends ConnectedActivity {
+public class ImageViewActivity extends ConnectedActivity implements ToolbarActivity {
     public static final String EXTRA_URLS = "urls";
     public static final String EXTRA_INDEX = "index";
+    private Toolbar mToolbar;
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -33,10 +34,15 @@ public class ImageViewActivity extends ConnectedActivity {
                     .add(R.id.container, ImageListViewFragment.newInstance(urls, index))
                     .commit();
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public Toolbar getToolbar() {
+        return mToolbar;
     }
 }

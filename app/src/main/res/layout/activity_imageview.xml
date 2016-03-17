@@ -23,7 +23,6 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:minHeight="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:theme="?attr/toolbarTheme" />
     </FrameLayout>
 </FrameLayout>

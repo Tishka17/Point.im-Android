@@ -1,11 +1,10 @@
 package org.itishka.pointim.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,8 +21,10 @@ import com.squareup.picasso.Picasso;
 
 import org.itishka.pointim.PointApplication;
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.ToolbarActivity;
 import org.itishka.pointim.utils.PicassoDecoder;
 import org.itishka.pointim.utils.PicassoRegionDecoder;
+import org.itishka.pointim.widgets.HideAnimationHelper;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -34,6 +35,14 @@ public class ImageViewFragment extends SpicedFragment {
     private String mUrl;
     private SubsamplingScaleImageView mImageView;
     private Picasso mPicasso;
+    private HideAnimationHelper mHideAnimationHelper = null;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mHideAnimationHelper = new HideAnimationHelper(((ToolbarActivity) getActivity()).getToolbar());
+    }
+
 
     public ImageViewFragment() {
     }
@@ -85,12 +94,7 @@ public class ImageViewFragment extends SpicedFragment {
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActionBar toolbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-                if (toolbar.isShowing()) {
-                    toolbar.hide();
-                } else {
-                    toolbar.show();
-                }
+                mHideAnimationHelper.toggleView();
             }
         });
     }
