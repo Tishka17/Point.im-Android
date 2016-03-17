@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,6 +71,18 @@ public class ImageViewFragment extends SpicedFragment {
         });
         mImageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
         mImageView.setImage(ImageSource.uri(mUrl));
+
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActionBar toolbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+                if (toolbar.isShowing()) {
+                    toolbar.hide();
+                } else {
+                    toolbar.show();
+                }
+            }
+        });
     }
 
     @Override

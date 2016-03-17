@@ -6,13 +6,8 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
-    <style name="AppTheme.ImageViewActivity" parent="AppTheme">
+    <style name="AppTheme.ImageViewActivity" parent="AppTheme.ImageViewActivity.Base">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="toolbarTheme">@style/AppTheme.ImageViewActivity.ToolbarTheme</item>
-    </style>
-    <!-- common styles -->
-    <style name="AppTheme.ImageViewActivity.ToolbarTheme" parent="AppTheme.ToolbarTheme">
-        <item name="android:background">@android:color/transparent</item>
     </style>
 </resources>
