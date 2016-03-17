@@ -63,7 +63,7 @@ public class HideAnimationHelper implements Animator.AnimatorListener {
     }
 
     public boolean isViewHiddenOrHiding() {
-        return mIsHidingProgress || mView.getVisibility() == View.INVISIBLE || mView.getVisibility() == View.GONE;
+        return isHidingProgress() || mView.getVisibility() == View.INVISIBLE || mView.getVisibility() == View.GONE;
     }
 
     public void toggleView() {

@@ -4,7 +4,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
-import android.view.View;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.fragments.ImageListViewFragment;
