@@ -11,8 +11,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.ImageViewActivity;
@@ -39,30 +37,7 @@ public class ImageList extends FrameLayout {
             R.id.imageView8,
             R.id.imageView9
     };
-    private final Transformation transformation = new Transformation() {
 
-        @Override
-        public Bitmap transform(Bitmap source) {
-
-            int targetHeight = mImageViews[0].getHeight();
-
-            double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
-            int targetWidth = (int) (targetHeight * aspectRatio);
-            if (targetWidth == 0 || targetHeight == 0)
-                return source;
-            Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
-            if (result != source) {
-                // Same bitmap is returned if sizes are the same
-                source.recycle();
-            }
-            return result;
-        }
-
-        @Override
-        public String key() {
-            return "transformation" + " desiredWidth";
-        }
-    };
     private final ImageView[] mImageViews = new ImageView[sImageIds.length];
     private String[] mUrls = null;
     private final OnClickListener imageClickListener = new OnClickListener() {

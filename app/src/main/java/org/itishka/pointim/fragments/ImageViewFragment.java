@@ -18,7 +18,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.squareup.picasso.Picasso;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.ToolbarActivity;
@@ -32,7 +31,6 @@ public class ImageViewFragment extends SpicedFragment {
     private static final String ARG_URL = "url";
     private String mUrl;
     private SubsamplingScaleImageView mImageView;
-    private Picasso mPicasso;
     private HideAnimationHelper mHideAnimationHelper = null;
 
     @Override

@@ -1,17 +1,12 @@
 package org.itishka.pointim;
 
 import android.app.Application;
-import android.graphics.Bitmap;
 
-import com.bumptech.glide.GenericRequestBuilder;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.integration.okhttp.OkHttpUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.OkHttpDownloader;
-import com.squareup.picasso.Picasso;
 
 import org.itishka.pointim.network.ImgurConnectionManager;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -38,12 +33,6 @@ public class PointApplication extends Application {
         ImageSearchHelper.initCache(this);
         PointConnectionManager.getInstance().init(this);
         ImgurConnectionManager.getInstance().init(this);
-
-        Picasso picasso = new Picasso.Builder(this)
-                .downloader(new OkHttpDownloader(mOkHttpClient))
-                .defaultBitmapConfig(Bitmap.Config.RGB_565)
-                .build();
-        Picasso.setSingletonInstance(picasso);
     }
 
     public OkHttpClient getOkHttpClient() {

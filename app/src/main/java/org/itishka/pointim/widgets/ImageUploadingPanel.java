@@ -1,7 +1,6 @@
 package org.itishka.pointim.widgets;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -16,9 +15,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.pnikosis.materialishprogress.ProgressWheel;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import org.itishka.pointim.BuildConfig;
 import org.itishka.pointim.R;
@@ -33,6 +31,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import jp.wasabeef.glide.transformations.CropTransformation;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -127,10 +126,9 @@ public class ImageUploadingPanel extends FrameLayout {
             }
         });
         img.imageView.setColorFilter(Color.argb(220, 255, 255, 255), PorterDuff.Mode.LIGHTEN);
-        Picasso.with(getContext())
+        Glide.with(getContext())
                 .load(uri)
-                .transform(new CropSquareTransformation())
-                .fit()
+                .bitmapTransform(new CropTransformation(getContext()))
                 .centerCrop()
                 .into(img.imageView);
         mLayout.addView(newView);
@@ -266,25 +264,6 @@ public class ImageUploadingPanel extends FrameLayout {
         boolean uploaded = false;
         ImgurUploadTask task = null;
         org.itishka.pointim.model.imgur.Image uploadInfo;
-    }
-
-    private class CropSquareTransformation implements Transformation {
-        @Override
-        public Bitmap transform(Bitmap source) {
-            int size = Math.min(source.getWidth(), source.getHeight());
-            int x = (source.getWidth() - size) / 2;
-            int y = (source.getHeight() - size) / 2;
-            Bitmap result = Bitmap.createBitmap(source, x, y, size, size);
-            if (result != source) {
-                source.recycle();
-            }
-            return result;
-        }
-
-        @Override
-        public String key() {
-            return "square()";
-        }
     }
 
     private class AuthProlongationTask extends AsyncTask<Void, Void, Token> {
