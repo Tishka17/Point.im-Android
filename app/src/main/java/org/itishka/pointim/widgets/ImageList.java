@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -67,7 +68,7 @@ public class ImageList extends FrameLayout {
     private final OnClickListener imageClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) view.getTag()));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) view.getTag(R.id.imageView)));
             browserIntent.putExtra(ImageViewActivity.EXTRA_URLS, mUrls);
             browserIntent.putExtra(ImageViewActivity.EXTRA_INDEX, (int) view.getTag(TAG_INDEX));
             browserIntent.setClass(getContext(), ImageViewActivity.class);
@@ -120,10 +121,10 @@ public class ImageList extends FrameLayout {
             if (url != null) {
                 mUrls[i] = url;
                 mImageViews[i].setVisibility(VISIBLE);
-                mImageViews[i].setTag(url);
-                Picasso.with(getContext())
+                mImageViews[i].setTag(R.id.imageView, url);
+                Glide.with(getContext())
                         .load(url)
-                        .transform(transformation)
+                        .dontAnimate()
                         .into(mImageViews[i]);
             } else {
                 mImageViews[i].setVisibility(GONE);
