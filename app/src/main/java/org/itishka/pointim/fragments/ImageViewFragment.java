@@ -53,7 +53,7 @@ public class ImageViewFragment extends SpicedFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (this.isVisible()) {
             if (!isVisibleToUser) {
-                //mAttacher.
+                mAttacher.update();
             }
         }
     }
