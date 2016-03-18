@@ -10,8 +10,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
+import com.bumptech.glide.Glide;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.ImageViewActivity;
@@ -38,36 +37,13 @@ public class ImageList extends FrameLayout {
             R.id.imageView8,
             R.id.imageView9
     };
-    private final Transformation transformation = new Transformation() {
 
-        @Override
-        public Bitmap transform(Bitmap source) {
-
-            int targetHeight = mImageViews[0].getHeight();
-
-            double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
-            int targetWidth = (int) (targetHeight * aspectRatio);
-            if (targetWidth == 0 || targetHeight == 0)
-                return source;
-            Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
-            if (result != source) {
-                // Same bitmap is returned if sizes are the same
-                source.recycle();
-            }
-            return result;
-        }
-
-        @Override
-        public String key() {
-            return "transformation" + " desiredWidth";
-        }
-    };
     private final ImageView[] mImageViews = new ImageView[sImageIds.length];
     private String[] mUrls = null;
     private final OnClickListener imageClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) view.getTag()));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) view.getTag(R.id.imageView)));
             browserIntent.putExtra(ImageViewActivity.EXTRA_URLS, mUrls);
             browserIntent.putExtra(ImageViewActivity.EXTRA_INDEX, (int) view.getTag(TAG_INDEX));
             browserIntent.setClass(getContext(), ImageViewActivity.class);
@@ -120,10 +96,10 @@ public class ImageList extends FrameLayout {
             if (url != null) {
                 mUrls[i] = url;
                 mImageViews[i].setVisibility(VISIBLE);
-                mImageViews[i].setTag(url);
-                Picasso.with(getContext())
+                mImageViews[i].setTag(R.id.imageView, url);
+                Glide.with(getContext())
                         .load(url)
-                        .transform(transformation)
+                        .dontAnimate()
                         .into(mImageViews[i]);
             } else {
                 mImageViews[i].setVisibility(GONE);

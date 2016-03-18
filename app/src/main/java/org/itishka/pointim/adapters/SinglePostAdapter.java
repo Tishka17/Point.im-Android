@@ -86,7 +86,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String user = (String) view.getTag();
+                    String user = (String) view.getTag(R.id.imageView);
                     if (!TextUtils.isEmpty(user)) {
                         Intent intent = new Intent(view.getContext(), UserViewActivity.class);
                         intent.putExtra(UserViewActivity.EXTRA_USER, user);
@@ -118,7 +118,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String user = (String) view.getTag();
+                    String user = (String) view.getTag(R.id.imageView);
                     if (!TextUtils.isEmpty(user)) {
                         Intent intent = new Intent(view.getContext(), UserViewActivity.class);
                         intent.putExtra(UserViewActivity.EXTRA_USER, user);

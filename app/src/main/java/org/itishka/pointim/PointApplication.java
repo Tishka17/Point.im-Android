@@ -1,19 +1,18 @@
 package org.itishka.pointim;
 
 import android.app.Application;
-import android.graphics.Bitmap;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.backends.okhttp.OkHttpImagePipelineConfigFactory;
-import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.integration.okhttp.OkHttpUrlLoader;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.OkHttpDownloader;
-import com.squareup.picasso.Picasso;
 
 import org.itishka.pointim.network.ImgurConnectionManager;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.imagechecker.ImageSearchHelper;
+
+import java.io.InputStream;
 
 /**
  * Created by Tishka17 on 03.08.2015.
@@ -28,19 +27,12 @@ public class PointApplication extends Application {
         mOkHttpClient = new OkHttpClient();
         mOkHttpClient.setCache(new Cache(getExternalCacheDir(), MAX_CACHE_SIZE));
 
-        ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
-                .newBuilder(this, mOkHttpClient)
-                .build();
-        Fresco.initialize(this, config);
+        Glide
+                .get(this)
+                .register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(mOkHttpClient));
         ImageSearchHelper.initCache(this);
         PointConnectionManager.getInstance().init(this);
         ImgurConnectionManager.getInstance().init(this);
-
-        Picasso picasso = new Picasso.Builder(this)
-                .downloader(new OkHttpDownloader(mOkHttpClient))
-                .defaultBitmapConfig(Bitmap.Config.RGB_565)
-                .build();
-        Picasso.setSingletonInstance(picasso);
     }
 
     public OkHttpClient getOkHttpClient() {

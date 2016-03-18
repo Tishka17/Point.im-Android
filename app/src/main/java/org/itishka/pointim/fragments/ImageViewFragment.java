@@ -11,31 +11,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.davemorrissey.labs.subscaleview.decoder.DecoderFactory;
-import com.davemorrissey.labs.subscaleview.decoder.ImageDecoder;
-import com.davemorrissey.labs.subscaleview.decoder.ImageRegionDecoder;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
-import org.itishka.pointim.PointApplication;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.ToolbarActivity;
-import org.itishka.pointim.utils.PicassoDecoder;
-import org.itishka.pointim.utils.PicassoRegionDecoder;
 import org.itishka.pointim.widgets.HideAnimationHelper;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 public class ImageViewFragment extends SpicedFragment {
 
     private static final String ARG_URL = "url";
     private String mUrl;
-    private SubsamplingScaleImageView mImageView;
-    private Picasso mPicasso;
+    private ImageView mImageView;
     private HideAnimationHelper mHideAnimationHelper = null;
+    private PhotoViewAttacher mAttacher;
 
     @Override
     public void onAttach(Context context) {
@@ -58,42 +53,37 @@ public class ImageViewFragment extends SpicedFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (this.isVisible()) {
             if (!isVisibleToUser) {
-                mImageView.resetScaleAndCenter();
+                mAttacher.update();
             }
         }
     }
 
     @Override
     public void onDestroyView() {
-        mPicasso.cancelTag(mUrl);
         super.onDestroyView();
+        mAttacher.cleanup();
+        mImageView.setImageDrawable(null);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mImageView = (SubsamplingScaleImageView) view.findViewById(R.id.imageView);
-        mPicasso = Picasso.with(getContext());
-        mImageView.setBitmapDecoderFactory(new DecoderFactory<ImageDecoder>() {
-            public ImageDecoder make() {
-                return new PicassoDecoder(mUrl, mPicasso);
-            }
-        });
+        mImageView = (ImageView) view.findViewById(R.id.imageView);
+        mAttacher = new PhotoViewAttacher(mImageView);
+        Glide.with(this)
+                .load(mUrl)
+                .fitCenter()
+                .into(new GlideDrawableImageViewTarget(mImageView) {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+                        super.onResourceReady(resource, animation);
+                        mAttacher.update();
+                    }
+                });
 
-        mImageView.setRegionDecoderFactory(new DecoderFactory<ImageRegionDecoder>() {
+        mAttacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
             @Override
-            public ImageRegionDecoder make() throws IllegalAccessException, java.lang.InstantiationException {
-                return new PicassoRegionDecoder(
-                        ((PointApplication) mImageView.getContext().getApplicationContext()).getOkHttpClient()
-                );
-            }
-        });
-        mImageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
-        mImageView.setImage(ImageSource.uri(mUrl));
-
-        mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void onViewTap(View view, float x, float y) {
                 mHideAnimationHelper.toggleView();
             }
         });
@@ -130,7 +120,6 @@ public class ImageViewFragment extends SpicedFragment {
             startActivity(browserIntent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
