@@ -15,11 +15,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.bumptech.glide.request.target.SizeReadyCallback;
-import com.bumptech.glide.request.target.Target;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.ToolbarActivity;
@@ -84,10 +81,9 @@ public class ImageViewFragment extends SpicedFragment {
                     }
                 });
 
-
-        mImageView.setOnClickListener(new View.OnClickListener() {
+        mAttacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
             @Override
-            public void onClick(View v) {
+            public void onViewTap(View view, float x, float y) {
                 mHideAnimationHelper.toggleView();
             }
         });
