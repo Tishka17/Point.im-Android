@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 import org.itishka.pointim.model.point.TextWithImages;
+import org.itishka.pointim.utils.imagechecker.ImageSearchHelper;
 
 import java.lang.reflect.Type;
 

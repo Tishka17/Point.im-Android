@@ -10,7 +10,7 @@ import com.squareup.okhttp.OkHttpClient;
 
 import org.itishka.pointim.network.ImgurConnectionManager;
 import org.itishka.pointim.network.PointConnectionManager;
-import org.itishka.pointim.utils.ImageSearchHelper;
+import org.itishka.pointim.utils.imagechecker.ImageSearchHelper;
 
 import java.io.InputStream;
 
