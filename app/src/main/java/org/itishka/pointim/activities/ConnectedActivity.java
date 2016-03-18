@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import org.itishka.pointim.network.PointConnectionManager;
-import org.itishka.pointim.utils.imagechecker.ImageSearchHelper;
+import org.itishka.pointim.utils.ImageSearchHelper;
 
 /**
  * Created by Tishka17 on 29.04.2015.

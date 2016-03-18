@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import com.octo.android.robospice.SpiceManager;
 
 import org.itishka.pointim.network.PointService;
-import org.itishka.pointim.utils.imagechecker.ImageSearchHelper;
+import org.itishka.pointim.utils.ImageSearchHelper;
 
 /**
  * Created by Tishka17 on 27.02.2015.
