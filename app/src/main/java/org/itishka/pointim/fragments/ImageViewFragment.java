@@ -2,6 +2,7 @@ package org.itishka.pointim.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,18 +13,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.davemorrissey.labs.subscaleview.decoder.DecoderFactory;
-import com.davemorrissey.labs.subscaleview.decoder.ImageDecoder;
-import com.davemorrissey.labs.subscaleview.decoder.ImageRegionDecoder;
 import com.squareup.picasso.Picasso;
 
-import org.itishka.pointim.PointApplication;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.ToolbarActivity;
-import org.itishka.pointim.utils.PicassoDecoder;
-import org.itishka.pointim.utils.PicassoRegionDecoder;
 import org.itishka.pointim.widgets.HideAnimationHelper;
 
 /**
@@ -65,7 +63,6 @@ public class ImageViewFragment extends SpicedFragment {
 
     @Override
     public void onDestroyView() {
-        mPicasso.cancelTag(mUrl);
         super.onDestroyView();
     }
 
@@ -73,23 +70,17 @@ public class ImageViewFragment extends SpicedFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mImageView = (SubsamplingScaleImageView) view.findViewById(R.id.imageView);
-        mPicasso = Picasso.with(getContext());
-        mImageView.setBitmapDecoderFactory(new DecoderFactory<ImageDecoder>() {
-            public ImageDecoder make() {
-                return new PicassoDecoder(mUrl, mPicasso);
-            }
-        });
-
-        mImageView.setRegionDecoderFactory(new DecoderFactory<ImageRegionDecoder>() {
-            @Override
-            public ImageRegionDecoder make() throws IllegalAccessException, java.lang.InstantiationException {
-                return new PicassoRegionDecoder(
-                        ((PointApplication) mImageView.getContext().getApplicationContext()).getOkHttpClient()
-                );
-            }
-        });
         mImageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
-        mImageView.setImage(ImageSource.uri(mUrl));
+        Glide.with(this)
+                .load(mUrl)
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                        mImageView.setImage(ImageSource.bitmap(bitmap));
+                    }
+                });
+
 
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +121,6 @@ public class ImageViewFragment extends SpicedFragment {
             startActivity(browserIntent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
