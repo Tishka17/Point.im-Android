@@ -1,6 +1,7 @@
 package org.itishka.pointim;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.backends.okhttp.OkHttpImagePipelineConfigFactory;
@@ -25,8 +26,7 @@ public class PointApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mOkHttpClient = new OkHttpClient();
-        mOkHttpClient.setCache(new Cache(getCacheDir(), MAX_CACHE_SIZE));
-
+        mOkHttpClient.setCache(new Cache(getExternalCacheDir(), MAX_CACHE_SIZE));
 
         ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
                 .newBuilder(this, mOkHttpClient)
@@ -38,6 +38,7 @@ public class PointApplication extends Application {
 
         Picasso picasso = new Picasso.Builder(this)
                 .downloader(new OkHttpDownloader(mOkHttpClient))
+                .defaultBitmapConfig(Bitmap.Config.RGB_565)
                 .build();
         Picasso.setSingletonInstance(picasso);
     }

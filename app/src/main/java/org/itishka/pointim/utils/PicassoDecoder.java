@@ -25,8 +25,6 @@ public class PicassoDecoder implements ImageDecoder {
         return picasso
                 .load(uri)
                 .tag(tag)
-                .config(Bitmap.Config.RGB_565)
-                .memoryPolicy(MemoryPolicy.NO_CACHE)
                 .get();
     }
 }
