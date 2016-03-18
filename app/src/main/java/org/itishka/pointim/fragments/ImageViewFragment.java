@@ -2,7 +2,6 @@ package org.itishka.pointim.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,26 +11,29 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.target.Target;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.ToolbarActivity;
 import org.itishka.pointim.widgets.HideAnimationHelper;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 public class ImageViewFragment extends SpicedFragment {
 
     private static final String ARG_URL = "url";
     private String mUrl;
-    private SubsamplingScaleImageView mImageView;
+    private ImageView mImageView;
     private HideAnimationHelper mHideAnimationHelper = null;
+    private PhotoViewAttacher mAttacher;
 
     @Override
     public void onAttach(Context context) {
@@ -54,7 +56,7 @@ public class ImageViewFragment extends SpicedFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (this.isVisible()) {
             if (!isVisibleToUser) {
-                mImageView.resetScaleAndCenter();
+                //mAttacher.
             }
         }
     }
@@ -62,20 +64,23 @@ public class ImageViewFragment extends SpicedFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mAttacher.cleanup();
+        mImageView.setImageDrawable(null);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mImageView = (SubsamplingScaleImageView) view.findViewById(R.id.imageView);
-        mImageView.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
+        mImageView = (ImageView) view.findViewById(R.id.imageView);
+        mAttacher = new PhotoViewAttacher(mImageView);
         Glide.with(this)
                 .load(mUrl)
-                .asBitmap()
-                .into(new SimpleTarget<Bitmap>() {
+                .fitCenter()
+                .into(new GlideDrawableImageViewTarget(mImageView) {
                     @Override
-                    public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                        mImageView.setImage(ImageSource.bitmap(bitmap));
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+                        super.onResourceReady(resource, animation);
+                        mAttacher.update();
                     }
                 });
 

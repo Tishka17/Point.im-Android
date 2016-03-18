@@ -4,8 +4,9 @@
     android:layout_height="match_parent"
     tools:context="org.itishka.pointim.fragments.ImageViewFragment">
 
-    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+    <ImageView
         android:id="@+id/imageView"
+        android:scaleType="fitCenter"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
