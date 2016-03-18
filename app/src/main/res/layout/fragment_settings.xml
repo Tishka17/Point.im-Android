@@ -34,15 +34,12 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <com.facebook.drawee.view.SimpleDraweeView
+                    <ImageView
                         android:id="@+id/point_avatar"
                         android:layout_width="@dimen/avatar_size"
                         android:layout_height="@dimen/avatar_size"
                         android:layout_marginRight="@dimen/text_avatar_margin"
-                        android:scaleType="fitCenter"
-                        app:placeholderImage="@drawable/ic_account_grey600_36dp"
-                        app:roundAsCircle="true"
-                        app:roundingBorderWidth="1dip" />
+                        android:scaleType="fitCenter" />
 
                     <TextView
                         android:id="@+id/point_login"
@@ -87,15 +84,12 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <com.facebook.drawee.view.SimpleDraweeView
+                    <ImageView
                         android:id="@+id/imgur_avatar"
                         android:layout_width="@dimen/avatar_size"
                         android:layout_height="@dimen/avatar_size"
                         android:layout_marginRight="@dimen/text_avatar_margin"
-                        android:scaleType="fitCenter"
-                        app:placeholderImage="@drawable/ic_account_grey600_36dp"
-                        app:roundAsCircle="true"
-                        app:roundingBorderWidth="1dip" />
+                        android:scaleType="fitCenter" />
 
                     <TextView
                         android:id="@+id/imgur_login"
@@ -221,27 +215,21 @@
                     android:orientation="horizontal">
 
 
-                    <com.facebook.drawee.view.SimpleDraweeView
+                    <ImageView
                         android:id="@+id/avatar_tishka17"
                         android:layout_width="@dimen/avatar_size"
                         android:layout_height="@dimen/avatar_size"
-                        android:scaleType="fitCenter"
-                        app:placeholderImage="@drawable/ic_account_grey600_36dp"
-                        app:roundAsCircle="true"
-                        app:roundingBorderWidth="1dip" />
+                        android:scaleType="fitCenter" />
 
                     <Space
                         android:layout_width="4dp"
                         android:layout_height="match_parent" />
 
-                    <com.facebook.drawee.view.SimpleDraweeView
+                    <ImageView
                         android:id="@+id/avatar_arts"
                         android:layout_width="@dimen/avatar_size"
                         android:layout_height="@dimen/avatar_size"
-                        android:scaleType="fitCenter"
-                        app:placeholderImage="@drawable/ic_account_grey600_36dp"
-                        app:roundAsCircle="true"
-                        app:roundingBorderWidth="1dip" />
+                        android:scaleType="fitCenter" />
                 </LinearLayout>
 
                 <View

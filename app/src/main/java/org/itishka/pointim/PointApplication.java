@@ -3,9 +3,6 @@ package org.itishka.pointim;
 import android.app.Application;
 import android.graphics.Bitmap;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.backends.okhttp.OkHttpImagePipelineConfigFactory;
-import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
@@ -28,10 +25,10 @@ public class PointApplication extends Application {
         mOkHttpClient = new OkHttpClient();
         mOkHttpClient.setCache(new Cache(getExternalCacheDir(), MAX_CACHE_SIZE));
 
-        ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
-                .newBuilder(this, mOkHttpClient)
-                .build();
-        Fresco.initialize(this, config);
+//        ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
+//                .newBuilder(this, mOkHttpClient)
+//                .build();
+//        Fresco.initialize(this, config);
         ImageSearchHelper.initCache(this);
         PointConnectionManager.getInstance().init(this);
         ImgurConnectionManager.getInstance().init(this);
