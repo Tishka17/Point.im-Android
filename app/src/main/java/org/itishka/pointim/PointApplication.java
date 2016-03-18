@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import org.itishka.pointim.network.ImgurConnectionManager;
 import org.itishka.pointim.network.PointConnectionManager;
-import org.itishka.pointim.utils.ImageSearchHelper;
+import org.itishka.pointim.utils.imagechecker.ImageSearchHelper;
 
 /**
  * Created by Tishka17 on 03.08.2015.
