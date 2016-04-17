@@ -67,8 +67,8 @@ public class Utils {
 
     public static void showAvatar(String login, String avatar, ImageView imageView) {
         imageView.setTag(R.id.imageView, login);
+        imageView.setImageURI(null);
         if (avatar == null) {
-            imageView.setImageURI(null);
             return;
         }
         Uri url;
