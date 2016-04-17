@@ -29,13 +29,12 @@ public class ImageViewFragment extends SpicedFragment {
     private static final String ARG_URL = "url";
     private String mUrl;
     private ImageView mImageView;
-    private HideAnimationHelper mHideAnimationHelper = null;
+    private HideAnimationHelper mHideAnimationHelper;
     private PhotoViewAttacher mAttacher;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mHideAnimationHelper = new HideAnimationHelper(((ToolbarActivity) getActivity()).getToolbar());
     }
 
 
@@ -81,6 +80,7 @@ public class ImageViewFragment extends SpicedFragment {
                     }
                 });
 
+        mHideAnimationHelper = new HideAnimationHelper(((ToolbarActivity) getActivity()).getToolbar());
         mAttacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
             @Override
             public void onViewTap(View view, float x, float y) {
