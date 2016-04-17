@@ -28,6 +28,8 @@
     <string name="action_share">Поделиться</string>
     <string name="action_subscribe">Подписаться</string>
     <string name="action_unsubscribe">Отписаться</string>
+    <string name="action_subscribe_recommendations">Подписаться на рекомендации</string>
+    <string name="action_unsubscribe_recommendations">Отписатсья от рекомендаций</string>
     <string name="action_view">Просмотреть</string>
     <string name="app_name_full">Point.im для Android</string>
     <string name="app_name">Point.im</string>
@@ -84,6 +86,8 @@
     <string name="toast_recommended">Рекомендовано!</string>
     <string name="toast_subscribed">Подписка выполнена!</string>
     <string name="toast_unsubscribed">Подписка удалена!</string>
+    <string name="toast_recommendations_subscribed">Подписка на рекомендации выполнена!</string>
+    <string name="toast_recommendations_unsubscribed">Подписка на рекомендации удалена!</string>
     <string name="toast_upload_not_finished">Загрузка не завершена. Подождите или проверьте наличие ошибок</string>
     <string name="version">Версия:</string>
     <string name="dialog_logout_imgur_title">Действительно выйти из профиля imgur.com?</string>

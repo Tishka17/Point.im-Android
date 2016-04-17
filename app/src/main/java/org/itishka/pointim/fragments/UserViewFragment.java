@@ -2,6 +2,7 @@ package org.itishka.pointim.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +22,8 @@ import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.PostListRequest;
 import org.itishka.pointim.network.requests.UserInfoRequest;
+
+import java.io.IOException;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -114,11 +117,27 @@ public class UserViewFragment extends PostListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_subscribe) {
-            PointConnectionManager.getInstance().pointIm.subscribeUser(mUser, "", new Callback<PointResult>() {
+            PointConnectionManager.getInstance().pointIm.subscribeUser(mUser, "", new Callback<Void>() {
+                @Override
+                public void success(Void postList, Response response) {
+                    if (!isDetached())
+                        Toast.makeText(getActivity(), getString(R.string.toast_subscribed), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.d("UserViewFragment", "failure " + error.getBody());
+                    if (!isDetached())
+                        Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            return true;
+        } else if (id == R.id.action_unsubscribe) {
+            PointConnectionManager.getInstance().pointIm.unsubscribeUser(mUser, new Callback<PointResult>() {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {
-                        Toast.makeText(getActivity(), getString(R.string.toast_subscribed), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.toast_unsubscribed), Toast.LENGTH_SHORT).show();
                     } else {
                         if (!isDetached())
                             Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();
@@ -132,12 +151,27 @@ public class UserViewFragment extends PostListFragment {
                 }
             });
             return true;
-        } else if (id == R.id.action_unsubscribe) {
-            PointConnectionManager.getInstance().pointIm.unsubscribeUser(mUser, new Callback<PointResult>() {
+        } else if (id == R.id.action_subscribe_recommendations) {
+            PointConnectionManager.getInstance().pointIm.subscribeUserRecommendations(mUser, "", new Callback<Void>() {
+                @Override
+                public void success(Void postList, Response response) {
+                    if (!isDetached())
+                        Toast.makeText(getActivity(), getString(R.string.toast_recommendations_subscribed), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    if (!isDetached())
+                        Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            return true;
+        } else if (id == R.id.action_unsubscribe_recommendations) {
+            PointConnectionManager.getInstance().pointIm.unsubscribeUserRecommendations(mUser, new Callback<PointResult>() {
                 @Override
                 public void success(PointResult postList, Response response) {
                     if (postList.isSuccess()) {
-                        Toast.makeText(getActivity(), getString(R.string.toast_unsubscribed), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.toast_recommendations_unsubscribed), Toast.LENGTH_SHORT).show();
                     } else {
                         if (!isDetached())
                             Toast.makeText(getActivity(), postList.error, Toast.LENGTH_SHORT).show();

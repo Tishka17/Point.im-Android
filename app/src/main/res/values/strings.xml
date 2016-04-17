@@ -18,6 +18,8 @@
     <string name="action_bookmarks">Bookmarks</string>
     <string name="action_subscribe">Subscribe</string>
     <string name="action_unsubscribe">Unsubscribe</string>
+    <string name="action_subscribe_recommendations">Subscribe recommendations</string>
+    <string name="action_unsubscribe_recommendations">Unsubscribe recommendations</string>
     <string name="about_registered_title">Registered:</string>
     <string name="about_birthday_title">Birthday:</string>
     <string name="about_skype_title">Skype:</string>
@@ -86,6 +88,8 @@
     <string name="toast_error_template">Error: %s</string>
     <string name="toast_subscribed">Subscribed!</string>
     <string name="toast_unsubscribed">Unsubscribed!</string>
+    <string name="toast_recommendations_subscribed">Recommendations subscribed!</string>
+    <string name="toast_recommendations_unsubscribed">Recommendations unsubscribed!</string>
     <string name="action_view">View</string>
     <string name="snack_posted_template">Post #%s sent</string>
     <string name="version">Version:</string>

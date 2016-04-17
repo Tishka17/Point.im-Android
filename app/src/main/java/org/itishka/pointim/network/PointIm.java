@@ -71,11 +71,18 @@ public interface PointIm {
     UserList getUserSubscriptions(@Path("login") String login);
 
     @FormUrlEncoded
-    @POST("/api/user/login/{login}/s")
-    void subscribeUser(@Path("login") String login, @Field("text") String text, Callback<PointResult> callback);
+    @POST("/api/user/s/{login}")
+    void subscribeUser(@Path("login") String login, @Field("text") String text, Callback<Void> callback);
 
-    @DELETE("/api/user/login/{login}/s")
+    @DELETE("/api/user/s/{login}")
     void unsubscribeUser(@Path("login") String login, Callback<PointResult> callback);
+
+    @FormUrlEncoded
+    @POST("/api/user/sr/{login}")
+    void subscribeUserRecommendations(@Path("login") String login, @Field("text") String text, Callback<Void> callback);
+
+    @DELETE("/api/user/sr/{login}")
+    void unsubscribeUserRecommendations(@Path("login") String login, Callback<PointResult> callback);
 
     @GET("/api/tags/login/{login}")
     TagList getTags(@Path("login") String login);
