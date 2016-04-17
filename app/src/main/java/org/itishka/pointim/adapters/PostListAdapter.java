@@ -104,10 +104,10 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if (position == mPostList.posts.size() + (mHasHeader ? 1 : 0))
-            return TYPE_FOOTER;
         if (position == 0 && mHasHeader)
             return TYPE_HEADER;
+        if (position == mPostList.posts.size() + (mHasHeader ? 1 : 0))
+            return TYPE_FOOTER;
         return TYPE_ITEM;
     }
 
@@ -278,7 +278,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         if (mPostList == null) return 0;
-        else return mPostList.posts.size() + 1;
+        else return mPostList.posts.size() + (mPostList.has_next ? 1 : 0) + (mHasHeader ? 1 : 0);
     }
 
     public void setOnLoadMoreRequestListener(OnLoadMoreRequestListener onLoadMoreRequestListener) {
