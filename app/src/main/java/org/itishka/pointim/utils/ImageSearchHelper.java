@@ -25,16 +25,14 @@ public class ImageSearchHelper {
     private static final String MIME_ERROR = "^";
     private static final LruCache<String, String> sLinksChecked = new LruCache<>(512);
     private static final String PREFERENCE = "linkTypes";
-    private static boolean isLoaded = false;
-    private static boolean isSaved = false;
+    private static volatile boolean isLoaded = false;
+    private static volatile boolean isSaved = false;
     private static OkHttpClient sOkHttpClient;
 
-    public static void initCache(Context context) {
-        synchronized (ImageSearchHelper.class) {
-            if (!isLoaded) {
-                sOkHttpClient = ((PointApplication) context.getApplicationContext()).getOkHttpClient();
-                reloadCache(context);
-            }
+    public synchronized static void initCache(Context context) {
+        if (!isLoaded) {
+            sOkHttpClient = ((PointApplication) context.getApplicationContext()).getOkHttpClient();
+            reloadCache(context);
         }
     }
 
@@ -47,7 +45,7 @@ public class ImageSearchHelper {
         return result;
     }
 
-    public static void reloadCache(Context context) {
+    public synchronized static void reloadCache(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
         for (Map.Entry<String, ?> s : pref.getAll().entrySet()) {
             sLinksChecked.put(s.getKey(), (String) s.getValue());
@@ -56,7 +54,7 @@ public class ImageSearchHelper {
         isSaved = true;
     }
 
-    public static void saveCache(Context context) {
+    public synchronized static void saveCache(Context context) {
         if (isSaved)
             return;
         SharedPreferences pref = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
