@@ -37,7 +37,11 @@ public class SimplePointClickListener implements OnPointClickListener {
 
     @Override
     public void oCommentClicked(String post, String comment) {
-
+        if (getActivity() == null) return;
+        Intent intent = new Intent(getActivity(), SinglePostActivity.class);
+        intent.putExtra("post", post);
+        intent.putExtra("comment", comment);
+        ActivityCompat.startActivity(getActivity(), intent, null);
     }
 
     @Override
