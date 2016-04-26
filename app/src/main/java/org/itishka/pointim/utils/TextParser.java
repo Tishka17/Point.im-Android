@@ -21,10 +21,10 @@ public class TextParser implements JsonDeserializer<TextWithImages> {
         String text = json.getAsJsonPrimitive().getAsString();
         textWithImages.text = new SpannableString(text);
         textWithImages.text = TextLinkify.addLinks(textWithImages.text);
-        textWithImages.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(textWithImages.text), true);
         textWithImages.text = TextLinkify.markNicks(textWithImages.text);
         textWithImages.text = TextLinkify.markPostNumbers(textWithImages.text);
         textWithImages.text = TextLinkify.markMarkdownLinks(textWithImages.text);
+        textWithImages.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(textWithImages.text), true);
         return textWithImages;
     }
 

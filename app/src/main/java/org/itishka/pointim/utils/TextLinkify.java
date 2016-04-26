@@ -22,7 +22,7 @@ public class TextLinkify {
     private static final Pattern nickPattern = Pattern.compile("(?<=^|[:(>\\s])@([\\w-]+)");// @nick
     private static final Pattern postNumberPattern = Pattern.compile("(?<=^|[:(>\\s])#(\\w+)(?>/(\\d+))?");// #post/comment
 
-    private static final Pattern markdownLinkPattern = Pattern.compile("\\[([^\\]]+)\\]\\(([^)\"]+)(\"([^\"]+)\")?\\)");// [title](link "hint")
+    private static final Pattern markdownLinkPattern = Pattern.compile("(?<=^|[:(>\\s])\\[([^\\]]+)\\]\\(([^)\"]+)(\"([^\"]+)\")?\\)");// [title](link "hint")
     private static final Pattern markdownSimpleLinkPattern = Pattern.compile("<([^>]*)>");
 
     public static Spannable addLinks(Spannable text) {
