@@ -1,10 +1,12 @@
 package org.itishka.pointim.fragments;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -27,6 +29,8 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
 import org.itishka.pointim.activities.TagViewActivity;
+import org.itishka.pointim.activities.UserViewActivity;
+import org.itishka.pointim.adapters.OnPointClickListener;
 import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.PostList;
@@ -42,16 +46,34 @@ import java.util.List;
  */
 public abstract class PostListFragment extends SpicedFragment {
 
-    private PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
+    private OnPointClickListener mOnPointClickListener = new OnPointClickListener() {
         @Override
-        public void onPostClicked(View view, String post) {
+        public void onPostClicked(String post) {
             Intent intent = new Intent(getActivity(), SinglePostActivity.class);
             intent.putExtra("post", post);
             ActivityCompat.startActivity(getActivity(), intent, null);
         }
 
         @Override
-        public void onTagClicked(View view, String tag) {
+        public void oCommentClicked(String post, String comment) {
+
+        }
+
+        @Override
+        public void onUserClicked(String user) {
+            Intent intent = new Intent(getActivity(), UserViewActivity.class);
+            intent.putExtra(UserViewActivity.EXTRA_USER, user);
+            ActivityCompat.startActivity(getActivity(), intent, null);
+        }
+
+        @Override
+        public void onBrowserLinkClicked(Uri link) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, link);
+            ActivityCompat.startActivity(getActivity(), Intent.createChooser(browserIntent, getString(R.string.title_choose_app)), new Bundle());
+        }
+
+        @Override
+        public void onTagClicked(String tag) {
             Intent intent = new Intent(getActivity(), TagViewActivity.class);
             intent.putExtra("tag", tag);
             ActivityCompat.startActivity(getActivity(), intent, null);
@@ -218,7 +240,7 @@ public abstract class PostListFragment extends SpicedFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         ((ScrollButton) rootView.findViewById(R.id.scroll_up)).setRecyclerView(mRecyclerView);
         mAdapter = createAdapter();
-        mAdapter.setOnPostClickListener(mOnPostClickListener);
+        mAdapter.setOnPostClickListener(mOnPointClickListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
             @Override
             public boolean onLoadMoreRequested() {

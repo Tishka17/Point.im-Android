@@ -1,13 +1,10 @@
 package org.itishka.pointim.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -21,7 +18,6 @@ import android.widget.TextView;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.activities.UserViewActivity;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.utils.BookmarkToggleListener;
@@ -43,12 +39,12 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private PostList mPostList = null;
     private ImageSearchTask mTask;
     private OnLoadMoreRequestListener mOnLoadMoreRequestListener = null;
-    private OnPostClickListener mOnPostClickListener = null;
+    private OnPointClickListener mOnPointClickListener = null;
     private View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (mOnPostClickListener != null)
-                mOnPostClickListener.onTagClicked(view, ((TextView) view).getText().toString());
+            if (mOnPointClickListener != null)
+                mOnPointClickListener.onTagClicked(((TextView) view).getText().toString());
         }
     };
 
@@ -130,8 +126,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.webLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri) view.getTag());
-                holder.itemView.getContext().startActivity(Intent.createChooser(browserIntent, holder.itemView.getContext().getString(R.string.title_choose_app)));
+                mOnPointClickListener.onBrowserLinkClicked((Uri) view.getTag());
             }
         });
         holder.avatar.setOnClickListener(new View.OnClickListener() {
@@ -139,9 +134,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public void onClick(View view) {
                 String user = (String) view.getTag(R.id.imageView);
                 if (!TextUtils.isEmpty(user)) {
-                    Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                    intent.putExtra(UserViewActivity.EXTRA_USER, user);
-                    ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                    mOnPointClickListener.onUserClicked(user);
                 }
             }
         });
@@ -151,17 +144,15 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public void onClick(View view) {
                 String user = (String) view.getTag(R.id.imageView);
                 if (!TextUtils.isEmpty(user)) {
-                    Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                    intent.putExtra(UserViewActivity.EXTRA_USER, user);
-                    ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                    mOnPointClickListener.onUserClicked(user);
                 }
             }
         });
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mOnPostClickListener != null) {
-                    mOnPostClickListener.onPostClicked(v, view.getTag(R.id.post_id).toString());
+                if (mOnPointClickListener != null) {
+                    mOnPointClickListener.onPostClicked(view.getTag(R.id.post_id).toString());
                 }
             }
         });
@@ -285,18 +276,12 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mOnLoadMoreRequestListener = onLoadMoreRequestListener;
     }
 
-    public void setOnPostClickListener(OnPostClickListener onPostClickListener) {
-        mOnPostClickListener = onPostClickListener;
+    public void setOnPostClickListener(OnPointClickListener onPointClickListener) {
+        mOnPointClickListener = onPointClickListener;
     }
 
     public interface OnLoadMoreRequestListener {
         boolean onLoadMoreRequested();//return false if cannot load more
-    }
-
-    public interface OnPostClickListener {
-        void onPostClicked(View view, String post);
-
-        void onTagClicked(View view, String tag);
     }
 
     protected class FooterHolder extends RecyclerView.ViewHolder {
