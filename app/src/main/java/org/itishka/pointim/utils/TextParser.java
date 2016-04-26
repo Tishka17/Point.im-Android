@@ -1,5 +1,7 @@
 package org.itishka.pointim.utils;
 
+import android.text.SpannableString;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -17,11 +19,13 @@ public class TextParser implements JsonDeserializer<TextWithImages> {
     public TextWithImages deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         TextWithImages textWithImages = new TextWithImages();
         String text = json.getAsJsonPrimitive().getAsString();
-        textWithImages.text = TextLinkify.addLinks(text);
+        textWithImages.text = new SpannableString(text);
+        textWithImages.text = TextLinkify.addLinks(textWithImages.text);
         textWithImages.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(textWithImages.text), true);
         textWithImages.text = TextLinkify.markNicks(textWithImages.text);
         textWithImages.text = TextLinkify.markPostNumbers(textWithImages.text);
         textWithImages.text = TextLinkify.markMarkdownLinks(textWithImages.text);
+        textWithImages.text = TextLinkify.markSimpleMarkdownLinks(textWithImages.text);
         return textWithImages;
     }
 
