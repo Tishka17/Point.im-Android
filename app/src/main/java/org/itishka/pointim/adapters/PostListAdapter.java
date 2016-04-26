@@ -48,6 +48,10 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     };
 
+    protected OnPointClickListener getOnPointClickListener() {
+        return mOnPointClickListener;
+    }
+
     private boolean mHasHeader = false;
 
     @Override
