@@ -154,7 +154,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), UserViewActivity.class);
                 intent.putExtra(UserViewActivity.EXTRA_USER, "Tishka17");
-                ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                ActivityCompat.startActivity(getActivity(), intent, null);
             }
         });
 
@@ -165,7 +165,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), UserViewActivity.class);
                 intent.putExtra(UserViewActivity.EXTRA_USER, "arts");
-                ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                ActivityCompat.startActivity(getActivity(), intent, null);
             }
         });
 
