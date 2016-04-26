@@ -19,9 +19,10 @@ import java.util.regex.Pattern;
  * Created by Tishka17 on 17.01.2015.
  */
 public class TextLinkify {
-    private static final Pattern nickPattern = Pattern.compile("(?<=^|[:(>\\s])@([\\w-]+)");
-    private static final Pattern postNumberPattern = Pattern.compile("(?<=^|[:(>\\s])#(\\w+)(?>/(\\d+))?");
-    private static final Pattern markdownLinkPattern = Pattern.compile("\\[([^\\]]+)\\]\\(([^)\"]+)(\"([^\"]+)\")?\\)");
+    private static final Pattern nickPattern = Pattern.compile("(?<=^|[:(>\\s])@([\\w-]+)");// @nick
+    private static final Pattern postNumberPattern = Pattern.compile("(?<=^|[:(>\\s])#(\\w+)(?>/(\\d+))?");// #post/comment
+
+    private static final Pattern markdownLinkPattern = Pattern.compile("\\[([^\\]]+)\\]\\(([^)\"]+)(\"([^\"]+)\")?\\)");// [title](link "hint")
     private static final Pattern markdownSimpleLinkPattern = Pattern.compile("<([^>]*)>");
 
     public static Spannable addLinks(Spannable text) {
@@ -53,6 +54,7 @@ public class TextLinkify {
     }
 
     public static Spannable markMarkdownLinks(Spannable text) {
+        text = markSimpleMarkdownLinks(text);//parse <> links before main
         Matcher m = markdownLinkPattern.matcher(text);
         Editable newText = new Editable.Factory().newEditable(text);
         int delta = 0;
@@ -67,7 +69,7 @@ public class TextLinkify {
         return newText;
     }
 
-    public static Spannable markSimpleMarkdownLinks(Spannable text) {
+    private static Spannable markSimpleMarkdownLinks(Spannable text) {
         Matcher m = markdownSimpleLinkPattern.matcher(text);
         Editable newText = new Editable.Factory().newEditable(text);
         int delta = 0;

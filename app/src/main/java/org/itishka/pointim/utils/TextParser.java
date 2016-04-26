@@ -25,7 +25,6 @@ public class TextParser implements JsonDeserializer<TextWithImages> {
         textWithImages.text = TextLinkify.markNicks(textWithImages.text);
         textWithImages.text = TextLinkify.markPostNumbers(textWithImages.text);
         textWithImages.text = TextLinkify.markMarkdownLinks(textWithImages.text);
-        textWithImages.text = TextLinkify.markSimpleMarkdownLinks(textWithImages.text);
         return textWithImages;
     }
 
