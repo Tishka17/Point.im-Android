@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,6 +36,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
+import org.itishka.pointim.adapters.SimplePointClickListener;
 import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
 import org.itishka.pointim.model.point.Comment;
@@ -76,6 +76,8 @@ public class SinglePostFragment extends SpicedFragment {
     private UserCompletionAdapter mUsersListAdapter;
     private ScrollButton mUpButton;
     private ScrollButton mDownButton;
+
+    private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
 
     private void hideDialog() {
         if (mProgressDialog != null) mProgressDialog.hide();
@@ -334,7 +336,8 @@ public class SinglePostFragment extends SpicedFragment {
             }
         });
 
-        mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnCommentClickListener() {
+        mAdapter.setOnPointClickListener(mOnPointClickListener);
+        mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnCommentActionClickListener() {
             @Override
             public void onCommentClicked(View view, String commentId) {
                 mCommentId.setText(commentId);

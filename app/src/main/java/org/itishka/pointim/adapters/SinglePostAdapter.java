@@ -1,12 +1,9 @@
 package org.itishka.pointim.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,9 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.activities.SinglePostActivity;
-import org.itishka.pointim.activities.TagViewActivity;
-import org.itishka.pointim.activities.UserViewActivity;
 import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.ExtendedPost;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -38,14 +32,13 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(getContext(), TagViewActivity.class);
-            intent.putExtra(TagViewActivity.EXTRA_TAG, ((TextView) view).getText());
-            getContext().startActivity(intent);
+            mOnPointClickListener.onTagClicked(((TextView) view).getText().toString());
         }
     };
     private ExtendedPost mPost = null;
     private ImageSearchTask mTask;
-    private OnCommentClickListener mOnCommentClickListener;
+    private OnCommentActionClickListener mOnCommentActionClickListener;
+    private OnPointClickListener mOnPointClickListener;
 
     public SinglePostAdapter(Context context) {
         super();
@@ -79,8 +72,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.webLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, (Uri) view.getTag());
-                    getContext().startActivity(Intent.createChooser(browserIntent, getContext().getString(R.string.title_choose_app)));
+                    mOnPointClickListener.onBrowserLinkClicked((Uri) view.getTag());
                 }
             });
             holder.avatar.setOnClickListener(new View.OnClickListener() {
@@ -88,9 +80,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 public void onClick(View view) {
                     String user = (String) view.getTag(R.id.imageView);
                     if (!TextUtils.isEmpty(user)) {
-                        Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                        intent.putExtra(UserViewActivity.EXTRA_USER, user);
-                        ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                        mOnPointClickListener.onUserClicked(user);
                     }
                 }
             });
@@ -98,16 +88,14 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.post_id.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent browserIntent = new Intent(getContext(), SinglePostActivity.class);
-                    browserIntent.putExtra(SinglePostActivity.EXTRA_POST, view.getTag().toString());
-                    getContext().startActivity(browserIntent);
+                    mOnPointClickListener.onPostClicked(view.getTag().toString());
                 }
             });
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mOnCommentClickListener != null) {
-                        mOnCommentClickListener.onPostClicked(v);
+                    if (mOnCommentActionClickListener != null) {
+                        mOnCommentActionClickListener.onPostClicked(v);
                     }
                 }
             });
@@ -120,17 +108,15 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 public void onClick(View view) {
                     String user = (String) view.getTag(R.id.imageView);
                     if (!TextUtils.isEmpty(user)) {
-                        Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                        intent.putExtra(UserViewActivity.EXTRA_USER, user);
-                        ActivityCompat.startActivity((Activity) view.getContext(), intent, null);
+                        mOnPointClickListener.onUserClicked(user);
                     }
                 }
             });
             holder.action_recommend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mOnCommentClickListener != null) {
-                        mOnCommentClickListener.onRecommendCommentClicked(v, view.getTag(R.id.comment_id).toString());
+                    if (mOnCommentActionClickListener != null) {
+                        mOnCommentActionClickListener.onRecommendCommentClicked(v, view.getTag(R.id.comment_id).toString());
                     }
                 }
             });
@@ -138,8 +124,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mOnCommentClickListener != null) {
-                        mOnCommentClickListener.onCommentClicked(v, view.getTag(R.id.comment_id).toString());
+                    if (mOnCommentActionClickListener != null) {
+                        mOnCommentActionClickListener.onCommentClicked(v, view.getTag(R.id.comment_id).toString());
                     }
                 }
             });
@@ -315,15 +301,19 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public interface OnCommentClickListener {
-        void onCommentClicked(View view, String commentId);
-
+    public interface OnCommentActionClickListener {
         void onRecommendCommentClicked(View view, String commentId);
 
-        void onPostClicked(View view);
+        void onCommentClicked(View v, String comment_id);
+
+        void onPostClicked(View v);
     }
 
-    public void setOnCommentClickListener(OnCommentClickListener onCommentClickListener) {
-        mOnCommentClickListener = onCommentClickListener;
+    public void setOnCommentClickListener(OnCommentActionClickListener onCommentActionClickListener) {
+        mOnCommentActionClickListener = onCommentActionClickListener;
+    }
+
+    public void setOnPointClickListener(OnPointClickListener onPointClickListener) {
+        mOnPointClickListener = onPointClickListener;
     }
 }

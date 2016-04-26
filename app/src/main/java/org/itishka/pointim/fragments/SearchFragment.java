@@ -1,7 +1,6 @@
 package org.itishka.pointim.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
@@ -20,8 +19,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.activities.TagViewActivity;
-import org.itishka.pointim.activities.UserViewActivity;
+import org.itishka.pointim.adapters.SimplePointClickListener;
 import org.itishka.pointim.model.point.Tag;
 import org.itishka.pointim.model.point.TagList;
 import org.itishka.pointim.model.point.User;
@@ -44,24 +42,21 @@ public class SearchFragment extends SpicedFragment {
     UserList mFilteredUsers;
     private SearchView mSearchView;
 
+    private SimplePointClickListener mSimplePointClickListener = new SimplePointClickListener(this);
+
     public SearchFragment() {
     }
 
     private View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(getActivity(), TagViewActivity.class);
-            intent.putExtra("tag", ((TextView) view).getText());
-            getActivity().startActivity(intent);
+            mSimplePointClickListener.onTagClicked(((TextView) view).getText().toString());
         }
     };
     private View.OnClickListener mOnUserClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            String user = (String) view.getTag();
-            Intent intent = new Intent(getActivity(), UserViewActivity.class);
-            intent.putExtra("user", user);
-            getActivity().startActivity(intent);
+            mSimplePointClickListener.onUserClicked((String) view.getTag());
         }
     };
 

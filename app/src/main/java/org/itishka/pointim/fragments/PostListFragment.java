@@ -2,12 +2,10 @@ package org.itishka.pointim.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -25,9 +23,8 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.activities.SinglePostActivity;
-import org.itishka.pointim.activities.TagViewActivity;
 import org.itishka.pointim.adapters.PostListAdapter;
+import org.itishka.pointim.adapters.SimplePointClickListener;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -42,21 +39,7 @@ import java.util.List;
  */
 public abstract class PostListFragment extends SpicedFragment {
 
-    private PostListAdapter.OnPostClickListener mOnPostClickListener = new PostListAdapter.OnPostClickListener() {
-        @Override
-        public void onPostClicked(View view, String post) {
-            Intent intent = new Intent(getActivity(), SinglePostActivity.class);
-            intent.putExtra("post", post);
-            ActivityCompat.startActivity(getActivity(), intent, null);
-        }
-
-        @Override
-        public void onTagClicked(View view, String tag) {
-            Intent intent = new Intent(getActivity(), TagViewActivity.class);
-            intent.putExtra("tag", tag);
-            ActivityCompat.startActivity(getActivity(), intent, null);
-        }
-    };
+    private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
 
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
@@ -218,7 +201,7 @@ public abstract class PostListFragment extends SpicedFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         ((ScrollButton) rootView.findViewById(R.id.scroll_up)).setRecyclerView(mRecyclerView);
         mAdapter = createAdapter();
-        mAdapter.setOnPostClickListener(mOnPostClickListener);
+        mAdapter.setOnPointClickListener(mOnPointClickListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
             @Override
             public boolean onLoadMoreRequested() {
