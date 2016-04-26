@@ -68,7 +68,15 @@ public class Utils {
     public static void showAvatar(String login, String avatar, ImageView imageView) {
         imageView.setTag(R.id.imageView, login);
         imageView.setImageURI(null);
+        final Context context = imageView.getContext();
         if (avatar == null) {
+            Glide
+                    .with(context)
+                    .load(R.drawable.ic_account_grey600_36dp)
+                    .fitCenter()
+                    .bitmapTransform(new CropCircleTransformation(context))
+                    .into(imageView);
+
             return;
         }
         Uri url;
@@ -77,7 +85,6 @@ public class Utils {
         else
             url = Uri.parse(AVATAR_URL_STRING + "/a/80/" + avatar);
         //imageView.setImageURI(url);
-        final Context context = imageView.getContext();
         Glide
                 .with(context)
                 .load(url)
