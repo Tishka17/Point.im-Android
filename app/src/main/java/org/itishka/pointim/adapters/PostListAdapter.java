@@ -276,7 +276,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mOnLoadMoreRequestListener = onLoadMoreRequestListener;
     }
 
-    public void setOnPostClickListener(OnPointClickListener onPointClickListener) {
+    public void setOnPointClickListener(OnPointClickListener onPointClickListener) {
         mOnPointClickListener = onPointClickListener;
     }
 
