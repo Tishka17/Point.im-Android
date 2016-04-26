@@ -19,8 +19,9 @@ public class TextParser implements JsonDeserializer<TextWithImages> {
         String text = json.getAsJsonPrimitive().getAsString();
         textWithImages.text = TextLinkify.addLinks(text);
         textWithImages.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(textWithImages.text), true);
-        TextLinkify.markNicks(textWithImages.text);
-        TextLinkify.markPostNumbers(textWithImages.text);
+        textWithImages.text = TextLinkify.markNicks(textWithImages.text);
+        textWithImages.text = TextLinkify.markPostNumbers(textWithImages.text);
+        textWithImages.text = TextLinkify.markMarkdownLinks(textWithImages.text);
         return textWithImages;
     }
 
