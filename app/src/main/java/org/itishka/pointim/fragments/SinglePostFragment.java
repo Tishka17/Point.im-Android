@@ -173,7 +173,7 @@ public class SinglePostFragment extends SpicedFragment {
         public void failure(RetrofitError error) {
             hideDialog();
             if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -202,7 +202,7 @@ public class SinglePostFragment extends SpicedFragment {
             mBottomBar.setEnabled(true);
             hideDialog();
             if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
     private Callback<PointResult> mDeleteCallback = new Callback<PointResult>() {
@@ -224,7 +224,7 @@ public class SinglePostFragment extends SpicedFragment {
         public void failure(RetrofitError error) {
             hideDialog();
             if (!isDetached())
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
 

@@ -86,7 +86,7 @@ public class NewPostFragment extends SpicedFragment {
         @Override
         public void failure(RetrofitError error) {
             mProgressDialog.hide();
-            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
 
