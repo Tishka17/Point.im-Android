@@ -14,7 +14,6 @@ import retrofit.client.OkClient;
  * Created by Tishka17 on 31.08.2015.
  */
 public abstract class ConnectionManager {
-    String USER_AGENT = "Tishka17 Point.im Client";
     private static final String KEY = "AuthorizationData";
     private OkClient mOkClient;
 

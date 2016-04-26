@@ -62,12 +62,6 @@ public class PointConnectionManager extends ConnectionManager {
 
 
         RestAdapter authRestAdapter = new RestAdapter.Builder()
-                .setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade requestFacade) {
-                        requestFacade.addHeader("User-Agent", USER_AGENT);
-                    }
-                })
                 .setClient(getOkClient())
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(mGson))
@@ -90,7 +84,6 @@ public class PointConnectionManager extends ConnectionManager {
                     public void intercept(RequestFacade requestFacade) {
                         requestFacade.addHeader("Authorization", loginResult.token);
                         requestFacade.addHeader("X-CSRF", loginResult.csrf_token);
-                        requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
                 .setClient(getOkClient())

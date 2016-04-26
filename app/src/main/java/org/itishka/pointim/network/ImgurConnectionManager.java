@@ -60,7 +60,6 @@ public class ImgurConnectionManager extends ConnectionManager {
                     @Override
                     public void intercept(RequestFacade requestFacade) {
                         requestFacade.addHeader("Authorization", "Client-ID " + BuildConfig.IMGUR_ID);
-                        requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
                 .setClient(getOkClient())
@@ -86,7 +85,6 @@ public class ImgurConnectionManager extends ConnectionManager {
                             requestFacade.addHeader("Authorization", "Bearer " + token.access_token);
                         else
                             requestFacade.addHeader("Authorization", "Client-ID " + BuildConfig.IMGUR_ID);
-                        requestFacade.addHeader("User-Agent", USER_AGENT);
                     }
                 })
                 .setClient(getOkClient())
