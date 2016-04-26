@@ -1,7 +1,6 @@
 package org.itishka.pointim.fragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -40,21 +39,7 @@ import java.util.List;
  */
 public abstract class PostListFragment extends SpicedFragment {
 
-    private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener();
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof Activity) {
-            mOnPointClickListener.setActivity((Activity) context);
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mOnPointClickListener.setActivity(null);
-    }
+    private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
 
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;

@@ -77,21 +77,7 @@ public class SinglePostFragment extends SpicedFragment {
     private ScrollButton mUpButton;
     private ScrollButton mDownButton;
 
-    private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener();
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof Activity) {
-            mOnPointClickListener.setActivity((Activity) context);
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mOnPointClickListener.setActivity(null);
-    }
+    private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
 
     private void hideDialog() {
         if (mProgressDialog != null) mProgressDialog.hide();

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.SinglePostActivity;
@@ -16,14 +17,22 @@ import org.itishka.pointim.activities.UserViewActivity;
  */
 public class SimplePointClickListener implements OnPointClickListener {
 
-    private Activity mActivity;
+    private Activity mActivity = null;
+    private Fragment mFragment = null;
 
+    public SimplePointClickListener() {
+    }
+
+    public SimplePointClickListener(Fragment fragment) {
+        mFragment = fragment;
+    }
 
     public void setActivity(Activity activity) {
         mActivity = activity;
     }
 
     public Activity getActivity() {
+        if (mFragment != null) return mFragment.getActivity();
         return mActivity;
     }
 
