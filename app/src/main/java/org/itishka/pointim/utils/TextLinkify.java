@@ -63,6 +63,7 @@ public class TextLinkify {
             LinkClickableSpan span = new LinkClickableSpan(m.group(2));
             link.setSpan(span, 0, link.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             link.setSpan(new UnderlineSpan(), 0, link.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            link.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, link.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             newText.replace(m.start() - delta, m.end() - delta, link);
             delta += (m.end() - m.start() - link.length());
         }
@@ -78,7 +79,7 @@ public class TextLinkify {
             LinkClickableSpan span = new LinkClickableSpan(m.group(1));
             link.setSpan(span, 0, link.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             link.setSpan(new UnderlineSpan(), 0, link.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-            text.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            link.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, link.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             newText.replace(m.start() - delta, m.end() - delta, link);
             delta += (m.end() - m.start() - link.length());
         }
