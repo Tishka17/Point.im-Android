@@ -36,7 +36,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
-import org.itishka.pointim.adapters.SimplePointClickListener;
+import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
 import org.itishka.pointim.model.point.Comment;

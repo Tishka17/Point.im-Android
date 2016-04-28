@@ -24,7 +24,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.PostListAdapter;
-import org.itishka.pointim.adapters.SimplePointClickListener;
+import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;

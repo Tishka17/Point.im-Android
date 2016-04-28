@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.listeners.OnPointClickListener;
 import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.ExtendedPost;
 import org.itishka.pointim.network.PointConnectionManager;

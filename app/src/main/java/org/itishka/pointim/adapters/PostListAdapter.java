@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.listeners.OnPointClickListener;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.utils.BookmarkToggleListener;
