@@ -6,12 +6,15 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
+import android.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -150,6 +153,13 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 if (!TextUtils.isEmpty(user)) {
                     mOnPointClickListener.onUserClicked(user);
                 }
+            }
+        });
+        holder.popupMenu.inflate(R.menu.menu_adapter_post);
+        holder.menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.popupMenu.show();
             }
         });
         v.setOnClickListener(new View.OnClickListener() {
@@ -316,6 +326,8 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final CheckBox favourite;
         final ImageList imageList;
         final View mainContent;
+        final ImageButton menuButton;
+        final PopupMenu popupMenu;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -339,6 +351,8 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Utils.setTint(favourite);
             mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
+            menuButton = (ImageButton) itemView.findViewById(R.id.overflow_button);
+            popupMenu = new PopupMenu(itemView.getContext(), menuButton, Gravity.RIGHT, 0, R.style.AppTheme_PopupMenu);
         }
     }
 

@@ -47,7 +47,14 @@
         </item>
         <item name="popupTheme">@style/AppTheme.PopupTheme</item>
         <item name="toolbarTheme">@style/AppTheme.ToolbarTheme</item>
+
+        <item name="popupMenuStyle">@style/AppTheme.PopupMenu</item>
     </style>
+
+    <style name="AppTheme.PopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="overlapAnchor">true</item>
+    </style>
+
 
     <style name="AppTheme.ImageViewActivity.Base" parent="AppTheme">
         <item name="toolbarTheme">@style/AppTheme.ImageViewActivity.ToolbarTheme</item>
