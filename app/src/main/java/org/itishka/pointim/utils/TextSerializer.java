@@ -16,6 +16,6 @@ public class TextSerializer implements JsonSerializer<TextWithImages> {
 
     @Override
     public JsonElement serialize(TextWithImages src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(src.text.toString());
+        return new JsonPrimitive(src.originalText.toString());
     }
 }

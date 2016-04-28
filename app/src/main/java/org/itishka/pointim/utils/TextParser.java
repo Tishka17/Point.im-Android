@@ -18,8 +18,8 @@ public class TextParser implements JsonDeserializer<TextWithImages> {
     @Override
     public TextWithImages deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         TextWithImages textWithImages = new TextWithImages();
-        String text = json.getAsJsonPrimitive().getAsString();
-        textWithImages.text = new SpannableString(text);
+        textWithImages.originalText = json.getAsJsonPrimitive().getAsString();
+        textWithImages.text = new SpannableString(textWithImages.originalText);
         textWithImages.text = TextLinkify.addLinks(textWithImages.text);
         textWithImages.text = TextLinkify.markNicks(textWithImages.text);
         textWithImages.text = TextLinkify.markPostNumbers(textWithImages.text);

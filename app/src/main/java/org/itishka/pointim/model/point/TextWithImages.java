@@ -9,5 +9,6 @@ import java.util.List;
  */
 public class TextWithImages {
     public Spannable text;
+    public String originalText;
     public List<String> images;
 }
