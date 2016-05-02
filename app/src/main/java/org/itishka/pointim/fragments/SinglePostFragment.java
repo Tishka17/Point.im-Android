@@ -2,11 +2,7 @@ package org.itishka.pointim.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -493,12 +489,6 @@ public class SinglePostFragment extends SpicedFragment {
                     .build();
             dialog.show();
             return true;
-        } else if (id == R.id.action_copy_link) {
-            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            Uri uri = Utils.generateSiteUri(mPost);
-            ClipData clip = ClipData.newRawUri(uri.toString(), uri);
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(getActivity(), String.format(getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_edit) {
             Intent intent = new Intent(getActivity(), NewPostActivity.class);
             Bundle bundle = new Bundle();
@@ -508,6 +498,8 @@ public class SinglePostFragment extends SpicedFragment {
             bundle.putStringArray(NewPostActivity.EXTRA_TAGS, mPointPost.post.tags.toArray(new String[mPointPost.post.tags.size()]));
             intent.putExtras(bundle);
             getActivity().startActivity(intent);
+        } else {
+            mOnPostActionsListener.onMenuClicked(mPointPost.post, null, item);//// FIXME: 02.05.2016 
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,6 +1,9 @@
 package org.itishka.pointim.listeners;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
@@ -12,6 +15,7 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.network.PointConnectionManager;
+import org.itishka.pointim.utils.Utils;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -76,6 +80,17 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         switch (item.getItemId()) {
             case R.id.action_delete:
                 break;
+            case R.id.action_copy_link:
+                onCopyLink(post, menu, item);
+                break;
         }
+    }
+
+    private void onCopyLink(@NonNull PostData post, PopupMenu menu, MenuItem item) {
+        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        Uri uri = Utils.generateSiteUri(post.id);
+        ClipData clip = ClipData.newRawUri(uri.toString(), uri);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();
     }
 }
