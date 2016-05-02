@@ -6,25 +6,26 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.support.v7.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.listeners.OnPointClickListener;
+import org.itishka.pointim.listeners.OnPostActionsListener;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.PostList;
-import org.itishka.pointim.utils.BookmarkToggleListener;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
@@ -51,6 +52,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mOnPointClickListener.onTagClicked(((TextView) view).getText().toString());
         }
     };
+    private OnPostActionsListener mOnPostActionsListener = null;
 
     protected OnPointClickListener getOnPointClickListener() {
         return mOnPointClickListener;
@@ -146,7 +148,14 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         });
-        holder.favourite.setOnClickListener(new BookmarkToggleListener());
+        holder.favourite.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    if (mOnPostActionsListener != null)
+                                                        mOnPostActionsListener.onBookmark(new Post(), holder.favourite);
+                                                }
+                                            }
+        );
         holder.recomender_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,6 +166,12 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
         holder.popupMenu.inflate(R.menu.menu_adapter_post);
+        holder.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;//// TODO: 02.05.2016  
+            }
+        });
         holder.menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -293,6 +308,10 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setOnPointClickListener(OnPointClickListener onPointClickListener) {
         mOnPointClickListener = onPointClickListener;
+    }
+
+    public void setOnPostActionsListener(OnPostActionsListener postActionsListener) {
+        mOnPostActionsListener = postActionsListener;
     }
 
     public interface OnLoadMoreRequestListener {
