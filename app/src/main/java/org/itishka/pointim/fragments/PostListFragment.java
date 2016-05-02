@@ -25,6 +25,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.listeners.SimplePointClickListener;
+import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -40,6 +41,7 @@ import java.util.List;
 public abstract class PostListFragment extends SpicedFragment {
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
+    private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
 
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
@@ -202,6 +204,7 @@ public abstract class PostListFragment extends SpicedFragment {
         ((ScrollButton) rootView.findViewById(R.id.scroll_up)).setRecyclerView(mRecyclerView);
         mAdapter = createAdapter();
         mAdapter.setOnPointClickListener(mOnPointClickListener);
+        mAdapter.setOnPostActionsListener(mOnPostActionsListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
             @Override
             public boolean onLoadMoreRequested() {

@@ -1,6 +1,7 @@
 package org.itishka.pointim.listeners;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
 import android.widget.CheckBox;
 
@@ -12,10 +13,13 @@ import org.itishka.pointim.utils.BookmarkToggleListener;
  */
 public class SimplePostActionsListener implements OnPostActionsListener {
 
-    BookmarkToggleListener mBookmarkToggleListener = new BookmarkToggleListener();
+    private Fragment mFragment = null;
 
-    private SimplePostActionsListener() {
+    public SimplePostActionsListener(Fragment fragment) {
+        mFragment = fragment;
     }
+
+    BookmarkToggleListener mBookmarkToggleListener = new BookmarkToggleListener();
 
     @Override
     public void onBookmark(@NonNull Post post, PopupMenu menu) {
@@ -33,6 +37,6 @@ public class SimplePostActionsListener implements OnPostActionsListener {
 
     @Override
     public void onMenuClicked(@NonNull Post post, PopupMenu menu) {
-        //// TODO: 02.05.2016  
+        //// TODO: 02.05.2016
     }
 }
