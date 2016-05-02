@@ -80,7 +80,7 @@ public class SinglePostFragment extends SpicedFragment {
     private SimplePostActionsListener.OnPostChangedListener onPostChangedListener = new SimplePostActionsListener.OnPostChangedListener() {
         @Override
         public void onChanged(PostData post) {
-            update();//// FIXME: 02.05.2016
+            mAdapter.notifyItemChanged(0);
         }
 
         @Override

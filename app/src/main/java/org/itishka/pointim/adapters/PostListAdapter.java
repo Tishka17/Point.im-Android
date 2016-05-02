@@ -322,6 +322,17 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mOnPostActionsListener = postActionsListener;
     }
 
+    public void removePost(PostData postData) {
+        for (int i=0; i<mPostList.posts.size();i++) {
+            if (mPostList.posts.get(i).post.id.equals(postData.id)) {
+                mPostList.posts.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+    }
+
+
     public interface OnLoadMoreRequestListener {
         boolean onLoadMoreRequested();//return false if cannot load more
     }

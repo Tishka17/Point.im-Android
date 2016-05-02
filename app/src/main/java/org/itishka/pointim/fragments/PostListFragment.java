@@ -27,6 +27,7 @@ import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Post;
+import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.PostListRequest;
@@ -42,6 +43,17 @@ public abstract class PostListFragment extends SpicedFragment {
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
     private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
+    private SimplePostActionsListener.OnPostChangedListener onPostChangedListener = new SimplePostActionsListener.OnPostChangedListener() {
+        @Override
+        public void onChanged(PostData post) {
+            mAdapter.notifyItemChanged(0);
+        }
+
+        @Override
+        public void onDeleted(PostData post) {
+            mAdapter.removePost(post);
+        }
+    };
 
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
@@ -204,6 +216,7 @@ public abstract class PostListFragment extends SpicedFragment {
         ((ScrollButton) rootView.findViewById(R.id.scroll_up)).setRecyclerView(mRecyclerView);
         mAdapter = createAdapter();
         mAdapter.setOnPointClickListener(mOnPointClickListener);
+        mOnPostActionsListener.setOnPostChangedListener(onPostChangedListener);
         mAdapter.setOnPostActionsListener(mOnPostActionsListener);
         mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
             @Override
