@@ -2,6 +2,7 @@ package org.itishka.pointim.listeners;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
+import android.view.MenuItem;
 import android.widget.CheckBox;
 
 import org.itishka.pointim.model.point.Post;
@@ -11,6 +12,8 @@ import org.itishka.pointim.model.point.Post;
  */
 public interface OnPostActionsListener {
     void onBookmark(@NonNull Post post, PopupMenu menu);
+
     void onBookmark(@NonNull Post post, CheckBox button);
-    void onMenuClicked(@NonNull Post post, PopupMenu menu);
+
+    void onMenuClicked(@NonNull Post post, PopupMenu menu, MenuItem item);
 }

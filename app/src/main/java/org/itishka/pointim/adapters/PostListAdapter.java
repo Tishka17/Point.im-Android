@@ -152,7 +152,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                 @Override
                                                 public void onClick(View v) {
                                                     if (mOnPostActionsListener != null)
-                                                        mOnPostActionsListener.onBookmark(new Post(), holder.favourite);
+                                                        mOnPostActionsListener.onBookmark(getPost(holder.itemView), holder.favourite);
                                                 }
                                             }
         );
@@ -169,7 +169,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                return false;//// TODO: 02.05.2016  
+                if (mOnPostActionsListener != null)
+                    mOnPostActionsListener.onMenuClicked(getPost(holder.itemView), holder.popupMenu, item);
+                return true;
             }
         });
         holder.menuButton.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +189,10 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
         return holder;
+    }
+
+    private Post getPost(View itemView) {
+        return mPostList.posts.get((Integer) itemView.getTag(R.id.card_view));
     }
 
     @Override
@@ -233,6 +239,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindItemViewHolder(PostListAdapter.ViewHolder holder, int i) {
         Post post = mPostList.posts.get(i);
         holder.author.setText("@" + post.post.author.login);
+        holder.itemView.setTag(R.id.card_view, i);
         holder.itemView.setTag(R.id.post_id, post.post.id);
 
         holder.imageList.setImageUrls(post.post.text.images, post.post.files);

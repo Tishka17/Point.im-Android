@@ -3,6 +3,7 @@ package org.itishka.pointim.listeners;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
+import android.view.MenuItem;
 import android.widget.CheckBox;
 
 import org.itishka.pointim.model.point.Post;
@@ -36,7 +37,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
     @Override
-    public void onMenuClicked(@NonNull Post post, PopupMenu menu) {
+    public void onMenuClicked(@NonNull Post post, PopupMenu menu, MenuItem item) {
         //// TODO: 02.05.2016
     }
 }
