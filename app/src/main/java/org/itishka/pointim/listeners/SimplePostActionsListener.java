@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -96,7 +97,44 @@ public class SimplePostActionsListener implements OnPostActionsListener {
             case R.id.action_copy_link:
                 onCopyLink(post, menu, item);
                 break;
+            case R.id.action_recommend:
+                onRecommendPost(post, menu, item);
+                break;
         }
+    }
+
+    private void onRecommendPost(@NonNull final PostData post, PopupMenu menu, MenuItem item) {
+        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                .title(String.format(getContext().getString(R.string.dialog_recommend_title_template), post.id))
+                .positiveText(android.R.string.ok)
+                .negativeText("Cancel")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
+                        PointConnectionManager.getInstance().pointIm.recommend(post.id, text, new Callback<PointResult>() {
+                            @Override
+                            public void success(PointResult pointResult, Response response) {
+                                if (pointResult.isSuccess()) {
+                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
+                                    if (mOnPostChangedListener != null) {
+                                        mOnPostChangedListener.onChanged(post);
+                                    }
+                                } else {
+                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .customView(R.layout.dialog_input, true)
+                .build();
+        dialog.show();
     }
 
     private void onEditPost(@NonNull PostData post, PopupMenu menu, MenuItem item) {

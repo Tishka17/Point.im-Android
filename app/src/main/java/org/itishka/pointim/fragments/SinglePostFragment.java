@@ -447,24 +447,6 @@ public class SinglePostFragment extends SpicedFragment {
             mSwipeRefresh.setRefreshing(true);
             update();
             return true;
-        } else if (id == R.id.action_recommend) {
-            final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                    .title(String.format(getString(R.string.dialog_recommend_title_template), mPost))
-                    .positiveText(android.R.string.ok)
-                    .negativeText("Cancel")
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
-                            String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
-                            showDialog();
-                            PointConnectionManager.getInstance().pointIm.recommend(mPost, text, mRecommendCallback);
-                        }
-                    })
-                    .customView(R.layout.dialog_input, true)
-                    .build();
-            dialog.show();
-            return true;
         } else {
             mOnPostActionsListener.onMenuClicked(mPointPost.post, null, item);//// FIXME: 02.05.2016
         }
