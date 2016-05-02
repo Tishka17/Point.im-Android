@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.listeners.OnPointClickListener;
+import org.itishka.pointim.listeners.OnPostActionsListener;
 import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.ExtendedPost;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -40,6 +41,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private ImageSearchTask mTask;
     private OnCommentActionClickListener mOnCommentActionClickListener;
     private OnPointClickListener mOnPointClickListener;
+    private OnPostActionsListener mOnPostActionsListener;
 
     public SinglePostAdapter(Context context) {
         super();
@@ -85,7 +87,14 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 }
             });
-            holder.favourite.setOnClickListener(new BookmarkToggleListener());
+            holder.favourite.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        if (mOnPostActionsListener != null)
+                                                            mOnPostActionsListener.onBookmark(mPost.post, holder.favourite);
+                                                    }
+                                                }
+            );
             holder.post_id.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -317,4 +326,9 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void setOnPointClickListener(OnPointClickListener onPointClickListener) {
         mOnPointClickListener = onPointClickListener;
     }
+
+    public void setOnPostActionsListener(OnPostActionsListener postActionsListener) {
+        mOnPostActionsListener = postActionsListener;
+    }
+
 }

@@ -6,7 +6,7 @@ import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 
-import org.itishka.pointim.model.point.Post;
+import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.utils.BookmarkToggleListener;
 
 /**
@@ -23,21 +23,21 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     BookmarkToggleListener mBookmarkToggleListener = new BookmarkToggleListener();
 
     @Override
-    public void onBookmark(@NonNull Post post, PopupMenu menu) {
+    public void onBookmark(@NonNull PostData post, PopupMenu menu) {
         onBookmarkImpl(post, menu, null);
     }
 
     @Override
-    public void onBookmark(@NonNull Post post, CheckBox button) {
+    public void onBookmark(@NonNull PostData post, CheckBox button) {
         onBookmarkImpl(post, null, button);
     }
 
-    private void onBookmarkImpl(Post post, PopupMenu menu, CheckBox button) {
+    private void onBookmarkImpl(PostData post, PopupMenu menu, CheckBox button) {
         mBookmarkToggleListener.onClick(button);//// FIXME: 02.05.2016
     }
 
     @Override
-    public void onMenuClicked(@NonNull Post post, PopupMenu menu, MenuItem item) {
+    public void onMenuClicked(@NonNull PostData post, PopupMenu menu, MenuItem item) {
         //// TODO: 02.05.2016
     }
 }

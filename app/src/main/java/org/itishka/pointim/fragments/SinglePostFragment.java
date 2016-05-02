@@ -36,9 +36,10 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
-import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
+import org.itishka.pointim.listeners.SimplePointClickListener;
+import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.ExtendedPost;
 import org.itishka.pointim.model.point.PointResult;
@@ -78,6 +79,7 @@ public class SinglePostFragment extends SpicedFragment {
     private ScrollButton mDownButton;
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
+    private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
 
     private void hideDialog() {
         if (mProgressDialog != null) mProgressDialog.hide();
@@ -173,7 +175,7 @@ public class SinglePostFragment extends SpicedFragment {
         public void failure(RetrofitError error) {
             hideDialog();
             if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -202,7 +204,7 @@ public class SinglePostFragment extends SpicedFragment {
             mBottomBar.setEnabled(true);
             hideDialog();
             if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
     private Callback<PointResult> mDeleteCallback = new Callback<PointResult>() {
@@ -224,7 +226,7 @@ public class SinglePostFragment extends SpicedFragment {
         public void failure(RetrofitError error) {
             hideDialog();
             if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -337,6 +339,7 @@ public class SinglePostFragment extends SpicedFragment {
         });
 
         mAdapter.setOnPointClickListener(mOnPointClickListener);
+        mAdapter.setOnPostActionsListener(mOnPostActionsListener);
         mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnCommentActionClickListener() {
             @Override
             public void onCommentClicked(View view, String commentId) {
