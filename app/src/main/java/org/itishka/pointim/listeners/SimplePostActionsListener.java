@@ -3,7 +3,9 @@ package org.itishka.pointim.listeners;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
@@ -15,6 +17,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -84,6 +87,9 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     public void onMenuClicked(@NonNull PostData post, PopupMenu menu, MenuItem item) {
         //// TODO: 02.05.2016
         switch (item.getItemId()) {
+            case R.id.action_edit:
+                onEditPost(post, menu, item);
+                break;
             case R.id.action_delete:
                 onDeletePost(post, menu, item);
                 break;
@@ -91,6 +97,17 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                 onCopyLink(post, menu, item);
                 break;
         }
+    }
+
+    private void onEditPost(@NonNull PostData post, PopupMenu menu, MenuItem item) {
+        Intent intent = new Intent(getContext(), NewPostActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(NewPostActivity.EXTRA_ID, post.id);
+        bundle.putBoolean(NewPostActivity.EXTRA_PRIVATE, post.isPrivate);
+        bundle.putString(NewPostActivity.EXTRA_TEXT, post.text.text.toString());
+        bundle.putStringArray(NewPostActivity.EXTRA_TAGS, post.tags.toArray(new String[post.tags.size()]));
+        intent.putExtras(bundle);
+        getContext().startActivity(intent);
     }
 
     private void onCopyLink(@NonNull PostData post, PopupMenu menu, MenuItem item) {

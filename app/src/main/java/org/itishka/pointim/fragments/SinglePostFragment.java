@@ -465,16 +465,6 @@ public class SinglePostFragment extends SpicedFragment {
                     .build();
             dialog.show();
             return true;
-        }
-        if (id == R.id.action_edit) {
-            Intent intent = new Intent(getActivity(), NewPostActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(NewPostActivity.EXTRA_ID, mPost);
-            bundle.putBoolean(NewPostActivity.EXTRA_PRIVATE, mPointPost.post.isPrivate);
-            bundle.putString(NewPostActivity.EXTRA_TEXT, mPointPost.post.text.text.toString());
-            bundle.putStringArray(NewPostActivity.EXTRA_TAGS, mPointPost.post.tags.toArray(new String[mPointPost.post.tags.size()]));
-            intent.putExtras(bundle);
-            getActivity().startActivity(intent);
         } else {
             mOnPostActionsListener.onMenuClicked(mPointPost.post, null, item);//// FIXME: 02.05.2016
         }
