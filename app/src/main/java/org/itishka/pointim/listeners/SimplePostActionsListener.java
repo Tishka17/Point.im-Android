@@ -11,6 +11,9 @@ import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import org.itishka.pointim.R;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.PostData;
@@ -27,6 +30,7 @@ import retrofit.client.Response;
 public class SimplePostActionsListener implements OnPostActionsListener {
 
     private Fragment mFragment = null;
+    private OnPostChangedListener mOnPostChangedListener;
 
     public SimplePostActionsListener(Fragment fragment) {
         mFragment = fragment;
@@ -46,12 +50,13 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                         @Override
                         public void success(PointResult pointResult, Response response) {
                             Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmarked_template), post.id), Toast.LENGTH_SHORT).show();
+                            notifyChanged(post);
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
                             Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_error_template), post.id, error), Toast.LENGTH_SHORT).show();
-                            checkBox.setChecked(false);
+                            notifyChanged(post);
                         }
                     }
             );
@@ -62,12 +67,13 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                         @Override
                         public void success(Void pointResult, Response response) {
                             Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_remove_template), post.id), Toast.LENGTH_SHORT).show();
+                            notifyChanged(post);
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
                             Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_remove_error_template), post.id, error), Toast.LENGTH_SHORT).show();
-                            checkBox.setChecked(true);
+                            notifyChanged(post);
                         }
                     }
             );
@@ -79,6 +85,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         //// TODO: 02.05.2016
         switch (item.getItemId()) {
             case R.id.action_delete:
+                onDeletePost(post, menu, item);
                 break;
             case R.id.action_copy_link:
                 onCopyLink(post, menu, item);
@@ -93,4 +100,52 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         clipboard.setPrimaryClip(clip);
         Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();
     }
+
+    private void onDeletePost(@NonNull final PostData post, PopupMenu menu, MenuItem item) {
+        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                .title(String.format(getContext().getString(R.string.dialog_delete_title_template), post.id))
+                .positiveText(android.R.string.ok)
+                .negativeText(android.R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        PointConnectionManager.getInstance().pointIm.deletePost(post.id, new Callback<PointResult>() {
+                            @Override
+                            public void success(PointResult pointResult, Response response) {
+                                if (pointResult.isSuccess()) {
+                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
+                                    if (mOnPostChangedListener != null) {
+                                        mOnPostChangedListener.onDeleted(post);
+                                    }
+                                } else {
+                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .build();
+        dialog.show();
+    }
+
+    private void notifyChanged(PostData post) {
+        if (mOnPostChangedListener != null)
+            mOnPostChangedListener.onChanged(post);
+    }
+
+    public void setOnPostChangedListener(OnPostChangedListener onPostChangedListener) {
+        mOnPostChangedListener = onPostChangedListener;
+    }
+
+    public interface OnPostChangedListener {
+        void onChanged(PostData post);
+
+        void onDeleted(PostData post);
+    }
+
 }

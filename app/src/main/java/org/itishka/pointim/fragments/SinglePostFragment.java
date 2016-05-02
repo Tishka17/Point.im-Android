@@ -39,6 +39,7 @@ import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.ExtendedPost;
 import org.itishka.pointim.model.point.PointResult;
+import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.model.point.UserList;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.SinglePostRequest;
@@ -76,6 +77,18 @@ public class SinglePostFragment extends SpicedFragment {
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
     private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
+    private SimplePostActionsListener.OnPostChangedListener onPostChangedListener = new SimplePostActionsListener.OnPostChangedListener() {
+        @Override
+        public void onChanged(PostData post) {
+            update();//// FIXME: 02.05.2016
+        }
+
+        @Override
+        public void onDeleted(PostData post) {
+            if (!isDetached())
+                getActivity().finish();
+        }
+    };
 
     private void hideDialog() {
         if (mProgressDialog != null) mProgressDialog.hide();
@@ -203,28 +216,6 @@ public class SinglePostFragment extends SpicedFragment {
                 Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
-    private Callback<PointResult> mDeleteCallback = new Callback<PointResult>() {
-        @Override
-        public void success(PointResult pointResult, Response response) {
-            hideDialog();
-            if (isDetached())
-                return;
-            if (pointResult.isSuccess()) {
-
-                Toast.makeText(getActivity(), getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-            } else {
-                Toast.makeText(getActivity(), pointResult.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            hideDialog();
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-        }
-    };
 
     public SinglePostFragment() {
         // Required empty public constructor
@@ -334,8 +325,9 @@ public class SinglePostFragment extends SpicedFragment {
             }
         });
 
-        mAdapter.setOnPointClickListener(mOnPointClickListener);
+        mOnPostActionsListener.setOnPostChangedListener(onPostChangedListener);
         mAdapter.setOnPostActionsListener(mOnPostActionsListener);
+        mAdapter.setOnPointClickListener(mOnPointClickListener);
         mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnCommentActionClickListener() {
             @Override
             public void onCommentClicked(View view, String commentId) {
@@ -473,23 +465,8 @@ public class SinglePostFragment extends SpicedFragment {
                     .build();
             dialog.show();
             return true;
-        } else if (id == R.id.action_delete) {
-            final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                    .title(String.format(getString(R.string.dialog_delete_title_template), mPost))
-                    .positiveText(android.R.string.ok)
-                    .negativeText(android.R.string.cancel)
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
-                            showDialog();
-                            PointConnectionManager.getInstance().pointIm.deletePost(mPost, mDeleteCallback);
-                        }
-                    })
-                    .build();
-            dialog.show();
-            return true;
-        } else if (id == R.id.action_edit) {
+        }
+        if (id == R.id.action_edit) {
             Intent intent = new Intent(getActivity(), NewPostActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString(NewPostActivity.EXTRA_ID, mPost);
@@ -499,7 +476,7 @@ public class SinglePostFragment extends SpicedFragment {
             intent.putExtras(bundle);
             getActivity().startActivity(intent);
         } else {
-            mOnPostActionsListener.onMenuClicked(mPointPost.post, null, item);//// FIXME: 02.05.2016 
+            mOnPostActionsListener.onMenuClicked(mPointPost.post, null, item);//// FIXME: 02.05.2016
         }
         return super.onOptionsItemSelected(item);
     }
