@@ -201,6 +201,12 @@ public class SinglePostFragment extends SpicedFragment {
             getSpiceManager().getFromCache(Post.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
         }
         mReplyFragment.setPostId(mPost);
+        mReplyFragment.setOnReplyListener(new ReplyFragment.OnReplyListener() {
+            @Override
+            public void onReplied() {
+                update();
+            }
+        });
     }
 
     @Override

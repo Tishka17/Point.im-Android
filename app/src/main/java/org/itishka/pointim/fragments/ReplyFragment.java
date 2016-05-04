@@ -101,7 +101,8 @@ public class ReplyFragment extends SpicedFragment {
                 }
 
                 String comment = mCommentId.getText().toString();
-//                mBottomBar.setEnabled(false);// FIXME: 04.05.2016
+                getView().setEnabled(false);
+                // FIXME: 04.05.2016
 //                showDialog();
                 if (TextUtils.isEmpty(comment)) {
                     PointConnectionManager.getInstance().pointIm.addComment(mPost, text, mCommentCallback);
@@ -178,7 +179,7 @@ public class ReplyFragment extends SpicedFragment {
     private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
         @Override
         public void success(PointResult post, Response response) {
-//            mBottomBar.setEnabled(true);
+            getView().setEnabled(true);
 //            hideDialog(); // FIXME: 04.05.2016
             if (post.isSuccess()) {
                 mCommentId.setVisibility(View.GONE);
@@ -186,7 +187,9 @@ public class ReplyFragment extends SpicedFragment {
                 mText.setText("");
                 mImagesPanel.reset();
                 if (!isDetached()) {
-                    //update(); // FIXME: 04.05.2016 
+                    if (mOnReplyListener != null) {
+                        mOnReplyListener.onReplied();
+                    }
                     Toast.makeText(getActivity(), getString(R.string.toast_commented), Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -197,10 +200,20 @@ public class ReplyFragment extends SpicedFragment {
 
         @Override
         public void failure(RetrofitError error) {
-//            mBottomBar.setEnabled(true);
+            getView().setEnabled(true);
 //            hideDialog(); // FIXME: 04.05.2016
             if (!isDetached())
                 Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
+
+    private OnReplyListener mOnReplyListener = null;
+
+    public void setOnReplyListener(OnReplyListener onReplyListener) {
+        mOnReplyListener = onReplyListener;
+    }
+
+    public interface OnReplyListener {
+        void onReplied();
+    }
 }
