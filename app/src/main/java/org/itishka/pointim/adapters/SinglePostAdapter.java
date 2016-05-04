@@ -17,7 +17,7 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.listeners.OnPointClickListener;
 import org.itishka.pointim.listeners.OnPostActionsListener;
 import org.itishka.pointim.model.point.Comment;
-import org.itishka.pointim.model.point.ExtendedPost;
+import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
@@ -36,7 +36,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             mOnPointClickListener.onTagClicked(((TextView) view).getText().toString());
         }
     };
-    private ExtendedPost mPost = null;
+    private Post mPost = null;
     private ImageSearchTask mTask;
     private OnCommentActionClickListener mOnCommentActionClickListener;
     private OnPointClickListener mOnPointClickListener;
@@ -55,7 +55,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return 1;
     }
 
-    public void setData(ExtendedPost post) {
+    public void setData(Post post) {
         mPost = post;
         notifyDataSetChanged();
         if (mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED) {
@@ -90,7 +90,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                                     @Override
                                                     public void onClick(View v) {
                                                         if (mOnPostActionsListener != null)
-                                                            mOnPostActionsListener.onBookmark(mPost.post, holder.favourite);
+                                                            mOnPostActionsListener.onBookmark(mPost, holder.favourite);
                                                     }
                                                 }
             );
@@ -276,13 +276,13 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    private class ImageSearchTask extends AsyncTask<ExtendedPost, Integer, Void> {
+    private class ImageSearchTask extends AsyncTask<Post, Integer, Void> {
         SharedPreferences prefs;
         boolean loadImages;
 
         @Override
-        protected Void doInBackground(ExtendedPost... posts) {
-            ExtendedPost post = posts[0];
+        protected Void doInBackground(Post... posts) {
+            Post post = posts[0];
             post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
             publishProgress(-1);
             if (post.comments != null) {

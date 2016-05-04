@@ -189,8 +189,8 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return holder;
     }
 
-    private PostData getPost(View itemView) {
-        return mPostList.posts.get((Integer) itemView.getTag(R.id.card_view)).post;
+    private Post getPost(View itemView) {
+        return mPostList.posts.get((Integer) itemView.getTag(R.id.card_view));
     }
 
     @Override
@@ -237,7 +237,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindItemViewHolder(PostListAdapter.ViewHolder holder, int i) {
         Post post = mPostList.posts.get(i);
         if (mOnPostActionsListener != null) {
-            mOnPostActionsListener.updateMenu(holder.toolbar.getMenu(), holder.shareActionProvider, post.post);
+            mOnPostActionsListener.updateMenu(holder.toolbar.getMenu(), holder.shareActionProvider, post);
         }
         holder.author.setText("@" + post.post.author.login);
         holder.itemView.setTag(R.id.card_view, i);
@@ -322,9 +322,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mOnPostActionsListener = postActionsListener;
     }
 
-    public void removePost(PostData postData) {
+    public void removePost(Post postData) {
         for (int i = 0; i < mPostList.posts.size(); i++) {
-            if (mPostList.posts.get(i).post.id.equals(postData.id)) {
+            if (mPostList.posts.get(i).post.id.equals(postData.post.id)) {
                 mPostList.posts.remove(i);
                 notifyItemRemoved(i);
                 break;

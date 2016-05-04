@@ -1,12 +1,12 @@
 package org.itishka.pointim.listeners;
 
-import org.itishka.pointim.model.point.PostData;
+import org.itishka.pointim.model.point.Post;
 
 /**
  * Created by Tishka17 on 04.05.2016.
  */
 public interface OnPostChangedListener {
-    void onChanged(PostData post);
+    void onChanged(Post post);
 
-    void onDeleted(PostData post);
+    void onDeleted(Post post);
 }

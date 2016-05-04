@@ -46,12 +46,12 @@ public abstract class PostListFragment extends SpicedFragment {
     private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
     private OnPostChangedListener onPostChangedListener = new OnPostChangedListener() {
         @Override
-        public void onChanged(PostData post) {
+        public void onChanged(Post post) {
             mAdapter.notifyItemChanged(0);
         }
 
         @Override
-        public void onDeleted(PostData post) {
+        public void onDeleted(Post post) {
             mAdapter.removePost(post);
         }
     };

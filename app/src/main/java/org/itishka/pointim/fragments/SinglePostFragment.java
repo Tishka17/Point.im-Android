@@ -37,9 +37,8 @@ import org.itishka.pointim.listeners.OnPostChangedListener;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Comment;
-import org.itishka.pointim.model.point.ExtendedPost;
 import org.itishka.pointim.model.point.PointResult;
-import org.itishka.pointim.model.point.PostData;
+import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.UserList;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.SinglePostRequest;
@@ -65,7 +64,7 @@ public class SinglePostFragment extends SpicedFragment {
     private MultiAutoCompleteTextView mText;
     private ImageButton mSendButton;
     private View mBottomBar;
-    private ExtendedPost mPointPost;
+    private Post mPointPost;
     private Dialog mProgressDialog;
     private ImageUploadingPanel mImagesPanel;
     private ImageButton mAttachButton;
@@ -78,12 +77,12 @@ public class SinglePostFragment extends SpicedFragment {
     private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
     private OnPostChangedListener onPostChangedListener = new OnPostChangedListener() {
         @Override
-        public void onChanged(PostData post) {
+        public void onChanged(Post post) {
             mAdapter.notifyItemChanged(0);
         }
 
         @Override
-        public void onDeleted(PostData post) {
+        public void onDeleted(Post post) {
             if (!isDetached())
                 getActivity().finish();
         }
@@ -102,7 +101,7 @@ public class SinglePostFragment extends SpicedFragment {
         mProgressDialog.show();
     }
 
-    private RequestListener<ExtendedPost> mUpdateRequestListener = new RequestListener<ExtendedPost>() {
+    private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             mSwipeRefresh.setRefreshing(false);
@@ -111,7 +110,7 @@ public class SinglePostFragment extends SpicedFragment {
         }
 
         @Override
-        public void onRequestSuccess(ExtendedPost extendedPost) {
+        public void onRequestSuccess(Post extendedPost) {
             mSwipeRefresh.setRefreshing(false);
             if (extendedPost != null && extendedPost.isSuccess()) {
                 mAdapter.setData(extendedPost);
@@ -127,7 +126,7 @@ public class SinglePostFragment extends SpicedFragment {
             }
         }
     };
-    private RequestListener<ExtendedPost> mCacheRequestListener = new RequestListener<ExtendedPost>() {
+    private RequestListener<Post> mCacheRequestListener = new RequestListener<Post>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             mSwipeRefresh.post(new Runnable() {
@@ -140,7 +139,7 @@ public class SinglePostFragment extends SpicedFragment {
         }
 
         @Override
-        public void onRequestSuccess(ExtendedPost extendedPost) {
+        public void onRequestSuccess(Post extendedPost) {
             if (extendedPost != null && extendedPost.isSuccess()) {
                 mAdapter.setData(extendedPost);
                 mPointPost = extendedPost;
@@ -250,7 +249,7 @@ public class SinglePostFragment extends SpicedFragment {
         PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
             SinglePostRequest request = createRequest();
-            getSpiceManager().getFromCache(ExtendedPost.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
+            getSpiceManager().getFromCache(Post.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
         }
     }
 
@@ -392,7 +391,7 @@ public class SinglePostFragment extends SpicedFragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if (mPointPost != null)
-            mOnPostActionsListener.updateMenu(menu, mShareActionProvider, mPointPost.post);
+            mOnPostActionsListener.updateMenu(menu, mShareActionProvider, mPointPost);
 
         menu.setGroupVisible(R.id.group_loaded, mPointPost != null);
     }
@@ -415,7 +414,7 @@ public class SinglePostFragment extends SpicedFragment {
             update();
             return true;
         } else {
-            mOnPostActionsListener.onMenuClicked(mPointPost.post, null, item);//// FIXME: 02.05.2016
+            mOnPostActionsListener.onMenuClicked(mPointPost, null, item);//// FIXME: 02.05.2016
         }
         return super.onOptionsItemSelected(item);
     }

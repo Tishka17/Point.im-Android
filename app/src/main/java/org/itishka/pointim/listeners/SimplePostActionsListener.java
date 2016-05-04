@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.model.point.PointResult;
+import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.Utils;
@@ -46,38 +47,40 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
     @Override
-    public void onBookmark(@NonNull final PostData post, final CheckBox checkBox) {
+    public void onBookmark(@NonNull final Post post, final CheckBox checkBox) {
         if (checkBox.isChecked()) {
             PointConnectionManager.getInstance().pointIm.addBookmark(
-                    post.id,
+                    post.post.id,
                     null,
                     new Callback<PointResult>() {
                         @Override
                         public void success(PointResult pointResult, Response response) {
-                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmarked_template), post.id), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmarked_template), post.post.id), Toast.LENGTH_SHORT).show();
+                            post.bookmarked = true;
                             notifyChanged(post);
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_error_template), post.id, error), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_error_template), post.post.id, error), Toast.LENGTH_SHORT).show();
                             notifyChanged(post);
                         }
                     }
             );
         } else {
             PointConnectionManager.getInstance().pointIm.deleteBookmark(
-                    post.id,
+                    post.post.id,
                     new Callback<Void>() {
                         @Override
                         public void success(Void pointResult, Response response) {
-                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_remove_template), post.id), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_remove_template), post.post.id), Toast.LENGTH_SHORT).show();
+                            post.bookmarked = false;
                             notifyChanged(post);
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_remove_error_template), post.id, error), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_remove_error_template), post.post.id, error), Toast.LENGTH_SHORT).show();
                             notifyChanged(post);
                         }
                     }
@@ -86,7 +89,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
     @Override
-    public void onMenuClicked(@NonNull PostData post, Menu menu, MenuItem item) {
+    public void onMenuClicked(@NonNull Post post, Menu menu, MenuItem item) {
         //// TODO: 02.05.2016
         switch (item.getItemId()) {
             case R.id.action_edit:
@@ -104,21 +107,22 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         }
     }
 
-    private void onRecommendPost(@NonNull final PostData post, Menu menu, MenuItem item) {
+    private void onRecommendPost(@NonNull final Post post, Menu menu, MenuItem item) {
         final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                .title(String.format(getContext().getString(R.string.dialog_recommend_title_template), post.id))
+                .title(String.format(getContext().getString(R.string.dialog_recommend_title_template), post.post.id))
                 .positiveText(android.R.string.ok)
                 .negativeText("Cancel")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
-                        PointConnectionManager.getInstance().pointIm.recommend(post.id, text, new Callback<PointResult>() {
+                        PointConnectionManager.getInstance().pointIm.recommend(post.post.id, text, new Callback<PointResult>() {
                             @Override
                             public void success(PointResult pointResult, Response response) {
                                 if (pointResult.isSuccess()) {
                                     Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
                                     if (mOnPostChangedListener != null) {
+                                        post.recommended = true;
                                         mOnPostChangedListener.onChanged(post);
                                     }
                                 } else {
@@ -138,34 +142,34 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         dialog.show();
     }
 
-    private void onEditPost(@NonNull PostData post, Menu menu, MenuItem item) {
+    private void onEditPost(@NonNull Post post, Menu menu, MenuItem item) {
         Intent intent = new Intent(getContext(), NewPostActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString(NewPostActivity.EXTRA_ID, post.id);
-        bundle.putBoolean(NewPostActivity.EXTRA_PRIVATE, post.isPrivate);
-        bundle.putString(NewPostActivity.EXTRA_TEXT, post.text.text.toString());
-        bundle.putStringArray(NewPostActivity.EXTRA_TAGS, post.tags.toArray(new String[post.tags.size()]));
+        bundle.putString(NewPostActivity.EXTRA_ID, post.post.id);
+        bundle.putBoolean(NewPostActivity.EXTRA_PRIVATE, post.post.isPrivate);
+        bundle.putString(NewPostActivity.EXTRA_TEXT, post.post.text.text.toString());
+        bundle.putStringArray(NewPostActivity.EXTRA_TAGS, post.post.tags.toArray(new String[post.post.tags.size()]));
         intent.putExtras(bundle);
         getContext().startActivity(intent);
     }
 
-    private void onCopyLink(@NonNull PostData post, Menu menu, MenuItem item) {
+    private void onCopyLink(@NonNull Post post, Menu menu, MenuItem item) {
         ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        Uri uri = Utils.generateSiteUri(post.id);
+        Uri uri = Utils.generateSiteUri(post.post.id);
         ClipData clip = ClipData.newRawUri(uri.toString(), uri);
         clipboard.setPrimaryClip(clip);
         Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();
     }
 
-    private void onDeletePost(@NonNull final PostData post, Menu menu, MenuItem item) {
+    private void onDeletePost(@NonNull final Post post, Menu menu, MenuItem item) {
         final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                .title(String.format(getContext().getString(R.string.dialog_delete_title_template), post.id))
+                .title(String.format(getContext().getString(R.string.dialog_delete_title_template), post.post.id))
                 .positiveText(android.R.string.ok)
                 .negativeText(android.R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        PointConnectionManager.getInstance().pointIm.deletePost(post.id, new Callback<PointResult>() {
+                        PointConnectionManager.getInstance().pointIm.deletePost(post.post.id, new Callback<PointResult>() {
                             @Override
                             public void success(PointResult pointResult, Response response) {
                                 if (pointResult.isSuccess()) {
@@ -189,7 +193,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         dialog.show();
     }
 
-    private void notifyChanged(PostData post) {
+    private void notifyChanged(Post post) {
         if (mOnPostChangedListener != null)
             mOnPostChangedListener.onChanged(post);
     }
@@ -199,13 +203,13 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
     @Override
-    public void updateMenu(Menu menu, ShareActionProvider provider, PostData post) {
-        menu.setGroupVisible(R.id.group_my, post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login));
-        menu.setGroupVisible(R.id.group_my_editable, post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
-                // mPointPost.editable //FIXME
+    public void updateMenu(Menu menu, ShareActionProvider provider, Post post) {
+        menu.setGroupVisible(R.id.group_my, post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login));
+        menu.setGroupVisible(R.id.group_my_editable,
+                post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && post.editable
         );
-        menu.setGroupVisible(R.id.group_not_recommended,!post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
-               /* &&  !mPointPost.recommended */ // FIXME: 04.05.2016
+        menu.setGroupVisible(R.id.group_not_recommended,
+                !post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && !post.recommended
         );
 
         Intent sendIntent = new Intent();
@@ -213,16 +217,16 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         sendIntent.setType("text/plain");
         StringBuilder sb = new StringBuilder();
         sb.append("@")
-                .append(post.author.login)
+                .append(post.post.author.login)
                 .append(":");
-        if (post.tags != null)
-            for (String tag : post.tags) {
+        if (post.post.tags != null)
+            for (String tag : post.post.tags) {
                 sb.append(" *").append(tag);
             }
         sb.append("\n\n")
-                .append(post.text.text)
+                .append(post.post.text.text)
                 .append("\n\n")
-                .append(Utils.generateSiteUri(post.id));
+                .append(Utils.generateSiteUri(post.post.id));
         sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
 
         provider.setShareIntent(sendIntent);
