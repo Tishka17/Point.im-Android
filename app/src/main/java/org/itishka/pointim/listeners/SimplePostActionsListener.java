@@ -204,7 +204,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         menu.setGroupVisible(R.id.group_my_editable, post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
                 // mPointPost.editable //FIXME
         );
-        menu.setGroupVisible(R.id.group_not_recommended, post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
+        menu.setGroupVisible(R.id.group_not_recommended,!post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
                /* &&  !mPointPost.recommended */ // FIXME: 04.05.2016
         );
 
