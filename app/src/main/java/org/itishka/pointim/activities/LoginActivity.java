@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void failure(RetrofitError error) {
-                                Toast.makeText(getActivity(), error.getBody().toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), (error.getBody() == null) ? error.toString() : error.getBody().toString(), Toast.LENGTH_SHORT).show();
                                 mProgressDialog.hide();
                             }
                         });
