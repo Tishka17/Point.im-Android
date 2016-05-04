@@ -65,7 +65,6 @@ public class ReplyFragment extends SpicedFragment {
         mText.setAdapter(mUsersListAdapter);
         mText.setTokenizer(new SymbolTokenizer('@'));
 
-
         mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
         mAttachButton = (ImageButton) rootView.findViewById(R.id.attach);
         mAttachButton.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +116,10 @@ public class ReplyFragment extends SpicedFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_reply, container, false);
+    }
+
+    public void setPostId(String post) {
+        mPost = post;
     }
 
     private static final java.lang.String ARG_POST = "post";
