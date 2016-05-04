@@ -6,10 +6,8 @@
 
     <fragment
         android:id="@+id/fragment_reply"
+        android:name="org.itishka.pointim.fragments.ReplyFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="org.itishka.pointim.fragments.ReplyFragment"
-        tools:layout="@layout/fragment_reply">
-
-    </fragment>
+        tools:layout="@layout/fragment_reply"></fragment>
 </FrameLayout>

@@ -2,6 +2,7 @@ package org.itishka.pointim.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 
 import com.octo.android.robospice.SpiceManager;
@@ -12,7 +13,7 @@ import org.itishka.pointim.utils.ImageSearchHelper;
 /**
  * Created by Tishka17 on 27.02.2015.
  */
-public class SpicedFragment extends Fragment {
+public class SpicedFragment extends DialogFragment {
     private SpiceManager mSpiceManager = new SpiceManager(PointService.class);
     private boolean mAutoload = true;
 
