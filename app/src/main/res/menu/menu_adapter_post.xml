@@ -2,7 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.itishka.pointim.activities.SinglePostActivity">
-   
+
+    <group android:id="@+id/group_my_editable">
+        <item
+            android:id="@+id/action_edit"
+            android:title="@string/action_edit"
+            app:showAsAction="never" />
+    </group>
     <group android:id="@+id/group_not_recommended">
         <item
             android:id="@+id/action_recommend"
@@ -17,6 +23,10 @@
             android:title="@string/action_share"
             app:showAsAction="never" />
     </group>
+    <item
+        android:id="@+id/action_copy_link"
+        android:title="@string/action_copy_link"
+        app:showAsAction="never" />
     <group android:id="@+id/group_my">
         <item
             android:id="@+id/action_delete"
@@ -24,14 +34,4 @@
             android:title="@string/action_delete"
             app:showAsAction="never" />
     </group>
-    <group android:id="@+id/group_my_editable">
-        <item
-            android:id="@+id/action_edit"
-            android:title="@string/action_edit"
-            app:showAsAction="never" />
-    </group>
-    <item
-        android:id="@+id/action_copy_link"
-        android:title="@string/action_copy_link"
-        app:showAsAction="never" />
 </menu>
