@@ -24,6 +24,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.PostListAdapter;
+import org.itishka.pointim.listeners.OnPostChangedListener;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Post;
@@ -43,7 +44,7 @@ public abstract class PostListFragment extends SpicedFragment {
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
     private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
-    private SimplePostActionsListener.OnPostChangedListener onPostChangedListener = new SimplePostActionsListener.OnPostChangedListener() {
+    private OnPostChangedListener onPostChangedListener = new OnPostChangedListener() {
         @Override
         public void onChanged(PostData post) {
             mAdapter.notifyItemChanged(0);

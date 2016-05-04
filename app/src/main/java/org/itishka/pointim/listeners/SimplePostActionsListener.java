@@ -8,7 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
@@ -198,10 +198,35 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         mOnPostChangedListener = onPostChangedListener;
     }
 
-    public interface OnPostChangedListener {
-        void onChanged(PostData post);
+    @Override
+    public void updateMenu(Menu menu, ShareActionProvider provider, PostData post) {
+        menu.setGroupVisible(R.id.group_my, post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login));
+        menu.setGroupVisible(R.id.group_my_editable, post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
+                // mPointPost.editable //FIXME
+        );
+        menu.setGroupVisible(R.id.group_not_recommended, post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
+               /* &&  !mPointPost.recommended */ // FIXME: 04.05.2016
+        );
 
-        void onDeleted(PostData post);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
+        StringBuilder sb = new StringBuilder();
+        sb.append("@")
+                .append(post.author.login)
+                .append(":");
+        if (post.tags != null)
+            for (String tag : post.tags) {
+                sb.append(" *").append(tag);
+            }
+        sb.append("\n\n")
+                .append(post.text.text)
+                .append("\n\n")
+                .append(Utils.generateSiteUri(post.id));
+        sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+
+        provider.setShareIntent(sendIntent);
+
     }
 
 }

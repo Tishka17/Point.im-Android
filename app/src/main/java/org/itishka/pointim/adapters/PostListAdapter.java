@@ -6,7 +6,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -165,6 +167,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
         holder.toolbar.inflateMenu(R.menu.menu_adapter_post);
+        MenuItem item = holder.toolbar.getMenu().findItem(R.id.menu_item_share);
+        MenuItemCompat.setActionProvider(item, holder.shareActionProvider);
+
         holder.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -231,6 +236,9 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void onBindItemViewHolder(PostListAdapter.ViewHolder holder, int i) {
         Post post = mPostList.posts.get(i);
+        if (mOnPostActionsListener != null) {
+            mOnPostActionsListener.updateMenu(holder.toolbar.getMenu(), holder.shareActionProvider, post.post);
+        }
         holder.author.setText("@" + post.post.author.login);
         holder.itemView.setTag(R.id.card_view, i);
         holder.itemView.setTag(R.id.post_id, post.post.id);
@@ -357,7 +365,8 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final CheckBox favourite;
         final ImageList imageList;
         final View mainContent;
-        private final Toolbar toolbar;
+        final Toolbar toolbar;
+        final ShareActionProvider shareActionProvider;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -382,6 +391,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
             toolbar = (Toolbar) itemView.findViewById(R.id.card_toolbar);
+            shareActionProvider = new ShareActionProvider(itemView.getContext());
         }
     }
 

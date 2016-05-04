@@ -31,9 +31,9 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
+import org.itishka.pointim.listeners.OnPostChangedListener;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Comment;
@@ -44,7 +44,6 @@ import org.itishka.pointim.model.point.UserList;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.SinglePostRequest;
 import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
-import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.itishka.pointim.widgets.ScrollButton;
 import org.itishka.pointim.widgets.SymbolTokenizer;
@@ -77,7 +76,7 @@ public class SinglePostFragment extends SpicedFragment {
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
     private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
-    private SimplePostActionsListener.OnPostChangedListener onPostChangedListener = new SimplePostActionsListener.OnPostChangedListener() {
+    private OnPostChangedListener onPostChangedListener = new OnPostChangedListener() {
         @Override
         public void onChanged(PostData post) {
             mAdapter.notifyItemChanged(0);
@@ -392,42 +391,10 @@ public class SinglePostFragment extends SpicedFragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.setGroupVisible(R.id.group_my,
-                mPointPost != null &&
-                        mPointPost.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
-        );
-        menu.setGroupVisible(R.id.group_my_editable,
-                mPointPost != null &&
-                        mPointPost.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
-                // mPointPost.editable //FIXME
-        );
-        menu.setGroupVisible(R.id.group_not_recommended,
-                mPointPost != null &&
-                        !mPointPost.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) &&
-                        !mPointPost.recommended
-        );
+        if (mPointPost != null)
+            mOnPostActionsListener.updateMenu(menu, mShareActionProvider, mPointPost.post);
 
         menu.setGroupVisible(R.id.group_loaded, mPointPost != null);
-        //share intent
-        if (mPointPost != null) {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.setType("text/plain");
-            StringBuilder sb = new StringBuilder();
-            sb.append("@")
-                    .append(mPointPost.post.author.login)
-                    .append(":");
-            if (mPointPost.post.tags != null)
-                for (String tag : mPointPost.post.tags) {
-                    sb.append(" *").append(tag);
-                }
-            sb.append("\n\n")
-                    .append(mPointPost.post.text.text)
-                    .append("\n\n")
-                    .append(Utils.generateSiteUri(mPost));
-            sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
-            mShareActionProvider.setShareIntent(sendIntent);
-        }
     }
 
     @Override
