@@ -2,6 +2,7 @@ package org.itishka.pointim.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -231,10 +233,9 @@ public class SinglePostFragment extends SpicedFragment {
                         .title(String.format(getString(R.string.dialog_recommend_comment_title_template), mPost, commentId))
                         .positiveText(android.R.string.ok)
                         .negativeText(android.R.string.cancel)
-                        .callback(new MaterialDialog.ButtonCallback() {
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                super.onPositive(dialog);
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
                                 showDialog();
                                 PointConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, text, mRecommendCallback);
@@ -307,7 +308,7 @@ public class SinglePostFragment extends SpicedFragment {
             update();
             return true;
         } else {
-            mOnPostActionsListener.onMenuClicked(mPointPost, null, item);//// FIXME: 02.05.2016
+            mOnPostActionsListener.onMenuClicked(mPointPost, null, item);
         }
         return super.onOptionsItemSelected(item);
     }
