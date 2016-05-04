@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -85,7 +86,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
     @Override
-    public void onMenuClicked(@NonNull PostData post, PopupMenu menu, MenuItem item) {
+    public void onMenuClicked(@NonNull PostData post, Menu menu, MenuItem item) {
         //// TODO: 02.05.2016
         switch (item.getItemId()) {
             case R.id.action_edit:
@@ -103,7 +104,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         }
     }
 
-    private void onRecommendPost(@NonNull final PostData post, PopupMenu menu, MenuItem item) {
+    private void onRecommendPost(@NonNull final PostData post, Menu menu, MenuItem item) {
         final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .title(String.format(getContext().getString(R.string.dialog_recommend_title_template), post.id))
                 .positiveText(android.R.string.ok)
@@ -137,7 +138,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         dialog.show();
     }
 
-    private void onEditPost(@NonNull PostData post, PopupMenu menu, MenuItem item) {
+    private void onEditPost(@NonNull PostData post, Menu menu, MenuItem item) {
         Intent intent = new Intent(getContext(), NewPostActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(NewPostActivity.EXTRA_ID, post.id);
@@ -148,7 +149,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         getContext().startActivity(intent);
     }
 
-    private void onCopyLink(@NonNull PostData post, PopupMenu menu, MenuItem item) {
+    private void onCopyLink(@NonNull PostData post, Menu menu, MenuItem item) {
         ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         Uri uri = Utils.generateSiteUri(post.id);
         ClipData clip = ClipData.newRawUri(uri.toString(), uri);
@@ -156,7 +157,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();
     }
 
-    private void onDeletePost(@NonNull final PostData post, PopupMenu menu, MenuItem item) {
+    private void onDeletePost(@NonNull final PostData post, Menu menu, MenuItem item) {
         final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .title(String.format(getContext().getString(R.string.dialog_delete_title_template), post.id))
                 .positiveText(android.R.string.ok)

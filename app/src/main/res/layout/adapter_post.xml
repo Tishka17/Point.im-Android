@@ -204,12 +204,9 @@
         </LinearLayout>
     </LinearLayout>
 
-
-    <ImageButton
-        android:layout_margin="@dimen/menu_button_margin"
-        android:id="@+id/overflow_button"
-        style="@style/Base.Widget.AppCompat.ActionButton.Overflow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right" />
+    <android.support.v7.widget.Toolbar
+        tools:targetApi=""
+        android:id="@+id/card_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </android.support.v7.widget.CardView>

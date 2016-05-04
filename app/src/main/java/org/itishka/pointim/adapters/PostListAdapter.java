@@ -6,16 +6,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -166,19 +164,13 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         });
-        holder.popupMenu.inflate(R.menu.menu_adapter_post);
-        holder.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        holder.toolbar.inflateMenu(R.menu.menu_adapter_post);
+        holder.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (mOnPostActionsListener != null)
-                    mOnPostActionsListener.onMenuClicked(getPost(holder.itemView), holder.popupMenu, item);
+                    mOnPostActionsListener.onMenuClicked(getPost(holder.itemView), holder.toolbar.getMenu(), item);
                 return true;
-            }
-        });
-        holder.menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.popupMenu.show();
             }
         });
         v.setOnClickListener(new View.OnClickListener() {
@@ -323,7 +315,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void removePost(PostData postData) {
-        for (int i=0; i<mPostList.posts.size();i++) {
+        for (int i = 0; i < mPostList.posts.size(); i++) {
             if (mPostList.posts.get(i).post.id.equals(postData.id)) {
                 mPostList.posts.remove(i);
                 notifyItemRemoved(i);
@@ -365,8 +357,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final CheckBox favourite;
         final ImageList imageList;
         final View mainContent;
-        final ImageButton menuButton;
-        final PopupMenu popupMenu;
+        private final Toolbar toolbar;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -390,8 +381,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Utils.setTint(favourite);
             mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
-            menuButton = (ImageButton) itemView.findViewById(R.id.overflow_button);
-            popupMenu = new PopupMenu(itemView.getContext(), menuButton, Gravity.RIGHT | Gravity.TOP);
+            toolbar = (Toolbar) itemView.findViewById(R.id.card_toolbar);
         }
     }
 
