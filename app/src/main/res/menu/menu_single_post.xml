@@ -8,34 +8,34 @@
         android:title="@string/action_refresh"
         app:showAsAction="ifRoom" />
 
-    <group android:id="@+id/group_not_recommended">
+    <group android:id="@+id/group_not_recommended" android:visible="false">
         <item
             android:id="@+id/action_recommend"
             android:icon="@drawable/ic_share_white_24dp"
             android:title="@string/action_recommend"
             app:showAsAction="ifRoom" />
     </group>
-    <group android:id="@+id/group_recommended">
+    <group android:id="@+id/group_recommended" android:visible="false">
         <item
             android:id="@+id/action_not_recommend"
             android:title="@string/action_not_recommend"
             app:showAsAction="never" />
     </group>
-    <group android:id="@+id/group_loaded">
+    <group android:id="@+id/group_loaded" android:visible="false">
         <item
             android:id="@+id/menu_item_share"
             android:icon="@drawable/ic_share_variant_white_24dp"
             android:title="@string/action_share"
             app:showAsAction="ifRoom" />
     </group>
-    <group android:id="@+id/group_my">
+    <group android:id="@+id/group_my" android:visible="false">
         <item
             android:id="@+id/action_delete"
             android:icon="@drawable/ic_delete_white_24dp"
             android:title="@string/action_delete"
             app:showAsAction="ifRoom" />
     </group>
-    <group android:id="@+id/group_my_editable">
+    <group android:id="@+id/group_my_editable" android:visible="false">
         <item
             android:id="@+id/action_edit"
             android:title="@string/action_edit"
