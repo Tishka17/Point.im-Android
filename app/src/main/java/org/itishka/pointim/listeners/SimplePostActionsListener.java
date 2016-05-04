@@ -22,7 +22,6 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
-import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.Utils;
 
@@ -104,6 +103,9 @@ public class SimplePostActionsListener implements OnPostActionsListener {
             case R.id.action_recommend:
                 onRecommendPost(post, menu, item);
                 break;
+            case R.id.action_not_recommend:
+                onNotRecommendPost(post, menu, item);
+                break;
         }
     }
 
@@ -140,6 +142,28 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                 .customView(R.layout.dialog_input, true)
                 .build();
         dialog.show();
+    }
+
+    private void onNotRecommendPost(@NonNull final Post post, Menu menu, MenuItem item) {
+        PointConnectionManager.getInstance().pointIm.notRecommend(post.post.id, new Callback<PointResult>() {
+            @Override
+            public void success(PointResult pointResult, Response response) {
+                if (pointResult.isSuccess()) {
+                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended_not), Toast.LENGTH_SHORT).show();
+                    if (mOnPostChangedListener != null) {
+                        post.recommended = false;
+                        mOnPostChangedListener.onChanged(post);
+                    }
+                } else {
+                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void onEditPost(@NonNull Post post, Menu menu, MenuItem item) {
@@ -210,6 +234,9 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         );
         menu.setGroupVisible(R.id.group_not_recommended,
                 !post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && !post.recommended
+        );
+        menu.setGroupVisible(R.id.group_recommended,
+                !post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && post.recommended
         );
 
         Intent sendIntent = new Intent();

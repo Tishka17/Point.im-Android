@@ -122,7 +122,7 @@ public interface PointIm {
     void recommend(@Path("id") String id, @Field("text") String text, Callback<PointResult> callback);
 
     @DELETE("/api/post/{id}/r")
-    void unRecommend(@Path("id") String id, Callback<PointResult> callback);
+    void notRecommend(@Path("id") String id, Callback<PointResult> callback);
 
     @FormUrlEncoded
     @POST("/api/post/{id}/{cid}/r")
