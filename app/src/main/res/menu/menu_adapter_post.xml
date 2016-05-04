@@ -29,10 +29,17 @@
             android:title="@string/action_share"
             app:showAsAction="never" />
     </group>
+
     <item
         android:id="@+id/action_copy_link"
         android:title="@string/action_copy_link"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reply"
+        android:title="@string/action_reply"
+        app:showAsAction="never" />
+
     <group android:id="@+id/group_my">
         <item
             android:id="@+id/action_delete"

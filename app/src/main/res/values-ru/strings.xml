@@ -100,4 +100,6 @@
     <string name="toast_bookmark_remove_error_template">Закладка #%1$s не удалена: %2$s</string>
     <string name="action_not_recommend">Не рекомендовать</string>
     <string name="toast_recommended_not">Рекомендация удалена</string>
+    <string name="action_reply">Reply</string>
+    <string name="dialog_reply_post">Ответ на пост #%s</string>
 </resources>

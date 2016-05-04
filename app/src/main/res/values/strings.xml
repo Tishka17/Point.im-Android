@@ -103,4 +103,6 @@
     <string name="toast_bookmark_remove_error_template">Bookmark #%1$s not removed: %2$s</string>
     <string name="action_not_recommend">Not recommend</string>
     <string name="toast_recommended_not">Recommendation deleted</string>
+    <string name="action_reply">Reply</string>
+    <string name="dialog_reply_post">Reply post #%s</string>
 </resources>

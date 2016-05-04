@@ -106,7 +106,18 @@ public class SimplePostActionsListener implements OnPostActionsListener {
             case R.id.action_not_recommend:
                 onNotRecommendPost(post, menu, item);
                 break;
+            case R.id.action_reply:
+                onReply(post, menu, item);
+                break;
         }
+    }
+
+    private void onReply(Post post, Menu menu, MenuItem item) {
+        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                .title(String.format(getContext().getString(R.string.dialog_reply_post), post.post.id))
+                .customView(R.layout.dialog_reply, false)
+                .build();
+        dialog.show();
     }
 
     private void onRecommendPost(@NonNull final Post post, Menu menu, MenuItem item) {
