@@ -6,9 +6,13 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -18,9 +22,11 @@ import android.widget.TextView;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.listeners.OnPointClickListener;
+import org.itishka.pointim.listeners.OnPostActionsListener;
 import org.itishka.pointim.model.point.Post;
+import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.model.point.PostList;
-import org.itishka.pointim.utils.BookmarkToggleListener;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
@@ -47,6 +53,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mOnPointClickListener.onTagClicked(((TextView) view).getText().toString());
         }
     };
+    private OnPostActionsListener mOnPostActionsListener = null;
 
     protected OnPointClickListener getOnPointClickListener() {
         return mOnPointClickListener;
@@ -142,7 +149,14 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         });
-        holder.favourite.setOnClickListener(new BookmarkToggleListener());
+        holder.favourite.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    if (mOnPostActionsListener != null)
+                                                        mOnPostActionsListener.onBookmark(getPost(holder.itemView), holder.favourite);
+                                                }
+                                            }
+        );
         holder.recomender_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,6 +164,18 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 if (!TextUtils.isEmpty(user)) {
                     mOnPointClickListener.onUserClicked(user);
                 }
+            }
+        });
+        holder.toolbar.inflateMenu(R.menu.menu_adapter_post);
+        MenuItem item = holder.toolbar.getMenu().findItem(R.id.menu_item_share);
+        MenuItemCompat.setActionProvider(item, holder.shareActionProvider);
+
+        holder.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (mOnPostActionsListener != null)
+                    mOnPostActionsListener.onMenuClicked(getPost(holder.itemView), holder.toolbar.getMenu(), item);
+                return true;
             }
         });
         v.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +187,10 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
         return holder;
+    }
+
+    private Post getPost(View itemView) {
+        return mPostList.posts.get((Integer) itemView.getTag(R.id.card_view));
     }
 
     @Override
@@ -206,7 +236,11 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void onBindItemViewHolder(PostListAdapter.ViewHolder holder, int i) {
         Post post = mPostList.posts.get(i);
+        if (mOnPostActionsListener != null) {
+            mOnPostActionsListener.updateMenu(holder.toolbar.getMenu(), holder.shareActionProvider, post);
+        }
         holder.author.setText("@" + post.post.author.login);
+        holder.itemView.setTag(R.id.card_view, i);
         holder.itemView.setTag(R.id.post_id, post.post.id);
 
         holder.imageList.setImageUrls(post.post.text.images, post.post.files);
@@ -284,6 +318,21 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mOnPointClickListener = onPointClickListener;
     }
 
+    public void setOnPostActionsListener(OnPostActionsListener postActionsListener) {
+        mOnPostActionsListener = postActionsListener;
+    }
+
+    public void removePost(Post postData) {
+        for (int i = 0; i < mPostList.posts.size(); i++) {
+            if (mPostList.posts.get(i).post.id.equals(postData.post.id)) {
+                mPostList.posts.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+    }
+
+
     public interface OnLoadMoreRequestListener {
         boolean onLoadMoreRequested();//return false if cannot load more
     }
@@ -316,6 +365,8 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final CheckBox favourite;
         final ImageList imageList;
         final View mainContent;
+        final Toolbar toolbar;
+        final ShareActionProvider shareActionProvider;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -339,6 +390,8 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Utils.setTint(favourite);
             mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
+            toolbar = (Toolbar) itemView.findViewById(R.id.card_toolbar);
+            shareActionProvider = new ShareActionProvider(itemView.getContext());
         }
     }
 

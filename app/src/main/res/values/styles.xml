@@ -47,13 +47,14 @@
         </item>
         <item name="popupTheme">@style/AppTheme.PopupTheme</item>
         <item name="toolbarTheme">@style/AppTheme.ToolbarTheme</item>
+
     </style>
 
     <style name="AppTheme.ImageViewActivity.Base" parent="AppTheme">
         <item name="toolbarTheme">@style/AppTheme.ImageViewActivity.ToolbarTheme</item>
     </style>
-    <style name="AppTheme.ImageViewActivity" parent="AppTheme.ImageViewActivity.Base">
-    </style>
+
+    <style name="AppTheme.ImageViewActivity" parent="AppTheme.ImageViewActivity.Base"></style>
 
     <style name="AppTheme.ImageViewActivity.ToolbarTheme" parent="AppTheme.ToolbarTheme">
         <item name="android:background">@android:color/transparent</item>

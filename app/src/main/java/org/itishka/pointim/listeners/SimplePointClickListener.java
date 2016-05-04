@@ -1,4 +1,4 @@
-package org.itishka.pointim.adapters;
+package org.itishka.pointim.listeners;
 
 import android.app.Activity;
 import android.content.Intent;

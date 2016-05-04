@@ -2,11 +2,7 @@ package org.itishka.pointim.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -35,18 +31,18 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.activities.NewPostActivity;
-import org.itishka.pointim.adapters.SimplePointClickListener;
 import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
+import org.itishka.pointim.listeners.OnPostChangedListener;
+import org.itishka.pointim.listeners.SimplePointClickListener;
+import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Comment;
-import org.itishka.pointim.model.point.ExtendedPost;
 import org.itishka.pointim.model.point.PointResult;
+import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.UserList;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.SinglePostRequest;
 import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
-import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.itishka.pointim.widgets.ScrollButton;
 import org.itishka.pointim.widgets.SymbolTokenizer;
@@ -68,7 +64,7 @@ public class SinglePostFragment extends SpicedFragment {
     private MultiAutoCompleteTextView mText;
     private ImageButton mSendButton;
     private View mBottomBar;
-    private ExtendedPost mPointPost;
+    private Post mPointPost;
     private Dialog mProgressDialog;
     private ImageUploadingPanel mImagesPanel;
     private ImageButton mAttachButton;
@@ -78,6 +74,19 @@ public class SinglePostFragment extends SpicedFragment {
     private ScrollButton mDownButton;
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
+    private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
+    private OnPostChangedListener onPostChangedListener = new OnPostChangedListener() {
+        @Override
+        public void onChanged(Post post) {
+            mAdapter.notifyItemChanged(0);
+        }
+
+        @Override
+        public void onDeleted(Post post) {
+            if (!isDetached())
+                getActivity().finish();
+        }
+    };
 
     private void hideDialog() {
         if (mProgressDialog != null) mProgressDialog.hide();
@@ -92,7 +101,7 @@ public class SinglePostFragment extends SpicedFragment {
         mProgressDialog.show();
     }
 
-    private RequestListener<ExtendedPost> mUpdateRequestListener = new RequestListener<ExtendedPost>() {
+    private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             mSwipeRefresh.setRefreshing(false);
@@ -101,7 +110,7 @@ public class SinglePostFragment extends SpicedFragment {
         }
 
         @Override
-        public void onRequestSuccess(ExtendedPost extendedPost) {
+        public void onRequestSuccess(Post extendedPost) {
             mSwipeRefresh.setRefreshing(false);
             if (extendedPost != null && extendedPost.isSuccess()) {
                 mAdapter.setData(extendedPost);
@@ -117,7 +126,7 @@ public class SinglePostFragment extends SpicedFragment {
             }
         }
     };
-    private RequestListener<ExtendedPost> mCacheRequestListener = new RequestListener<ExtendedPost>() {
+    private RequestListener<Post> mCacheRequestListener = new RequestListener<Post>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             mSwipeRefresh.post(new Runnable() {
@@ -130,7 +139,7 @@ public class SinglePostFragment extends SpicedFragment {
         }
 
         @Override
-        public void onRequestSuccess(ExtendedPost extendedPost) {
+        public void onRequestSuccess(Post extendedPost) {
             if (extendedPost != null && extendedPost.isSuccess()) {
                 mAdapter.setData(extendedPost);
                 mPointPost = extendedPost;
@@ -173,7 +182,7 @@ public class SinglePostFragment extends SpicedFragment {
         public void failure(RetrofitError error) {
             hideDialog();
             if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -202,29 +211,7 @@ public class SinglePostFragment extends SpicedFragment {
             mBottomBar.setEnabled(true);
             hideDialog();
             if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
-        }
-    };
-    private Callback<PointResult> mDeleteCallback = new Callback<PointResult>() {
-        @Override
-        public void success(PointResult pointResult, Response response) {
-            hideDialog();
-            if (isDetached())
-                return;
-            if (pointResult.isSuccess()) {
-
-                Toast.makeText(getActivity(), getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-            } else {
-                Toast.makeText(getActivity(), pointResult.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            hideDialog();
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -262,7 +249,7 @@ public class SinglePostFragment extends SpicedFragment {
         PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
             SinglePostRequest request = createRequest();
-            getSpiceManager().getFromCache(ExtendedPost.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
+            getSpiceManager().getFromCache(Post.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
         }
     }
 
@@ -336,6 +323,8 @@ public class SinglePostFragment extends SpicedFragment {
             }
         });
 
+        mOnPostActionsListener.setOnPostChangedListener(onPostChangedListener);
+        mAdapter.setOnPostActionsListener(mOnPostActionsListener);
         mAdapter.setOnPointClickListener(mOnPointClickListener);
         mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnCommentActionClickListener() {
             @Override
@@ -401,42 +390,10 @@ public class SinglePostFragment extends SpicedFragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.setGroupVisible(R.id.group_my,
-                mPointPost != null &&
-                        mPointPost.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
-        );
-        menu.setGroupVisible(R.id.group_my_editable,
-                mPointPost != null &&
-                        mPointPost.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login)
-                // mPointPost.editable //FIXME
-        );
-        menu.setGroupVisible(R.id.group_not_recommended,
-                mPointPost != null &&
-                        !mPointPost.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) &&
-                        !mPointPost.recommended
-        );
+        if (mPointPost != null)
+            mOnPostActionsListener.updateMenu(menu, mShareActionProvider, mPointPost);
 
         menu.setGroupVisible(R.id.group_loaded, mPointPost != null);
-        //share intent
-        if (mPointPost != null) {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.setType("text/plain");
-            StringBuilder sb = new StringBuilder();
-            sb.append("@")
-                    .append(mPointPost.post.author.login)
-                    .append(":");
-            if (mPointPost.post.tags != null)
-                for (String tag : mPointPost.post.tags) {
-                    sb.append(" *").append(tag);
-                }
-            sb.append("\n\n")
-                    .append(mPointPost.post.text.text)
-                    .append("\n\n")
-                    .append(Utils.generateSiteUri(mPost));
-            sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
-            mShareActionProvider.setShareIntent(sendIntent);
-        }
     }
 
     @Override
@@ -456,55 +413,8 @@ public class SinglePostFragment extends SpicedFragment {
             mSwipeRefresh.setRefreshing(true);
             update();
             return true;
-        } else if (id == R.id.action_recommend) {
-            final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                    .title(String.format(getString(R.string.dialog_recommend_title_template), mPost))
-                    .positiveText(android.R.string.ok)
-                    .negativeText("Cancel")
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
-                            String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
-                            showDialog();
-                            PointConnectionManager.getInstance().pointIm.recommend(mPost, text, mRecommendCallback);
-                        }
-                    })
-                    .customView(R.layout.dialog_input, true)
-                    .build();
-            dialog.show();
-            return true;
-        } else if (id == R.id.action_delete) {
-            final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                    .title(String.format(getString(R.string.dialog_delete_title_template), mPost))
-                    .positiveText(android.R.string.ok)
-                    .negativeText(android.R.string.cancel)
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
-                            showDialog();
-                            PointConnectionManager.getInstance().pointIm.deletePost(mPost, mDeleteCallback);
-                        }
-                    })
-                    .build();
-            dialog.show();
-            return true;
-        } else if (id == R.id.action_copy_link) {
-            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            Uri uri = Utils.generateSiteUri(mPost);
-            ClipData clip = ClipData.newRawUri(uri.toString(), uri);
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(getActivity(), String.format(getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.action_edit) {
-            Intent intent = new Intent(getActivity(), NewPostActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(NewPostActivity.EXTRA_ID, mPost);
-            bundle.putBoolean(NewPostActivity.EXTRA_PRIVATE, mPointPost.post.isPrivate);
-            bundle.putString(NewPostActivity.EXTRA_TEXT, mPointPost.post.text.text.toString());
-            bundle.putStringArray(NewPostActivity.EXTRA_TAGS, mPointPost.post.tags.toArray(new String[mPointPost.post.tags.size()]));
-            intent.putExtras(bundle);
-            getActivity().startActivity(intent);
+        } else {
+            mOnPostActionsListener.onMenuClicked(mPointPost, null, item);//// FIXME: 02.05.2016
         }
         return super.onOptionsItemSelected(item);
     }

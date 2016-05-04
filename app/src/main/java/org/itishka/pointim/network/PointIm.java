@@ -1,6 +1,6 @@
 package org.itishka.pointim.network;
 
-import org.itishka.pointim.model.point.ExtendedPost;
+import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.ExtendedUser;
 import org.itishka.pointim.model.point.NewPostResponse;
 import org.itishka.pointim.model.point.PointResult;
@@ -100,7 +100,7 @@ public interface PointIm {
     PostList getPostsByUserTag(@Query("before") long before, @Path("login") String login, @Query("tag") String tag);
 
     @GET("/api/post/{id}")
-    ExtendedPost getPost(@Path("id") String id);
+    Post getPost(@Path("id") String id);
 
     @FormUrlEncoded
     @POST("/api/post/{id}/b")
@@ -122,7 +122,7 @@ public interface PointIm {
     void recommend(@Path("id") String id, @Field("text") String text, Callback<PointResult> callback);
 
     @DELETE("/api/post/{id}/r")
-    void unRecommend(@Path("id") String id, Callback<PointResult> callback);
+    void notRecommend(@Path("id") String id, Callback<PointResult> callback);
 
     @FormUrlEncoded
     @POST("/api/post/{id}/{cid}/r")

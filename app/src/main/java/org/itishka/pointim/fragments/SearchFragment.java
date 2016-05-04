@@ -19,7 +19,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.adapters.SimplePointClickListener;
+import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.model.point.Tag;
 import org.itishka.pointim.model.point.TagList;
 import org.itishka.pointim.model.point.User;
