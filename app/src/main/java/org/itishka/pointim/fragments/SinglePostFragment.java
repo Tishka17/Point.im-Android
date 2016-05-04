@@ -66,20 +66,6 @@ public class SinglePostFragment extends SpicedFragment {
                 getActivity().finish();
         }
     };
-
-    private void hideDialog() {
-        if (mProgressDialog != null) mProgressDialog.hide();
-        mProgressDialog = null;
-    }
-
-    private void showDialog() {
-        mProgressDialog = new MaterialDialog.Builder(getActivity())
-                .cancelable(false)
-                .customView(R.layout.dialog_progress, false)
-                .build();
-        mProgressDialog.show();
-    }
-
     private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -139,7 +125,6 @@ public class SinglePostFragment extends SpicedFragment {
             }
         }
     };
-
     private Callback<PointResult> mRecommendCallback = new Callback<PointResult>() {
         @Override
         public void success(PointResult post, Response response) {
@@ -163,7 +148,6 @@ public class SinglePostFragment extends SpicedFragment {
         }
     };
 
-
     public SinglePostFragment() {
         // Required empty public constructor
     }
@@ -183,6 +167,19 @@ public class SinglePostFragment extends SpicedFragment {
         return fragment;
     }
 
+    private void hideDialog() {
+        if (mProgressDialog != null) mProgressDialog.hide();
+        mProgressDialog = null;
+    }
+
+    private void showDialog() {
+        mProgressDialog = new MaterialDialog.Builder(getActivity())
+                .cancelable(false)
+                .customView(R.layout.dialog_progress, false)
+                .build();
+        mProgressDialog.show();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,26 +192,8 @@ public class SinglePostFragment extends SpicedFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        PointConnectionManager manager = PointConnectionManager.getInstance();
-        if (manager.isAuthorized()) {
-            SinglePostRequest request = createRequest();
-            getSpiceManager().getFromCache(Post.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
-        }
-        mReplyFragment.setPostId(mPost);
-        mReplyFragment.setOnReplyListener(new ReplyFragment.OnReplyListener() {
-            @Override
-            public void onReplied() {
-                update();
-            }
-        });
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_single_post, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.post);
-        mSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.post);
+        mSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -229,9 +208,9 @@ public class SinglePostFragment extends SpicedFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new SinglePostAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
-        mUpButton = (ScrollButton) rootView.findViewById(R.id.scroll_up);
+        mUpButton = (ScrollButton) view.findViewById(R.id.scroll_up);
         mUpButton.setRecyclerView(mRecyclerView);
-        mDownButton = (ScrollButton) rootView.findViewById(R.id.scroll_down);
+        mDownButton = (ScrollButton) view.findViewById(R.id.scroll_down);
         mDownButton.setRecyclerView(mRecyclerView);
 
         mReplyFragment = (ReplyFragment) getChildFragmentManager().findFragmentById(R.id.bottom_bar);
@@ -271,7 +250,25 @@ public class SinglePostFragment extends SpicedFragment {
                 mReplyFragment.setCommentId(null);
             }
         });
-        return rootView;
+
+        PointConnectionManager manager = PointConnectionManager.getInstance();
+        if (manager.isAuthorized()) {
+            SinglePostRequest request = createRequest();
+            getSpiceManager().getFromCache(Post.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
+        }
+        mReplyFragment.setPostId(mPost);
+        mReplyFragment.setOnReplyListener(new ReplyFragment.OnReplyListener() {
+            @Override
+            public void onReplied() {
+                update();
+            }
+        });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_single_post, container, false);
     }
 
     protected SinglePostRequest createRequest() {

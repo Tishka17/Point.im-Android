@@ -40,12 +40,61 @@ import retrofit.client.Response;
  */
 public class ReplyFragment extends SpicedFragment {
     private static final int RESULT_LOAD_IMAGE = 1;
+    private static final java.lang.String ARG_POST = "post";
     private TextView mCommentId;
     private MultiAutoCompleteTextView mText;
     private UserCompletionAdapter mUsersListAdapter;
     private ImageButton mSendButton;
     private ImageUploadingPanel mImagesPanel;
     private ImageButton mAttachButton;
+    private String mPost;
+    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            //
+        }
+
+        @Override
+        public void onRequestSuccess(UserList users) {
+            Log.d("SinglePostFragment", "users: " + users);
+            if (users != null) {
+                for (User u : users)
+                    mUsersListAdapter.addIfAbsent(u);
+                mUsersListAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+    private OnReplyListener mOnReplyListener = null;
+    private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
+        @Override
+        public void success(PointResult post, Response response) {
+            getView().setEnabled(true);
+//            hideDialog(); // FIXME: 04.05.2016
+            if (post.isSuccess()) {
+                mCommentId.setVisibility(View.GONE);
+                mCommentId.setText("");
+                mText.setText("");
+                mImagesPanel.reset();
+                if (!isDetached()) {
+                    if (mOnReplyListener != null) {
+                        mOnReplyListener.onReplied();
+                    }
+                    Toast.makeText(getActivity(), getString(R.string.toast_commented), Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                if (!isDetached())
+                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            getView().setEnabled(true);
+//            hideDialog(); // FIXME: 04.05.2016
+            if (!isDetached())
+                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
@@ -123,9 +172,6 @@ public class ReplyFragment extends SpicedFragment {
         mPost = post;
     }
 
-    private static final java.lang.String ARG_POST = "post";
-    private String mPost;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +180,6 @@ public class ReplyFragment extends SpicedFragment {
         }
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -142,23 +187,6 @@ public class ReplyFragment extends SpicedFragment {
             mImagesPanel.addImage(data.getData(), data.getType());
         }
     }
-
-    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            //
-        }
-
-        @Override
-        public void onRequestSuccess(UserList users) {
-            Log.d("SinglePostFragment", "users: " + users);
-            if (users != null) {
-                for (User u : users)
-                    mUsersListAdapter.addIfAbsent(u);
-                mUsersListAdapter.notifyDataSetChanged();
-            }
-        }
-    };
 
     public void addAuthorsToCompletion(Post pointPost) {
         if (pointPost == null)
@@ -174,40 +202,6 @@ public class ReplyFragment extends SpicedFragment {
         mCommentId.setText(commentId);
         mCommentId.setVisibility(TextUtils.isEmpty(commentId) ? View.GONE : View.VISIBLE);
     }
-
-
-    private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
-        @Override
-        public void success(PointResult post, Response response) {
-            getView().setEnabled(true);
-//            hideDialog(); // FIXME: 04.05.2016
-            if (post.isSuccess()) {
-                mCommentId.setVisibility(View.GONE);
-                mCommentId.setText("");
-                mText.setText("");
-                mImagesPanel.reset();
-                if (!isDetached()) {
-                    if (mOnReplyListener != null) {
-                        mOnReplyListener.onReplied();
-                    }
-                    Toast.makeText(getActivity(), getString(R.string.toast_commented), Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            getView().setEnabled(true);
-//            hideDialog(); // FIXME: 04.05.2016
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    private OnReplyListener mOnReplyListener = null;
 
     public void setOnReplyListener(OnReplyListener onReplyListener) {
         mOnReplyListener = onReplyListener;
