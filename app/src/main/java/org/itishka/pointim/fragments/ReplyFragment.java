@@ -1,12 +1,9 @@
 package org.itishka.pointim.fragments;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +15,6 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -52,9 +48,11 @@ public class ReplyFragment extends SpicedFragment {
     private ImageUploadingPanel mImagesPanel;
     private ImageButton mAttachButton;
     private String mPost;
+
     public ReplyFragment() {
         setArguments(new Bundle());
     }
+
     private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -175,9 +173,12 @@ public class ReplyFragment extends SpicedFragment {
         return inflater.inflate(R.layout.fragment_reply, container, false);
     }
 
-    public void setPostId(String post) {
-        mPost = post;
-        getArguments().putString(ARG_POST, post);
+    public static ReplyFragment newInstance(String post) {
+        ReplyFragment fragment = new ReplyFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_POST, post);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override

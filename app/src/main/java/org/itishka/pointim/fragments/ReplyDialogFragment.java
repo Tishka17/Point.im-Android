@@ -15,6 +15,7 @@ import org.itishka.pointim.R;
  */
 public class ReplyDialogFragment extends DialogFragment {
     private static final String ARG_POST = "post";
+    private ReplyFragment mReplyFragment;
 
     @Nullable
     @Override
@@ -25,8 +26,9 @@ public class ReplyDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ReplyFragment fragment = (ReplyFragment) getChildFragmentManager().findFragmentById(R.id.fragment_reply);
-        fragment.setPostId(getArguments().getString(ARG_POST));
+
+        mReplyFragment = ReplyFragment.newInstance(getArguments().getString(ARG_POST));
+        getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
     }
 
     public static void show(AppCompatActivity context, String postId) {

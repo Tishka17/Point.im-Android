@@ -22,7 +22,8 @@
                 android:id="@+id/post"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical"
+                tools:listitem="@layout/adapter_comment" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <org.itishka.pointim.widgets.ScrollButton
@@ -46,9 +47,8 @@
             tools:ignore="RelativeOverlap" />
     </RelativeLayout>
 
-    <fragment
-        android:id="@+id/bottom_bar"
-        android:name="org.itishka.pointim.fragments.ReplyFragment"
+    <FrameLayout
+        android:id="@+id/fragment_reply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_reply" />
