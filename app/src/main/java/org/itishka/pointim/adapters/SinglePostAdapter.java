@@ -125,14 +125,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 }
             });
-            holder.action_recommend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mOnCommentActionClickListener != null) {
-                        mOnCommentActionClickListener.onRecommendCommentClicked(v, view.getTag(R.id.comment_id).toString());
-                    }
-                }
-            });
             holder.toolbar.inflateMenu(R.menu.menu_adapter_comment);
             MenuItem item = holder.toolbar.getMenu().findItem(R.id.menu_item_share);
             MenuItemCompat.setActionProvider(item, holder.shareActionProvider);
@@ -208,12 +200,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (mOnPostActionsListener != null) {
                 mOnPostActionsListener.updateMenu(commentHolder.toolbar.getMenu(), commentHolder.shareActionProvider, comment);
             }
-            if (PointConnectionManager.getInstance().loginResult.login.equalsIgnoreCase(comment.author.login)) {
-                commentHolder.action_recommend.setVisibility(View.GONE);
-            } else {
-                commentHolder.action_recommend.setTag(R.id.comment_id, comment.id);
-                commentHolder.action_recommend.setVisibility(View.VISIBLE);
-            }
             Utils.showAvatar(comment.author.login, comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
                 commentHolder.divider.setVisibility(View.INVISIBLE);
@@ -280,7 +266,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         final View divider;
         final TextView comment_id;
         final ImageList imageList;
-        final View action_recommend;
         final Toolbar toolbar;
         final ShareActionProvider shareActionProvider;
 
@@ -293,7 +278,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             divider = itemView.findViewById(R.id.divider);
             comment_id = (TextView) itemView.findViewById(R.id.comment_id);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
-            action_recommend = itemView.findViewById(R.id.action_recommend);
             toolbar = (Toolbar) itemView.findViewById(R.id.comment_toolbar);
             shareActionProvider = new ShareActionProvider(itemView.getContext());
         }
@@ -334,8 +318,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public interface OnCommentActionClickListener {
-        void onRecommendCommentClicked(View view, String commentId);
-
         void onCommentClicked(View v, String comment_id);
 
         void onPostClicked(View v);

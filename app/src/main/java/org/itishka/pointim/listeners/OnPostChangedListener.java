@@ -1,5 +1,6 @@
 package org.itishka.pointim.listeners;
 
+import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.Post;
 
 /**
@@ -9,4 +10,6 @@ public interface OnPostChangedListener {
     void onChanged(Post post);
 
     void onDeleted(Post post);
+
+    void onCommentChanged(Post post, Comment comment);
 }

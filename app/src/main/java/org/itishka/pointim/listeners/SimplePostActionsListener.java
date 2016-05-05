@@ -120,6 +120,9 @@ public class SimplePostActionsListener implements OnPostActionsListener {
             case R.id.action_copy_link:
                 onCopyLink(post, comment, menu, item);
                 break;
+            case R.id.action_recommend:
+                onRecommendComment(post, comment, menu, item);
+                break;
         }
     }
 
@@ -148,6 +151,41 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                                     if (mOnPostChangedListener != null) {
                                         post.recommended = true;
                                         mOnPostChangedListener.onChanged(post);
+                                    }
+                                } else {
+                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .customView(R.layout.dialog_input, true)
+                .build();
+        dialog.show();
+    }
+
+    private void onRecommendComment(@NonNull final Post post, final Comment comment, Menu menu, MenuItem item) {
+        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                .title(String.format(getContext().getString(R.string.dialog_recommend_title_template), post.post.id))
+                .positiveText(android.R.string.ok)
+                .negativeText("Cancel")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
+                        PointConnectionManager.getInstance().pointIm.recommendCommend(post.post.id, comment.id, text, new Callback<PointResult>() {
+                            @Override
+                            public void success(PointResult pointResult, Response response) {
+                                if (pointResult.isSuccess()) {
+                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
+                                    if (mOnPostChangedListener != null) {
+                                        comment.recommended = true;
+                                        mOnPostChangedListener.onCommentChanged(post, comment);
                                     }
                                 } else {
                                     Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();

@@ -29,6 +29,7 @@ import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.listeners.OnPostChangedListener;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
+import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -66,6 +67,11 @@ public class SinglePostFragment extends SpicedFragment {
         public void onDeleted(Post post) {
             if (!isDetached())
                 getActivity().finish();
+        }
+
+        @Override
+        public void onCommentChanged(Post post, Comment comment) {
+            //// TODO: 06.05.2016 notify fragment changed
         }
     };
     private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
@@ -125,28 +131,6 @@ public class SinglePostFragment extends SpicedFragment {
                     }
                 });
             }
-        }
-    };
-    private Callback<PointResult> mRecommendCallback = new Callback<PointResult>() {
-        @Override
-        public void success(PointResult post, Response response) {
-            hideDialog();
-            if (post.isSuccess()) {
-                if (!isDetached()) {
-                    Toast.makeText(getActivity(), getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
-                    update();
-                }
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            hideDialog();
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -224,26 +208,6 @@ public class SinglePostFragment extends SpicedFragment {
             @Override
             public void onCommentClicked(View view, String commentId) {
                 mReplyFragment.setCommentId(commentId);
-            }
-
-            @Override
-            public void onRecommendCommentClicked(View view, String commentId) {
-                final String cid = commentId;
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .title(String.format(getString(R.string.dialog_recommend_comment_title_template), mPost, commentId))
-                        .positiveText(android.R.string.ok)
-                        .negativeText(android.R.string.cancel)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
-                                showDialog();
-                                PointConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, text, mRecommendCallback);
-                            }
-                        })
-                        .customView(R.layout.dialog_input, true)
-                        .build();
-                dialog.show();
             }
 
             @Override

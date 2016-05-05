@@ -27,6 +27,7 @@ import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.listeners.OnPostChangedListener;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
+import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.model.point.PostList;
@@ -48,6 +49,11 @@ public abstract class PostListFragment extends SpicedFragment {
         @Override
         public void onChanged(Post post) {
             mAdapter.notifyItemChanged(0);
+        }
+
+        @Override
+        public void onCommentChanged(Post post, Comment comment) {
+            // TODO: 06.05.2016  
         }
 
         @Override
