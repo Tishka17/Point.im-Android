@@ -22,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.fragments.ReplyDialogFragment;
+import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -91,7 +92,6 @@ public class SimplePostActionsListener implements OnPostActionsListener {
 
     @Override
     public void onMenuClicked(@NonNull Post post, Menu menu, MenuItem item) {
-        //// TODO: 02.05.2016
         switch (item.getItemId()) {
             case R.id.action_edit:
                 onEditPost(post, menu, item);
@@ -110,6 +110,15 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                 break;
             case R.id.action_reply:
                 onReply(post, menu, item);
+                break;
+        }
+    }
+
+    @Override
+    public void onMenuClicked(@NonNull Post post, @NonNull Comment comment, Menu menu, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_copy_link:
+                onCopyLink(post, comment, menu, item);
                 break;
         }
     }
@@ -193,6 +202,15 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     private void onCopyLink(@NonNull Post post, Menu menu, MenuItem item) {
         ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         Uri uri = Utils.generateSiteUri(post.post.id);
+        ClipData clip = ClipData.newRawUri(uri.toString(), uri);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void onCopyLink(@NonNull Post post, Comment comment, Menu menu, MenuItem item) {
+        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        Uri uri = Utils.generateSiteUri(post.post.id, comment.id);
         ClipData clip = ClipData.newRawUri(uri.toString(), uri);
         clipboard.setPrimaryClip(clip);
         Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();

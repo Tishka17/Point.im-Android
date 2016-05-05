@@ -35,8 +35,8 @@ public class Utils {
         return Uri.parse(SITE_URL_STRING + postId);
     }
 
-    public static Uri generateSiteUri(String postId, String commendId) {
-        return Uri.parse(SITE_URL_STRING + postId + "#" + (commendId == null ? "" : commendId));
+    public static Uri generateSiteUri(String postId, long commendId) {
+        return Uri.parse(SITE_URL_STRING + postId + "#" + commendId);
     }
 
     public static Uri generateBlogUri(String login) {

@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -111,7 +115,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return holder;
         } else {
             final View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_comment, viewGroup, false);
-            CommentViewHolder holder = new CommentViewHolder(v);
+            final CommentViewHolder holder = new CommentViewHolder(v);
             holder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -127,6 +131,18 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if (mOnCommentActionClickListener != null) {
                         mOnCommentActionClickListener.onRecommendCommentClicked(v, view.getTag(R.id.comment_id).toString());
                     }
+                }
+            });
+            holder.toolbar.inflateMenu(R.menu.menu_adapter_post);
+            MenuItem item = holder.toolbar.getMenu().findItem(R.id.menu_item_share);
+            MenuItemCompat.setActionProvider(item, holder.shareActionProvider);
+
+            holder.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (mOnPostActionsListener != null)
+                        mOnPostActionsListener.onMenuClicked(mPost, mPost.comments.get(((Long) v.getTag(R.id.comment_id)).intValue()), holder.toolbar.getMenu(), item);
+                    return true;
                 }
             });
 
@@ -262,6 +278,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         final TextView comment_id;
         final ImageList imageList;
         final View action_recommend;
+        final Toolbar toolbar;
+        final ShareActionProvider shareActionProvider;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
@@ -273,6 +291,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             comment_id = (TextView) itemView.findViewById(R.id.comment_id);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
             action_recommend = itemView.findViewById(R.id.action_recommend);
+            toolbar = (Toolbar) itemView.findViewById(R.id.comment_toolbar);
+            shareActionProvider = new ShareActionProvider(itemView.getContext());
         }
     }
 
