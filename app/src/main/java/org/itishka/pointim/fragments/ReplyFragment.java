@@ -1,6 +1,7 @@
 package org.itishka.pointim.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
@@ -126,6 +128,13 @@ public class ReplyFragment extends SpicedFragment {
             if (comment > 0)
                 setCommentId(String.valueOf(comment));
             mText.requestFocus();
+            mText.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(mText, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }, 1);
         }
 
         mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
