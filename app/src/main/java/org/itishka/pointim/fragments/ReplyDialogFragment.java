@@ -83,8 +83,6 @@ public class ReplyDialogFragment extends DialogFragment {
                 getDialog().hide();
             }
         });
-        //тут нельзя
-        //getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
 
         Dialog dialog = new CustomDialog.Builder(getActivity())
                 .enableSetContentView()
