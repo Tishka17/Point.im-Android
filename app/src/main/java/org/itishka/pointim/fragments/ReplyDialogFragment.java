@@ -29,6 +29,12 @@ public class ReplyDialogFragment extends DialogFragment {
 
         mReplyFragment = ReplyFragment.newInstance(getArguments().getString(ARG_POST));
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
+        mReplyFragment.setOnReplyListener(new ReplyFragment.OnReplyListener() {
+            @Override
+            public void onReplied() {
+                getDialog().hide();
+            }
+        });
     }
 
     public static void show(AppCompatActivity context, String postId) {
