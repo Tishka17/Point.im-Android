@@ -5,13 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title_view"
-        android:textSize="@dimen/md_title_textsize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="@string/dialog_reply_post" />
-
     <FrameLayout
         android:id="@+id/fragment_reply"
         android:layout_width="match_parent"
