@@ -43,6 +43,6 @@ public class ReplyDialogFragment extends DialogFragment {
             dialog.setArguments(new Bundle());
         }
         dialog.getArguments().putString(ARG_POST, postId);
-        dialog.show(context.getSupportFragmentManager(), "[ABOUT_DIALOG]");
+        dialog.show(context.getSupportFragmentManager(), "reply_dialog_"+postId);
     }
 }
