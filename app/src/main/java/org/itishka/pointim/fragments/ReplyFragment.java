@@ -52,6 +52,9 @@ public class ReplyFragment extends SpicedFragment {
     private ImageUploadingPanel mImagesPanel;
     private ImageButton mAttachButton;
     private String mPost;
+    public ReplyFragment() {
+        setArguments(new Bundle());
+    }
     private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -174,9 +177,6 @@ public class ReplyFragment extends SpicedFragment {
 
     public void setPostId(String post) {
         mPost = post;
-        if (getArguments()==null) {
-            setArguments(new Bundle());
-        }
         getArguments().putString(ARG_POST, post);
     }
 
@@ -217,11 +217,5 @@ public class ReplyFragment extends SpicedFragment {
 
     public interface OnReplyListener {
         void onReplied();
-    }
-
-    public static void show(AppCompatActivity context, String postId) {
-        ReplyFragment dialog = new ReplyFragment();
-        dialog.setPostId(postId);
-        dialog.show(context.getSupportFragmentManager(), "[ABOUT_DIALOG]");
     }
 }

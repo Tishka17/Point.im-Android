@@ -21,7 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
-import org.itishka.pointim.fragments.ReplyFragment;
+import org.itishka.pointim.fragments.ReplyDialogFragment;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -115,7 +115,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
     private void onReply(Post post, Menu menu, MenuItem item) {
-        ReplyFragment.show((AppCompatActivity) getContext(), post.post.id);
+        ReplyDialogFragment.show((AppCompatActivity) getContext(), post.post.id);
     }
 
     private void onRecommendPost(@NonNull final Post post, Menu menu, MenuItem item) {

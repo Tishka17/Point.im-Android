@@ -13,7 +13,7 @@ import org.itishka.pointim.utils.ImageSearchHelper;
 /**
  * Created by Tishka17 on 27.02.2015.
  */
-public class SpicedFragment extends DialogFragment {
+public class SpicedFragment extends Fragment {
     private SpiceManager mSpiceManager = new SpiceManager(PointService.class);
     private boolean mAutoload = true;
 
