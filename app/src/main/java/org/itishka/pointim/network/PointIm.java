@@ -145,4 +145,7 @@ public interface PointIm {
 
     @DELETE("/api/post/{id}")
     void deletePost(@Path("id") String id, Callback<PointResult> callback);
+
+    @DELETE("/api/post/{id}/{cid}")
+    void deleteComment(@Path("id") String id, @Path("cid") long cid, Callback<PointResult> callback);
 }

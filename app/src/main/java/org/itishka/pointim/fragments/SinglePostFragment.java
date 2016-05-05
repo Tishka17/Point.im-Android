@@ -73,6 +73,11 @@ public class SinglePostFragment extends SpicedFragment {
         public void onCommentChanged(Post post, Comment comment) {
             //// TODO: 06.05.2016 notify fragment changed
         }
+
+        @Override
+        public void onCommentDeleted(Post post, Comment comment) {
+            // TODO: 06.05.2016  
+        }
     };
     private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
         @Override

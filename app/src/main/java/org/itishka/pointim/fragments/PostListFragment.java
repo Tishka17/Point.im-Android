@@ -53,7 +53,12 @@ public abstract class PostListFragment extends SpicedFragment {
 
         @Override
         public void onCommentChanged(Post post, Comment comment) {
-            // TODO: 06.05.2016  
+            // TODO: 06.05.2016
+        }
+
+        @Override
+        public void onCommentDeleted(Post post, Comment comment) {
+            // TODO: 06.05.2016
         }
 
         @Override

@@ -106,4 +106,5 @@
     <string name="action_quick_reply">Quick reply</string>
     <string name="dialog_reply_post">Reply on #%s</string>
     <string name="dialog_reply_post_comment">Reply on #%1$s/%2$s</string>
+    <string name="dialog_delete_comment_title_template">Really delete #%1$s/%2$s?</string>
 </resources>

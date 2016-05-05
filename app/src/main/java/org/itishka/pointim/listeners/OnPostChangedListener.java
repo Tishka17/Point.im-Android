@@ -12,4 +12,6 @@ public interface OnPostChangedListener {
     void onDeleted(Post post);
 
     void onCommentChanged(Post post, Comment comment);
+
+    void onCommentDeleted(Post post, Comment comment);
 }

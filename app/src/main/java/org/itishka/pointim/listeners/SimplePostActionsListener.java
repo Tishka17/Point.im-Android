@@ -123,6 +123,9 @@ public class SimplePostActionsListener implements OnPostActionsListener {
             case R.id.action_recommend:
                 onRecommendComment(post, comment, menu, item);
                 break;
+            case R.id.action_delete:
+                onDeleteComment(post, comment, menu, item);
+                break;
         }
     }
 
@@ -269,6 +272,37 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                                     Toast.makeText(getContext(), getContext().getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
                                     if (mOnPostChangedListener != null) {
                                         mOnPostChangedListener.onDeleted(post);
+                                    }
+                                } else {
+                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .build();
+        dialog.show();
+    }
+    private void onDeleteComment(@NonNull final Post post, @NonNull final Comment comment, Menu menu, MenuItem item) {
+        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                .title(String.format(getContext().getString(R.string.dialog_delete_comment_title_template), post.post.id, comment.id))
+                .positiveText(android.R.string.ok)
+                .negativeText(android.R.string.cancel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        PointConnectionManager.getInstance().pointIm.deleteComment(post.post.id, comment.id, new Callback<PointResult>() {
+                            @Override
+                            public void success(PointResult pointResult, Response response) {
+                                if (pointResult.isSuccess()) {
+                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
+                                    if (mOnPostChangedListener != null) {
+                                        mOnPostChangedListener.onCommentDeleted(post, comment);
                                     }
                                 } else {
                                     Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();

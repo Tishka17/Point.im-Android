@@ -103,4 +103,5 @@
     <string name="action_quick_reply">Быстрый ответ</string>
     <string name="dialog_reply_post">Ответ на #%1$s</string>
     <string name="dialog_reply_post_comment">Ответ на #%1$s/%2$s</string>
+    <string name="dialog_delete_comment_title_template">Удалить #%1$s/%2$s?</string>
 </resources>
