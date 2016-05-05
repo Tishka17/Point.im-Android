@@ -71,12 +71,12 @@ public class SinglePostFragment extends SpicedFragment {
 
         @Override
         public void onCommentChanged(Post post, Comment comment) {
-            //// TODO: 06.05.2016 notify fragment changed
+            mAdapter.notifyItemChanged(mAdapter.searchCommentById(comment.id)+1);//+1 beacuse of post in beginning
         }
 
         @Override
         public void onCommentDeleted(Post post, Comment comment) {
-            // TODO: 06.05.2016  
+            // TODO: 06.05.2016
         }
     };
     private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {

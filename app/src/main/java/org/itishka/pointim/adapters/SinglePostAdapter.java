@@ -22,7 +22,6 @@ import org.itishka.pointim.listeners.OnPointClickListener;
 import org.itishka.pointim.listeners.OnPostActionsListener;
 import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.Post;
-import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
@@ -57,6 +56,16 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return 0;
         else
             return 1;
+    }
+
+    public int searchCommentById(long id) {
+        if (mPost == null || mPost.comments == null)
+            return -1;
+        for (int i = 0; i < mPost.comments.size(); i++) {
+            if (id == mPost.comments.get(i).id)
+                return i;
+        }
+        return -1;
     }
 
     public void setData(Post post) {
@@ -132,8 +141,12 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    if (mOnPostActionsListener != null)
-                        mOnPostActionsListener.onMenuClicked(mPost, mPost.comments.get(((Long) v.getTag(R.id.comment_id)).intValue()), holder.toolbar.getMenu(), item);
+                    if (mOnPostActionsListener != null) {
+                        int i = searchCommentById(((Long) v.getTag(R.id.comment_id)).intValue());
+                        if (i >= 0) {
+                            mOnPostActionsListener.onMenuClicked(mPost, mPost.comments.get(i), holder.toolbar.getMenu(), item);
+                        }
+                    }
                     return true;
                 }
             });
