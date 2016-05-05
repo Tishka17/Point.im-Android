@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.itishka.pointim.R;
 
@@ -28,8 +29,16 @@ public class ReplyDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        String post = getArguments().getString(ARG_POST);
+        long comment = getArguments().getLong(ARG_COMMENT, 0);
+        TextView textView = (TextView) view.findViewById(R.id.title_view);
+        if (comment > 0) {
+            textView.setText(String.format(getString(R.string.dialog_reply_post_comment), post, comment));
+        } else {
+            textView.setText(String.format(getString(R.string.dialog_reply_post), post));
+        }
 
-        mReplyFragment = ReplyFragment.newInstanceForDialog(getArguments().getString(ARG_POST), getArguments().getLong(ARG_COMMENT));
+        mReplyFragment = ReplyFragment.newInstanceForDialog(post);
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
         mReplyFragment.setOnReplyListener(new ReplyFragment.OnReplyListener() {
             @Override

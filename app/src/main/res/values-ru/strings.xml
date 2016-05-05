@@ -101,5 +101,6 @@
     <string name="action_not_recommend">Не рекомендовать</string>
     <string name="toast_recommended_not">Рекомендация удалена</string>
     <string name="action_quick_reply">Быстрый ответ</string>
-    <string name="dialog_reply_post">Ответ на пост #%s</string>
+    <string name="dialog_reply_post">Ответ на #%1$s</string>
+    <string name="dialog_reply_post_comment">Ответ на #%1$s/%2$s</string>
 </resources>

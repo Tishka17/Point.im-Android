@@ -104,5 +104,6 @@
     <string name="action_not_recommend">Not recommend</string>
     <string name="toast_recommended_not">Recommendation deleted</string>
     <string name="action_quick_reply">Quick reply</string>
-    <string name="dialog_reply_post">Reply post #%s</string>
+    <string name="dialog_reply_post">Reply on #%s</string>
+    <string name="dialog_reply_post_comment">Reply on #%1$s/%2$s</string>
 </resources>

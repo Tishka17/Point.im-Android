@@ -225,10 +225,9 @@ public class ReplyFragment extends SpicedFragment {
         mOnReplyListener = onReplyListener;
     }
 
-    public static ReplyFragment newInstanceForDialog(@NonNull String post, long comment) {
+    public static ReplyFragment newInstanceForDialog(@NonNull String post) {
         ReplyFragment fragment = newInstance(post);
         fragment.getArguments().putBoolean(ARG_DIALOG, true);
-        fragment.getArguments().putLong(ARG_COMMENT, comment);
         return fragment;
     }
 
