@@ -115,7 +115,11 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
     private void onReply(Post post, Menu menu, MenuItem item) {
-        ReplyDialogFragment.show((AppCompatActivity) getContext(), post.post.id);
+        if (post.rec != null) {
+            ReplyDialogFragment.show((AppCompatActivity) getContext(), post.post.id, post.rec.comment_id);
+        } else {
+            ReplyDialogFragment.show((AppCompatActivity) getContext(), post.post.id);
+        }
     }
 
     private void onRecommendPost(@NonNull final Post post, Menu menu, MenuItem item) {

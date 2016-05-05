@@ -3,6 +3,7 @@ package org.itishka.pointim.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -41,6 +42,8 @@ import retrofit.client.Response;
 public class ReplyFragment extends SpicedFragment {
     private static final int RESULT_LOAD_IMAGE = 1;
     private static final java.lang.String ARG_POST = "post";
+    private static final String ARG_DIALOG = "dialog";
+    private static final String ARG_COMMENT = "comment";
     private TextView mCommentId;
     private MultiAutoCompleteTextView mText;
     private UserCompletionAdapter mUsersListAdapter;
@@ -118,6 +121,12 @@ public class ReplyFragment extends SpicedFragment {
         mText.setInputType(mText.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE | EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT);
         mText.setAdapter(mUsersListAdapter);
         mText.setTokenizer(new SymbolTokenizer('@'));
+        if (getArguments() != null && getArguments().getBoolean(ARG_DIALOG, false)) {
+            Long comment = getArguments().getLong(ARG_COMMENT, -1);
+            if (comment > 0)
+                setCommentId(String.valueOf(comment));
+            mText.requestFocus();
+        }
 
         mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
         mAttachButton = (ImageButton) rootView.findViewById(R.id.attach);
@@ -173,7 +182,7 @@ public class ReplyFragment extends SpicedFragment {
         return inflater.inflate(R.layout.fragment_reply, container, false);
     }
 
-    public static ReplyFragment newInstance(String post) {
+    public static ReplyFragment newInstance(@NonNull String post) {
         ReplyFragment fragment = new ReplyFragment();
         Bundle args = new Bundle();
         args.putString(ARG_POST, post);
@@ -214,6 +223,13 @@ public class ReplyFragment extends SpicedFragment {
 
     public void setOnReplyListener(OnReplyListener onReplyListener) {
         mOnReplyListener = onReplyListener;
+    }
+
+    public static ReplyFragment newInstanceForDialog(@NonNull String post, long comment) {
+        ReplyFragment fragment = newInstance(post);
+        fragment.getArguments().putBoolean(ARG_DIALOG, true);
+        fragment.getArguments().putLong(ARG_COMMENT, comment);
+        return fragment;
     }
 
     public interface OnReplyListener {

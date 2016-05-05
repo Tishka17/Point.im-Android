@@ -1,6 +1,7 @@
 package org.itishka.pointim.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import org.itishka.pointim.R;
  */
 public class ReplyDialogFragment extends DialogFragment {
     private static final String ARG_POST = "post";
+    private static final java.lang.String ARG_COMMENT = "comment";
     private ReplyFragment mReplyFragment;
 
     @Nullable
@@ -27,7 +29,7 @@ public class ReplyDialogFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mReplyFragment = ReplyFragment.newInstance(getArguments().getString(ARG_POST));
+        mReplyFragment = ReplyFragment.newInstanceForDialog(getArguments().getString(ARG_POST), getArguments().getLong(ARG_COMMENT));
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
         mReplyFragment.setOnReplyListener(new ReplyFragment.OnReplyListener() {
             @Override
@@ -37,12 +39,17 @@ public class ReplyDialogFragment extends DialogFragment {
         });
     }
 
-    public static void show(AppCompatActivity context, String postId) {
+    public static void show(AppCompatActivity context, @NonNull String postId) {
+        show(context, postId, 0);
+    }
+
+    public static void show(AppCompatActivity context, @NonNull String postId, long comment) {
         ReplyDialogFragment dialog = new ReplyDialogFragment();
         if (dialog.getArguments() == null) {
             dialog.setArguments(new Bundle());
         }
         dialog.getArguments().putString(ARG_POST, postId);
-        dialog.show(context.getSupportFragmentManager(), "reply_dialog_"+postId);
+        dialog.getArguments().putLong(ARG_COMMENT, comment);
+        dialog.show(context.getSupportFragmentManager(), "reply_dialog_" + postId);
     }
 }
