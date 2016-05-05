@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
+import org.itishka.pointim.fragments.ReplyDialogFragment;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -106,6 +108,17 @@ public class SimplePostActionsListener implements OnPostActionsListener {
             case R.id.action_not_recommend:
                 onNotRecommendPost(post, menu, item);
                 break;
+            case R.id.action_reply:
+                onReply(post, menu, item);
+                break;
+        }
+    }
+
+    private void onReply(Post post, Menu menu, MenuItem item) {
+        if (post.rec != null) {
+            ReplyDialogFragment.show((AppCompatActivity) getContext(), post.post.id, post.rec.comment_id);
+        } else {
+            ReplyDialogFragment.show((AppCompatActivity) getContext(), post.post.id);
         }
     }
 

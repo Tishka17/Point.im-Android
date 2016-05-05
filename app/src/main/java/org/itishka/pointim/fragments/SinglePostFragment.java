@@ -1,30 +1,24 @@
 package org.itishka.pointim.fragments;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.MultiAutoCompleteTextView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -32,20 +26,14 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.SinglePostAdapter;
-import org.itishka.pointim.adapters.UserCompletionAdapter;
 import org.itishka.pointim.listeners.OnPostChangedListener;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
-import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
-import org.itishka.pointim.model.point.UserList;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.SinglePostRequest;
-import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
-import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.itishka.pointim.widgets.ScrollButton;
-import org.itishka.pointim.widgets.SymbolTokenizer;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -53,25 +41,18 @@ import retrofit.client.Response;
 
 public class SinglePostFragment extends SpicedFragment {
     private static final String ARG_POST = "post";
-    private static final int RESULT_LOAD_IMAGE = 17;
 
     private String mPost;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
     private LinearLayoutManager mLayoutManager;
     private SinglePostAdapter mAdapter;
-    private TextView mCommentId;
-    private MultiAutoCompleteTextView mText;
-    private ImageButton mSendButton;
-    private View mBottomBar;
     private Post mPointPost;
     private Dialog mProgressDialog;
-    private ImageUploadingPanel mImagesPanel;
-    private ImageButton mAttachButton;
     private ShareActionProvider mShareActionProvider;
-    private UserCompletionAdapter mUsersListAdapter;
     private ScrollButton mUpButton;
     private ScrollButton mDownButton;
+    private ReplyFragment mReplyFragment;
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
     private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
@@ -87,20 +68,6 @@ public class SinglePostFragment extends SpicedFragment {
                 getActivity().finish();
         }
     };
-
-    private void hideDialog() {
-        if (mProgressDialog != null) mProgressDialog.hide();
-        mProgressDialog = null;
-    }
-
-    private void showDialog() {
-        mProgressDialog = new MaterialDialog.Builder(getActivity())
-                .cancelable(false)
-                .customView(R.layout.dialog_progress, false)
-                .build();
-        mProgressDialog.show();
-    }
-
     private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -115,8 +82,7 @@ public class SinglePostFragment extends SpicedFragment {
             if (extendedPost != null && extendedPost.isSuccess()) {
                 mAdapter.setData(extendedPost);
                 mPointPost = extendedPost;
-                addAuthorsToCompletion();
-                mUsersListAdapter.notifyDataSetChanged();
+                mReplyFragment.addAuthorsToCompletion(mPointPost);
                 mDownButton.updateVisibility();
                 if (!isDetached())
                     getActivity().supportInvalidateOptionsMenu();
@@ -143,8 +109,7 @@ public class SinglePostFragment extends SpicedFragment {
             if (extendedPost != null && extendedPost.isSuccess()) {
                 mAdapter.setData(extendedPost);
                 mPointPost = extendedPost;
-                addAuthorsToCompletion();
-                mUsersListAdapter.notifyDataSetChanged();
+                mReplyFragment.addAuthorsToCompletion(mPointPost);
                 if (!isDetached())
                     getActivity().supportInvalidateOptionsMenu();
                 if (shouldAutoload()) {
@@ -162,7 +127,6 @@ public class SinglePostFragment extends SpicedFragment {
             }
         }
     };
-
     private Callback<PointResult> mRecommendCallback = new Callback<PointResult>() {
         @Override
         public void success(PointResult post, Response response) {
@@ -180,35 +144,6 @@ public class SinglePostFragment extends SpicedFragment {
 
         @Override
         public void failure(RetrofitError error) {
-            hideDialog();
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
-        @Override
-        public void success(PointResult post, Response response) {
-            mBottomBar.setEnabled(true);
-            hideDialog();
-            if (post.isSuccess()) {
-                mCommentId.setVisibility(View.GONE);
-                mCommentId.setText("");
-                mText.setText("");
-                mImagesPanel.reset();
-                if (!isDetached()) {
-                    update();
-                    Toast.makeText(getActivity(), getString(R.string.toast_commented), Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            mBottomBar.setEnabled(true);
             hideDialog();
             if (!isDetached())
                 Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
@@ -234,6 +169,19 @@ public class SinglePostFragment extends SpicedFragment {
         return fragment;
     }
 
+    private void hideDialog() {
+        if (mProgressDialog != null) mProgressDialog.hide();
+        mProgressDialog = null;
+    }
+
+    private void showDialog() {
+        mProgressDialog = new MaterialDialog.Builder(getActivity())
+                .cancelable(false)
+                .customView(R.layout.dialog_progress, false)
+                .build();
+        mProgressDialog.show();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -246,20 +194,8 @@ public class SinglePostFragment extends SpicedFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        PointConnectionManager manager = PointConnectionManager.getInstance();
-        if (manager.isAuthorized()) {
-            SinglePostRequest request = createRequest();
-            getSpiceManager().getFromCache(Post.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_single_post, container, false);
-        mUsersListAdapter = new UserCompletionAdapter(getActivity());
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.post);
-        mSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.post);
+        mSwipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -274,54 +210,12 @@ public class SinglePostFragment extends SpicedFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new SinglePostAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
-        mUpButton = (ScrollButton) rootView.findViewById(R.id.scroll_up);
+        mUpButton = (ScrollButton) view.findViewById(R.id.scroll_up);
         mUpButton.setRecyclerView(mRecyclerView);
-        mDownButton = (ScrollButton) rootView.findViewById(R.id.scroll_down);
+        mDownButton = (ScrollButton) view.findViewById(R.id.scroll_down);
         mDownButton.setRecyclerView(mRecyclerView);
 
-        mBottomBar = rootView.findViewById(R.id.bottom_bar);
-        mCommentId = (TextView) rootView.findViewById(R.id.comment_id);
-        mCommentId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCommentId.setText("");
-                mCommentId.setVisibility(View.GONE);
-            }
-        });
-        mText = (MultiAutoCompleteTextView) rootView.findViewById(R.id.text);
-        mText.setInputType(mText.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE | EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT);
-        mText.setAdapter(mUsersListAdapter);
-        mText.setTokenizer(new SymbolTokenizer('@'));
-        mSendButton = (ImageButton) rootView.findViewById(R.id.send);
-        mSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String text = mText.getText().toString();
-                if (!mImagesPanel.isUploadFinished()) {
-                    Toast.makeText(getActivity(), getString(R.string.toast_upload_not_finished), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                StringBuilder sb = new StringBuilder(text);
-                for (String l : mImagesPanel.getLinks()) {
-                    sb.append("\n").append(l);
-                }
-                text = sb.toString().trim();
-
-                if (TextUtils.isEmpty(text)) {
-                    Toast.makeText(getActivity(), getString(R.string.toast_empty_comment), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String comment = mCommentId.getText().toString();
-                mBottomBar.setEnabled(false);
-                showDialog();
-                if (TextUtils.isEmpty(comment)) {
-                    PointConnectionManager.getInstance().pointIm.addComment(mPost, text, mCommentCallback);
-                } else {
-                    PointConnectionManager.getInstance().pointIm.addComment(mPost, text, comment, mCommentCallback);
-                }
-            }
-        });
+        mReplyFragment = (ReplyFragment) getChildFragmentManager().findFragmentById(R.id.bottom_bar);
 
         mOnPostActionsListener.setOnPostChangedListener(onPostChangedListener);
         mAdapter.setOnPostActionsListener(mOnPostActionsListener);
@@ -329,8 +223,7 @@ public class SinglePostFragment extends SpicedFragment {
         mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnCommentActionClickListener() {
             @Override
             public void onCommentClicked(View view, String commentId) {
-                mCommentId.setText(commentId);
-                mCommentId.setVisibility(View.VISIBLE);
+                mReplyFragment.setCommentId(commentId);
             }
 
             @Override
@@ -340,10 +233,9 @@ public class SinglePostFragment extends SpicedFragment {
                         .title(String.format(getString(R.string.dialog_recommend_comment_title_template), mPost, commentId))
                         .positiveText(android.R.string.ok)
                         .negativeText(android.R.string.cancel)
-                        .callback(new MaterialDialog.ButtonCallback() {
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                super.onPositive(dialog);
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
                                 showDialog();
                                 PointConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, text, mRecommendCallback);
@@ -356,26 +248,29 @@ public class SinglePostFragment extends SpicedFragment {
 
             @Override
             public void onPostClicked(View view) {
-                mCommentId.setVisibility(View.GONE);
-                mCommentId.setText("");
+                mReplyFragment.setCommentId(null);
             }
         });
 
-        mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
-        mAttachButton = (ImageButton) rootView.findViewById(R.id.attach);
-        mAttachButton.setOnClickListener(new View.OnClickListener() {
+        PointConnectionManager manager = PointConnectionManager.getInstance();
+        if (manager.isAuthorized()) {
+            SinglePostRequest request = createRequest();
+            getSpiceManager().getFromCache(Post.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
+        }
+        mReplyFragment = ReplyFragment.newInstance(mPost);
+        getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
+        mReplyFragment.setOnReplyListener(new ReplyFragment.OnReplyListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, RESULT_LOAD_IMAGE);
+            public void onReplied() {
+                update();
             }
         });
+    }
 
-        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
-        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
-        return rootView;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_single_post, container, false);
     }
 
     protected SinglePostRequest createRequest() {
@@ -414,43 +309,10 @@ public class SinglePostFragment extends SpicedFragment {
             update();
             return true;
         } else {
-            mOnPostActionsListener.onMenuClicked(mPointPost, null, item);//// FIXME: 02.05.2016
+            mOnPostActionsListener.onMenuClicked(mPointPost, null, item);
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
-            mImagesPanel.addImage(data.getData(), data.getType());
-        }
-    }
 
-
-    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            //
-        }
-
-        @Override
-        public void onRequestSuccess(UserList users) {
-            Log.d("SinglePostFragment", "users: " + users);
-            if (users != null) {
-                mUsersListAdapter.setData(users);
-                addAuthorsToCompletion();
-                mUsersListAdapter.notifyDataSetChanged();
-            }
-        }
-    };
-
-    private void addAuthorsToCompletion() {
-        if (mPointPost == null)
-            return;
-        mUsersListAdapter.addIfAbsent(mPointPost.post.author);
-        for (Comment c : mPointPost.comments) {
-            mUsersListAdapter.addIfAbsent(c.author);
-        }
-    }
 }

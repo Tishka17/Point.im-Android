@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.itishka.pointim.activities.SinglePostActivity">
 
+    <item
+        android:id="@+id/action_reply"
+        android:title="@string/action_quick_reply"
+        app:showAsAction="never" />
+
     <group android:id="@+id/group_my_editable">
         <item
             android:id="@+id/action_edit"
@@ -29,6 +34,7 @@
             android:title="@string/action_share"
             app:showAsAction="never" />
     </group>
+
     <item
         android:id="@+id/action_copy_link"
         android:title="@string/action_copy_link"
