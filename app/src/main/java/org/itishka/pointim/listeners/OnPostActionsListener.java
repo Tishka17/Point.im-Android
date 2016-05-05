@@ -20,4 +20,6 @@ public interface OnPostActionsListener {
     void onMenuClicked(@NonNull Post post, @NonNull Comment comment, Menu menu, MenuItem item);
 
     void updateMenu(Menu menu, ShareActionProvider provider, Post post);
+
+    void updateMenu(Menu menu, ShareActionProvider provider, Comment comment);
 }

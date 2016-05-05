@@ -133,7 +133,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 }
             });
-            holder.toolbar.inflateMenu(R.menu.menu_adapter_post);
+            holder.toolbar.inflateMenu(R.menu.menu_adapter_comment);
             MenuItem item = holder.toolbar.getMenu().findItem(R.id.menu_item_share);
             MenuItemCompat.setActionProvider(item, holder.shareActionProvider);
 
@@ -205,6 +205,9 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Comment comment = mPost.comments.get(i - 1);
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
             commentHolder.itemView.setTag(R.id.comment_id, comment.id);
+            if (mOnPostActionsListener != null) {
+                mOnPostActionsListener.updateMenu(commentHolder.toolbar.getMenu(), commentHolder.shareActionProvider, comment);
+            }
             if (PointConnectionManager.getInstance().loginResult.login.equalsIgnoreCase(comment.author.login)) {
                 commentHolder.action_recommend.setVisibility(View.GONE);
             } else {

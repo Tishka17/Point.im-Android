@@ -291,4 +291,31 @@ public class SimplePostActionsListener implements OnPostActionsListener {
 
     }
 
+    @Override
+    public void updateMenu(Menu menu, ShareActionProvider provider, Comment comment) {
+        menu.setGroupVisible(R.id.group_my, comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login));
+        menu.setGroupVisible(R.id.group_not_recommended,
+                !comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && !comment.recommended
+        );
+        menu.setGroupVisible(R.id.group_recommended,
+                !comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && comment.recommended
+        );
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
+        StringBuilder sb = new StringBuilder();
+        sb.append("@")
+                .append(comment.author.login)
+                .append(":");
+        sb.append("\n\n")
+                .append(comment.text.text)
+                .append("\n\n")
+                .append(Utils.generateSiteUri(comment.post_id, comment.id));
+        sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+
+        provider.setShareIntent(sendIntent);
+
+    }
+
 }
