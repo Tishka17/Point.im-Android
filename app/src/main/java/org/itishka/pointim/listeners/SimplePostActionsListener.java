@@ -123,6 +123,9 @@ public class SimplePostActionsListener implements OnPostActionsListener {
             case R.id.action_recommend:
                 onRecommendComment(post, comment, menu, item);
                 break;
+            case R.id.action_not_recommend:
+                onNotRecommendComment(post, comment, menu, item);
+                break;
             case R.id.action_delete:
                 onDeleteComment(post, comment, menu, item);
                 break;
@@ -229,6 +232,29 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         });
     }
 
+
+    private void onNotRecommendComment(@NonNull final Post post, @NonNull final Comment comment, Menu menu, MenuItem item) {
+        PointConnectionManager.getInstance().pointIm.notRecommendComment(post.post.id, comment.id, new Callback<PointResult>() {
+            @Override
+            public void success(PointResult pointResult, Response response) {
+                if (pointResult.isSuccess()) {
+                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended_not), Toast.LENGTH_SHORT).show();
+                    if (mOnPostChangedListener != null) {
+                        comment.recommended = false;
+                        mOnPostChangedListener.onCommentChanged(post, comment);
+                    }
+                } else {
+                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void onEditPost(@NonNull Post post, Menu menu, MenuItem item) {
         Intent intent = new Intent(getContext(), NewPostActivity.class);
         Bundle bundle = new Bundle();
@@ -288,6 +314,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                 .build();
         dialog.show();
     }
+
     private void onDeleteComment(@NonNull final Post post, @NonNull final Comment comment, Menu menu, MenuItem item) {
         final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .title(String.format(getContext().getString(R.string.dialog_delete_comment_title_template), post.post.id, comment.id))
