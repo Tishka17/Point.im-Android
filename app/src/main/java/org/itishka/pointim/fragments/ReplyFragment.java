@@ -18,6 +18,9 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -33,6 +36,13 @@ import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.itishka.pointim.widgets.SymbolTokenizer;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -105,6 +115,12 @@ public class ReplyFragment extends SpicedFragment {
                 Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
         }
     };
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        saveData();
+    }
 
     @Override
     public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
@@ -183,6 +199,59 @@ public class ReplyFragment extends SpicedFragment {
                 }
             }
         });
+
+        loadData();
+        // TODO: 08.05.2016 cleanup
+    }
+
+    File dataDir;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        dataDir = new File(context.getFilesDir(), "replies");
+        dataDir.mkdir();
+    }
+
+    private static class SavedData {
+        public String text;
+        public List<String> images;
+    }
+
+    private void saveData() {
+        File file = new File(dataDir, mPost);
+        try {
+            Gson gson = new Gson();
+            JsonWriter writer = new JsonWriter(new FileWriter(file, false));
+            SavedData data = new SavedData();
+            data.text = mText.getText().toString();
+            data.images = mImagesPanel.getLinks();
+            gson.toJson(data, SavedData.class, writer);
+            mText.setText(data.text);
+            writer.flush();
+            writer.close();
+            // TODO: 08.05.2016 images
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadData() {
+        File file = new File(dataDir, mPost);
+        try {
+            Gson gson = new Gson();
+            JsonReader reader = new JsonReader(new FileReader(file));
+            SavedData data = gson.fromJson(reader, SavedData.class);
+            mText.setText(data.text);
+            // TODO: 08.05.2016 images
+            reader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Nullable
