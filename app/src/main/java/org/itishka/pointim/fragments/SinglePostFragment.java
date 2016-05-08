@@ -1,6 +1,5 @@
 package org.itishka.pointim.fragments;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -67,11 +65,15 @@ public class SinglePostFragment extends SpicedFragment {
         @Override
         public void onCommentChanged(Post post, Comment comment) {
             mAdapter.notifyCommentChanged(comment);
+            SinglePostRequest request = createRequest();
+            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
         }
 
         @Override
         public void onCommentDeleted(Post post, Comment comment) {
             mAdapter.removeComment(comment);
+            SinglePostRequest request = createRequest();
+            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
         }
     };
 

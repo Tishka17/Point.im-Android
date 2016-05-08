@@ -47,11 +47,15 @@ public abstract class PostListFragment extends SpicedFragment {
         @Override
         public void onChanged(Post post) {
             mAdapter.notifyPostChanged(post);
+            PostListRequest request = createRequest();
+            getSpiceManager().putInCache(request.getCacheName(), getAdapter().getPostList());
         }
 
         @Override
         public void onDeleted(Post post) {
             mAdapter.removePost(post);
+            PostListRequest request = createRequest();
+            getSpiceManager().putInCache(request.getCacheName(), getAdapter().getPostList());
         }
     };
 
