@@ -201,7 +201,6 @@ public class ReplyFragment extends SpicedFragment {
         });
 
         loadData();
-        // TODO: 08.05.2016 cleanup
     }
 
     File dataDir;
@@ -211,6 +210,12 @@ public class ReplyFragment extends SpicedFragment {
         super.onAttach(context);
         dataDir = new File(context.getFilesDir(), "replies");
         dataDir.mkdir();
+        for (File f : dataDir.listFiles()) {
+            //delete files older than month
+            if (f.lastModified() < System.currentTimeMillis() - 30 * 24 * 60 * 60 * 1000) {
+                f.delete();
+            }
+        }
     }
 
     private static class SavedData {
@@ -230,7 +235,6 @@ public class ReplyFragment extends SpicedFragment {
             mText.setText(data.text);
             writer.flush();
             writer.close();
-            // TODO: 08.05.2016 images
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
