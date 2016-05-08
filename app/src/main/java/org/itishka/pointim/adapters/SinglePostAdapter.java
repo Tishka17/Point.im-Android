@@ -165,7 +165,11 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void removeComment(Comment comment) {
-        mPost.comments.remove(comment);
+        int index = searchCommentById(comment.id);
+        if (index >= 0) {
+            mPost.comments.remove(index);
+            notifyItemRemoved(index);
+        }
     }
 
     public void notifyCommentChanged(Comment comment) {
