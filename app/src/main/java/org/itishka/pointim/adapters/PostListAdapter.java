@@ -25,7 +25,6 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.listeners.OnPointClickListener;
 import org.itishka.pointim.listeners.OnPostActionsListener;
 import org.itishka.pointim.model.point.Post;
-import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
@@ -328,6 +327,14 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mPostList.posts.remove(i);
                 notifyItemRemoved(i);
                 break;
+            }
+        }
+    }
+
+    public void notifyPostChanged(Post post) {
+        for (int i = 0; i < mPostList.posts.size(); i++) {
+            if (mPostList.posts.get(i).post.id == post.post.id) {
+                notifyItemChanged((mHasHeader) ? i + 1 : i);
             }
         }
     }

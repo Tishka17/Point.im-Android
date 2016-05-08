@@ -29,7 +29,6 @@ import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.Post;
-import org.itishka.pointim.model.point.PostData;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.PostListRequest;
@@ -48,7 +47,7 @@ public abstract class PostListFragment extends SpicedFragment {
     private OnPostChangedListener onPostChangedListener = new OnPostChangedListener() {
         @Override
         public void onChanged(Post post) {
-            mAdapter.notifyItemChanged(0);
+            mAdapter.notifyPostChanged(post);
         }
 
         @Override
