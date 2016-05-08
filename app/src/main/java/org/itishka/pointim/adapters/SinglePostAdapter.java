@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -14,11 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.listeners.OnCommentActionsListener;
 import org.itishka.pointim.listeners.OnPointClickListener;
 import org.itishka.pointim.listeners.OnPostActionsListener;
 import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.Post;
-import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.ImageSearchHelper;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.ImageList;
@@ -38,9 +42,10 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     };
     private Post mPost = null;
     private ImageSearchTask mTask;
-    private OnCommentActionClickListener mOnCommentActionClickListener;
     private OnPointClickListener mOnPointClickListener;
     private OnPostActionsListener mOnPostActionsListener;
+    private OnCommentActionsListener mOnCommentActionsListener;
+    private OnItemClickListener mOnItemClickListener;
 
     public SinglePostAdapter(Context context) {
         super();
@@ -53,6 +58,16 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return 0;
         else
             return 1;
+    }
+
+    public int searchCommentById(long id) {
+        if (mPost == null || mPost.comments == null)
+            return -1;
+        for (int i = 0; i < mPost.comments.size(); i++) {
+            if (id == mPost.comments.get(i).id)
+                return i;
+        }
+        return -1;
     }
 
     public void setData(Post post) {
@@ -103,15 +118,15 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mOnCommentActionClickListener != null) {
-                        mOnCommentActionClickListener.onPostClicked(v);
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onPostClicked(v);
                     }
                 }
             });
             return holder;
         } else {
             final View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.adapter_comment, viewGroup, false);
-            CommentViewHolder holder = new CommentViewHolder(v);
+            final CommentViewHolder holder = new CommentViewHolder(v);
             holder.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -121,20 +136,28 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 }
             });
-            holder.action_recommend.setOnClickListener(new View.OnClickListener() {
+            holder.toolbar.inflateMenu(R.menu.menu_adapter_comment);
+            MenuItem item = holder.toolbar.getMenu().findItem(R.id.menu_item_share);
+            MenuItemCompat.setActionProvider(item, holder.shareActionProvider);
+
+            holder.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
-                public void onClick(View view) {
-                    if (mOnCommentActionClickListener != null) {
-                        mOnCommentActionClickListener.onRecommendCommentClicked(v, view.getTag(R.id.comment_id).toString());
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (mOnPostActionsListener != null) {
+                        int i = searchCommentById(((Long) v.getTag(R.id.comment_id)).intValue());
+                        if (i >= 0) {
+                            mOnCommentActionsListener.onMenuClicked(mPost, mPost.comments.get(i), holder.toolbar.getMenu(), item);
+                        }
                     }
+                    return true;
                 }
             });
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mOnCommentActionClickListener != null) {
-                        mOnCommentActionClickListener.onCommentClicked(v, view.getTag(R.id.comment_id).toString());
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onCommentClicked(v, view.getTag(R.id.comment_id).toString());
                     }
                 }
             });
@@ -142,6 +165,21 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
     }
+
+    public void removeComment(Comment comment) {
+        int index = searchCommentById(comment.id);
+        if (index >= 0) {
+            mPost.comments.remove(index);
+            notifyItemRemoved(index + 1);//+1 beacuse of post in beginning
+        }
+    }
+
+    public void notifyCommentChanged(Comment comment) {
+        int index = searchCommentById(comment.id);
+        if (index >= 0)
+            notifyItemChanged(index + 1);//+1 beacuse of post in beginning
+    }
+
 
     private Context getContext() {
         return mContext.get();
@@ -161,8 +199,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             postHolder.post_id.setTag(mPost.post.id);
             postHolder.favourite.setTag(mPost.post.id);
             postHolder.webLink.setTag(Utils.generateSiteUri(mPost.post.id));
-            //postHolder.favourite.setChecked(mPost.);
-            //postHolder.favourite.setTag(mPost.post.id);
 
             if (mPost.post.comments_count > 0) {
                 postHolder.comments.setText(String.valueOf(mPost.post.comments_count));
@@ -189,11 +225,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Comment comment = mPost.comments.get(i - 1);
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
             commentHolder.itemView.setTag(R.id.comment_id, comment.id);
-            if (PointConnectionManager.getInstance().loginResult.login.equalsIgnoreCase(comment.author.login)) {
-                commentHolder.action_recommend.setVisibility(View.GONE);
-            } else {
-                commentHolder.action_recommend.setTag(R.id.comment_id, comment.id);
-                commentHolder.action_recommend.setVisibility(View.VISIBLE);
+            if (mOnPostActionsListener != null) {
+                mOnCommentActionsListener.updateMenu(commentHolder.toolbar.getMenu(), commentHolder.shareActionProvider, comment);
             }
             Utils.showAvatar(comment.author.login, comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
@@ -261,7 +294,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         final View divider;
         final TextView comment_id;
         final ImageList imageList;
-        final View action_recommend;
+        final Toolbar toolbar;
+        final ShareActionProvider shareActionProvider;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
@@ -272,7 +306,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             divider = itemView.findViewById(R.id.divider);
             comment_id = (TextView) itemView.findViewById(R.id.comment_id);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
-            action_recommend = itemView.findViewById(R.id.action_recommend);
+            toolbar = (Toolbar) itemView.findViewById(R.id.comment_toolbar);
+            shareActionProvider = new ShareActionProvider(itemView.getContext());
         }
     }
 
@@ -310,16 +345,14 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public interface OnCommentActionClickListener {
-        void onRecommendCommentClicked(View view, String commentId);
-
+    public interface OnItemClickListener {
         void onCommentClicked(View v, String comment_id);
 
         void onPostClicked(View v);
     }
 
-    public void setOnCommentClickListener(OnCommentActionClickListener onCommentActionClickListener) {
-        mOnCommentActionClickListener = onCommentActionClickListener;
+    public void setOnCommentClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     public void setOnPointClickListener(OnPointClickListener onPointClickListener) {
@@ -328,6 +361,10 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void setOnPostActionsListener(OnPostActionsListener postActionsListener) {
         mOnPostActionsListener = postActionsListener;
+    }
+
+    public void setOnCommentActionsListener(OnCommentActionsListener commentActionsListener) {
+        mOnCommentActionsListener = commentActionsListener;
     }
 
 }

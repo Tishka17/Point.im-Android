@@ -1,5 +1,6 @@
 package org.itishka.pointim.listeners;
 
+import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.Post;
 
 /**

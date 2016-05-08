@@ -22,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.fragments.ReplyDialogFragment;
+import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -91,7 +92,6 @@ public class SimplePostActionsListener implements OnPostActionsListener {
 
     @Override
     public void onMenuClicked(@NonNull Post post, Menu menu, MenuItem item) {
-        //// TODO: 02.05.2016
         switch (item.getItemId()) {
             case R.id.action_edit:
                 onEditPost(post, menu, item);
@@ -113,6 +113,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                 break;
         }
     }
+
 
     private void onReply(Post post, Menu menu, MenuItem item) {
         if (post.rec != null) {
@@ -157,6 +158,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         dialog.show();
     }
 
+
     private void onNotRecommendPost(@NonNull final Post post, Menu menu, MenuItem item) {
         PointConnectionManager.getInstance().pointIm.notRecommend(post.post.id, new Callback<PointResult>() {
             @Override
@@ -179,6 +181,8 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         });
     }
 
+
+
     private void onEditPost(@NonNull Post post, Menu menu, MenuItem item) {
         Intent intent = new Intent(getContext(), NewPostActivity.class);
         Bundle bundle = new Bundle();
@@ -197,6 +201,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         clipboard.setPrimaryClip(clip);
         Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();
     }
+
 
     private void onDeletePost(@NonNull final Post post, Menu menu, MenuItem item) {
         final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
@@ -272,5 +277,4 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         provider.setShareIntent(sendIntent);
 
     }
-
 }

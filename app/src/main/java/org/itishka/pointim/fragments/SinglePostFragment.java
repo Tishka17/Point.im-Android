@@ -1,8 +1,6 @@
 package org.itishka.pointim.fragments;
 
-import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,29 +13,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.SinglePostAdapter;
+import org.itishka.pointim.listeners.OnCommentChangedListener;
 import org.itishka.pointim.listeners.OnPostChangedListener;
+import org.itishka.pointim.listeners.SimpleCommentActionsListener;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
-import org.itishka.pointim.model.point.PointResult;
+import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.SinglePostRequest;
 import org.itishka.pointim.widgets.ScrollButton;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class SinglePostFragment extends SpicedFragment {
     private static final String ARG_POST = "post";
@@ -48,7 +41,6 @@ public class SinglePostFragment extends SpicedFragment {
     private LinearLayoutManager mLayoutManager;
     private SinglePostAdapter mAdapter;
     private Post mPointPost;
-    private Dialog mProgressDialog;
     private ShareActionProvider mShareActionProvider;
     private ScrollButton mUpButton;
     private ScrollButton mDownButton;
@@ -56,7 +48,8 @@ public class SinglePostFragment extends SpicedFragment {
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
     private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
-    private OnPostChangedListener onPostChangedListener = new OnPostChangedListener() {
+    private SimpleCommentActionsListener mOnCommentActionsListener = new SimpleCommentActionsListener(this);
+    private OnPostChangedListener mOnPostChangedListener = new OnPostChangedListener() {
         @Override
         public void onChanged(Post post) {
             mAdapter.notifyItemChanged(0);
@@ -68,6 +61,22 @@ public class SinglePostFragment extends SpicedFragment {
                 getActivity().finish();
         }
     };
+    private OnCommentChangedListener mOnCommentChangedListener = new OnCommentChangedListener() {
+        @Override
+        public void onCommentChanged(Post post, Comment comment) {
+            mAdapter.notifyCommentChanged(comment);
+            SinglePostRequest request = createRequest();
+            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
+        }
+
+        @Override
+        public void onCommentDeleted(Post post, Comment comment) {
+            mAdapter.removeComment(comment);
+            SinglePostRequest request = createRequest();
+            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
+        }
+    };
+
     private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -127,28 +136,6 @@ public class SinglePostFragment extends SpicedFragment {
             }
         }
     };
-    private Callback<PointResult> mRecommendCallback = new Callback<PointResult>() {
-        @Override
-        public void success(PointResult post, Response response) {
-            hideDialog();
-            if (post.isSuccess()) {
-                if (!isDetached()) {
-                    Toast.makeText(getActivity(), getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
-                    update();
-                }
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            hideDialog();
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-        }
-    };
 
     public SinglePostFragment() {
         // Required empty public constructor
@@ -167,19 +154,6 @@ public class SinglePostFragment extends SpicedFragment {
         args.putString(ARG_POST, post);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    private void hideDialog() {
-        if (mProgressDialog != null) mProgressDialog.hide();
-        mProgressDialog = null;
-    }
-
-    private void showDialog() {
-        mProgressDialog = new MaterialDialog.Builder(getActivity())
-                .cancelable(false)
-                .customView(R.layout.dialog_progress, false)
-                .build();
-        mProgressDialog.show();
     }
 
     @Override
@@ -217,33 +191,15 @@ public class SinglePostFragment extends SpicedFragment {
 
         mReplyFragment = (ReplyFragment) getChildFragmentManager().findFragmentById(R.id.bottom_bar);
 
-        mOnPostActionsListener.setOnPostChangedListener(onPostChangedListener);
+        mOnPostActionsListener.setOnPostChangedListener(mOnPostChangedListener);
         mAdapter.setOnPostActionsListener(mOnPostActionsListener);
+        mOnCommentActionsListener.setOnCommentChangedListener(mOnCommentChangedListener);
+        mAdapter.setOnCommentActionsListener(mOnCommentActionsListener);
         mAdapter.setOnPointClickListener(mOnPointClickListener);
-        mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnCommentActionClickListener() {
+        mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnItemClickListener() {
             @Override
             public void onCommentClicked(View view, String commentId) {
                 mReplyFragment.setCommentId(commentId);
-            }
-
-            @Override
-            public void onRecommendCommentClicked(View view, String commentId) {
-                final String cid = commentId;
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                        .title(String.format(getString(R.string.dialog_recommend_comment_title_template), mPost, commentId))
-                        .positiveText(android.R.string.ok)
-                        .negativeText(android.R.string.cancel)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
-                                showDialog();
-                                PointConnectionManager.getInstance().pointIm.recommendCommend(mPost, cid, text, mRecommendCallback);
-                            }
-                        })
-                        .customView(R.layout.dialog_input, true)
-                        .build();
-                dialog.show();
             }
 
             @Override

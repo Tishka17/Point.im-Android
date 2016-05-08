@@ -126,10 +126,10 @@ public interface PointIm {
 
     @FormUrlEncoded
     @POST("/api/post/{id}/{cid}/r")
-    void recommendCommend(@Path("id") String id, @Path("cid") String cid, @Field("text") String text, Callback<PointResult> callback);
+    void recommendCommend(@Path("id") String id, @Path("cid") long cid, @Field("text") String text, Callback<PointResult> callback);
 
     @DELETE("/api/post/{id}/{cid}/r")
-    void unRecommendComment(@Path("id") String id, @Path("cid") String cid, Callback<PointResult> callback);
+    void notRecommendComment(@Path("id") String id, @Path("cid") long cid, Callback<PointResult> callback);
 
     @FormUrlEncoded
     @POST("/api/post/")
@@ -145,4 +145,7 @@ public interface PointIm {
 
     @DELETE("/api/post/{id}")
     void deletePost(@Path("id") String id, Callback<PointResult> callback);
+
+    @DELETE("/api/post/{id}/{cid}")
+    void deleteComment(@Path("id") String id, @Path("cid") long cid, Callback<PointResult> callback);
 }
