@@ -164,6 +164,17 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
+    public void removeComment(Comment comment) {
+        mPost.comments.remove(comment);
+    }
+
+    public void notifyCommentChanged(Comment comment) {
+        int index = searchCommentById(comment.id);
+        if (index >= 0)
+            notifyItemChanged(index + 1);//+1 beacuse of post in beginning
+    }
+
+
     private Context getContext() {
         return mContext.get();
     }

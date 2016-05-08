@@ -2,7 +2,6 @@ package org.itishka.pointim.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,10 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -30,15 +27,10 @@ import org.itishka.pointim.listeners.OnPostChangedListener;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Comment;
-import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.SinglePostRequest;
 import org.itishka.pointim.widgets.ScrollButton;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class SinglePostFragment extends SpicedFragment {
     private static final String ARG_POST = "post";
@@ -71,12 +63,12 @@ public class SinglePostFragment extends SpicedFragment {
 
         @Override
         public void onCommentChanged(Post post, Comment comment) {
-            mAdapter.notifyItemChanged(mAdapter.searchCommentById(comment.id)+1);//+1 beacuse of post in beginning
+            mAdapter.notifyCommentChanged(comment);
         }
 
         @Override
         public void onCommentDeleted(Post post, Comment comment) {
-            // TODO: 06.05.2016
+            mAdapter.removeComment(comment);
         }
     };
     private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
