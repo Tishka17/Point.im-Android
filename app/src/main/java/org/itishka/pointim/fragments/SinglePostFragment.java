@@ -23,7 +23,9 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.SinglePostAdapter;
+import org.itishka.pointim.listeners.OnCommentChangedListener;
 import org.itishka.pointim.listeners.OnPostChangedListener;
+import org.itishka.pointim.listeners.SimpleCommentActionsListener;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Comment;
@@ -49,7 +51,8 @@ public class SinglePostFragment extends SpicedFragment {
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
     private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
-    private OnPostChangedListener onPostChangedListener = new OnPostChangedListener() {
+    private SimpleCommentActionsListener mOnCommentActionsListener = new SimpleCommentActionsListener(this);
+    private OnPostChangedListener mOnPostChangedListener = new OnPostChangedListener() {
         @Override
         public void onChanged(Post post) {
             mAdapter.notifyItemChanged(0);
@@ -60,7 +63,8 @@ public class SinglePostFragment extends SpicedFragment {
             if (!isDetached())
                 getActivity().finish();
         }
-
+    };
+    private OnCommentChangedListener mOnCommentChangedListener = new OnCommentChangedListener() {
         @Override
         public void onCommentChanged(Post post, Comment comment) {
             mAdapter.notifyCommentChanged(comment);
@@ -71,6 +75,7 @@ public class SinglePostFragment extends SpicedFragment {
             mAdapter.removeComment(comment);
         }
     };
+
     private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -198,10 +203,12 @@ public class SinglePostFragment extends SpicedFragment {
 
         mReplyFragment = (ReplyFragment) getChildFragmentManager().findFragmentById(R.id.bottom_bar);
 
-        mOnPostActionsListener.setOnPostChangedListener(onPostChangedListener);
+        mOnPostActionsListener.setOnPostChangedListener(mOnPostChangedListener);
         mAdapter.setOnPostActionsListener(mOnPostActionsListener);
+        mOnCommentActionsListener.setOnCommentChangedListener(mOnCommentChangedListener);
+        mAdapter.setOnCommentActionsListener(mOnCommentActionsListener);
         mAdapter.setOnPointClickListener(mOnPointClickListener);
-        mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnCommentActionClickListener() {
+        mAdapter.setOnCommentClickListener(new SinglePostAdapter.OnItemClickListener() {
             @Override
             public void onCommentClicked(View view, String commentId) {
                 mReplyFragment.setCommentId(commentId);

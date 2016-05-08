@@ -114,23 +114,6 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         }
     }
 
-    @Override
-    public void onMenuClicked(@NonNull Post post, @NonNull Comment comment, Menu menu, MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_copy_link:
-                onCopyLink(post, comment, menu, item);
-                break;
-            case R.id.action_recommend:
-                onRecommendComment(post, comment, menu, item);
-                break;
-            case R.id.action_not_recommend:
-                onNotRecommendComment(post, comment, menu, item);
-                break;
-            case R.id.action_delete:
-                onDeleteComment(post, comment, menu, item);
-                break;
-        }
-    }
 
     private void onReply(Post post, Menu menu, MenuItem item) {
         if (post.rec != null) {
@@ -175,40 +158,6 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         dialog.show();
     }
 
-    private void onRecommendComment(@NonNull final Post post, final Comment comment, Menu menu, MenuItem item) {
-        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                .title(String.format(getContext().getString(R.string.dialog_recommend_title_template), post.post.id))
-                .positiveText(android.R.string.ok)
-                .negativeText("Cancel")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
-                        PointConnectionManager.getInstance().pointIm.recommendCommend(post.post.id, comment.id, text, new Callback<PointResult>() {
-                            @Override
-                            public void success(PointResult pointResult, Response response) {
-                                if (pointResult.isSuccess()) {
-                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
-                                    if (mOnPostChangedListener != null) {
-                                        comment.recommended = true;
-                                        mOnPostChangedListener.onCommentChanged(post, comment);
-                                    }
-                                } else {
-                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .customView(R.layout.dialog_input, true)
-                .build();
-        dialog.show();
-    }
 
     private void onNotRecommendPost(@NonNull final Post post, Menu menu, MenuItem item) {
         PointConnectionManager.getInstance().pointIm.notRecommend(post.post.id, new Callback<PointResult>() {
@@ -233,27 +182,6 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
 
-    private void onNotRecommendComment(@NonNull final Post post, @NonNull final Comment comment, Menu menu, MenuItem item) {
-        PointConnectionManager.getInstance().pointIm.notRecommendComment(post.post.id, comment.id, new Callback<PointResult>() {
-            @Override
-            public void success(PointResult pointResult, Response response) {
-                if (pointResult.isSuccess()) {
-                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended_not), Toast.LENGTH_SHORT).show();
-                    if (mOnPostChangedListener != null) {
-                        comment.recommended = false;
-                        mOnPostChangedListener.onCommentChanged(post, comment);
-                    }
-                } else {
-                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     private void onEditPost(@NonNull Post post, Menu menu, MenuItem item) {
         Intent intent = new Intent(getContext(), NewPostActivity.class);
@@ -275,14 +203,6 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
 
-    private void onCopyLink(@NonNull Post post, Comment comment, Menu menu, MenuItem item) {
-        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        Uri uri = Utils.generateSiteUri(post.post.id, comment.id);
-        ClipData clip = ClipData.newRawUri(uri.toString(), uri);
-        clipboard.setPrimaryClip(clip);
-        Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_link_copied__template), uri.toString()), Toast.LENGTH_SHORT).show();
-    }
-
     private void onDeletePost(@NonNull final Post post, Menu menu, MenuItem item) {
         final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .title(String.format(getContext().getString(R.string.dialog_delete_title_template), post.post.id))
@@ -298,38 +218,6 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                                     Toast.makeText(getContext(), getContext().getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
                                     if (mOnPostChangedListener != null) {
                                         mOnPostChangedListener.onDeleted(post);
-                                    }
-                                } else {
-                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .build();
-        dialog.show();
-    }
-
-    private void onDeleteComment(@NonNull final Post post, @NonNull final Comment comment, Menu menu, MenuItem item) {
-        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                .title(String.format(getContext().getString(R.string.dialog_delete_comment_title_template), post.post.id, comment.id))
-                .positiveText(android.R.string.ok)
-                .negativeText(android.R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        PointConnectionManager.getInstance().pointIm.deleteComment(post.post.id, comment.id, new Callback<PointResult>() {
-                            @Override
-                            public void success(PointResult pointResult, Response response) {
-                                if (pointResult.isSuccess()) {
-                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
-                                    if (mOnPostChangedListener != null) {
-                                        mOnPostChangedListener.onCommentDeleted(post, comment);
                                     }
                                 } else {
                                     Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
@@ -389,32 +277,4 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         provider.setShareIntent(sendIntent);
 
     }
-
-    @Override
-    public void updateMenu(Menu menu, ShareActionProvider provider, Comment comment) {
-        menu.setGroupVisible(R.id.group_my, comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login));
-        menu.setGroupVisible(R.id.group_not_recommended,
-                !comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && !comment.recommended
-        );
-        menu.setGroupVisible(R.id.group_recommended,
-                !comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && comment.recommended
-        );
-
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.setType("text/plain");
-        StringBuilder sb = new StringBuilder();
-        sb.append("@")
-                .append(comment.author.login)
-                .append(":");
-        sb.append("\n\n")
-                .append(comment.text.text)
-                .append("\n\n")
-                .append(Utils.generateSiteUri(comment.post_id, comment.id));
-        sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
-
-        provider.setShareIntent(sendIntent);
-
-    }
-
 }

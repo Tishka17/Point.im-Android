@@ -6,15 +6,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 
+import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.Post;
 
 /**
- * Created by Tishka17 on 02.05.2016.
+ * Created by Tishka17 on 08.05.2016.
  */
-public interface OnPostActionsListener {
+public interface OnCommentActionsListener {
+
     void onBookmark(@NonNull Post post, final CheckBox button);
 
-    void onMenuClicked(@NonNull Post post, Menu menu, MenuItem item);
+    void onMenuClicked(@NonNull Post post, @NonNull Comment comment, Menu menu, MenuItem item);
 
-    void updateMenu(Menu menu, ShareActionProvider provider, Post post);
+    void updateMenu(Menu menu, ShareActionProvider provider, Comment comment);
 }

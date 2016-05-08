@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.itishka.pointim.R;
+import org.itishka.pointim.listeners.OnCommentActionsListener;
 import org.itishka.pointim.listeners.OnPointClickListener;
 import org.itishka.pointim.listeners.OnPostActionsListener;
 import org.itishka.pointim.model.point.Comment;
@@ -41,9 +42,10 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     };
     private Post mPost = null;
     private ImageSearchTask mTask;
-    private OnCommentActionClickListener mOnCommentActionClickListener;
     private OnPointClickListener mOnPointClickListener;
     private OnPostActionsListener mOnPostActionsListener;
+    private OnCommentActionsListener mOnCommentActionsListener;
+    private OnItemClickListener mOnItemClickListener;
 
     public SinglePostAdapter(Context context) {
         super();
@@ -116,8 +118,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mOnCommentActionClickListener != null) {
-                        mOnCommentActionClickListener.onPostClicked(v);
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onPostClicked(v);
                     }
                 }
             });
@@ -144,7 +146,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if (mOnPostActionsListener != null) {
                         int i = searchCommentById(((Long) v.getTag(R.id.comment_id)).intValue());
                         if (i >= 0) {
-                            mOnPostActionsListener.onMenuClicked(mPost, mPost.comments.get(i), holder.toolbar.getMenu(), item);
+                            mOnCommentActionsListener.onMenuClicked(mPost, mPost.comments.get(i), holder.toolbar.getMenu(), item);
                         }
                     }
                     return true;
@@ -154,8 +156,8 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mOnCommentActionClickListener != null) {
-                        mOnCommentActionClickListener.onCommentClicked(v, view.getTag(R.id.comment_id).toString());
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onCommentClicked(v, view.getTag(R.id.comment_id).toString());
                     }
                 }
             });
@@ -197,8 +199,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             postHolder.post_id.setTag(mPost.post.id);
             postHolder.favourite.setTag(mPost.post.id);
             postHolder.webLink.setTag(Utils.generateSiteUri(mPost.post.id));
-            //postHolder.favourite.setChecked(mPost.);
-            //postHolder.favourite.setTag(mPost.post.id);
 
             if (mPost.post.comments_count > 0) {
                 postHolder.comments.setText(String.valueOf(mPost.post.comments_count));
@@ -226,7 +226,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
             commentHolder.itemView.setTag(R.id.comment_id, comment.id);
             if (mOnPostActionsListener != null) {
-                mOnPostActionsListener.updateMenu(commentHolder.toolbar.getMenu(), commentHolder.shareActionProvider, comment);
+                mOnCommentActionsListener.updateMenu(commentHolder.toolbar.getMenu(), commentHolder.shareActionProvider, comment);
             }
             Utils.showAvatar(comment.author.login, comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
@@ -345,14 +345,14 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public interface OnCommentActionClickListener {
+    public interface OnItemClickListener {
         void onCommentClicked(View v, String comment_id);
 
         void onPostClicked(View v);
     }
 
-    public void setOnCommentClickListener(OnCommentActionClickListener onCommentActionClickListener) {
-        mOnCommentActionClickListener = onCommentActionClickListener;
+    public void setOnCommentClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     public void setOnPointClickListener(OnPointClickListener onPointClickListener) {
@@ -361,6 +361,10 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void setOnPostActionsListener(OnPostActionsListener postActionsListener) {
         mOnPostActionsListener = postActionsListener;
+    }
+
+    public void setOnCommentActionsListener(OnCommentActionsListener commentActionsListener) {
+        mOnCommentActionsListener = commentActionsListener;
     }
 
 }
