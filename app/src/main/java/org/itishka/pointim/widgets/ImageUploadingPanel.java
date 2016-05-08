@@ -101,6 +101,38 @@ public class ImageUploadingPanel extends FrameLayout {
         cancel();
     }
 
+
+    public void addUploadedImage(String url) {
+        final Image img = new Image();
+        final View newView = inflate(getContext(), R.layout.image_uploading_panel_item, null);
+        img.imageView = (ImageView) newView.findViewById(R.id.imageView);
+        img.viewFinished = (ImageView) newView.findViewById(R.id.viewFinished);
+        img.viewFinished.setVisibility(VISIBLE);
+        img.viewError = (ImageView) newView.findViewById(R.id.viewError);
+        img.viewError.setVisibility(GONE);
+        img.cancel = (ImageButton) newView.findViewById(R.id.action_cancel);
+        img.uploaded = true;
+        img.progress = (ProgressWheel) newView.findViewById(R.id.progress_wheel);
+        img.progress.setVisibility(GONE);
+        img.uploadInfo = new org.itishka.pointim.model.imgur.Image();
+        img.uploadInfo.link = url;
+        img.cancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImageUploadingPanel.this.mLayout.removeView(newView);
+                mImages.remove(img);
+            }
+        });
+        Glide.with(getContext())
+                .load(url)
+                .bitmapTransform(new CropTransformation(getContext()))
+                .centerCrop()
+                .into(img.imageView);
+        mLayout.addView(newView);
+        mImages.add(img);
+
+    }
+
     public void addImage(Uri uri, String mime) {
         final Image img = new Image();
         final View newView = inflate(getContext(), R.layout.image_uploading_panel_item, null);
