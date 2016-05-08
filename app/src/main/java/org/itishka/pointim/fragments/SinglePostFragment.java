@@ -43,7 +43,6 @@ public class SinglePostFragment extends SpicedFragment {
     private LinearLayoutManager mLayoutManager;
     private SinglePostAdapter mAdapter;
     private Post mPointPost;
-    private Dialog mProgressDialog;
     private ShareActionProvider mShareActionProvider;
     private ScrollButton mUpButton;
     private ScrollButton mDownButton;
@@ -153,19 +152,6 @@ public class SinglePostFragment extends SpicedFragment {
         args.putString(ARG_POST, post);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    private void hideDialog() {
-        if (mProgressDialog != null) mProgressDialog.hide();
-        mProgressDialog = null;
-    }
-
-    private void showDialog() {
-        mProgressDialog = new MaterialDialog.Builder(getActivity())
-                .cancelable(false)
-                .customView(R.layout.dialog_progress, false)
-                .build();
-        mProgressDialog.show();
     }
 
     @Override
