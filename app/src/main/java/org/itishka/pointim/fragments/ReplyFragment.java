@@ -117,8 +117,8 @@ public class ReplyFragment extends SpicedFragment {
     };
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         saveData();
     }
 
@@ -244,8 +244,12 @@ public class ReplyFragment extends SpicedFragment {
             Gson gson = new Gson();
             JsonReader reader = new JsonReader(new FileReader(file));
             SavedData data = gson.fromJson(reader, SavedData.class);
-            mText.setText(data.text);
-            // TODO: 08.05.2016 images
+            if (data != null) {
+                mText.setText(data.text);
+                for (String img : data.images) {
+                    mImagesPanel.addUploadedImage(img);
+                }
+            }
             reader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
