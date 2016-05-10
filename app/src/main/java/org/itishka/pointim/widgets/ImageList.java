@@ -3,7 +3,6 @@ package org.itishka.pointim.widgets;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
@@ -77,21 +76,18 @@ public class ImageList extends FrameLayout {
         }
     }
 
-    public void setImageUrls(List<String> urls, List<String> files) {
+    public void setImageUrls(List<String> urls) {
         if (!mPreferences.getBoolean("loadImages", true)) {
             for (int i = 0; i < sImageIds.length; i++)
                 mImageViews[i].setVisibility(GONE);
             return;
         }
         int urlCount = urls == null ? 0 : urls.size();
-        int fileCount = files == null ? 0 : files.size();
-        mUrls = new String[urlCount + fileCount];
+        mUrls = new String[urlCount];
         for (int i = 0; i < sImageIds.length; i++) {
             String url = null;
             if (i < urlCount) {
                 url = urls.get(i);
-            } else if (i - urlCount < fileCount) {
-                url = files.get(i - urlCount);
             }
             if (url != null) {
                 mUrls[i] = url;

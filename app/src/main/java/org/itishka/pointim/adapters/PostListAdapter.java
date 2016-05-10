@@ -242,7 +242,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.itemView.setTag(R.id.card_view, i);
         holder.itemView.setTag(R.id.post_id, post.post.id);
 
-        holder.imageList.setImageUrls(post.post.text.images, post.post.files);
+        holder.imageList.setImageUrls(post.post.text.images);
         holder.text.setText(post.post.text.text);
         Utils.showAvatar(post.post.author.login, post.post.author.avatar, holder.avatar);
         holder.date.setText(Utils.formatDate(post.post.created));
@@ -417,6 +417,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             for (int i = 0; i < posts.size(); i++) {
                 Post post = posts.get(i);
                 post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
+                post.post.text.images.addAll(ImageSearchHelper.checkImageLinks(ImageSearchHelper.checkImageLinks(post.post.files)));
                 publishProgress(i);
             }
             return null;

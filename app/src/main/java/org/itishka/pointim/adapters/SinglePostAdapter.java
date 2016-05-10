@@ -191,7 +191,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             PostViewHolder postHolder = (PostViewHolder) holder;
             postHolder.author.setText("@" + mPost.post.author.login);
             postHolder.text.setText(mPost.post.text.text);
-            postHolder.imageList.setImageUrls(mPost.post.text.images, mPost.post.files);
+            postHolder.imageList.setImageUrls(mPost.post.text.images);
             Utils.showAvatar(mPost.post.author.login, mPost.post.author.avatar, postHolder.avatar);
             postHolder.date.setText(Utils.formatDate(mPost.post.created));
 
@@ -236,7 +236,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
             commentHolder.date.setText(Utils.formatDate(comment.created));
             commentHolder.text.setText(comment.text.text);
-            commentHolder.imageList.setImageUrls(comment.text.images, comment.files);
+            commentHolder.imageList.setImageUrls(comment.text.images);
             commentHolder.author.setText("@" + comment.author.login);
             if (TextUtils.isEmpty(comment.to_comment_id))
                 commentHolder.comment_id.setText("/" + comment.id);
@@ -319,11 +319,13 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         protected Void doInBackground(Post... posts) {
             Post post = posts[0];
             post.post.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(post.post.text.text));
+            post.post.text.images.addAll(ImageSearchHelper.checkImageLinks(ImageSearchHelper.checkImageLinks(post.post.files, false)));
             publishProgress(-1);
             if (post.comments != null) {
                 for (int i = 0; i < post.comments.size(); i++) {
                     Comment comment = post.comments.get(i);
                     comment.text.images = ImageSearchHelper.checkImageLinks(ImageSearchHelper.getAllLinks(comment.text.text));
+                    comment.text.images.addAll(ImageSearchHelper.checkImageLinks(ImageSearchHelper.checkImageLinks(comment.files, false)));
                     publishProgress(i);
                 }
             }

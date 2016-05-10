@@ -73,6 +73,7 @@ public class ImageSearchHelper {
 
     public static List<String> checkImageLinks(List<String> links, boolean offline) {
         List<String> images = new ArrayList<>();
+        if (links == null) return images;
         for (String link : links) {
             String mime = sLinksChecked.get(link);
             if (mime == null) {
