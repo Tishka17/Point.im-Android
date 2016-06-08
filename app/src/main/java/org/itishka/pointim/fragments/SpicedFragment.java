@@ -2,24 +2,16 @@ package org.itishka.pointim.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 
-import com.octo.android.robospice.SpiceManager;
-
-import org.itishka.pointim.network.PointService;
 import org.itishka.pointim.utils.ImageSearchHelper;
 
 /**
  * Created by Tishka17 on 27.02.2015.
  */
 public class SpicedFragment extends Fragment {
-    private SpiceManager mSpiceManager = new SpiceManager(PointService.class);
     private boolean mAutoload = true;
 
-    protected SpiceManager getSpiceManager() {
-        return mSpiceManager;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,14 +27,11 @@ public class SpicedFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        getSpiceManager().start(getActivity());
     }
 
     @Override
     public void onStop() {
-        if (getSpiceManager().isStarted()) {
-            getSpiceManager().shouldStop();
-        }
+        //unsubscribe in rx?
         ImageSearchHelper.saveCache(getActivity());
         super.onStop();
     }

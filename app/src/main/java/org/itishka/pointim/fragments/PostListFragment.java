@@ -18,10 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
-
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.PostListAdapter;
 import org.itishka.pointim.listeners.OnPostChangedListener;
@@ -30,10 +26,14 @@ import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
-import org.itishka.pointim.network.requests.PostListRequest;
 import org.itishka.pointim.widgets.ScrollButton;
 
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -47,15 +47,13 @@ public abstract class PostListFragment extends SpicedFragment {
         @Override
         public void onChanged(Post post) {
             mAdapter.notifyPostChanged(post);
-            PostListRequest request = createRequest();
-            getSpiceManager().putInCache(request.getCacheName(), getAdapter().getPostList());
+//            getSpiceManager().putInCache(request.getCacheName(), getAdapter().getPostList());
         }
 
         @Override
         public void onDeleted(Post post) {
             mAdapter.removePost(post);
-            PostListRequest request = createRequest();
-            getSpiceManager().putInCache(request.getCacheName(), getAdapter().getPostList());
+//            getSpiceManager().putInCache(request.getCacheName(), getAdapter().getPostList());
         }
     };
 
@@ -64,76 +62,39 @@ public abstract class PostListFragment extends SpicedFragment {
     private PostListAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
 
-    private RequestListener<PostList> mUpdateRequestListener = new RequestListener<PostList>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            mSwipeRefresh.setRefreshing(false);
-            if (!isDetached())
-                Toast.makeText(getActivity(), spiceException.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onRequestSuccess(PostList postList) {
-            mSwipeRefresh.setRefreshing(false);
-            if (postList != null && postList.isSuccess()) {
-                mAdapter.setData(getActivity(), postList);
-                mRecyclerView.scrollToPosition(0);
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-    private RequestListener<PostList> mCacheRequestListener = new RequestListener<PostList>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            mSwipeRefresh.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefresh.setRefreshing(true);
-                    update();
-                }
-            });
-        }
-
-        @Override
-        public void onRequestSuccess(PostList postList) {
-            if (postList != null && postList.isSuccess()) {
-                mAdapter.setData(getActivity(), postList);
-                if (shouldAutoload()) {
-                    mSwipeRefresh.setRefreshing(true);
-                    update();
-                }
-            } else {
-                mSwipeRefresh.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSwipeRefresh.setRefreshing(true);
-                        update();
-                    }
-                });
-            }
-        }
-    };
+    //    private RequestListener<PostList> mCacheRequestListener = new RequestListener<PostList>() {
+//        @Override
+//        public void onRequestFailure(SpiceException spiceException) {
+//            mSwipeRefresh.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mSwipeRefresh.setRefreshing(true);
+//                    update();
+//                }
+//            });
+//        }
+//
+//        @Override
+//        public void onRequestSuccess(PostList postList) {
+//            if (postList != null && postList.isSuccess()) {
+//                mAdapter.setData(getActivity(), postList);
+//                if (shouldAutoload()) {
+//                    mSwipeRefresh.setRefreshing(true);
+//                    update();
+//                }
+//            } else {
+//                mSwipeRefresh.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mSwipeRefresh.setRefreshing(true);
+//                        update();
+//                    }
+//                });
+//            }
+//        }
+//    };
     private boolean mIsLoadingMore = false;
-    private RequestListener<PostList> mLoadMoreRequestListener = new RequestListener<PostList>() {
-
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            if (!isDetached())
-                Toast.makeText(getActivity(), spiceException.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onRequestSuccess(PostList postList) {
-            if (postList != null && postList.isSuccess()) {
-                mAdapter.appendData(getActivity(), postList);
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
+    private Subscription mSubscription;
 
     public PostListFragment() {
     }
@@ -248,22 +209,50 @@ public abstract class PostListFragment extends SpicedFragment {
         super.onViewCreated(view, savedInstanceState);
         PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
-            PostListRequest request = createRequest();
-            getSpiceManager().getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
+            Observable<PostList> request = createRequest();
+//            getSpiceManager().getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
         }
     }
 
     protected void update() {
-        PostListRequest request = createRequest();
-        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
+        mSubscription = createRequest()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(postList -> {
+                    mSwipeRefresh.setRefreshing(false);
+                    if (postList != null && postList.isSuccess()) {
+                        mAdapter.setData(getActivity(), postList);
+                        mRecyclerView.scrollToPosition(0);
+                    } else {
+                        if (!isDetached())
+                            Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+//        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
     }
 
     protected void loadMore(long before) {
-        PostListRequest request = createRequest(before);
-        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mLoadMoreRequestListener);
+        mSubscription = createRequest(before)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(postList -> {
+                    if (postList != null && postList.isSuccess()) {
+                        mAdapter.appendData(getActivity(), postList);
+                    } else {
+                        if (!isDetached())
+                            Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    protected abstract PostListRequest createRequest();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSubscription.unsubscribe();
+    }
 
-    protected abstract PostListRequest createRequest(long before);
+    protected abstract Observable<PostList> createRequest();
+
+    protected abstract Observable<PostList> createRequest(long before);
 }
+

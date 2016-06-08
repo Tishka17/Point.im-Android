@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import org.itishka.pointim.model.point.PostList;
-import org.itishka.pointim.network.requests.PostListRequest;
 
 /**
  * A placeholder fragment containing a simple view.

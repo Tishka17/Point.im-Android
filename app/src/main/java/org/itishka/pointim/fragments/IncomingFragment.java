@@ -1,7 +1,6 @@
 package org.itishka.pointim.fragments;
 
 import org.itishka.pointim.model.point.PostList;
-import org.itishka.pointim.network.requests.PostListRequest;
 
 /**
  * Created by Tishka17 on 21.10.2014.

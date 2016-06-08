@@ -13,24 +13,14 @@ import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
-
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.fragments.ReplyDialogFragment;
-import org.itishka.pointim.model.point.Comment;
-import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.Utils;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * Created by Tishka17 on 28.04.2016.
@@ -50,44 +40,44 @@ public class SimplePostActionsListener implements OnPostActionsListener {
 
     @Override
     public void onBookmark(@NonNull final Post post, final CheckBox checkBox) {
-        if (checkBox.isChecked()) {
-            PointConnectionManager.getInstance().pointIm.addBookmark(
-                    post.post.id,
-                    null,
-                    new Callback<PointResult>() {
-                        @Override
-                        public void success(PointResult pointResult, Response response) {
-                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmarked_template), post.post.id), Toast.LENGTH_SHORT).show();
-                            post.bookmarked = true;
-                            notifyChanged(post);
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_error_template), post.post.id, error), Toast.LENGTH_SHORT).show();
-                            notifyChanged(post);
-                        }
-                    }
-            );
-        } else {
-            PointConnectionManager.getInstance().pointIm.deleteBookmark(
-                    post.post.id,
-                    new Callback<Void>() {
-                        @Override
-                        public void success(Void pointResult, Response response) {
-                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_remove_template), post.post.id), Toast.LENGTH_SHORT).show();
-                            post.bookmarked = false;
-                            notifyChanged(post);
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_remove_error_template), post.post.id, error), Toast.LENGTH_SHORT).show();
-                            notifyChanged(post);
-                        }
-                    }
-            );
-        }
+//        if (checkBox.isChecked()) {
+//            PointConnectionManager.getInstance().pointIm.addBookmark(
+//                    post.post.id,
+//                    null,
+//                    new Callback<PointResult>() {
+//                        @Override
+//                        public void success(PointResult pointResult, Response response) {
+//                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmarked_template), post.post.id), Toast.LENGTH_SHORT).show();
+//                            post.bookmarked = true;
+//                            notifyChanged(post);
+//                        }
+//
+//                        @Override
+//                        public void failure(RetrofitError error) {
+//                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_error_template), post.post.id, error), Toast.LENGTH_SHORT).show();
+//                            notifyChanged(post);
+//                        }
+//                    }
+//            );
+//        } else {
+//            PointConnectionManager.getInstance().pointIm.deleteBookmark(
+//                    post.post.id,
+//                    new Callback<Void>() {
+//                        @Override
+//                        public void success(Void pointResult, Response response) {
+//                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_remove_template), post.post.id), Toast.LENGTH_SHORT).show();
+//                            post.bookmarked = false;
+//                            notifyChanged(post);
+//                        }
+//
+//                        @Override
+//                        public void failure(RetrofitError error) {
+//                            Toast.makeText(getContext(), String.format(getContext().getString(R.string.toast_bookmark_remove_error_template), post.post.id, error), Toast.LENGTH_SHORT).show();
+//                            notifyChanged(post);
+//                        }
+//                    }
+//            );
+//        }
     }
 
     @Override
@@ -124,61 +114,61 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
     private void onRecommendPost(@NonNull final Post post, Menu menu, MenuItem item) {
-        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                .title(String.format(getContext().getString(R.string.dialog_recommend_title_template), post.post.id))
-                .positiveText(android.R.string.ok)
-                .negativeText("Cancel")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
-                        PointConnectionManager.getInstance().pointIm.recommend(post.post.id, text, new Callback<PointResult>() {
-                            @Override
-                            public void success(PointResult pointResult, Response response) {
-                                if (pointResult.isSuccess()) {
-                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
-                                    if (mOnPostChangedListener != null) {
-                                        post.recommended = true;
-                                        mOnPostChangedListener.onChanged(post);
-                                    }
-                                } else {
-                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .customView(R.layout.dialog_input, true)
-                .build();
-        dialog.show();
+//        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+//                .title(String.format(getContext().getString(R.string.dialog_recommend_title_template), post.post.id))
+//                .positiveText(android.R.string.ok)
+//                .negativeText("Cancel")
+//                .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                        String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
+//                        PointConnectionManager.getInstance().pointIm.recommend(post.post.id, text, new Callback<PointResult>() {
+//                            @Override
+//                            public void success(PointResult pointResult, Response response) {
+//                                if (pointResult.isSuccess()) {
+//                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
+//                                    if (mOnPostChangedListener != null) {
+//                                        post.recommended = true;
+//                                        mOnPostChangedListener.onChanged(post);
+//                                    }
+//                                } else {
+//                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void failure(RetrofitError error) {
+//                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
+//                })
+//                .customView(R.layout.dialog_input, true)
+//                .build();
+//        dialog.show();
     }
 
 
     private void onNotRecommendPost(@NonNull final Post post, Menu menu, MenuItem item) {
-        PointConnectionManager.getInstance().pointIm.notRecommend(post.post.id, new Callback<PointResult>() {
-            @Override
-            public void success(PointResult pointResult, Response response) {
-                if (pointResult.isSuccess()) {
-                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended_not), Toast.LENGTH_SHORT).show();
-                    if (mOnPostChangedListener != null) {
-                        post.recommended = false;
-                        mOnPostChangedListener.onChanged(post);
-                    }
-                } else {
-                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        PointConnectionManager.getInstance().pointIm.notRecommend(post.post.id, new Callback<PointResult>() {
+//            @Override
+//            public void success(PointResult pointResult, Response response) {
+//                if (pointResult.isSuccess()) {
+//                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended_not), Toast.LENGTH_SHORT).show();
+//                    if (mOnPostChangedListener != null) {
+//                        post.recommended = false;
+//                        mOnPostChangedListener.onChanged(post);
+//                    }
+//                } else {
+//                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError error) {
+//                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
 
@@ -204,35 +194,35 @@ public class SimplePostActionsListener implements OnPostActionsListener {
 
 
     private void onDeletePost(@NonNull final Post post, Menu menu, MenuItem item) {
-        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                .title(String.format(getContext().getString(R.string.dialog_delete_title_template), post.post.id))
-                .positiveText(android.R.string.ok)
-                .negativeText(android.R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        PointConnectionManager.getInstance().pointIm.deletePost(post.post.id, new Callback<PointResult>() {
-                            @Override
-                            public void success(PointResult pointResult, Response response) {
-                                if (pointResult.isSuccess()) {
-                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
-                                    if (mOnPostChangedListener != null) {
-                                        mOnPostChangedListener.onDeleted(post);
-                                    }
-                                } else {
-                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .build();
-        dialog.show();
+//        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+//                .title(String.format(getContext().getString(R.string.dialog_delete_title_template), post.post.id))
+//                .positiveText(android.R.string.ok)
+//                .negativeText(android.R.string.cancel)
+//                .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                        PointConnectionManager.getInstance().pointIm.deletePost(post.post.id, new Callback<PointResult>() {
+//                            @Override
+//                            public void success(PointResult pointResult, Response response) {
+//                                if (pointResult.isSuccess()) {
+//                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
+//                                    if (mOnPostChangedListener != null) {
+//                                        mOnPostChangedListener.onDeleted(post);
+//                                    }
+//                                } else {
+//                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void failure(RetrofitError error) {
+//                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
+//                })
+//                .build();
+//        dialog.show();
     }
 
     private void notifyChanged(Post post) {

@@ -20,10 +20,7 @@ import org.itishka.pointim.model.point.ExtendedUser;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
-import org.itishka.pointim.network.requests.PostListRequest;
 import org.itishka.pointim.network.requests.UserInfoRequest;
-
-import java.io.IOException;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
