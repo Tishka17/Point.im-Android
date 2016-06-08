@@ -21,8 +21,9 @@ import org.itishka.pointim.model.point.LoginResult;
 import org.itishka.pointim.network.PointConnectionManager;
 
 import retrofit2.Callback;
-import retrofit2.RetrofitError;
-import retrofit2.client.Response;
+import retrofit2.Retrofit;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -82,26 +83,23 @@ public class LoginActivity extends AppCompatActivity {
                         mPasswordEdit.requestFocus();
                     } else {
                         mProgressDialog.show();
-                        PointConnectionManager.getInstance().pointAuthService.login(mLoginEdit.getText().toString(), mPasswordEdit.getText().toString(), new Callback<LoginResult>() {
-                            @Override
-                            public void success(LoginResult result, Response response) {
-                                if (result.isSuccess()) {
-                                    result.login = mLoginEdit.getText().toString();
-                                    PointConnectionManager.getInstance().updateAuthorization(getActivity(), result);
-                                    getActivity().finish();
+                        PointConnectionManager.getInstance().pointAuthService.login(mLoginEdit.getText().toString(), mPasswordEdit.getText().toString())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(result -> {
+                                    if (result.isSuccess()) {
+                                        result.login = mLoginEdit.getText().toString();
+                                        PointConnectionManager.getInstance().updateAuthorization(getActivity(), result);
+                                        getActivity().finish();
+                                        mProgressDialog.hide();
+                                    } else {
+                                        Toast.makeText(getActivity(), result.error, Toast.LENGTH_SHORT).show();
+                                        mProgressDialog.hide();
+                                    }
+                                }, error -> {
+                                    Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
                                     mProgressDialog.hide();
-                                } else {
-                                    Toast.makeText(getActivity(), result.error, Toast.LENGTH_SHORT).show();
-                                    mProgressDialog.hide();
-                                }
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Toast.makeText(getActivity(), (error.getBody() == null) ? error.toString() : error.getBody().toString(), Toast.LENGTH_SHORT).show();
-                                mProgressDialog.hide();
-                            }
-                        });
+                                });
                     }
                 }
             });
