@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,19 +20,11 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
 import org.itishka.pointim.model.point.Comment;
-import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
-import org.itishka.pointim.model.point.User;
-import org.itishka.pointim.model.point.UserList;
-import org.itishka.pointim.network.PointConnectionManager;
-import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.itishka.pointim.widgets.SymbolTokenizer;
 
@@ -43,10 +34,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * Created by Tishka17 on 04.05.2016.
@@ -67,54 +54,54 @@ public class ReplyFragment extends SpicedFragment {
     public ReplyFragment() {
         setArguments(new Bundle());
     }
-
-    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            //
-        }
-
-        @Override
-        public void onRequestSuccess(UserList users) {
-            Log.d("SinglePostFragment", "users: " + users);
-            if (users != null) {
-                for (User u : users)
-                    mUsersListAdapter.addIfAbsent(u);
-                mUsersListAdapter.notifyDataSetChanged();
-            }
-        }
-    };
+//
+//    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
+//        @Override
+//        public void onRequestFailure(SpiceException spiceException) {
+//            //
+//        }
+//
+//        @Override
+//        public void onRequestSuccess(UserList users) {
+//            Log.d("SinglePostFragment", "users: " + users);
+//            if (users != null) {
+//                for (User u : users)
+//                    mUsersListAdapter.addIfAbsent(u);
+//                mUsersListAdapter.notifyDataSetChanged();
+//            }
+//        }
+//    };
     private OnReplyListener mOnReplyListener = null;
-    private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
-        @Override
-        public void success(PointResult post, Response response) {
-            getView().setEnabled(true);
-//            hideDialog(); // FIXME: 04.05.2016
-            if (post.isSuccess()) {
-                mCommentId.setVisibility(View.GONE);
-                mCommentId.setText("");
-                mText.setText("");
-                mImagesPanel.reset();
-                if (!isDetached()) {
-                    if (mOnReplyListener != null) {
-                        mOnReplyListener.onReplied();
-                    }
-                    Toast.makeText(getActivity(), getString(R.string.toast_commented), Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            getView().setEnabled(true);
-//            hideDialog(); // FIXME: 04.05.2016
-            if (!isDetached())
-                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-        }
-    };
+//    private Callback<PointResult> mCommentCallback = new Callback<PointResult>() {
+//        @Override
+//        public void success(PointResult post, Response response) {
+//            getView().setEnabled(true);
+////            hideDialog(); // FIXME: 04.05.2016
+//            if (post.isSuccess()) {
+//                mCommentId.setVisibility(View.GONE);
+//                mCommentId.setText("");
+//                mText.setText("");
+//                mImagesPanel.reset();
+//                if (!isDetached()) {
+//                    if (mOnReplyListener != null) {
+//                        mOnReplyListener.onReplied();
+//                    }
+//                    Toast.makeText(getActivity(), getString(R.string.toast_commented), Toast.LENGTH_SHORT).show();
+//                }
+//            } else {
+//                if (!isDetached())
+//                    Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//
+//        @Override
+//        public void failure(RetrofitError error) {
+//            getView().setEnabled(true);
+////            hideDialog(); // FIXME: 04.05.2016
+//            if (!isDetached())
+//                Toast.makeText(getActivity(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+//        }
+//    };
 
     @Override
     public void onPause() {
@@ -165,8 +152,8 @@ public class ReplyFragment extends SpicedFragment {
             }
         });
 
-        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
-        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
+//        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
+//        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
 
         mSendButton = (ImageButton) rootView.findViewById(R.id.send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
@@ -192,11 +179,11 @@ public class ReplyFragment extends SpicedFragment {
                 getView().setEnabled(false);
                 // FIXME: 04.05.2016
 //                showDialog();
-                if (TextUtils.isEmpty(comment)) {
-                    PointConnectionManager.getInstance().pointIm.addComment(mPost, text, mCommentCallback);
-                } else {
-                    PointConnectionManager.getInstance().pointIm.addComment(mPost, text, comment, mCommentCallback);
-                }
+//                if (TextUtils.isEmpty(comment)) {
+//                    PointConnectionManager.getInstance().pointIm.addComment(mPost, text, mCommentCallback);
+//                } else {
+//                    PointConnectionManager.getInstance().pointIm.addComment(mPost, text, comment, mCommentCallback);
+//                }
             }
         });
 

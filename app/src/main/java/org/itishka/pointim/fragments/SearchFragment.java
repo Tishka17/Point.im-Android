@@ -14,10 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
-
 import org.itishka.pointim.R;
 import org.itishka.pointim.listeners.SimplePointClickListener;
 import org.itishka.pointim.model.point.Tag;
@@ -26,7 +22,6 @@ import org.itishka.pointim.model.point.User;
 import org.itishka.pointim.model.point.UserList;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.network.requests.TagsRequest;
-import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.FlowLayout;
 
@@ -72,11 +67,11 @@ public class SearchFragment extends SpicedFragment {
 
         mTagsLayout = (FlowLayout) rootView.findViewById(R.id.tags);
         mUsersLayout = (FlowLayout) rootView.findViewById(R.id.users);
-
-        TagsRequest request = new TagsRequest(PointConnectionManager.getInstance().loginResult.login);
-        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mTagsRequestListener);
-        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
-        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
+//
+//        TagsRequest request = new TagsRequest(PointConnectionManager.getInstance().loginResult.login);
+//        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mTagsRequestListener);
+//        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
+//        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
         return rootView;
     }
 
@@ -108,22 +103,22 @@ public class SearchFragment extends SpicedFragment {
         int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
-
-    private RequestListener<TagList> mTagsRequestListener = new RequestListener<TagList>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            //
-        }
-
-        @Override
-        public void onRequestSuccess(TagList tags) {
-            if (tags != null) {
-                mTags = tags;
-                mFilteredTags = filterTags(tags, mSearchView.getQuery());
-                showTags(mFilteredTags);
-            }
-        }
-    };
+//
+//    private RequestListener<TagList> mTagsRequestListener = new RequestListener<TagList>() {
+//        @Override
+//        public void onRequestFailure(SpiceException spiceException) {
+//            //
+//        }
+//
+//        @Override
+//        public void onRequestSuccess(TagList tags) {
+//            if (tags != null) {
+//                mTags = tags;
+//                mFilteredTags = filterTags(tags, mSearchView.getQuery());
+//                showTags(mFilteredTags);
+//            }
+//        }
+//    };
 
     private void showTags(TagList tags) {
         if (tags != null) {
@@ -159,22 +154,22 @@ public class SearchFragment extends SpicedFragment {
             }
         }
     }
-
-    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            //
-        }
-
-        @Override
-        public void onRequestSuccess(UserList users) {
-            if (users != null) {
-                mUsers = users;
-                mFilteredUsers = filterUsers(mUsers, mSearchView.getQuery());
-                showUsers(mFilteredUsers);
-            }
-        }
-    };
+//
+//    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
+//        @Override
+//        public void onRequestFailure(SpiceException spiceException) {
+//            //
+//        }
+//
+//        @Override
+//        public void onRequestSuccess(UserList users) {
+//            if (users != null) {
+//                mUsers = users;
+//                mFilteredUsers = filterUsers(mUsers, mSearchView.getQuery());
+//                showUsers(mFilteredUsers);
+//            }
+//        }
+//    };
 
     private static TagList filterTags(TagList tags, CharSequence query) {
         if (TextUtils.isEmpty(query))

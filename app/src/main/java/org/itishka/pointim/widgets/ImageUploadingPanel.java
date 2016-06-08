@@ -32,10 +32,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import jp.wasabeef.glide.transformations.CropTransformation;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
 /**
  * Created by Tishka17 on 31.12.2014.
  */
@@ -63,17 +59,17 @@ public class ImageUploadingPanel extends FrameLayout {
         return super.onSaveInstanceState();
     }
 
-    private final Callback<Void> deleteCallback = new Callback<Void>() {
-        @Override
-        public void success(Void aVoid, Response response) {
-            //do nothng
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            //do nothng
-        }
-    };
+//    private final Callback<Void> deleteCallback = new Callback<Void>() {
+//        @Override
+//        public void success(Void aVoid, Response response) {
+//            //do nothng
+//        }
+//
+//        @Override
+//        public void failure(RetrofitError error) {
+//            //do nothng
+//        }
+//    };
 
     public ImageUploadingPanel(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -153,7 +149,7 @@ public class ImageUploadingPanel extends FrameLayout {
                 ImageUploadingPanel.this.mLayout.removeView(newView);
                 mImages.remove(img);
                 if (img.uploaded && !TextUtils.isEmpty(img.uploadInfo.deletehash)) {
-                    ImgurConnectionManager.getInstance().imgurService.deleteImage(img.uploadInfo.deletehash, deleteCallback);
+//                    ImgurConnectionManager.getInstance().imgurService.deleteImage(img.uploadInfo.deletehash, deleteCallback);
                 }
             }
         });
@@ -307,18 +303,19 @@ public class ImageUploadingPanel extends FrameLayout {
                 mAuthProlonged = AuthProlongationState.NotAuthorized;
                 return null;
             }
-            try {
-                return ImgurConnectionManager.getInstance().imgurAuthService.refreshToken(
-                        BuildConfig.IMGUR_ID,
-                        BuildConfig.IMGUR_SECRET,
-                        "refresh_token",
-                        token.refresh_token);
-            } catch (RetrofitError e) {
-                if (e.getKind() == RetrofitError.Kind.HTTP && e.getResponse().getStatus() == 403)
-                    mAuthProlonged = AuthProlongationState.AuthError;
-                mAuthProlonged = AuthProlongationState.TemporarilyError;
-                return null;
-            }
+//            try {
+//                return ImgurConnectionManager.getInstance().imgurAuthService.refreshToken(
+//                        BuildConfig.IMGUR_ID,
+//                        BuildConfig.IMGUR_SECRET,
+//                        "refresh_token",
+//                        token.refresh_token);
+//            } catch (RetrofitError e) {
+//                if (e.getKind() == RetrofitError.Kind.HTTP && e.getResponse().getStatus() == 403)
+//                    mAuthProlonged = AuthProlongationState.AuthError;
+//                mAuthProlonged = AuthProlongationState.TemporarilyError;
+//                return null;
+//            }
+            return null;
         }
 
         @Override

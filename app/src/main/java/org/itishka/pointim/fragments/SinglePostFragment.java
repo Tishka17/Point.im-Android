@@ -29,7 +29,6 @@ import org.itishka.pointim.listeners.SimplePostActionsListener;
 import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
-import org.itishka.pointim.network.requests.SinglePostRequest;
 import org.itishka.pointim.widgets.ScrollButton;
 
 public class SinglePostFragment extends SpicedFragment {

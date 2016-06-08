@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,28 +19,14 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.itishka.pointim.R;
-import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.adapters.UserCompletionAdapter;
-import org.itishka.pointim.model.point.NewPostResponse;
 import org.itishka.pointim.model.point.Tag;
-import org.itishka.pointim.model.point.TagList;
-import org.itishka.pointim.model.point.UserList;
-import org.itishka.pointim.network.PointConnectionManager;
-import org.itishka.pointim.network.requests.TagsRequest;
-import org.itishka.pointim.network.requests.UserSubscriptionsRequest;
 import org.itishka.pointim.widgets.ImageUploadingPanel;
 import org.itishka.pointim.widgets.SymbolTokenizer;
 
 import java.util.ArrayList;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -65,30 +49,30 @@ public class NewPostFragment extends SpicedFragment {
     private UserCompletionAdapter mUsersListAdapter;
     private ArrayAdapter<Tag> mTagsListAdapter;
     private ImageUploadingPanel mImagesPanel;
-    private Callback<NewPostResponse> mNewPostCallback = new Callback<NewPostResponse>() {
-        @Override
-        public void success(NewPostResponse post, Response response) {
-            mProgressDialog.hide();
-            if (post.isSuccess()) {
-                if (getActivity().getCallingActivity() != null) {
-                    Intent intent = new Intent();
-                    intent.putExtra(NewPostActivity.EXTRA_RESULT_POST, post.id);
-                    getActivity().setResult(Activity.RESULT_OK, intent);
-                } else {
-                    Toast.makeText(getActivity(), String.format(getString(R.string.toast_posted_template), post.id), Toast.LENGTH_SHORT).show();
-                }
-                getActivity().finish();
-            } else {
-                Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            mProgressDialog.hide();
-            Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
-        }
-    };
+//    private Callback<NewPostResponse> mNewPostCallback = new Callback<NewPostResponse>() {
+//        @Override
+//        public void success(NewPostResponse post, Response response) {
+//            mProgressDialog.hide();
+//            if (post.isSuccess()) {
+//                if (getActivity().getCallingActivity() != null) {
+//                    Intent intent = new Intent();
+//                    intent.putExtra(NewPostActivity.EXTRA_RESULT_POST, post.id);
+//                    getActivity().setResult(Activity.RESULT_OK, intent);
+//                } else {
+//                    Toast.makeText(getActivity(), String.format(getString(R.string.toast_posted_template), post.id), Toast.LENGTH_SHORT).show();
+//                }
+//                getActivity().finish();
+//            } else {
+//                Toast.makeText(getActivity(), post.error, Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//
+//        @Override
+//        public void failure(RetrofitError error) {
+//            mProgressDialog.hide();
+//            Toast.makeText(getActivity(), error.toString() + "\n\n"+error.getCause(), Toast.LENGTH_SHORT).show();
+//        }
+//    };
 
     public NewPostFragment() {
     }
@@ -179,10 +163,10 @@ public class NewPostFragment extends SpicedFragment {
                 .customView(R.layout.dialog_progress, false)
                 .build();
 
-        TagsRequest request = new TagsRequest(PointConnectionManager.getInstance().loginResult.login);
-        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mTagsRequestListener);
-        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
-        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
+//        TagsRequest request = new TagsRequest(PointConnectionManager.getInstance().loginResult.login);
+//        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheName(), DurationInMillis.ONE_DAY, mTagsRequestListener);
+//        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);
+//        getSpiceManager().getFromCacheAndLoadFromNetworkIfExpired(request2, request2.getCacheName(), DurationInMillis.ONE_DAY, mUsersRequestListener);
         return rootView;
     }
 
@@ -215,14 +199,14 @@ public class NewPostFragment extends SpicedFragment {
                 sb.append("\n").append(l);
             }
             mProgressDialog.show();
-            if (TextUtils.isEmpty(mPostId)) {
-                if (mIsPrivate.isChecked())
-                    PointConnectionManager.getInstance().pointIm.createPrivatePost(sb.toString().trim(), tags, mIsPrivate.isChecked(), mNewPostCallback);
-                else
-                    PointConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mNewPostCallback);
-            } else {
-                PointConnectionManager.getInstance().pointIm.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
-            }
+//            if (TextUtils.isEmpty(mPostId)) {
+//                if (mIsPrivate.isChecked())
+//                    PointConnectionManager.getInstance().pointIm.createPrivatePost(sb.toString().trim(), tags, mIsPrivate.isChecked(), mNewPostCallback);
+//                else
+//                    PointConnectionManager.getInstance().pointIm.createPost(sb.toString().trim(), tags, mNewPostCallback);
+//            } else {
+//                PointConnectionManager.getInstance().pointIm.editPost(mPostId, sb.toString().trim(), tags, mNewPostCallback);
+//            }
             return true;
         } else if (id == R.id.attach) {
             Intent intent = new Intent();
@@ -233,36 +217,36 @@ public class NewPostFragment extends SpicedFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private RequestListener<TagList> mTagsRequestListener = new RequestListener<TagList>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            //
-        }
-
-        @Override
-        public void onRequestSuccess(TagList tags) {
-            Log.d("NewPostFragment", "tags: " + tags);
-            if (tags != null) {
-                mTagsListAdapter.clear();
-                mTagsListAdapter.addAll(tags);
-                mTagsListAdapter.notifyDataSetChanged();
-            }
-        }
-    };
-
-    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            //
-        }
-
-        @Override
-        public void onRequestSuccess(UserList users) {
-            Log.d("NewPostFragment", "users: " + users);
-            if (users != null) {
-                mUsersListAdapter.setData(users);
-                mUsersListAdapter.notifyDataSetChanged();
-            }
-        }
-    };
+//    private RequestListener<TagList> mTagsRequestListener = new RequestListener<TagList>() {
+//        @Override
+//        public void onRequestFailure(SpiceException spiceException) {
+//            //
+//        }
+//
+//        @Override
+//        public void onRequestSuccess(TagList tags) {
+//            Log.d("NewPostFragment", "tags: " + tags);
+//            if (tags != null) {
+//                mTagsListAdapter.clear();
+//                mTagsListAdapter.addAll(tags);
+//                mTagsListAdapter.notifyDataSetChanged();
+//            }
+//        }
+//    };
+//
+//    private RequestListener<UserList> mUsersRequestListener = new RequestListener<UserList>() {
+//        @Override
+//        public void onRequestFailure(SpiceException spiceException) {
+//            //
+//        }
+//
+//        @Override
+//        public void onRequestSuccess(UserList users) {
+//            Log.d("NewPostFragment", "users: " + users);
+//            if (users != null) {
+//                mUsersListAdapter.setData(users);
+//                mUsersListAdapter.notifyDataSetChanged();
+//            }
+//        }
+//    };
 }

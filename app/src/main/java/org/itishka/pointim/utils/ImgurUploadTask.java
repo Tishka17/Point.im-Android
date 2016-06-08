@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 
 import org.itishka.pointim.model.imgur.UploadResult;
-import org.itishka.pointim.network.ImgurConnectionManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import retrofit.RetrofitError;
 
 /**
  * Created by Tishka17 on 30.12.2014.
@@ -86,24 +84,25 @@ public abstract class ImgurUploadTask extends AsyncTask<String, Integer, UploadR
 
         mContext = null;
         final long totalSize = mFile.length();
-        try {
-            UploadResult res = ImgurConnectionManager.getInstance().imgurService.uploadFile(
-                    new CountingTypedFile(imageMime, mFile, new CountingTypedFile.ProgressListener() {
-                        @Override
-                        public void transferred(long num) {
-                            publishProgress((int) ((num / (float) totalSize) * 50));
-                        }
-                    })
-            );
-            publishProgress(100);
-            return res;
-        } catch (RetrofitError e) {
-            e.printStackTrace();
-            mError = e.toString();
-            return null;
-        } finally {
-            mFile.delete();
-        }
+//        try {
+//            UploadResult res = ImgurConnectionManager.getInstance().imgurService.uploadFile(
+//                    new CountingTypedFile(imageMime, mFile, new CountingTypedFile.ProgressListener() {
+//                        @Override
+//                        public void transferred(long num) {
+//                            publishProgress((int) ((num / (float) totalSize) * 50));
+//                        }
+//                    })
+//            );
+//            publishProgress(100);
+//            return res;
+//        } catch (RetrofitError e) {
+//            e.printStackTrace();
+//            mError = e.toString();
+//            return null;
+//        } finally {
+//            mFile.delete();
+//        }
+        return null;
     }
 
     protected String getError() {
