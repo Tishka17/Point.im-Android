@@ -73,17 +73,17 @@ public interface PointIm {
 
     @FormUrlEncoded
     @POST("/api/user/s/{login}")
-    Call subscribeUser(@Path("login") String login, @Field("text") String text, Callback<Void> callback);
+    Call subscribeUser(@Path("login") String login, @Field("text") String text);
 
     @DELETE("/api/user/s/{login}")
-    Call unsubscribeUser(@Path("login") String login, Callback<PointResult> callback);
+    Call<PointResult> unsubscribeUser(@Path("login") String login);
 
     @FormUrlEncoded
     @POST("/api/user/sr/{login}")
-    Call subscribeUserRecommendations(@Path("login") String login, @Field("text") String text, Callback<Void> callback);
+    Call subscribeUserRecommendations(@Path("login") String login, @Field("text") String text);
 
     @DELETE("/api/user/sr/{login}")
-    Call unsubscribeUserRecommendations(@Path("login") String login, Callback<PointResult> callback);
+    Call<PointResult> unsubscribeUserRecommendations(@Path("login") String login);
 
     @GET("/api/tags/login/{login}")
     Call<TagList> getTags(@Path("login") String login);
@@ -105,48 +105,48 @@ public interface PointIm {
 
     @FormUrlEncoded
     @POST("/api/post/{id}/b")
-    Call addBookmark(@Path("id") String id, @Field("text") String text, Callback<PointResult> callback);
+    Call<PointResult> addBookmark(@Path("id") String id, @Field("text") String text);
 
     @DELETE("/api/post/{id}/b")
-    Call deleteBookmark(@Path("id") String id, Callback<Void> callback);
+    Call deleteBookmark(@Path("id") String id);
 
     @FormUrlEncoded
     @POST("/api/post/{id}")
-    Call addComment(@Path("id") String id, @Field("text") String text, Callback<PointResult> callback);
+    Call<PointResult> addComment(@Path("id") String id, @Field("text") String text);
 
     @FormUrlEncoded
     @POST("/api/post/{id}")
-    Call addComment(@Path("id") String id, @Field("text") String text, @Field("comment_id") String commentId, Callback<PointResult> callback);
+    Call<PointResult> addComment(@Path("id") String id, @Field("text") String text, @Field("comment_id") String commentId);
 
     @FormUrlEncoded
     @POST("/api/post/{id}/r")
-    Call recommend(@Path("id") String id, @Field("text") String text, Callback<PointResult> callback);
+    Call<PointResult> recommend(@Path("id") String id, @Field("text") String text);
 
     @DELETE("/api/post/{id}/r")
-    Call notRecommend(@Path("id") String id, Callback<PointResult> callback);
+    Call<PointResult> notRecommend(@Path("id") String id);
 
     @FormUrlEncoded
     @POST("/api/post/{id}/{cid}/r")
-    Call recommendCommend(@Path("id") String id, @Path("cid") long cid, @Field("text") String text, Callback<PointResult> callback);
+    Call<PointResult> recommendCommend(@Path("id") String id, @Path("cid") long cid, @Field("text") String text);
 
     @DELETE("/api/post/{id}/{cid}/r")
-    Call notRecommendComment(@Path("id") String id, @Path("cid") long cid, Callback<PointResult> callback);
+    Call<PointResult> notRecommendComment(@Path("id") String id, @Path("cid") long cid);
 
     @FormUrlEncoded
     @POST("/api/post/")
-    Call createPost(@Field("text") String text, @Field("tag") String[] tags, Callback<NewPostResponse> callback);
+    Call<NewPostResponse> createPost(@Field("text") String text, @Field("tag") String[] tags);
 
     @FormUrlEncoded
     @POST("/api/post/")
-    Call createPrivatePost(@Field("text") String text, @Field("tag") String[] tags, @Field("private") boolean reserved, Callback<NewPostResponse> callback);
+    Call<NewPostResponse> createPrivatePost(@Field("text") String text, @Field("tag") String[] tags, @Field("private") boolean reserved);
 
     @FormUrlEncoded
     @PUT("/api/post/{id}")
-    Call editPost(@Path("id") String id, @Field("text") String text, @Field("tag") String[] tags, Callback<NewPostResponse> callback);
+    Call<NewPostResponse> editPost(@Path("id") String id, @Field("text") String text, @Field("tag") String[] tags);
 
     @DELETE("/api/post/{id}")
-    Call deletePost(@Path("id") String id, Callback<PointResult> callback);
+    Call<PointResult> deletePost(@Path("id") String id);
 
     @DELETE("/api/post/{id}/{cid}")
-    Call deleteComment(@Path("id") String id, @Path("cid") long cid, Callback<PointResult> callback);
+    Call<PointResult> deleteComment(@Path("id") String id, @Path("cid") long cid);
 }

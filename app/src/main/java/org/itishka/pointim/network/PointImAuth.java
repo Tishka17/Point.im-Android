@@ -2,10 +2,11 @@ package org.itishka.pointim.network;
 
 import org.itishka.pointim.model.point.LoginResult;
 
-import retrofit.Callback;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
-import retrofit.http.POST;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
 
 /**
  * Created by atikhonov on 28.04.2014.
@@ -13,9 +14,9 @@ import retrofit.http.POST;
 public interface PointImAuth {
     @FormUrlEncoded
     @POST("/api/login")
-    void login(@Field("login") String login, @Field("password") String password, Callback<LoginResult> callback);
+    Call<LoginResult> login(@Field("login") String login, @Field("password") String password);
 
     @FormUrlEncoded
     @POST("/api/logout")
-    void logout(@Field("csrf_token") String csrf_token, Callback<LoginResult> callback);
+    Call<LoginResult> logout(@Field("csrf_token") String csrf_token);
 }

@@ -20,9 +20,9 @@ import org.itishka.pointim.R;
 import org.itishka.pointim.model.point.LoginResult;
 import org.itishka.pointim.network.PointConnectionManager;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Callback;
+import retrofit2.RetrofitError;
+import retrofit2.client.Response;
 
 
 public class LoginActivity extends AppCompatActivity {
