@@ -51,16 +51,16 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile 'com.android.support:support-v4:23.2.1'
+
     compile 'com.squareup.okhttp:okhttp:2.7.5'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.7.5'
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.octo.android.robospice:robospice:1.4.14'
-    compile 'com.octo.android.robospice:robospice-retrofit:1.4.14'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.bumptech.glide:okhttp-integration:1.4.0@aar'
+
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
     compile 'com.jpardogo.googleprogressbar:library:1.2.0'
     compile 'com.pnikosis:materialish-progress:1.7'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.github.bumptech.glide:okhttp-integration:1.4.0@aar'
     compile 'jp.wasabeef:glide-transformations:2.0.1'
     compile 'com.commit451:PhotoView:1.2.5'
 }
