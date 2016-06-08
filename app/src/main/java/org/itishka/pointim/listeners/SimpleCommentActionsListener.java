@@ -19,14 +19,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.model.point.Comment;
-import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.Utils;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * Created by Tishka17 on 08.05.2016.
@@ -78,25 +73,25 @@ public class SimpleCommentActionsListener implements OnCommentActionsListener {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String text = ((EditText) (dialog.findViewById(R.id.recommend_text))).getText().toString();
-                        PointConnectionManager.getInstance().pointIm.recommendCommend(post.post.id, comment.id, text, new Callback<PointResult>() {
-                            @Override
-                            public void success(PointResult pointResult, Response response) {
-                                if (pointResult.isSuccess()) {
-                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
-                                    if (omOnCommentChangedListener != null) {
-                                        comment.recommended = true;
-                                        omOnCommentChangedListener.onCommentChanged(post, comment);
-                                    }
-                                } else {
-                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+//                        PointConnectionManager.getInstance().pointIm.recommendCommend(post.post.id, comment.id, text, new Callback<PointResult>() {
+//                            @Override
+//                            public void success(PointResult pointResult, Response response) {
+//                                if (pointResult.isSuccess()) {
+//                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended), Toast.LENGTH_SHORT).show();
+//                                    if (omOnCommentChangedListener != null) {
+//                                        comment.recommended = true;
+//                                        omOnCommentChangedListener.onCommentChanged(post, comment);
+//                                    }
+//                                } else {
+//                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void failure(RetrofitError error) {
+//                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
                     }
                 })
                 .customView(R.layout.dialog_input, true)
@@ -105,25 +100,25 @@ public class SimpleCommentActionsListener implements OnCommentActionsListener {
     }
 
     private void onNotRecommendComment(@NonNull final Post post, @NonNull final Comment comment, Menu menu, MenuItem item) {
-        PointConnectionManager.getInstance().pointIm.notRecommendComment(post.post.id, comment.id, new Callback<PointResult>() {
-            @Override
-            public void success(PointResult pointResult, Response response) {
-                if (pointResult.isSuccess()) {
-                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended_not), Toast.LENGTH_SHORT).show();
-                    if (omOnCommentChangedListener != null) {
-                        comment.recommended = false;
-                        omOnCommentChangedListener.onCommentChanged(post, comment);
-                    }
-                } else {
-                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        PointConnectionManager.getInstance().pointIm.notRecommendComment(post.post.id, comment.id, new Callback<PointResult>() {
+//            @Override
+//            public void success(PointResult pointResult, Response response) {
+//                if (pointResult.isSuccess()) {
+//                    Toast.makeText(getContext(), getContext().getString(R.string.toast_recommended_not), Toast.LENGTH_SHORT).show();
+//                    if (omOnCommentChangedListener != null) {
+//                        comment.recommended = false;
+//                        omOnCommentChangedListener.onCommentChanged(post, comment);
+//                    }
+//                } else {
+//                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError error) {
+//                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
 
@@ -136,35 +131,35 @@ public class SimpleCommentActionsListener implements OnCommentActionsListener {
     }
 
     private void onDeleteComment(@NonNull final Post post, @NonNull final Comment comment, Menu menu, MenuItem item) {
-        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                .title(String.format(getContext().getString(R.string.dialog_delete_comment_title_template), post.post.id, comment.id))
-                .positiveText(android.R.string.ok)
-                .negativeText(android.R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        PointConnectionManager.getInstance().pointIm.deleteComment(post.post.id, comment.id, new Callback<PointResult>() {
-                            @Override
-                            public void success(PointResult pointResult, Response response) {
-                                if (pointResult.isSuccess()) {
-                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
-                                    if (omOnCommentChangedListener != null) {
-                                        omOnCommentChangedListener.onCommentDeleted(post, comment);
-                                    }
-                                } else {
-                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .build();
-        dialog.show();
+//        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+//                .title(String.format(getContext().getString(R.string.dialog_delete_comment_title_template), post.post.id, comment.id))
+//                .positiveText(android.R.string.ok)
+//                .negativeText(android.R.string.cancel)
+//                .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                        PointConnectionManager.getInstance().pointIm.deleteComment(post.post.id, comment.id, new Callback<PointResult>() {
+//                            @Override
+//                            public void success(PointResult pointResult, Response response) {
+//                                if (pointResult.isSuccess()) {
+//                                    Toast.makeText(getContext(), getContext().getString(R.string.toast_deleted), Toast.LENGTH_SHORT).show();
+//                                    if (omOnCommentChangedListener != null) {
+//                                        omOnCommentChangedListener.onCommentDeleted(post, comment);
+//                                    }
+//                                } else {
+//                                    Toast.makeText(getContext(), pointResult.error, Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void failure(RetrofitError error) {
+//                                Toast.makeText(getContext(), error.toString() + "\n\n" + error.getCause(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
+//                })
+//                .build();
+//        dialog.show();
     }
 
     public void setOnCommentChangedListener(OnCommentChangedListener onCommentChangedListener) {

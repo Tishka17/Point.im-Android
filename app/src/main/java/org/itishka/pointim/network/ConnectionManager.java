@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 
 import org.itishka.pointim.PointApplication;
 
-import retrofit.client.OkClient;
 
 /**
  * Created by Tishka17 on 31.08.2015.

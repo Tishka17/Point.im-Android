@@ -15,10 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
-
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.SinglePostAdapter;
 import org.itishka.pointim.listeners.OnCommentChangedListener;
@@ -30,6 +26,8 @@ import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.widgets.ScrollButton;
+
+import rx.Observable;
 
 public class SinglePostFragment extends SpicedFragment {
     private static final String ARG_POST = "post";
@@ -64,77 +62,77 @@ public class SinglePostFragment extends SpicedFragment {
         @Override
         public void onCommentChanged(Post post, Comment comment) {
             mAdapter.notifyCommentChanged(comment);
-            SinglePostRequest request = createRequest();
-            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
+//            SinglePostRequest request = createRequest();
+//            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
         }
 
         @Override
         public void onCommentDeleted(Post post, Comment comment) {
             mAdapter.removeComment(comment);
-            SinglePostRequest request = createRequest();
-            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
+//            SinglePostRequest request = createRequest();
+//            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
         }
     };
 
-    private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            mSwipeRefresh.setRefreshing(false);
-            if (!isDetached())
-                Toast.makeText(getActivity(), spiceException.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onRequestSuccess(Post extendedPost) {
-            mSwipeRefresh.setRefreshing(false);
-            if (extendedPost != null && extendedPost.isSuccess()) {
-                mAdapter.setData(extendedPost);
-                mPointPost = extendedPost;
-                mReplyFragment.addAuthorsToCompletion(mPointPost);
-                mDownButton.updateVisibility();
-                if (!isDetached())
-                    getActivity().supportInvalidateOptionsMenu();
-            } else {
-                if (!isDetached())
-                    Toast.makeText(getActivity(), (extendedPost == null) ? "null" : extendedPost.error, Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-    private RequestListener<Post> mCacheRequestListener = new RequestListener<Post>() {
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            mSwipeRefresh.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefresh.setRefreshing(true);
-                    update();
-                }
-            });
-        }
-
-        @Override
-        public void onRequestSuccess(Post extendedPost) {
-            if (extendedPost != null && extendedPost.isSuccess()) {
-                mAdapter.setData(extendedPost);
-                mPointPost = extendedPost;
-                mReplyFragment.addAuthorsToCompletion(mPointPost);
-                if (!isDetached())
-                    getActivity().supportInvalidateOptionsMenu();
-                if (shouldAutoload()) {
-                    mSwipeRefresh.setRefreshing(true);
-                    update();
-                }
-            } else {
-                mSwipeRefresh.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSwipeRefresh.setRefreshing(true);
-                        update();
-                    }
-                });
-            }
-        }
-    };
+//    private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
+//        @Override
+//        public void onRequestFailure(SpiceException spiceException) {
+//            mSwipeRefresh.setRefreshing(false);
+//            if (!isDetached())
+//                Toast.makeText(getActivity(), spiceException.toString(), Toast.LENGTH_SHORT).show();
+//        }
+//
+//        @Override
+//        public void onRequestSuccess(Post extendedPost) {
+//            mSwipeRefresh.setRefreshing(false);
+//            if (extendedPost != null && extendedPost.isSuccess()) {
+//                mAdapter.setData(extendedPost);
+//                mPointPost = extendedPost;
+//                mReplyFragment.addAuthorsToCompletion(mPointPost);
+//                mDownButton.updateVisibility();
+//                if (!isDetached())
+//                    getActivity().supportInvalidateOptionsMenu();
+//            } else {
+//                if (!isDetached())
+//                    Toast.makeText(getActivity(), (extendedPost == null) ? "null" : extendedPost.error, Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    };
+//    private RequestListener<Post> mCacheRequestListener = new RequestListener<Post>() {
+//        @Override
+//        public void onRequestFailure(SpiceException spiceException) {
+//            mSwipeRefresh.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mSwipeRefresh.setRefreshing(true);
+//                    update();
+//                }
+//            });
+//        }
+//
+//        @Override
+//        public void onRequestSuccess(Post extendedPost) {
+//            if (extendedPost != null && extendedPost.isSuccess()) {
+//                mAdapter.setData(extendedPost);
+//                mPointPost = extendedPost;
+//                mReplyFragment.addAuthorsToCompletion(mPointPost);
+//                if (!isDetached())
+//                    getActivity().supportInvalidateOptionsMenu();
+//                if (shouldAutoload()) {
+//                    mSwipeRefresh.setRefreshing(true);
+//                    update();
+//                }
+//            } else {
+//                mSwipeRefresh.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mSwipeRefresh.setRefreshing(true);
+//                        update();
+//                    }
+//                });
+//            }
+//        }
+//    };
 
     public SinglePostFragment() {
         // Required empty public constructor
@@ -209,8 +207,8 @@ public class SinglePostFragment extends SpicedFragment {
 
         PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
-            SinglePostRequest request = createRequest();
-            getSpiceManager().getFromCache(Post.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
+//            SinglePostRequest request = createRequest();
+//            getSpiceManager().getFromCache(Post.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
         }
         mReplyFragment = ReplyFragment.newInstance(mPost);
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
@@ -228,13 +226,13 @@ public class SinglePostFragment extends SpicedFragment {
         return inflater.inflate(R.layout.fragment_single_post, container, false);
     }
 
-    protected SinglePostRequest createRequest() {
-        return new SinglePostRequest(mPost);
+    protected Observable<Post> createRequest() {
+        return PointConnectionManager.getInstance().pointIm.getPost(mPost);
     }
 
     protected void update() {
-        SinglePostRequest request = createRequest();
-        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
+        Observable<Post> request = createRequest();
+//        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
     }
 
     @Override
