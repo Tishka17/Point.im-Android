@@ -14,7 +14,7 @@ import org.itishka.pointim.PointApplication;
  */
 public abstract class ConnectionManager {
     private static final String KEY = "AuthorizationData";
-    private OkClient mOkClient;
+    private PointApplication mApplication;
 
     protected abstract Gson getGson();
 
@@ -22,7 +22,11 @@ public abstract class ConnectionManager {
 
     @CallSuper
     public void init(PointApplication application) {
-        mOkClient = new OkClient(application.getOkHttpClient());
+        mApplication = application;
+    }
+
+    PointApplication getApplication() {
+        return mApplication;
     }
 
     public abstract boolean isAuthorized();
@@ -42,9 +46,5 @@ public abstract class ConnectionManager {
         } else {
             return getGson().fromJson(v, clazz);
         }
-    }
-
-    public OkClient getOkClient() {
-        return mOkClient;
     }
 }

@@ -12,11 +12,15 @@ import org.itishka.pointim.model.point.TextWithImages;
 import org.itishka.pointim.utils.DateDeserializer;
 import org.itishka.pointim.utils.TextParser;
 
+import java.io.IOException;
 import java.util.Date;
 
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Tishka17 on 21.10.2014.
@@ -31,8 +35,8 @@ public class PointConnectionManager extends ConnectionManager {
             .registerTypeAdapter(Date.class, new DateDeserializer())
             .registerTypeAdapter(TextWithImages.class, new TextParser())
             .create();
-    public PointIm pointIm = null;
-    public PointImAuth pointAuthService = null;
+    public Retrofit pointIm = null;
+    public Retrofit pointAuthService = null;
     public LoginResult loginResult = null;
 
     private PointConnectionManager() {
@@ -59,14 +63,11 @@ public class PointConnectionManager extends ConnectionManager {
     @Override
     public void init(PointApplication application) {
         super.init(application);
-
-
-        RestAdapter authRestAdapter = new RestAdapter.Builder()
-                .setClient(getOkClient())
-                .setEndpoint(ENDPOINT)
-                .setConverter(new GsonConverter(mGson))
+        pointAuthService = new Retrofit.Builder()
+                .client(application.getOkHttpClient())
+                .baseUrl(ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(mGson))
                 .build();
-        pointAuthService = authRestAdapter.create(PointImAuth.class);
 
         synchronized (this) {
             if (this.loginResult == null) {
@@ -78,19 +79,22 @@ public class PointConnectionManager extends ConnectionManager {
 
     @Override
     protected void createService() {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade requestFacade) {
-                        requestFacade.addHeader("Authorization", loginResult.token);
-                        requestFacade.addHeader("X-CSRF", loginResult.csrf_token);
-                    }
+        OkHttpClient httpClient = getApplication().getOkHttpClient()
+                .newBuilder()
+                .addInterceptor(chain -> {
+                    Request request = chain.request();
+                    request = request.newBuilder()
+                            .header("Authorization", loginResult.token)
+                            .header("X-CSRF", loginResult.csrf_token)
+                            .build();
+                    return chain.proceed(request);
                 })
-                .setClient(getOkClient())
-                .setEndpoint(ENDPOINT)
-                .setConverter(new GsonConverter(mGson))
                 .build();
-        pointIm = restAdapter.create(PointIm.class);
+        pointIm = new Retrofit.Builder()
+                .client(httpClient)
+                .baseUrl(ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(mGson))
+                .build();
     }
 
     @Override

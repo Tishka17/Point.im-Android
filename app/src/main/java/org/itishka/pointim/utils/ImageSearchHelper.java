@@ -7,9 +7,6 @@ import android.text.style.URLSpan;
 import android.util.Log;
 import android.util.LruCache;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import org.itishka.pointim.PointApplication;
 
@@ -17,6 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Tishka17 on 31.12.2014.
