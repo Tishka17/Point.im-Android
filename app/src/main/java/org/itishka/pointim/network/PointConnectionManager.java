@@ -20,6 +20,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -67,6 +68,7 @@ public class PointConnectionManager extends ConnectionManager {
                 .client(application.getOkHttpClient())
                 .baseUrl(ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(mGson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
                 .create(PointImAuth.class);
 
@@ -95,6 +97,7 @@ public class PointConnectionManager extends ConnectionManager {
                 .client(httpClient)
                 .baseUrl(ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(mGson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build()
                 .create(PointIm.class);
     }

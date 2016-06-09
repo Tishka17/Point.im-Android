@@ -34,8 +34,8 @@ public class PointApplication extends Application {
                 .cache(new Cache(getExternalCacheDir(), MAX_CACHE_SIZE))
                 .build();
 
-        Glide
-                .get(this);
+//        Glide
+//                .get(this);
 //                .register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(mOkHttpClient));
         ImageSearchHelper.initCache(this);
         PointConnectionManager.getInstance().init(this);
