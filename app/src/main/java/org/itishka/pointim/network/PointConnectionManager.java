@@ -35,8 +35,8 @@ public class PointConnectionManager extends ConnectionManager {
             .registerTypeAdapter(Date.class, new DateDeserializer())
             .registerTypeAdapter(TextWithImages.class, new TextParser())
             .create();
-    public Retrofit pointIm = null;
-    public Retrofit pointAuthService = null;
+    public PointIm pointIm = null;
+    public PointImAuth pointAuthService = null;
     public LoginResult loginResult = null;
 
     private PointConnectionManager() {
@@ -67,7 +67,8 @@ public class PointConnectionManager extends ConnectionManager {
                 .client(application.getOkHttpClient())
                 .baseUrl(ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(mGson))
-                .build();
+                .build()
+                .create(PointImAuth.class);
 
         synchronized (this) {
             if (this.loginResult == null) {
@@ -94,7 +95,8 @@ public class PointConnectionManager extends ConnectionManager {
                 .client(httpClient)
                 .baseUrl(ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(mGson))
-                .build();
+                .build()
+                .create(PointIm.class);
     }
 
     @Override
