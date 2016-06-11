@@ -62,7 +62,7 @@ public interface PointIm {
     Observable<PostList> getBlog(@Path("login") String login);
 
     @GET("/api/blog/login/{login}")
-    Observable<PostList> getBlog(@Query("before") long before, @Path("login") String login);
+    Observable<PostList> getBlog( @Path("login") String login, @Query("before") long before);
 
     @GET("/api/user/login/{login}")
     Observable<ExtendedUser> getUserInfo(@Path("login") String login);
@@ -97,7 +97,7 @@ public interface PointIm {
     Observable<PostList> getPostsByUserTag(@Path("login") String login, @Query("tag") String tag);
 
     @GET("/api/tags/login/{login}")
-    Observable<PostList> getPostsByUserTag(@Query("before") long before, @Path("login") String login, @Query("tag") String tag);
+    Observable<PostList> getPostsByUserTag(@Query("before") long before, @Path("login") String login, @Query("tag") String tag);//FIXME Path after query, check more
 
     @GET("/api/post/{id}")
     Observable<Post> getPost(@Path("id") String id);

@@ -17,6 +17,6 @@ public class SelfFragment extends PostListFragment {
 
     @Override
     protected Observable<PostList> createRequest(long before) {
-        return PointConnectionManager.getInstance().pointIm.getBlog(before, PointConnectionManager.getInstance().loginResult.login);
+        return PointConnectionManager.getInstance().pointIm.getBlog(PointConnectionManager.getInstance().loginResult.login, before);
     }
 }

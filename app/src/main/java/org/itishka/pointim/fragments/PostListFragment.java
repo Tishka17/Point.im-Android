@@ -220,6 +220,9 @@ public abstract class PostListFragment extends SpicedFragment {
                         if (!isDetached())
                             Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
                     }
+                }, error -> {
+                    if (!isDetached())
+                        Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
                 });
     }
 

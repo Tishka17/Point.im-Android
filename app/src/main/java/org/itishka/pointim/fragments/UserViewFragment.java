@@ -74,7 +74,7 @@ public class UserViewFragment extends PostListFragment {
 
     @Override
     protected Observable<PostList> createRequest(long before) {
-        return PointConnectionManager.getInstance().pointIm.getBlog(before, mUser);
+        return PointConnectionManager.getInstance().pointIm.getBlog(mUser, before);
     }
 
     protected Observable<ExtendedUser> createUserInfoRequest() {
