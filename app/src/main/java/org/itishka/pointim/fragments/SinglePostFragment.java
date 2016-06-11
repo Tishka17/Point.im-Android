@@ -65,15 +65,13 @@ public class SinglePostFragment extends SpicedFragment {
         @Override
         public void onCommentChanged(Post post, Comment comment) {
             mAdapter.notifyCommentChanged(comment);
-//            SinglePostRequest request = createRequest();
-//            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
+            getCache().put(getCacheName(), mPointPost);
         }
 
         @Override
         public void onCommentDeleted(Post post, Comment comment) {
             mAdapter.removeComment(comment);
-//            SinglePostRequest request = createRequest();
-//            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
+            getCache().put(getCacheName(), mPointPost);
         }
     };
     private Subscription mCacheSubscription;
@@ -160,7 +158,7 @@ public class SinglePostFragment extends SpicedFragment {
 
         PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
-            Observable<Post> observable = getCache().get("SinglePostFragment" + mPost, Post.class);
+            Observable<Post> observable = getCache().get(getCacheName(), Post.class);
             mCacheSubscription = observable
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -182,6 +180,10 @@ public class SinglePostFragment extends SpicedFragment {
         mReplyFragment.setOnReplyListener(() -> update());
     }
 
+    private String getCacheName() {
+        return "SinglePostFragment" + mPost;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -201,7 +203,7 @@ public class SinglePostFragment extends SpicedFragment {
                 .subscribe(post -> {
                     mSwipeRefresh.setRefreshing(false);
                     if (post != null && post.isSuccess()) {
-                        getCache().put("SinglePostFragment" + mPost, post);
+                        getCache().put(getCacheName(), post);
                         mAdapter.setData(post);
                         mPointPost = post;
                         mReplyFragment.addAuthorsToCompletion(mPointPost);

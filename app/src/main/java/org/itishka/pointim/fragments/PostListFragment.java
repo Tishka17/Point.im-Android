@@ -47,13 +47,13 @@ public abstract class PostListFragment extends SpicedFragment {
         @Override
         public void onChanged(Post post) {
             mAdapter.notifyPostChanged(post);
-//            getSpiceManager().putInCache(request.getCacheName(), getAdapter().getPostList());
+            getCache().put(getCacheName(), getAdapter().getPostList());
         }
 
         @Override
         public void onDeleted(Post post) {
             mAdapter.removePost(post);
-//            getSpiceManager().putInCache(request.getCacheName(), getAdapter().getPostList());
+            getCache().put(getCacheName(), getAdapter().getPostList());
         }
     };
 
@@ -61,38 +61,6 @@ public abstract class PostListFragment extends SpicedFragment {
     private StaggeredGridLayoutManager mLayoutManager;
     private PostListAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
-
-    //    private RequestListener<PostList> mCacheRequestListener = new RequestListener<PostList>() {
-//        @Override
-//        public void onRequestFailure(SpiceException spiceException) {
-//            mSwipeRefresh.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mSwipeRefresh.setRefreshing(true);
-//                    update();
-//                }
-//            });
-//        }
-//
-//        @Override
-//        public void onRequestSuccess(PostList postList) {
-//            if (postList != null && postList.isSuccess()) {
-//                mAdapter.setData(getActivity(), postList);
-//                if (shouldAutoload()) {
-//                    mSwipeRefresh.setRefreshing(true);
-//                    update();
-//                }
-//            } else {
-//                mSwipeRefresh.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mSwipeRefresh.setRefreshing(true);
-//                        update();
-//                    }
-//                });
-//            }
-//        }
-//    };
     private boolean mIsLoadingMore = false;
     private Subscription mSubscription;
     private Subscription mCacheSubscription;
@@ -164,13 +132,10 @@ public abstract class PostListFragment extends SpicedFragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.posts);
         mSwipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                PointConnectionManager manager = PointConnectionManager.getInstance();
-                if (manager.isAuthorized()) {
-                    update();
-                }
+        mSwipeRefresh.setOnRefreshListener(() -> {
+            PointConnectionManager manager = PointConnectionManager.getInstance();
+            if (manager.isAuthorized()) {
+                update();
             }
         });
         mRecyclerView.setHasFixedSize(true);
@@ -184,22 +149,19 @@ public abstract class PostListFragment extends SpicedFragment {
         mAdapter.setOnPointClickListener(mOnPointClickListener);
         mOnPostActionsListener.setOnPostChangedListener(onPostChangedListener);
         mAdapter.setOnPostActionsListener(mOnPostActionsListener);
-        mAdapter.setOnLoadMoreRequestListener(new PostListAdapter.OnLoadMoreRequestListener() {
-            @Override
-            public boolean onLoadMoreRequested() {
-                if (mIsLoadingMore) {
-                    //do nothing
+        mAdapter.setOnLoadMoreRequestListener(() -> {
+            if (mIsLoadingMore) {
+                //do nothing
+            } else {
+                List<Post> posts = mAdapter.getPostList().posts;
+                if (posts.size() < 1) {
+                    mAdapter.getPostList().has_next = false;
+                    return false;
                 } else {
-                    List<Post> posts = mAdapter.getPostList().posts;
-                    if (posts.size() < 1) {
-                        mAdapter.getPostList().has_next = false;
-                        return false;
-                    } else {
-                        loadMore(posts.get(posts.size() - 1).uid);
-                    }
+                    loadMore(posts.get(posts.size() - 1).uid);
                 }
-                return true;
             }
+            return true;
         });
         mRecyclerView.setAdapter(mAdapter);
         return rootView;
@@ -214,7 +176,7 @@ public abstract class PostListFragment extends SpicedFragment {
             mCacheSubscription = observable
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe( postList -> {
+                    .subscribe(postList -> {
                         if (postList != null && postList.isSuccess()) {
                             getCache().put(getCacheName(), postList);
                             mAdapter.setData(getActivity(), postList);
@@ -241,7 +203,7 @@ public abstract class PostListFragment extends SpicedFragment {
                             Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
                     }
                 }, error -> {
-                    Toast.makeText(getActivity(),error.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -253,6 +215,7 @@ public abstract class PostListFragment extends SpicedFragment {
                     if (postList != null && postList.isSuccess()) {
                         getCache().put(getCacheName(), postList);
                         mAdapter.appendData(getActivity(), postList);
+                        getCache().put(getCacheName(), getAdapter().getPostList());
                     } else {
                         if (!isDetached())
                             Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
