@@ -5,6 +5,7 @@ import android.app.Application;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
+import com.github.simonpercic.waterfallcache.WaterfallCache;
 
 import org.itishka.pointim.network.ImgurConnectionManager;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -23,10 +24,16 @@ public class PointApplication extends Application {
     private OkHttpClient mOkHttpClient;
     String USER_AGENT = "Tishka17 Point.im Client";
     private static final int MAX_CACHE_SIZE = 50 * 1024 * 1024; //50 MiB
+    private WaterfallCache mCache;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mCache = WaterfallCache.builder()
+                .addMemoryCache(1000)
+                .addDiskCache(this, MAX_CACHE_SIZE)
+                .build();
+
         mOkHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request request = chain.request();
@@ -48,5 +55,9 @@ public class PointApplication extends Application {
 
     public OkHttpClient getOkHttpClient() {
         return mOkHttpClient;
+    }
+
+    public WaterfallCache getCache() {
+        return mCache;
     }
 }

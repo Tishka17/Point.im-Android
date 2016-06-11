@@ -95,6 +95,7 @@ public abstract class PostListFragment extends SpicedFragment {
 //    };
     private boolean mIsLoadingMore = false;
     private Subscription mSubscription;
+    private Subscription mCacheSubscription;
 
     public PostListFragment() {
     }
@@ -209,8 +210,18 @@ public abstract class PostListFragment extends SpicedFragment {
         super.onViewCreated(view, savedInstanceState);
         PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
-            Observable<PostList> request = createRequest();
-//            getSpiceManager().getFromCache(PostList.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
+            Observable<PostList> observable = getCache().get(getCacheName(), PostList.class);
+            mCacheSubscription = observable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( postList -> {
+                        if (postList != null && postList.isSuccess()) {
+                            getCache().put(getCacheName(), postList);
+                            mAdapter.setData(getActivity(), postList);
+                            mRecyclerView.scrollToPosition(0);
+                        }
+                        update();
+                    });
         }
     }
 
@@ -221,14 +232,16 @@ public abstract class PostListFragment extends SpicedFragment {
                 .subscribe(postList -> {
                     mSwipeRefresh.setRefreshing(false);
                     if (postList != null && postList.isSuccess()) {
+                        getCache().put(getCacheName(), postList);
                         mAdapter.setData(getActivity(), postList);
                         mRecyclerView.scrollToPosition(0);
                     } else {
                         if (!isDetached())
                             Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
                     }
+                }, error -> {
+                    Toast.makeText(getActivity(),error.toString(), Toast.LENGTH_SHORT).show();
                 });
-//        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
     }
 
     protected void loadMore(long before) {
@@ -237,6 +250,7 @@ public abstract class PostListFragment extends SpicedFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(postList -> {
                     if (postList != null && postList.isSuccess()) {
+                        getCache().put(getCacheName(), postList);
                         mAdapter.appendData(getActivity(), postList);
                     } else {
                         if (!isDetached())
@@ -249,10 +263,15 @@ public abstract class PostListFragment extends SpicedFragment {
     public void onDestroy() {
         super.onDestroy();
         mSubscription.unsubscribe();
+        mCacheSubscription.unsubscribe();
     }
 
     protected abstract Observable<PostList> createRequest();
 
     protected abstract Observable<PostList> createRequest(long before);
+
+    protected String getCacheName() {
+        return getClass().getCanonicalName();
+    }
 }
 
