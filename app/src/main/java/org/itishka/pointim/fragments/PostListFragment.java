@@ -226,6 +226,7 @@ public abstract class PostListFragment extends SpicedFragment {
     }
 
     protected void update() {
+        mSwipeRefresh.setRefreshing(true);
         mSubscription = createRequest()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
