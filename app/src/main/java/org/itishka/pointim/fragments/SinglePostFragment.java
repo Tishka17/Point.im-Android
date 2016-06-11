@@ -28,6 +28,9 @@ import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.widgets.ScrollButton;
 
 import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class SinglePostFragment extends SpicedFragment {
     private static final String ARG_POST = "post";
@@ -73,66 +76,16 @@ public class SinglePostFragment extends SpicedFragment {
 //            getSpiceManager().putInCache(request.getCacheName(), mPointPost);
         }
     };
+    private Subscription mCacheSubscription;
 
-//    private RequestListener<Post> mUpdateRequestListener = new RequestListener<Post>() {
-//        @Override
-//        public void onRequestFailure(SpiceException spiceException) {
-//            mSwipeRefresh.setRefreshing(false);
-//            if (!isDetached())
-//                Toast.makeText(getActivity(), spiceException.toString(), Toast.LENGTH_SHORT).show();
-//        }
-//
-//        @Override
-//        public void onRequestSuccess(Post extendedPost) {
-//            mSwipeRefresh.setRefreshing(false);
-//            if (extendedPost != null && extendedPost.isSuccess()) {
-//                mAdapter.setData(extendedPost);
-//                mPointPost = extendedPost;
-//                mReplyFragment.addAuthorsToCompletion(mPointPost);
-//                mDownButton.updateVisibility();
-//                if (!isDetached())
-//                    getActivity().supportInvalidateOptionsMenu();
-//            } else {
-//                if (!isDetached())
-//                    Toast.makeText(getActivity(), (extendedPost == null) ? "null" : extendedPost.error, Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    };
-//    private RequestListener<Post> mCacheRequestListener = new RequestListener<Post>() {
-//        @Override
-//        public void onRequestFailure(SpiceException spiceException) {
-//            mSwipeRefresh.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mSwipeRefresh.setRefreshing(true);
-//                    update();
-//                }
-//            });
-//        }
-//
-//        @Override
-//        public void onRequestSuccess(Post extendedPost) {
-//            if (extendedPost != null && extendedPost.isSuccess()) {
-//                mAdapter.setData(extendedPost);
-//                mPointPost = extendedPost;
-//                mReplyFragment.addAuthorsToCompletion(mPointPost);
-//                if (!isDetached())
-//                    getActivity().supportInvalidateOptionsMenu();
-//                if (shouldAutoload()) {
-//                    mSwipeRefresh.setRefreshing(true);
-//                    update();
-//                }
-//            } else {
-//                mSwipeRefresh.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mSwipeRefresh.setRefreshing(true);
-//                        update();
-//                    }
-//                });
-//            }
-//        }
-//    };
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSubscription.unsubscribe();
+        mCacheSubscription.unsubscribe();
+    }
+
+    private Subscription mSubscription;
 
     public SinglePostFragment() {
         // Required empty public constructor
@@ -207,17 +160,26 @@ public class SinglePostFragment extends SpicedFragment {
 
         PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
-//            SinglePostRequest request = createRequest();
-//            getSpiceManager().getFromCache(Post.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mCacheRequestListener);
+            Observable<Post> observable = getCache().get("SinglePostFragment" + mPost, Post.class);
+            mCacheSubscription = observable
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(post -> {
+                        mSwipeRefresh.setRefreshing(false);
+                        if (post != null && post.isSuccess()) {
+                            mAdapter.setData(post);
+                            mPointPost = post;
+                            mReplyFragment.addAuthorsToCompletion(mPointPost);
+                            mDownButton.updateVisibility();
+                            if (!isDetached())
+                                getActivity().supportInvalidateOptionsMenu();
+                        }
+                        update();
+                    });
         }
         mReplyFragment = ReplyFragment.newInstance(mPost);
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
-        mReplyFragment.setOnReplyListener(new ReplyFragment.OnReplyListener() {
-            @Override
-            public void onReplied() {
-                update();
-            }
-        });
+        mReplyFragment.setOnReplyListener(() -> update());
     }
 
     @Override
@@ -232,7 +194,29 @@ public class SinglePostFragment extends SpicedFragment {
 
     protected void update() {
         Observable<Post> request = createRequest();
-//        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUpdateRequestListener);
+        mSwipeRefresh.setRefreshing(true);
+        mSubscription = request
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(post -> {
+                    mSwipeRefresh.setRefreshing(false);
+                    if (post != null && post.isSuccess()) {
+                        getCache().put("SinglePostFragment" + mPost, post);
+                        mAdapter.setData(post);
+                        mPointPost = post;
+                        mReplyFragment.addAuthorsToCompletion(mPointPost);
+                        mDownButton.updateVisibility();
+                        if (!isDetached())
+                            getActivity().supportInvalidateOptionsMenu();
+                    } else {
+                        if (!isDetached())
+                            Toast.makeText(getActivity(), (post == null) ? "null" : post.error, Toast.LENGTH_SHORT).show();
+                    }
+                }, error -> {
+                    mSwipeRefresh.setRefreshing(false);
+                    if (!isDetached())
+                        Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     @Override
