@@ -47,6 +47,6 @@ public class TagViewFragment extends PostListFragment {
         if (TextUtils.isEmpty(mUser))
             return PointConnectionManager.getInstance().pointIm.getPostsByTag(before, mTag);
         else
-            return PointConnectionManager.getInstance().pointIm.getPostsByUserTag(before, mUser, mTag);
+            return PointConnectionManager.getInstance().pointIm.getPostsByUserTag(mUser, before, mTag);
     }
 }
