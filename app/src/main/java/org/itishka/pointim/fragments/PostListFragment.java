@@ -1,6 +1,5 @@
 package org.itishka.pointim.fragments;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -35,10 +34,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public abstract class PostListFragment extends SpicedFragment {
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);

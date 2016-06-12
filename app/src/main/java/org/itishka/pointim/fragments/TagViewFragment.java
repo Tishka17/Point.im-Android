@@ -49,4 +49,8 @@ public class TagViewFragment extends PostListFragment {
         else
             return PointConnectionManager.getInstance().pointIm.getPostsByUserTag(mUser, before, mTag);
     }
+
+    protected String getCacheName() {
+        return getClass().getCanonicalName() + mUser + ":" + mTag;
+    }
 }

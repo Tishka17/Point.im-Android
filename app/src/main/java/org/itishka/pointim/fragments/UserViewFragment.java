@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.itishka.pointim.R;
 import org.itishka.pointim.adapters.PostListAdapter;
@@ -15,44 +16,15 @@ import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
 
 import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-
-/**
- * A placeholder fragment containing a simple view.
- */
 public class UserViewFragment extends PostListFragment {
 
     private String mUser;
-//    private RequestListener<ExtendedUser> mUserInfoRequestListener = new RequestListener<ExtendedUser>() {
-//        @Override
-//        public void onRequestSuccess(ExtendedUser user) {
-//            if (user != null && user.isSuccess()) {
-//                ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
-//            } else if (!isDetached()) {
-//                Toast.makeText(getActivity(), String.format(getString(R.string.toast_error_template), (user == null) ? "null" : user.error), Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//
-//        @Override
-//        public void onRequestFailure(SpiceException retrofitError) {
-//            if (!isDetached()) {
-//                Toast.makeText(getActivity(), retrofitError.toString(), Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    };
-//
-//    private RequestListener<ExtendedUser> mUserInfoCacheListener = new RequestListener<ExtendedUser>() {
-//        @Override
-//        public void onRequestSuccess(ExtendedUser user) {
-//            if (user != null && user.isSuccess()) {
-//                ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
-//            }
-//        }
-//
-//        @Override
-//        public void onRequestFailure(SpiceException retrofitError) {
-//        }
-//    };
+    private Subscription mUserCacheSubscription;
+    private Subscription mUserSubscription;
 
     public static UserViewFragment newInstance(String tag) {
         UserViewFragment fragment = new UserViewFragment();
@@ -60,6 +32,10 @@ public class UserViewFragment extends PostListFragment {
         args.putString("user", tag);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    protected String getCacheName() {
+        return getClass().getCanonicalName() + mUser;
     }
 
     @Override
@@ -87,18 +63,50 @@ public class UserViewFragment extends PostListFragment {
         mUser = getArguments().getString("user");
     }
 
+    protected String getUserCacheName() {
+        return "UserViewFragment" + mUser;
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//        UserInfoRequest request = createUserInfoRequest();
-//        getSpiceManager().getFromCache(ExtendedUser.class, request.getCacheName(), DurationInMillis.ALWAYS_RETURNED, mUserInfoCacheListener);
+        Observable<ExtendedUser> request = getCache()
+                .get(getUserCacheName(), ExtendedUser.class);
+        mUserCacheSubscription = request
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(user -> {
+                    if (user != null && user.isSuccess()) {
+                        ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
+                    }
+                    update();
+                });
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mUserCacheSubscription.unsubscribe();
+        mUserSubscription.unsubscribe();
     }
 
     @Override
     protected void update() {
         super.update();
-//        UserInfoRequest request = createUserInfoRequest();
-//        getSpiceManager().execute(request, request.getCacheName(), DurationInMillis.ALWAYS_EXPIRED, mUserInfoRequestListener);
+        mUserSubscription = createUserInfoRequest()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(user -> {
+                    if (user != null && user.isSuccess()) {
+                        ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
+                    } else if (!isDetached()) {
+                        Toast.makeText(getActivity(), String.format(getString(R.string.toast_error_template), (user == null) ? "null" : user.error), Toast.LENGTH_SHORT).show();
+                    }
+                }, error -> {
+                    if (!isDetached()) {
+                        Toast.makeText(getActivity(), String.format(getString(R.string.toast_error_template), error.toString()), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
