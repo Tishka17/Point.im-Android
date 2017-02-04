@@ -72,14 +72,14 @@ public interface PointIm {
 
     @FormUrlEncoded
     @POST("/api/user/s/{login}")
-    Observable subscribeUser(@Path("login") String login, @Field("text") String text);
+    Observable<Void> subscribeUser(@Path("login") String login, @Field("text") String text);
 
     @DELETE("/api/user/s/{login}")
     Observable<PointResult> unsubscribeUser(@Path("login") String login);
 
     @FormUrlEncoded
     @POST("/api/user/sr/{login}")
-    Observable subscribeUserRecommendations(@Path("login") String login, @Field("text") String text);
+    Observable<Void> subscribeUserRecommendations(@Path("login") String login, @Field("text") String text);
 
     @DELETE("/api/user/sr/{login}")
     Observable<PointResult> unsubscribeUserRecommendations(@Path("login") String login);
