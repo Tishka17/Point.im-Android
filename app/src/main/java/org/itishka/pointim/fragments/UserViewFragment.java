@@ -17,12 +17,14 @@ import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
 
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class UserViewFragment extends PostListFragment {
 
     private String mUser;
+    private Subscription mInfoSubscription;
 
     public static UserViewFragment newInstance(String tag) {
         UserViewFragment fragment = new UserViewFragment();
@@ -81,10 +83,11 @@ public class UserViewFragment extends PostListFragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
-    protected void update() {
-        super.update();
-        addSubscription(createUserInfoRequest()
+    protected void updateInfo() {
+        if (mInfoSubscription != null && !mInfoSubscription.isUnsubscribed()) {
+            mInfoSubscription.unsubscribe();
+        }
+        mInfoSubscription = createUserInfoRequest()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(user -> {
@@ -97,7 +100,14 @@ public class UserViewFragment extends PostListFragment {
                     if (!isDetached()) {
                         Toast.makeText(getActivity(), String.format(getString(R.string.toast_error_template), error.toString()), Toast.LENGTH_SHORT).show();
                     }
-                }));
+                });
+        addSubscription(mInfoSubscription);
+    }
+
+    @Override
+    protected void update() {
+        super.update();
+        updateInfo();
     }
 
     @Override
@@ -108,8 +118,14 @@ public class UserViewFragment extends PostListFragment {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(pointResult -> {
-                        if (!isDetached())
+                        if (!isDetached()) {
                             Toast.makeText(getActivity(), getString(R.string.toast_subscribed), Toast.LENGTH_SHORT).show();
+                            ExtendedUser user = ((UserInfoPostListAdapter) getAdapter()).getUserInfo();
+                            if (user!=null) {
+                                user.subscribed = true;
+                                user.rec_sub = true;
+                            }((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
+                        }
                     }, error -> {
                         Log.d("UserViewFragment", "failure " + error.toString());
                         if (!isDetached())
@@ -124,6 +140,11 @@ public class UserViewFragment extends PostListFragment {
                         if (!isDetached()) {
                             if (pointResult.isSuccess()) {
                                 Toast.makeText(getActivity(), getString(R.string.toast_unsubscribed), Toast.LENGTH_SHORT).show();
+                                ExtendedUser user = ((UserInfoPostListAdapter) getAdapter()).getUserInfo();
+                                if (user!=null) {
+                                    user.subscribed = false;
+                                    user.rec_sub = false;
+                                }((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
                             } else {
                                 Toast.makeText(getActivity(), pointResult.error, Toast.LENGTH_SHORT).show();
                             }
@@ -139,8 +160,14 @@ public class UserViewFragment extends PostListFragment {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(pointResult -> {
-                        if (!isDetached())
+                        if (!isDetached()) {
                             Toast.makeText(getActivity(), getString(R.string.toast_recommendations_subscribed), Toast.LENGTH_SHORT).show();
+                            ExtendedUser user = ((UserInfoPostListAdapter) getAdapter()).getUserInfo();
+                            if (user!=null) {
+                                user.subscribed = true;
+                                user.rec_sub = true;
+                            }((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
+                        }
                     }, error -> {
                         Log.d("UserViewFragment", "failure " + error.toString());
                         if (!isDetached())
@@ -155,6 +182,10 @@ public class UserViewFragment extends PostListFragment {
                         if (!isDetached()) {
                             if (pointResult.isSuccess()) {
                                 Toast.makeText(getActivity(), getString(R.string.toast_recommendations_unsubscribed), Toast.LENGTH_SHORT).show();
+                                ExtendedUser user = ((UserInfoPostListAdapter) getAdapter()).getUserInfo();
+                                if (user!=null) {
+                                    user.rec_sub = false;
+                                }((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
                             } else {
                                 Toast.makeText(getActivity(), pointResult.error, Toast.LENGTH_SHORT).show();
                             }
@@ -173,6 +204,18 @@ public class UserViewFragment extends PostListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_user, menu);
+    }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        ExtendedUser user = ((UserInfoPostListAdapter) getAdapter()).getUserInfo();
+        if (user!=null) {
+            menu.setGroupVisible(R.id.group_subscribed, user.subscribed);
+            menu.setGroupVisible(R.id.group_rec_subscribed, user.rec_sub);
+            menu.setGroupVisible(R.id.group_unsubscribed, !user.subscribed);
+            menu.setGroupVisible(R.id.group_rec_unsubscribed, !user.rec_sub);
+
+        }
     }
 }

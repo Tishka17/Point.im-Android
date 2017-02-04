@@ -74,6 +74,10 @@ public class UserInfoPostListAdapter extends PostListAdapter {
         headerHolder.login.setText("@" + mUser.login);
     }
 
+    public ExtendedUser getUserInfo() {
+        return mUser;
+    }
+
     public void setUserInfo(ExtendedUser user) {
         if (user == null)
             return;

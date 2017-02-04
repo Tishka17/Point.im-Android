@@ -2,20 +2,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.itishka.pointim.activities.SinglePostActivity">
-    <item
-        android:id="@+id/action_subscribe"
-        android:title="@string/action_subscribe"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_subscribe_recommendations"
-        android:title="@string/action_subscribe_recommendations"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_unsubscribe"
-        android:title="@string/action_unsubscribe"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_unsubscribe_recommendations"
-        android:title="@string/action_unsubscribe_recommendations"
-        app:showAsAction="never" />
+    <group android:id="@+id/group_unsubscribed">
+        <item
+            android:id="@+id/action_subscribe"
+            android:title="@string/action_subscribe"
+            app:showAsAction="never" />
+    </group>
+    <group android:id="@+id/group_rec_unsubscribed">
+        <item
+            android:id="@+id/action_subscribe_recommendations"
+            android:title="@string/action_subscribe_recommendations"
+            app:showAsAction="never" />
+    </group>
+    <group android:id="@+id/group_subscribed">
+        <item
+            android:id="@+id/action_unsubscribe"
+            android:title="@string/action_unsubscribe"
+            app:showAsAction="never" />
+    </group>
+    <group android:id="@+id/group_rec_subscribed">
+        <item
+            android:id="@+id/action_unsubscribe_recommendations"
+            android:title="@string/action_unsubscribe_recommendations"
+            app:showAsAction="never" />
+    </group>
 </menu>
