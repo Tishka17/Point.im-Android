@@ -12,6 +12,7 @@ import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.utils.ImageSearchHelper;
 
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -43,6 +44,9 @@ public class PointApplication extends Application {
                     return chain.proceed(request);
                 })
                 .cache(new Cache(getExternalCacheDir(), MAX_CACHE_SIZE))
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
                 .build();
 
         Glide
