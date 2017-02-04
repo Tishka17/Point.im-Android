@@ -35,12 +35,7 @@ public class ReplyDialogFragment extends DialogFragment {
 
         mReplyFragment = ReplyFragment.newInstanceForDialog(post);
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
-        mReplyFragment.setOnReplyListener(new ReplyFragment.OnReplyListener() {
-            @Override
-            public void onReplied() {
-                getDialog().hide();
-            }
-        });
+        mReplyFragment.setOnReplyListener(() -> getDialog().hide());
     }
 
     public static void show(AppCompatActivity context, @NonNull String postId) {
@@ -77,12 +72,7 @@ public class ReplyDialogFragment extends DialogFragment {
         }
 
         mReplyFragment = ReplyFragment.newInstanceForDialog(post);
-        mReplyFragment.setOnReplyListener(new ReplyFragment.OnReplyListener() {
-            @Override
-            public void onReplied() {
-                getDialog().hide();
-            }
-        });
+        mReplyFragment.setOnReplyListener(() -> getDialog().hide());
 
         Dialog dialog = new CustomDialog.Builder(getActivity())
                 .enableSetContentView()

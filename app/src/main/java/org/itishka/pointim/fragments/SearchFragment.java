@@ -40,18 +40,8 @@ public class SearchFragment extends RxFragment {
     public SearchFragment() {
     }
 
-    private View.OnClickListener mOnTagClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            mSimplePointClickListener.onTagClicked(((TextView) view).getText().toString());
-        }
-    };
-    private View.OnClickListener mOnUserClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            mSimplePointClickListener.onUserClicked((String) view.getTag());
-        }
-    };
+    private View.OnClickListener mOnTagClickListener = view -> mSimplePointClickListener.onTagClicked(((TextView) view).getText().toString());
+    private View.OnClickListener mOnUserClickListener = view -> mSimplePointClickListener.onUserClicked((String) view.getTag());
 
     public static SearchFragment newInstance() {
         return new SearchFragment();

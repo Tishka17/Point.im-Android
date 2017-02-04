@@ -1,6 +1,5 @@
 package org.itishka.pointim.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -72,8 +70,8 @@ public class SettingsFragment extends Fragment {
             Utils.showAvatarByLogin(loginResult.login, mPointAvatar);
         }
 
-        Token imgutToken = ImgurConnectionManager.getInstance().token;
-        if (imgutToken == null) {
+        Token imgurToken = ImgurConnectionManager.getInstance().token;
+        if (imgurToken == null) {
             mImgurAvatar.setVisibility(View.GONE);
             mImgurLogout.setVisibility(View.GONE);
             mImgurLogin.setVisibility(View.VISIBLE);
@@ -82,7 +80,7 @@ public class SettingsFragment extends Fragment {
             mImgurAvatar.setVisibility(View.VISIBLE);
             mImgurLogout.setVisibility(View.VISIBLE);
             mImgurLogin.setVisibility(View.GONE);
-            mImgurName.setText(imgutToken.account_username);
+            mImgurName.setText(imgurToken.account_username);
         }
 
     }
@@ -100,106 +98,65 @@ public class SettingsFragment extends Fragment {
         mImgurAvatar = (ImageView) rootView.findViewById(R.id.imgur_avatar);
 
         mPointLogout = (ImageButton) rootView.findViewById(R.id.action_point_logout);
-        mPointLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                askPointLogout();
-            }
-        });
+        mPointLogout.setOnClickListener(view -> askPointLogout());
         mPointLogin = (ImageButton) rootView.findViewById(R.id.action_point_login);
-        mPointLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                askPointLogin();
-            }
-        });
+        mPointLogin.setOnClickListener(view -> askPointLogin());
 
         mImgurLogin = (ImageButton) rootView.findViewById(R.id.action_imgur_login);
-        mImgurLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                askImgurLogin();
-            }
-        });
+        mImgurLogin.setOnClickListener(view -> askImgurLogin());
         mImgurLogout = (ImageButton) rootView.findViewById(R.id.action_imgur_logout);
-        mImgurLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                askImgurLogout();
-            }
-        });
+        mImgurLogout.setOnClickListener(view -> askImgurLogout());
 
         TextView version = (TextView) rootView.findViewById(R.id.version);
         version.setText(getString(R.string.version) + " " + BuildConfig.VERSION_NAME);
 
-        rootView.findViewById(R.id.google_play).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=org.itishka.pointim"));
-                getActivity().startActivity(browserIntent);
-            }
+        rootView.findViewById(R.id.google_play).setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=org.itishka.pointim"));
+            getActivity().startActivity(browserIntent);
         });
-        rootView.findViewById(R.id.github).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Tishka17/Point.im-Android/"));
-                getActivity().startActivity(browserIntent);
-            }
+        rootView.findViewById(R.id.github).setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Tishka17/Point.im-Android/"));
+            getActivity().startActivity(browserIntent);
         });
 
         ImageView avatarTishka17 = (ImageView) rootView.findViewById(R.id.avatar_tishka17);
         Utils.showAvatarByLogin("Tishka17", avatarTishka17);
-        avatarTishka17.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                intent.putExtra(UserViewActivity.EXTRA_USER, "Tishka17");
-                ActivityCompat.startActivity(getActivity(), intent, null);
-            }
+        avatarTishka17.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), UserViewActivity.class);
+            intent.putExtra(UserViewActivity.EXTRA_USER, "Tishka17");
+            ActivityCompat.startActivity(getActivity(), intent, null);
         });
 
         ImageView avatarArts = (ImageView) rootView.findViewById(R.id.avatar_arts);
         Utils.showAvatarByLogin("arts", avatarArts);
-        avatarArts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), UserViewActivity.class);
-                intent.putExtra(UserViewActivity.EXTRA_USER, "arts");
-                ActivityCompat.startActivity(getActivity(), intent, null);
-            }
+        avatarArts.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), UserViewActivity.class);
+            intent.putExtra(UserViewActivity.EXTRA_USER, "arts");
+            ActivityCompat.startActivity(getActivity(), intent, null);
         });
 
         //LoadPictures switch
         Switch swLoadPictures = (Switch) rootView.findViewById(R.id.swLoadPictures);
         swLoadPictures.setChecked(prefs.getBoolean("loadImages", true));
-        swLoadPictures.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("loadImages", isChecked);
-                editor.apply();
-            }
+        swLoadPictures.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("loadImages", isChecked);
+            editor.apply();
         });
         //LoadPictures switch
         Switch swMultiColumns = (Switch) rootView.findViewById(R.id.swMultiColumn);
         swMultiColumns.setChecked(prefs.getBoolean("multiColumns", true));
-        swMultiColumns.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("multiColumns", isChecked);
-                editor.apply();
-            }
+        swMultiColumns.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("multiColumns", isChecked);
+            editor.apply();
         });
         Switch swThemeDark = (Switch) rootView.findViewById(R.id.swThemeDark);
         swThemeDark.setChecked(prefs.getBoolean("themeDark", false));
-        swThemeDark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("themeDark", isChecked);
-                editor.apply();
-            }
+        swThemeDark.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("themeDark", isChecked);
+            editor.apply();
         });
 
         updateViews();
