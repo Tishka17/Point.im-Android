@@ -205,7 +205,8 @@ public abstract class PostListFragment extends RxFragment {
                             Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();
                     }
                 }, error -> {
-                    Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                    if (!isDetached())
+                        Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
                 });
     }
 
