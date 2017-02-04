@@ -1,6 +1,7 @@
 Point.im-Android
 ================
-
+![Build status](https://travis-ci.org/Tishka17/Point.im-Android.svg?branch=rx)
+ 
 Android client for Point.im
 
 This project is distributing under GNU GPL v3 Licence. Whatever it means
