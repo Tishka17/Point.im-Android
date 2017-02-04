@@ -16,15 +16,15 @@ import org.itishka.pointim.model.point.ExtendedUser;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
 
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class UserViewFragment extends PostListFragment {
 
     private String mUser;
-    private Subscription mInfoSubscription;
+    private Disposable mInfoSubscription;
 
     public static UserViewFragment newInstance(String tag) {
         UserViewFragment fragment = new UserViewFragment();
@@ -69,23 +69,24 @@ public class UserViewFragment extends PostListFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Observable<ExtendedUser> request = getCache()
-                .get(getUserCacheName(), ExtendedUser.class);
-        addSubscription(request
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(user -> {
-                    if (user != null && user.isSuccess()) {
-                        ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
-                    }
-                    update();
-                }));
+//        Observable<ExtendedUser> request = getCache()
+//                .get(getUserCacheName(), ExtendedUser.class);
+//        addSubscription(request
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(user -> {
+//                    if (user != null && user.isSuccess()) {
+//                        ((UserInfoPostListAdapter) getAdapter()).setUserInfo(user);
+//                    }
+//                    update();
+//                }));
+        update();
         super.onViewCreated(view, savedInstanceState);
     }
 
     protected void updateInfo() {
-        if (mInfoSubscription != null && !mInfoSubscription.isUnsubscribed()) {
-            mInfoSubscription.unsubscribe();
+        if (mInfoSubscription != null && !mInfoSubscription.isDisposed()) {
+            mInfoSubscription.dispose();
         }
         mInfoSubscription = createUserInfoRequest()
                 .observeOn(AndroidSchedulers.mainThread())

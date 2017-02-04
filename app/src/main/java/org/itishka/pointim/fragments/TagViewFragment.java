@@ -6,7 +6,8 @@ import android.text.TextUtils;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 /**
  * A placeholder fragment containing a simple view.

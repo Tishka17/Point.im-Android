@@ -28,10 +28,10 @@ import org.itishka.pointim.widgets.ScrollButton;
 
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public abstract class PostListFragment extends RxFragment {
 
@@ -41,13 +41,13 @@ public abstract class PostListFragment extends RxFragment {
         @Override
         public void onChanged(Post post) {
             mAdapter.notifyPostChanged(post);
-            getCache().put(getCacheName(), getAdapter().getPostList());
+//            getCache().put(getCacheName(), getAdapter().getPostList());
         }
 
         @Override
         public void onDeleted(Post post) {
             mAdapter.removePost(post);
-            getCache().put(getCacheName(), getAdapter().getPostList());
+//            getCache().put(getCacheName(), getAdapter().getPostList());
         }
     };
 
@@ -56,8 +56,8 @@ public abstract class PostListFragment extends RxFragment {
     private PostListAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
     private boolean mIsLoadingMore = false;
-    private Subscription mSubscription;
-    private Subscription mCacheSubscription;
+    private Disposable mSubscription;
+    private Disposable mCacheSubscription;
 
     public PostListFragment() {
     }
@@ -166,30 +166,31 @@ public abstract class PostListFragment extends RxFragment {
         super.onViewCreated(view, savedInstanceState);
         PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
-            Observable<PostList> observable = getCache().get(getCacheName(), PostList.class);
-            mCacheSubscription = observable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(postList -> {
-                        if (postList != null && postList.isSuccess()) {
-                            getCache().put(getCacheName(), postList);
-                            mAdapter.setData(getActivity(), postList);
-                            mRecyclerView.scrollToPosition(0);
-                        }
-                        update();
-                    });
-            addSubscription(mCacheSubscription);
+//            Observable<PostList> observable = getCache().get(getCacheName(), PostList.class);
+//            mCacheSubscription = observable
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(postList -> {
+//                        if (postList != null && postList.isSuccess()) {
+//                            getCache().put(getCacheName(), postList);
+//                            mAdapter.setData(getActivity(), postList);
+//                            mRecyclerView.scrollToPosition(0);
+//                        }
+//                        update();
+//                    });
+//            addSubscription(mCacheSubscription);
+            update();
         }
     }
 
     protected void update() {
         mSwipeRefresh.setRefreshing(true);
-        if (mCacheSubscription != null && !mCacheSubscription.isUnsubscribed()) {
-            mCacheSubscription.unsubscribe();
-            mCacheSubscription = null;
-        }
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
+//        if (mCacheSubscription != null && !mCacheSubscription.isUnsubscribed()) {
+//            mCacheSubscription.unsubscribe();
+//            mCacheSubscription = null;
+//        }
+        if (mSubscription != null && !mSubscription.isDisposed()) {
+            mSubscription.dispose();
         }
         mSubscription = createRequest()
                 .subscribeOn(Schedulers.io())
@@ -197,7 +198,7 @@ public abstract class PostListFragment extends RxFragment {
                 .subscribe(postList -> {
                     mSwipeRefresh.setRefreshing(false);
                     if (postList != null && postList.isSuccess()) {
-                        getCache().put(getCacheName(), postList);
+//                        getCache().put(getCacheName(), postList);
                         mAdapter.setData(getActivity(), postList);
                         mRecyclerView.scrollToPosition(0);
                     } else {
@@ -216,9 +217,9 @@ public abstract class PostListFragment extends RxFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(postList -> {
                     if (postList != null && postList.isSuccess()) {
-                        getCache().put(getCacheName(), postList);
+//                        getCache().put(getCacheName(), postList);
                         mAdapter.appendData(getActivity(), postList);
-                        getCache().put(getCacheName(), getAdapter().getPostList());
+//                        getCache().put(getCacheName(), getAdapter().getPostList());
                     } else {
                         if (!isDetached())
                             Toast.makeText(getActivity(), (postList == null) ? "null" : postList.error, Toast.LENGTH_SHORT).show();

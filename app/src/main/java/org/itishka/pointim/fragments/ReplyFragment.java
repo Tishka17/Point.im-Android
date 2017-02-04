@@ -115,12 +115,9 @@ public class ReplyFragment extends RxFragment {
         mUsersListAdapter = new UserCompletionAdapter(getContext());
 
         mCommentId = (TextView) rootView.findViewById(R.id.comment_id);
-        mCommentId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCommentId.setText("");
-                mCommentId.setVisibility(View.GONE);
-            }
+        mCommentId.setOnClickListener(view -> {
+            mCommentId.setText("");
+            mCommentId.setVisibility(View.GONE);
         });
         mText = (MultiAutoCompleteTextView) rootView.findViewById(R.id.text);
         mText.setInputType(mText.getInputType() & ~EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE | EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT);
@@ -131,25 +128,19 @@ public class ReplyFragment extends RxFragment {
             if (comment > 0)
                 setCommentId(String.valueOf(comment));
             mText.requestFocus();
-            mText.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(mText, InputMethodManager.SHOW_IMPLICIT);
-                }
+            mText.postDelayed(() -> {
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(mText, InputMethodManager.SHOW_IMPLICIT);
             }, 1);
         }
 
         mImagesPanel = (ImageUploadingPanel) rootView.findViewById(R.id.imagesPanel);
         mAttachButton = (ImageButton) rootView.findViewById(R.id.attach);
-        mAttachButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, RESULT_LOAD_IMAGE);
-            }
+        mAttachButton.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, RESULT_LOAD_IMAGE);
         });
 
 //        UserSubscriptionsRequest request2 = new UserSubscriptionsRequest(PointConnectionManager.getInstance().loginResult.login);

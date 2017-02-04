@@ -22,8 +22,8 @@ import org.itishka.pointim.network.PointConnectionManager;
 
 import retrofit2.Callback;
 import retrofit2.Retrofit;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class LoginActivity extends AppCompatActivity {

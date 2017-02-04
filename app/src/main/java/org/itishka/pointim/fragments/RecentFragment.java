@@ -3,7 +3,8 @@ package org.itishka.pointim.fragments;
 import org.itishka.pointim.model.point.PostList;
 import org.itishka.pointim.network.PointConnectionManager;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 /**
  * Created by Tishka17 on 21.10.2014.

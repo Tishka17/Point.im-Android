@@ -3,6 +3,7 @@ package org.itishka.pointim.network;
 import org.itishka.pointim.model.imgur.Image;
 import org.itishka.pointim.model.imgur.UploadResult;
 
+import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.Callback;
 import retrofit2.http.DELETE;
@@ -11,7 +12,6 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
-import rx.Observable;
 
 /**
  * Created by Tishka17 on 30.12.2014.

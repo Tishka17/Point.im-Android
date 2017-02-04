@@ -13,7 +13,7 @@ import org.itishka.pointim.model.imgur.Token;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
@@ -73,7 +73,7 @@ public class ImgurConnectionManager extends ConnectionManager {
                 .client(httpClient)
                 .baseUrl(IMGUR_AUTH_ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(mGson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         synchronized (this) {
             if (this.token == null) {
@@ -101,7 +101,7 @@ public class ImgurConnectionManager extends ConnectionManager {
                 .client(httpClient)
                 .baseUrl(IMGUR_AUTH_ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(mGson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 

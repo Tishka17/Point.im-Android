@@ -27,10 +27,10 @@ import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
 import org.itishka.pointim.widgets.ScrollButton;
 
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SinglePostFragment extends RxFragment {
     private static final String ARG_POST = "post";
@@ -65,17 +65,17 @@ public class SinglePostFragment extends RxFragment {
         @Override
         public void onCommentChanged(Post post, Comment comment) {
             mAdapter.notifyCommentChanged(comment);
-            getCache().put(getCacheName(), mPointPost);
+//            getCache().put(getCacheName(), mPointPost);
         }
 
         @Override
         public void onCommentDeleted(Post post, Comment comment) {
             mAdapter.removeComment(comment);
-            getCache().put(getCacheName(), mPointPost);
+//            getCache().put(getCacheName(), mPointPost);
         }
     };
-    private Subscription mCacheSubscription;
-    private Subscription mSubscription;
+    private Disposable mCacheSubscription;
+    private Disposable mSubscription;
 
     public SinglePostFragment() {
         // Required empty public constructor
@@ -150,23 +150,24 @@ public class SinglePostFragment extends RxFragment {
 
         PointConnectionManager manager = PointConnectionManager.getInstance();
         if (manager.isAuthorized()) {
-            Observable<Post> observable = getCache().get(getCacheName(), Post.class);
-            mCacheSubscription = observable
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(post -> {
-                        mSwipeRefresh.setRefreshing(false);
-                        if (post != null && post.isSuccess()) {
-                            mAdapter.setData(post);
-                            mPointPost = post;
-                            mReplyFragment.addAuthorsToCompletion(mPointPost);
-                            mDownButton.updateVisibility();
-                            if (!isDetached())
-                                getActivity().supportInvalidateOptionsMenu();
-                        }
-                        update();
-                    });
-            addSubscription(mCacheSubscription);
+//            Observable<Post> observable = getCache().get(getCacheName(), Post.class);
+//            mCacheSubscription = observable
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribeOn(Schedulers.io())
+//                    .subscribe(post -> {
+//                        mSwipeRefresh.setRefreshing(false);
+//                        if (post != null && post.isSuccess()) {
+//                            mAdapter.setData(post);
+//                            mPointPost = post;
+//                            mReplyFragment.addAuthorsToCompletion(mPointPost);
+//                            mDownButton.updateVisibility();
+//                            if (!isDetached())
+//                                getActivity().supportInvalidateOptionsMenu();
+//                        }
+//                        update();
+//                    });
+//            addSubscription(mCacheSubscription);
+            update();
         }
         mReplyFragment = ReplyFragment.newInstance(mPost);
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
@@ -190,12 +191,12 @@ public class SinglePostFragment extends RxFragment {
     protected void update() {
         Observable<Post> request = createRequest();
         mSwipeRefresh.setRefreshing(true);
-        if (mCacheSubscription != null && !mCacheSubscription.isUnsubscribed()) {
-            mCacheSubscription.unsubscribe();
+        if (mCacheSubscription != null && !mCacheSubscription.isDisposed()) {
+            mCacheSubscription.dispose();
             mCacheSubscription = null;
         }
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
+        if (mSubscription != null && !mSubscription.isDisposed()) {
+            mSubscription.dispose();
         }
         mSubscription = request
                 .observeOn(AndroidSchedulers.mainThread())
@@ -203,7 +204,7 @@ public class SinglePostFragment extends RxFragment {
                 .subscribe(post -> {
                     mSwipeRefresh.setRefreshing(false);
                     if (post != null && post.isSuccess()) {
-                        getCache().put(getCacheName(), post);
+//                        getCache().put(getCacheName(), post);
                         mAdapter.setData(post);
                         mPointPost = post;
                         mReplyFragment.addAuthorsToCompletion(mPointPost);
