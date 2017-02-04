@@ -16,3 +16,7 @@ android:
     # Additional components
     - extra-google-m2repository
     - extra-android-m2repository
+
+    - sys-img-armeabi-v7a-android-25
+    - sys-img-armeabi-v7a-android-22
+    - sys-img-armeabi-v7a-android-17
