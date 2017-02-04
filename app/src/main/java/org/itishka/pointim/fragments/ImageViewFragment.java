@@ -24,7 +24,7 @@ import org.itishka.pointim.widgets.HideAnimationHelper;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class ImageViewFragment extends SpicedFragment {
+public class ImageViewFragment extends RxFragment {
 
     private static final String ARG_URL = "url";
     private String mUrl;

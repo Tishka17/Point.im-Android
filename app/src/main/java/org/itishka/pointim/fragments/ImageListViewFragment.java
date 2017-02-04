@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import org.itishka.pointim.R;
 
-public class ImageListViewFragment extends SpicedFragment {
+public class ImageListViewFragment extends RxFragment {
     private static final String ARG_URLS = "urls";
     private static final String ARG_INDEX = "index";
 

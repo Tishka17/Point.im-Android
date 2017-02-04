@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * Created by Tishka17 on 04.05.2016.
  */
-public class ReplyFragment extends SpicedFragment {
+public class ReplyFragment extends RxFragment {
     private static final int RESULT_LOAD_IMAGE = 1;
     private static final java.lang.String ARG_POST = "post";
     private static final String ARG_DIALOG = "dialog";

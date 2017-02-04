@@ -20,15 +20,13 @@ import org.itishka.pointim.model.point.Tag;
 import org.itishka.pointim.model.point.TagList;
 import org.itishka.pointim.model.point.User;
 import org.itishka.pointim.model.point.UserList;
-import org.itishka.pointim.network.PointConnectionManager;
-import org.itishka.pointim.network.requests.TagsRequest;
 import org.itishka.pointim.utils.Utils;
 import org.itishka.pointim.widgets.FlowLayout;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SearchFragment extends SpicedFragment {
+public class SearchFragment extends RxFragment {
     FlowLayout mUsersLayout;
     FlowLayout mTagsLayout;
     TagList mTags;

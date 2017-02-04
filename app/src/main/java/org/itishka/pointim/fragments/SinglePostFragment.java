@@ -32,7 +32,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class SinglePostFragment extends SpicedFragment {
+public class SinglePostFragment extends RxFragment {
     private static final String ARG_POST = "post";
 
     private String mPost;

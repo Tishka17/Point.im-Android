@@ -9,14 +9,18 @@ import com.github.simonpercic.waterfallcache.WaterfallCache;
 import org.itishka.pointim.PointApplication;
 import org.itishka.pointim.utils.ImageSearchHelper;
 
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
+
 /**
  * Created by Tishka17 on 27.02.2015.
  */
-public class SpicedFragment extends Fragment {
+public class RxFragment extends Fragment {
     private boolean mAutoload = true;
+    private CompositeSubscription mCompositeSubscription;
 
     protected WaterfallCache getCache() {
-        return ((PointApplication)getContext().getApplicationContext()).getCache();
+        return ((PointApplication) getContext().getApplicationContext()).getCache();
     }
 
     @Override
@@ -24,6 +28,17 @@ public class SpicedFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null)
             mAutoload = false;
+        mCompositeSubscription = new CompositeSubscription();
+    }
+
+    protected void addSubscription(Subscription subscription) {
+        mCompositeSubscription.add(subscription);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mCompositeSubscription.unsubscribe();
     }
 
     protected boolean shouldAutoload() {
@@ -37,7 +52,6 @@ public class SpicedFragment extends Fragment {
 
     @Override
     public void onStop() {
-        //unsubscribe in rx?
         ImageSearchHelper.saveCache(getActivity());
         super.onStop();
     }

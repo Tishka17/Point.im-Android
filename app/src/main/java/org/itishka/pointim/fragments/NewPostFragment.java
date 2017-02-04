@@ -31,7 +31,7 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewPostFragment extends SpicedFragment {
+public class NewPostFragment extends RxFragment {
 
     private static final int RESULT_LOAD_IMAGE = 17;
     private static final String ARG_TEXT = "text";

@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -34,7 +33,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public abstract class PostListFragment extends SpicedFragment {
+public abstract class PostListFragment extends RxFragment {
 
     private SimplePointClickListener mOnPointClickListener = new SimplePointClickListener(this);
     private SimplePostActionsListener mOnPostActionsListener = new SimplePostActionsListener(this);
@@ -179,6 +178,7 @@ public abstract class PostListFragment extends SpicedFragment {
                         }
                         update();
                     });
+            addSubscription(mCacheSubscription);
         }
     }
 
@@ -219,13 +219,7 @@ public abstract class PostListFragment extends SpicedFragment {
                     if (!isDetached())
                         Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
                 });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mSubscription.unsubscribe();
-        mCacheSubscription.unsubscribe();
+        addSubscription(mSubscription);
     }
 
     protected abstract Observable<PostList> createRequest();
