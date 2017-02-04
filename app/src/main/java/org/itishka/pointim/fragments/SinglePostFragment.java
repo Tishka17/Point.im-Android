@@ -75,14 +75,6 @@ public class SinglePostFragment extends RxFragment {
         }
     };
     private Subscription mCacheSubscription;
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mSubscription.unsubscribe();
-        mCacheSubscription.unsubscribe();
-    }
-
     private Subscription mSubscription;
 
     public SinglePostFragment() {
@@ -174,6 +166,7 @@ public class SinglePostFragment extends RxFragment {
                         }
                         update();
                     });
+            addSubscription(mCacheSubscription);
         }
         mReplyFragment = ReplyFragment.newInstance(mPost);
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_reply, mReplyFragment).commit();
@@ -197,6 +190,13 @@ public class SinglePostFragment extends RxFragment {
     protected void update() {
         Observable<Post> request = createRequest();
         mSwipeRefresh.setRefreshing(true);
+        if (mCacheSubscription != null && !mCacheSubscription.isUnsubscribed()) {
+            mCacheSubscription.unsubscribe();
+            mCacheSubscription = null;
+        }
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
         mSubscription = request
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -219,6 +219,7 @@ public class SinglePostFragment extends RxFragment {
                     if (!isDetached())
                         Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
                 });
+        addSubscription(mSubscription);
     }
 
     @Override
