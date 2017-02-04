@@ -184,6 +184,13 @@ public abstract class PostListFragment extends RxFragment {
 
     protected void update() {
         mSwipeRefresh.setRefreshing(true);
+        if (mCacheSubscription != null && !mCacheSubscription.isUnsubscribed()) {
+            mCacheSubscription.unsubscribe();
+            mCacheSubscription = null;
+        }
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
         mSubscription = createRequest()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
