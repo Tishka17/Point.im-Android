@@ -1,5 +1,6 @@
 package org.itishka.pointim.listeners;
 
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -64,6 +65,9 @@ public class SimpleCommentActionsListener implements OnCommentActionsListener {
                 break;
             case R.id.action_delete:
                 onDeleteComment(post, comment, menu, item);
+                break;
+            case R.id.menu_item_share:
+                onShareComment(post, comment, menu, item);
                 break;
         }
     }
@@ -171,19 +175,10 @@ public class SimpleCommentActionsListener implements OnCommentActionsListener {
         omOnCommentChangedListener = onCommentChangedListener;
     }
 
-    @Override
-    public void updateMenu(Menu menu, ShareActionProvider provider, Comment comment) {
-        menu.setGroupVisible(R.id.group_my, comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login));
-        menu.setGroupVisible(R.id.group_not_recommended,
-                !comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && !comment.recommended
-        );
-        menu.setGroupVisible(R.id.group_recommended,
-                !comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && comment.recommended
-        );
+    private void onShareComment(@NonNull final Post post, @NonNull final Comment comment, Menu menu, MenuItem item) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.setType("text/plain");
+        shareIntent.setType("plain/text");
         StringBuilder sb = new StringBuilder();
         sb.append("@")
                 .append(comment.author.login)
@@ -192,9 +187,24 @@ public class SimpleCommentActionsListener implements OnCommentActionsListener {
                 .append(comment.text.text)
                 .append("\n\n")
                 .append(Utils.generateSiteUri(comment.post_id, comment.id));
-        sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
 
-        provider.setShareIntent(sendIntent);
+        try {
+            String shareTitle = getContext().getString(R.string.action_share);
+            getContext().startActivity(Intent.createChooser(shareIntent, shareTitle));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), R.string.error_no_share_apps, Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    @Override
+    public void updateMenu(Menu menu, Comment comment) {
+        menu.setGroupVisible(R.id.group_my, comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login));
+        menu.setGroupVisible(R.id.group_not_recommended,
+                !comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && !comment.recommended
+        );
+        menu.setGroupVisible(R.id.group_recommended,
+                !comment.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && comment.recommended
+        );
     }
 }

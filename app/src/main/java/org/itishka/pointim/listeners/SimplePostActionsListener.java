@@ -259,7 +259,7 @@ public class SimplePostActionsListener implements OnPostActionsListener {
             String shareTitle = getContext().getString(R.string.action_share);
             getContext().startActivity(Intent.createChooser(shareIntent, shareTitle));
         } catch (ActivityNotFoundException e) {
-            Toast.makeText(getContext(), "Cannot share, no apps found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.error_no_share_apps, Toast.LENGTH_SHORT).show();
         }
     }
 
