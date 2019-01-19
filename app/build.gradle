@@ -11,8 +11,8 @@ android {
         applicationId "org.itishka.pointim"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 30
-        versionName "2.16"
+        versionCode 31
+        versionName "2.17"
         buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId', "null")
         buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret', "null")
         buildConfigField "String", "IMGUR_REDIRECT_URL", properties.getProperty('imgurRedirectUrl', "null")
@@ -31,6 +31,12 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/maven/commons-io/commons-io/pom.xml'
         exclude 'META-INF/maven/commons-io/commons-io/pom.properties'
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
 }
 repositories {
