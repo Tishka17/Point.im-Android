@@ -166,8 +166,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
         holder.toolbar.inflateMenu(R.menu.menu_adapter_post);
-        MenuItem item = holder.toolbar.getMenu().findItem(R.id.menu_item_share);
-        MenuItemCompat.setActionProvider(item, holder.shareActionProvider);
 
         holder.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -236,7 +234,7 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindItemViewHolder(PostListAdapter.ViewHolder holder, int i) {
         Post post = mPostList.posts.get(i);
         if (mOnPostActionsListener != null) {
-            mOnPostActionsListener.updateMenu(holder.toolbar.getMenu(), holder.shareActionProvider, post);
+            mOnPostActionsListener.updateMenu(holder.toolbar.getMenu(), post);
         }
         holder.author.setText("@" + post.post.author.login);
         holder.itemView.setTag(R.id.card_view, i);
@@ -373,7 +371,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final ImageList imageList;
         final View mainContent;
         final Toolbar toolbar;
-        final ShareActionProvider shareActionProvider;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -398,7 +395,6 @@ public class PostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mainContent = itemView.findViewById(R.id.main_content);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
             toolbar = (Toolbar) itemView.findViewById(R.id.card_toolbar);
-            shareActionProvider = new ShareActionProvider(itemView.getContext());
         }
     }
 
