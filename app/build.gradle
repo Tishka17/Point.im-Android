@@ -10,9 +10,9 @@ android {
     defaultConfig {
         applicationId "org.itishka.pointim"
         minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 31
-        versionName "2.17"
+        targetSdkVersion 26
+        versionCode 32
+        versionName "2.18"
         buildConfigField "String", "IMGUR_ID", properties.getProperty('imgurId', "null")
         buildConfigField "String", "IMGUR_SECRET", properties.getProperty('imgurSecret', "null")
         buildConfigField "String", "IMGUR_REDIRECT_URL", properties.getProperty('imgurRedirectUrl', "null")
