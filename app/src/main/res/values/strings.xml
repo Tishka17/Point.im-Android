@@ -107,4 +107,5 @@
     <string name="dialog_reply_post">Reply on #%s</string>
     <string name="dialog_reply_post_comment">Reply on #%1$s/%2$s</string>
     <string name="dialog_delete_comment_title_template">Really delete #%1$s/%2$s?</string>
+    <string name="error_no_share_apps">Cannot share, no apps found</string>
 </resources>

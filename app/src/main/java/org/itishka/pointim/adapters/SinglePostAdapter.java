@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -137,8 +136,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             });
             holder.toolbar.inflateMenu(R.menu.menu_adapter_comment);
-            MenuItem item = holder.toolbar.getMenu().findItem(R.id.menu_item_share);
-            MenuItemCompat.setActionProvider(item, holder.shareActionProvider);
 
             holder.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
@@ -226,7 +223,7 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             CommentViewHolder commentHolder = (CommentViewHolder) holder;
             commentHolder.itemView.setTag(R.id.comment_id, comment.id);
             if (mOnPostActionsListener != null) {
-                mOnCommentActionsListener.updateMenu(commentHolder.toolbar.getMenu(), commentHolder.shareActionProvider, comment);
+                mOnCommentActionsListener.updateMenu(commentHolder.toolbar.getMenu(), comment);
             }
             Utils.showAvatar(comment.author.login, comment.author.avatar, commentHolder.avatar);
             if (i == 1) {
@@ -295,7 +292,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         final TextView comment_id;
         final ImageList imageList;
         final Toolbar toolbar;
-        final ShareActionProvider shareActionProvider;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
@@ -307,7 +303,6 @@ public class SinglePostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             comment_id = (TextView) itemView.findViewById(R.id.comment_id);
             imageList = (ImageList) itemView.findViewById(R.id.imageList);
             toolbar = (Toolbar) itemView.findViewById(R.id.comment_toolbar);
-            shareActionProvider = new ShareActionProvider(itemView.getContext());
         }
     }
 

@@ -41,7 +41,6 @@ public class SinglePostFragment extends SpicedFragment {
     private LinearLayoutManager mLayoutManager;
     private SinglePostAdapter mAdapter;
     private Post mPointPost;
-    private ShareActionProvider mShareActionProvider;
     private ScrollButton mUpButton;
     private ScrollButton mDownButton;
     private ReplyFragment mReplyFragment;
@@ -242,7 +241,7 @@ public class SinglePostFragment extends SpicedFragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if (mPointPost != null)
-            mOnPostActionsListener.updateMenu(menu, mShareActionProvider, mPointPost);
+            mOnPostActionsListener.updateMenu(menu, mPointPost);
 
         menu.setGroupVisible(R.id.group_loaded, mPointPost != null);
     }
@@ -251,10 +250,6 @@ public class SinglePostFragment extends SpicedFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_single_post, menu);
-
-        MenuItem item = menu.findItem(R.id.menu_item_share);
-        mShareActionProvider = new ShareActionProvider(getActivity());
-        MenuItemCompat.setActionProvider(item, mShareActionProvider);
     }
 
     @Override

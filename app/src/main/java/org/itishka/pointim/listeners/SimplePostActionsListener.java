@@ -1,5 +1,6 @@
 package org.itishka.pointim.listeners;
 
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -22,7 +23,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import org.itishka.pointim.R;
 import org.itishka.pointim.activities.NewPostActivity;
 import org.itishka.pointim.fragments.ReplyDialogFragment;
-import org.itishka.pointim.model.point.Comment;
 import org.itishka.pointim.model.point.PointResult;
 import org.itishka.pointim.model.point.Post;
 import org.itishka.pointim.network.PointConnectionManager;
@@ -111,6 +111,9 @@ public class SimplePostActionsListener implements OnPostActionsListener {
             case R.id.action_reply:
                 onReply(post, menu, item);
                 break;
+            case R.id.menu_item_share:
+                onShare(post, menu, item);
+                break;
         }
     }
 
@@ -182,7 +185,6 @@ public class SimplePostActionsListener implements OnPostActionsListener {
     }
 
 
-
     private void onEditPost(@NonNull Post post, Menu menu, MenuItem item) {
         Intent intent = new Intent(getContext(), NewPostActivity.class);
         Bundle bundle = new Bundle();
@@ -235,31 +237,10 @@ public class SimplePostActionsListener implements OnPostActionsListener {
         dialog.show();
     }
 
-    private void notifyChanged(Post post) {
-        if (mOnPostChangedListener != null)
-            mOnPostChangedListener.onChanged(post);
-    }
+    public void onShare(@NonNull final Post post, Menu menu, MenuItem item) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
-    public void setOnPostChangedListener(OnPostChangedListener onPostChangedListener) {
-        mOnPostChangedListener = onPostChangedListener;
-    }
-
-    @Override
-    public void updateMenu(Menu menu, ShareActionProvider provider, Post post) {
-        menu.setGroupVisible(R.id.group_my, post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login));
-        menu.setGroupVisible(R.id.group_my_editable,
-                post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && post.editable
-        );
-        menu.setGroupVisible(R.id.group_not_recommended,
-                !post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && !post.recommended
-        );
-        menu.setGroupVisible(R.id.group_recommended,
-                !post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && post.recommended
-        );
-
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.setType("text/plain");
+        shareIntent.setType("plain/text");
         StringBuilder sb = new StringBuilder();
         sb.append("@")
                 .append(post.post.author.login)
@@ -272,9 +253,36 @@ public class SimplePostActionsListener implements OnPostActionsListener {
                 .append(post.post.text.text)
                 .append("\n\n")
                 .append(Utils.generateSiteUri(post.post.id));
-        sendIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
 
-        provider.setShareIntent(sendIntent);
+        try {
+            String shareTitle = getContext().getString(R.string.action_share);
+            getContext().startActivity(Intent.createChooser(shareIntent, shareTitle));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), R.string.error_no_share_apps, Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    private void notifyChanged(Post post) {
+        if (mOnPostChangedListener != null)
+            mOnPostChangedListener.onChanged(post);
+    }
+
+    public void setOnPostChangedListener(OnPostChangedListener onPostChangedListener) {
+        mOnPostChangedListener = onPostChangedListener;
+    }
+
+    @Override
+    public void updateMenu(Menu menu, Post post) {
+        menu.setGroupVisible(R.id.group_my, post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login));
+        menu.setGroupVisible(R.id.group_my_editable,
+                post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && post.editable
+        );
+        menu.setGroupVisible(R.id.group_not_recommended,
+                !post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && !post.recommended
+        );
+        menu.setGroupVisible(R.id.group_recommended,
+                !post.post.author.login.equalsIgnoreCase(PointConnectionManager.getInstance().loginResult.login) && post.recommended
+        );
     }
 }
